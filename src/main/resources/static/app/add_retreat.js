@@ -81,10 +81,6 @@ Vue.component('add-retreat', {
                         <label>Shower</label>
                     </div>
                     <div class="form-group mb-3">
-                        <input type="checkbox" v-model="form.additionalServices" value="Kitchen"/>
-                        <label>Kitchen</label>
-                    </div>
-                    <div class="form-group mb-3">
                         <input type="checkbox" v-model="form.additionalServices" value="Barbeque"/>
                         <label>Barbeque</label>
                     </div>
@@ -99,7 +95,7 @@ Vue.component('add-retreat', {
                 </div>
                 <div class="form-group mb-3">
                     <label>Pictures:</label>
-                    <input accept="image/*" type="file" class="form-control" @change="addPicture($event)"/>
+                    <input accept="image/*" type="file" class="form-control" @change="addPicture($event)" multiple/>
                 </div>
                 <div class="form-group mb-3">
                     <button @click="addRetreat" type="submit" class="btn btn-primary float-end">Add retreat</button>
@@ -156,17 +152,34 @@ Vue.component('add-retreat', {
 
         addRetreat() {
             if (this.formIsValid) {
-                console.log(this.form.rulesOfConduction);
-                console.log(this.form.pictures)
-                console.log("Dobri su parametri za vikendicu.");
+                this.sendData();
             }
+        },
+
+        sendData() {
+            axios.post("/retreats", {
+                name: this.form.name,
+                description: this.form.description,
+                country: this.form.country,
+                city: this.form.city,
+                address: this.form.address,
+                rulesOfConduct: this.form.rulesOfConduction,
+                pictures: this.form.pictures,
+                numOfRooms: this.form.numOfRooms,
+                numOfBeds: this.form.numOfBeds,
+                additionalServices: this.form.additionalServices
+            }).then(function(response) {
+                alert("radi brt");
+            }).catch(function (error) {
+                alert("ne valja brt");
+            });
         },
 
         addPicture(e) {
             let files = e.target.files || e.dataTransfer.files;
             if (!files.length)
                 return;
-            this.form.pictures.push(files[0].name);
+            for (let file of files) this.form.pictures.push(file.name);
         }
     }
 });
