@@ -250,8 +250,33 @@ Vue.component('add-ship', {
 
         addRetreat() {
             if (this.formIsValid) {
-                console.log("Dobri su parametri za brod.");
+                this.sendData();
             }
+        },
+
+        sendData() {
+            axios.post("/ships", {
+                name: this.form.name,
+                description: this.form.description,
+                country: this.form.country,
+                city: this.form.city,
+                address: this.form.address,
+                rulesOfConduct: this.form.rulesOfConduction,
+                type: this.form.shipType,
+                length: this.form.shipLength,
+                engineNum: this.form.engineNumber,
+                enginePower: this.form.enginePower,
+                maxSpeed: this.form.maxSpeed,
+                capacity: this.form.capacity,
+                navigationEquipment: this.form.navigationEquipment,
+                fishingEquipment: this.form.fishingEquipment,
+                reservationCancellationConditions: this.form.reservationCancellationConditions,
+                pictures: this.form.pictures
+            }).then(function(response) {
+                alert("radi brt");
+            }).catch(function (error) {
+                alert("ne valja brt");
+            });
         },
 
         addPicture(e) {
