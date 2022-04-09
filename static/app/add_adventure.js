@@ -1,5 +1,4 @@
 Vue.use(vuelidate.default)
-
 Vue.component("add-adventure", {
     template:`
     <form class="w-50 mx-auto mt-5">
@@ -13,8 +12,23 @@ Vue.component("add-adventure", {
             <textarea v-model="form.description" class="form-control" id="descriptionNameId" placeholder="This field is required!"></textarea>
         </div>
         <div class="form-group mb-3">
-            <label for="rulesOfConduct">Rules of conduct: </label>
-            <textarea v-model="form.rulesOfConduct" class="form-control"  id="rulesOfConductId" placeholder="This field is required!"></textarea>
+           <label for="rulesOfConduct">Rules of conduct: </label>
+           <div class="form-group mb-3">
+                <input type="checkbox" v-model="form.rulesOfConduct" value="Mobile phone must be turned off">
+                <label>Mobile phone must be turned off</label>
+           </div>
+           <div class="form-group mb-3">
+                <input type="checkbox" v-model="form.rulesOfConduct" value="Must be properly dressed">
+                <label>Must be properly dressed</label>
+           </div>
+           <div class="form-group mb-3">
+                <input type="checkbox" v-model="form.rulesOfConduct" value="Bring your own fishing equipment">
+                <label>Bring your own fishing equipment</label>
+           </div>
+           <div class="form-group mb-3">
+                <input type="checkbox" v-model="form.rulesOfConduct" value="Can't be noisy">
+                <label>Can't be noisy</label>
+           </div>
         </div>
         <div class="form-group mb-3">
             <label for="price">Price: </label>
@@ -28,7 +42,50 @@ Vue.component("add-adventure", {
         </div>
         <div class="form-group mb-3">
             <label for="fishingEquipment">Fishing equipment: </label>
-            <textarea v-model="form.fishingEquipment" class="form-control" id="fishingEquipmentId" placeholder="This field is required!"></textarea>
+            <div class="form-group mb-3">
+                <input type="checkbox" v-model="form.fishingEquipment" value="hooks">
+                <label>Hooks</label>
+           </div>
+           <div class="form-group mb-3">
+                <input type="checkbox" v-model="form.fishingEquipment" value="lines">
+                <label>Lines</label>
+           </div>
+           <div class="form-group mb-3">
+                <input type="checkbox" v-model="form.fishingEquipment" value="floats">
+                <label>Floats</label>
+           </div>
+           <div class="form-group mb-3">
+                <input type="checkbox" v-model="form.fishingEquipment" value="rods">
+                <label>Rods</label>
+           </div>
+           <div class="form-group mb-3">
+                <input type="checkbox" v-model="form.fishingEquipment" value="reels">
+                <label>Reels</label>
+           </div>
+           <div class="form-group mb-3">
+                <input type="checkbox" v-model="form.fishingEquipment" value="baits">
+                <label>Baits</label>
+           </div>
+           <div class="form-group mb-3">
+                <input type="checkbox" v-model="form.fishingEquipment" value="lures">
+                <label>Lures</label>
+           </div>
+           <div class="form-group mb-3">
+                <input type="checkbox" v-model="form.fishingEquipment" value="spears">
+                <label>Spears</label>
+           </div>
+           <div class="form-group mb-3">
+                <input type="checkbox" v-model="form.fishingEquipment" value="nets">
+                <label>Nets</label>
+           </div>
+           <div class="form-group mb-3">
+                <input type="checkbox" v-model="form.fishingEquipment" value="gaffs">
+                <label>Gaffs</label>
+           </div>
+           <div class="form-group mb-3">
+                <input type="checkbox" v-model="form.fishingEquipment" value="traps">
+                <label>Traps</label>
+           </div>
         </div>
         <div class="form-group mb-3">
             <label for="reservationCancellationConditions">Reservation cancellation conditions: </label>
@@ -38,12 +95,13 @@ Vue.component("add-adventure", {
             <label for="instructorBiography">Instructor biography: </label>
             <textarea v-model="form.instructorBiography" class="form-control" id="instructorBiographyId" placeholder="This field is required!"></textarea>
         </div>
+        <label>Pictures:</label>
         <div class="form-group mb-3">
-            <label for="pictures">Pictures: </label>
-            <input v-model="form.pictures" accept="image/*" @change="uploadImage($event)" class="form-control" id="picturesId" placeholder="This field is required!">
+            <input accept="image/*" type="file" class="form-control" @change="addPicture" multiple/>
         </div>
-        <br>
-        <button @click="sendData" type="submit" @ :disabled="$v.form.$invalid" class="btn btn-primary float-end" >Add adventure</button> <!-- videti kako ovo -->
+        <div class="form-group- mb-3">
+            <button @click="sendData" type="submit" @ :disabled="$v.form.$invalid" class="btn btn-primary float-end" >Add adventure</button>
+        </div>
     </form>
     `,
     data(){
@@ -51,20 +109,28 @@ Vue.component("add-adventure", {
             form:{
                 adventureName: "",
                 description: "",
-                rulesOfConduct: "",
+                rulesOfConduct: [],
                 price: 5,
                 maxNumOfPeople: 1,
-                fishingEquipment: "",
+                fishingEquipment: [],
                 reservationCancellationConditions: "",
                 instructorBiography: "",
-                pictures: null // ovo menjati vrv
+                pictures: []
             }
         }
     },
     methods: {
+        addPicture(e) {
+            let files = e.target.files || e.dataTransfer.files;
+            if (!files.length)
+                return;
+            for (file of files){
+                this.form.pictures.push(file.name)
+            }
+        },
         sendData(){
-            axios.post("neka_Putanja",{
-                adventureName: this.form.adventureName,
+            axios.post("/adventures", {
+                name: this.form.adventureName,
                 description: this.form.description,
                 rulesOfConduct: this.form.rulesOfConduct,
                 price: this.form.price,
@@ -74,8 +140,12 @@ Vue.component("add-adventure", {
                 instructorBiography: this.form.instructorBiography,
                 pictures: this.form.pictures
                 //zatim header jwt token
-                //zatim then(response => { router.puhs("vrv stranica instruktora")
-            })
+            }).then(function(response){
+                console.log("uspeo sam");
+                console.log(response);
+            }).catch(function(error){
+               alert("ne valja brt");
+            });
         }
     },
     validations:{
@@ -88,10 +158,6 @@ Vue.component("add-adventure", {
                 required: validators.required,
                 minLength: validators.minLength(5)
             },
-            rulesOfConduct: {
-                required: validators.required,
-                minLength: validators.minLength(5)
-            },
             price: {
                 required: validators.required,
                 minValueValue: validators.minValue(5)
@@ -99,10 +165,6 @@ Vue.component("add-adventure", {
             maxNumOfPeople: {
                 required: validators.required,
                 minValueValue: validators.minValue(1)
-            },
-            fishingEquipment: {
-                required: validators.required,
-                minLength: validators.minLength(5)
             },
             reservationCancellationConditions: {
                 required: validators.required,
