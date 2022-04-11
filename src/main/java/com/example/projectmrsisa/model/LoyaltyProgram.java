@@ -8,8 +8,8 @@ import java.util.Map;
 @Table(name="loyalty_programs")
 public class LoyaltyProgram {
     @Id
-    @SequenceGenerator(name = "myComplaintSeqGen", sequenceName = "myComplaintSeq", initialValue = 1, allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "myComplaintSeqGen")
+    @SequenceGenerator(name = "myLoyProgSeqGen", sequenceName = "myLoyProgSeq", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "myLoyProgSeqGen")
     @Column(name="id", unique = true, nullable = false)
     private Integer id;
     @Column(name="clientPointsPerReservation", nullable = false)
