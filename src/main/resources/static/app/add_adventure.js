@@ -12,6 +12,18 @@ Vue.component("add-adventure", {
             <textarea v-model="form.description" class="form-control" id="descriptionNameId" placeholder="This field is required!"></textarea>
         </div>
         <div class="form-group mb-3">
+            <label>Country:</label>
+            <input v-model="form.country" type="text" class="form-control" placeholder="This field is required!"/>
+        </div>
+        <div class="form-group mb-3">
+            <label>City:</label>
+            <input v-model="form.city" type="text" class="form-control" placeholder="This field is required!"/>
+        </div>
+        <div class="form-group mb-3">
+            <label>Address:</label>
+            <input v-model="form.address" type="text" class="form-control" placeholder="This field is required!"/>
+        </div>
+        <div class="form-group mb-3">
            <label for="rulesOfConduct">Rules of conduct: </label>
            <div class="form-group mb-3">
                 <input type="checkbox" v-model="form.rulesOfConduct" value="Mobile phone must be turned off">
@@ -115,8 +127,19 @@ Vue.component("add-adventure", {
                 fishingEquipment: [],
                 reservationCancellationConditions: "",
                 instructorBiography: "",
-                pictures: []
+                pictures: [],
+                country: "",
+                city: "",
+                address: ""
             }
+        }
+    },
+    computed: {
+        countryIsValid() {
+            return RegExp(/([A-Z]{1})([a-z]+)([^0-9]*)$/).test(this.form.country) && !!this.form.country;
+        },
+        cityIsValid() {
+            return RegExp(/([A-Z]{1})([a-z]+)([^0-9]*)$/).test(this.form.city) && !!this.form.city;
         }
     },
     methods: {
@@ -138,11 +161,13 @@ Vue.component("add-adventure", {
                 fishingEquipment: this.form.fishingEquipment,
                 reservationCancellationConditions: this.form.reservationCancellationConditions,
                 instructorBiography: this.form.instructorBiography,
-                pictures: this.form.pictures
+                pictures: this.form.pictures,
+                country: this.form.country,
+                city: this.form.city,
+                address: this.form.address
                 //zatim header jwt token
             }).then(function(response){
-                console.log("uspeo sam");
-                console.log(response);
+                alert("uspeo sam");
             }).catch(function(error){
                alert("ne valja brt");
             });
@@ -173,6 +198,15 @@ Vue.component("add-adventure", {
             instructorBiography: {
                 required: validators.required,
                 minLength: validators.minLength(5)
+            },
+            country: {
+                required: validators.required
+            },
+            city: {
+                required: validators.required
+            },
+            address: {
+                required: validators.required
             }
         }
     }

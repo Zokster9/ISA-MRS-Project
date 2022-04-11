@@ -15,4 +15,8 @@ public class AdventureService {
         adventures.add(adventure);
         return adventure;
     }
+
+    /*public Adventure save(Adventure adventure){
+        return adventureRepository.save(adventure); //dodaj repository
+    }    */
 }

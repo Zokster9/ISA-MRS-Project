@@ -15,13 +15,17 @@ public class AdventureDTO {
     private int maxNumOfPeople;
     private String reservationCancellationConditions;
     private boolean isDeleted;
+    //private AddressDTO addressDTO;
+    private String country;
+    private String address;
+    private String city;
 
     public AdventureDTO(){
 
     }
 
     public AdventureDTO(String name, String description, List<String> pictures, List<String> rulesOfConduct, double price,
-                        String instructorBiography, List<String> fishingEquipment, int maxNumOfPeople, String reservationCancellationConditions){
+                        String instructorBiography, List<String> fishingEquipment, int maxNumOfPeople, String reservationCancellationConditions, String country, String address, String city){
         this.name = name;
         this.description = description;
         this.pictures = pictures;
@@ -32,6 +36,11 @@ public class AdventureDTO {
         this.maxNumOfPeople = maxNumOfPeople;
         this.reservationCancellationConditions = reservationCancellationConditions;
         this.isDeleted = false;
+        //this.addressDTO = new AddressDTO(country, address, city);
+        this.country = country;
+        this.address = address;
+        this.city = city;
+
     }
 
     public String getName() {
@@ -112,5 +121,29 @@ public class AdventureDTO {
 
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 }
