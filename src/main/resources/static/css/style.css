@@ -46,6 +46,26 @@ body,
     padding-bottom: 20px;
 }
 
+.card {
+    cursor: pointer;
+    border-radius: 20px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    transition: all 0.2s ease;
+}
+
+.card:hover {
+    box-shadow: 5px 6px 6px 2px #e9ecef;
+    transform: scale(1.1)
+}
+
+.card-img-top {
+    height: 161px;
+    width: auto;
+    object-fit: cover;
+}
+
 .inner-block {
     width: 450px;
     margin: auto;

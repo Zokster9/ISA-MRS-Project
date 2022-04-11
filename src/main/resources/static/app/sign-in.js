@@ -57,7 +57,7 @@ Vue.component("sign-in", {
             email : {
                 required: validators.required,
                 minLength: validators.minLength(3),
-                maxLength: validators.maxLength(20)
+                maxLength: validators.maxLength(50)
             },
             password: {
                 required: validators.required,
