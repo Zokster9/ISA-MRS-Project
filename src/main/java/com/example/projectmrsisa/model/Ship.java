@@ -24,7 +24,7 @@ public class Ship extends Service {
     @Column(name = "capacity", nullable = false)
     private int capacity;
     @ElementCollection
-    @CollectionTable(name = "my_fishingEquipment", joinColumns = @JoinColumn(name = "id"))
+    @CollectionTable(name = "my_fishingEquipment_ships", joinColumns = @JoinColumn(name = "id"))
     @Column(name = "fishingEquipment", nullable = false)
     private Set<String> fishingEquipment = new HashSet<>();
     @Column(name = "reservationCancellationConditions", nullable = false)
