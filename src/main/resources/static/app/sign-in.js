@@ -13,7 +13,7 @@ Vue.component("sign-in", {
                             
                             <div class="form-group">
                                 <label>E-mail</label>
-                                <input v-model="form.email" type="text" class="form-control form-control-lg" pattern=" /^[a-zA-Z0-9.!#$%&'*+/=?^_\`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$/">
+                                <input v-model="form.email" type="email" class="form-control form-control-lg">
                             </div>
                             
                             <div class="form-group">
