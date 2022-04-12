@@ -12,7 +12,7 @@ public class Adventure extends Service {
     @Column(name = "maxNumOfPeople", nullable = false)
     private int maxNumOfPeople;
     @ElementCollection
-    @CollectionTable(name = "my_fishingEquipment", joinColumns = @JoinColumn(name = "id"))
+    @CollectionTable(name = "my_fishingEquipment_adventures", joinColumns = @JoinColumn(name = "id"))
     @Column(name = "fishingEquipment", nullable = false)
     private Set<String> fishingEquipment = new HashSet<>();
     @Column(name = "reservationCancellationConditions", nullable = false)

@@ -12,8 +12,8 @@ public class Retreat extends Service {
     @Column(name="numOfBeds", nullable = false)
     private int numOfBeds;
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "retreat_tags", joinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "retreat_id"))
+    @JoinTable(name = "retreat_tags", joinColumns = @JoinColumn(name = "retreat_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
     private Set<Tag> additionalServices = new HashSet<>();
 
     public Retreat() {

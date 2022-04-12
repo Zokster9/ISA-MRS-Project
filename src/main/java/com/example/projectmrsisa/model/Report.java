@@ -20,10 +20,10 @@ public class Report {
     private boolean isPenalized;
     @Column(name="isAnswered")
     private boolean isAnswered;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client", nullable = false)
     private Client client;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "privilegedUser", nullable = false)
     private User privilegedUser;
 

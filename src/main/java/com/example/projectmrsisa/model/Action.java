@@ -15,8 +15,8 @@ public class Action extends Reservation {
     @JoinColumn(name = "eventPlace_id")
     private Address eventPlace;
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "action_tags", joinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "action_id"))
+    @JoinTable(name = "action_tags", joinColumns = @JoinColumn(name = "action_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
     private Set<Tag> additionalServices = new HashSet<>();
 
     public Action() {

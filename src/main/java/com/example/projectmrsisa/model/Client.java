@@ -12,11 +12,11 @@ public class Client extends User {
     @Column(name = "isPenalized")
     private boolean isPenalized;
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reservations_id")
+    @JoinColumn(name = "client_id")
     private Set<Reservation> reservations = new HashSet<>();
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "subscriptions", joinColumns = @JoinColumn(name = "subscription_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "client_id"))
+    @JoinTable(name = "subscriptions", joinColumns = @JoinColumn(name = "client_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "subscription_id", referencedColumnName = "id"))
     private Set<Service> subscriptions = new HashSet<>();
 
     public Client() {
