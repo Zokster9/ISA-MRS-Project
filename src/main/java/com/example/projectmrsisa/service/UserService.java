@@ -31,4 +31,12 @@ public class UserService {
     public RetreatOwner findRetreatOwnerById(Integer id){
         return userRepository.findRetreatOwnerById(id);
     }
+
+    public User findUserById(Integer id){
+        return userRepository.findUserById(id);
+    }
+
+    public void updateUserActivatedStatusById(Integer id){
+        userRepository.updateUserActivatedStatusById(id);
+    }
 }

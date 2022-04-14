@@ -7,9 +7,8 @@ import com.example.projectmrsisa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +20,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping(produces = "application/json")
+    @GetMapping(value="/inactive", produces = "application/json")
     public ResponseEntity<List<UserDTO>> getInactiveUsers(){
         List<User> inactiveUsers = userService.findUsersByActivatedStatus(false);
         List<UserDTO> inactiveUsersDTO = new ArrayList<UserDTO>();
@@ -40,4 +39,16 @@ public class UserController {
         }
         return new ResponseEntity<>(inactiveUsersDTO, HttpStatus.OK);
     }
+
+    @Transactional
+    @PostMapping(value="/accept/{id}")
+    public ResponseEntity<UserDTO> acceptUser(@PathVariable Integer id){
+        User user = userService.findUserById(id);
+        userService.updateUserActivatedStatusById(user.getId());
+        UserDTO userDTO = new UserDTO(user);
+        // TODO: Poslati email
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+    }
+
+    //TODO declineUser
 }
