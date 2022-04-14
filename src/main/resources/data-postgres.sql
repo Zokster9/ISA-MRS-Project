@@ -12,11 +12,11 @@ insert into addresses (id, country, city, street) values (2, 'Srbija', 'Novi Sad
 insert into addresses (id, country, city, street) values (3, 'Srbija', 'Sremska Kamenica', 'Dunavska 1');
 insert into addresses (id, country, city, street) values (4, 'Srbija', 'Loznica', 'Drinska 84');
 
-insert into users (id, email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values (1, 'matijazaric9@gmail.com', 'matija123','Matija', 'Zaric', 4, '0657842312', true, false, 0, 0);
-insert into users (id, email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values (2, 'sakal.teodor@gmail.com', 'teodor123', 'Teodor', 'Sakal Franciskovic', 1, '0636742312', true, false, 0, 0);
-insert into users (id, email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values (3, 'lordje@gmail.com', 'djordje123', 'Djordje', 'Vajagic', 2, '0617647812', true, false, 0, 0);
-insert into users (id, email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values (4, 'zoki@gmail.com', 'zoran123', 'Zoran', 'Bukorac', 3, '0607846912', true, false, 0, 0);
-insert into users (id, email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values (5, 'klijent@gmail.com', 'klijent123', 'Klijent', 'Klijentic', 2, '0667342312', true, false, 0, 0);
+insert into users (id, email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status, registration_reason) values (1, 'matijazaric9@gmail.com', 'matija123','Matija', 'Zaric', 4, '0657842312', false, false, 0, 0, 'Registration reason RETREAT OWNER');
+insert into users (id, email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status, registration_reason) values (2, 'sakal.teodor@gmail.com', 'teodor123', 'Teodor', 'Sakal Franciskovic', 1, '0636742312', false, false, 0, 0, 'Registration reason SHIP OWNER');
+insert into users (id, email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status, registration_reason) values (3, 'lordje@gmail.com', 'djordje123', 'Djordje', 'Vajagic', 2, '0617647812', true, false, 0, 0, 'Registration reason FISHING INSTRUCTOR');
+insert into users (id, email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status, registration_reason) values (4, 'zoki@gmail.com', 'zoran123', 'Zoran', 'Bukorac', 3, '0607846912', true, false, 0, 0, 'Registration reason ADMIN');
+insert into users (id, email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status, registration_reason) values (5, 'klijent@gmail.com', 'klijent123', 'Klijent', 'Klijentic', 2, '0667342312', true, false, 0, 0, '');
 
 insert into retreat_owners (id) values (1);
 

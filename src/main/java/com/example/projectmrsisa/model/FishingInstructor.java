@@ -15,8 +15,8 @@ public class FishingInstructor extends User {
     }
 
     public FishingInstructor(Integer id, String email, String password, String name, String surname, Address address,
-                             String phoneNumber, LoyaltyStatus loyaltyStatus, int loyaltyPoints, Set<Adventure> adventures) {
-        super(id, email, password, name, surname, address, phoneNumber, loyaltyStatus, loyaltyPoints);
+                             String phoneNumber, LoyaltyStatus loyaltyStatus, int loyaltyPoints, String registrationReason, Set<Adventure> adventures) {
+        super(id, email, password, name, surname, address, phoneNumber, loyaltyStatus, loyaltyPoints, registrationReason);
         this.adventures = adventures;
     }
 

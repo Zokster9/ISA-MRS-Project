@@ -32,6 +32,8 @@ public abstract class User {
     private boolean isDeleted;
     @Column(name="isActive", nullable = false)
     private boolean isActive;
+    @Column(name="registrationReason")
+    private String registrationReason;
 
     public User() {
         this.loyaltyStatus = LoyaltyStatus.Regular;
@@ -40,7 +42,7 @@ public abstract class User {
     }
 
     public User(Integer id, String email, String password, String name, String surname, Address address,
-                String phoneNumber, LoyaltyStatus loyaltyStatus, int loyaltyPoints) {
+                String phoneNumber, LoyaltyStatus loyaltyStatus, int loyaltyPoints, String registrationReason) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -52,6 +54,7 @@ public abstract class User {
         this.loyaltyPoints = loyaltyPoints;
         this.isDeleted = false;
         this.isActive = false;
+        this.registrationReason = registrationReason;
     }
 
     public Integer getId() {
@@ -140,5 +143,13 @@ public abstract class User {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public String getRegistrationReason() {
+        return registrationReason;
+    }
+
+    public void setRegistrationReason(String registrationReason) {
+        this.registrationReason = registrationReason;
     }
 }

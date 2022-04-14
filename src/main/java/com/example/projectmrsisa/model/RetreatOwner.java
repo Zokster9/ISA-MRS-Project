@@ -15,8 +15,8 @@ public class RetreatOwner extends User {
     }
 
     public RetreatOwner(Integer id, String email, String password, String name, String surname, Address address,
-                        String phoneNumber, LoyaltyStatus loyaltyStatus, int loyaltyPoints, Set<Retreat> retreats) {
-        super(id, email, password, name, surname, address, phoneNumber, loyaltyStatus, loyaltyPoints);
+                        String phoneNumber, LoyaltyStatus loyaltyStatus, int loyaltyPoints, String registrationReason, Set<Retreat> retreats) {
+        super(id, email, password, name, surname, address, phoneNumber, loyaltyStatus, loyaltyPoints, registrationReason);
         this.retreats = retreats;
     }
 

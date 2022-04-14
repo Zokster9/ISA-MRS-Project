@@ -1,8 +1,9 @@
-const AddRetreat = { template: '<add-retreat></add-retreat>'};
+const RegistrationRequests = { template: '<registration-requests></registration-requests>'};
 
 const router = new VueRouter({
     mode: 'hash',
     routes: [
+        {path: "/registration-requests", component: RegistrationRequests},
 
     ]
 });
