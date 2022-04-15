@@ -4,17 +4,14 @@ Vue.component("registration-requests", {
     template:`
         <div class="row justify-content-center">
          <div class="col-auto">
-            <table class="table table-striped table-responsive table-bordered">
+         <br>
+         <br>
+            <table class="table table-striped table-responsive table-bordered mb-5"">
                 <thead>
-                    <th colspan="4" class="text-center"> Registration Requests </th>
+                    <th colspan="100%" class="text-center h2"> Registration Requests </th>
                 </thead>
                 <tbody>
-                    <tr v-for="user in unactivatedUsers" :key="user.id">
-                        <td> {{ user.name }} {{ user.surname }} </td>
-                        <td> {{ user.registrationReason }} </td>
-                        <td> <button type="button" class="btn btn-success" @click="acceptUser(user.id)">Accept registration</button> </td>
-                        <td> <button type="button" class="btn btn-danger"> Decline registration</button> </td>
-                    </tr>
+                    <registration-requests-row v-for="user in unactivatedUsers" :user="user"></registration-requests-row>
                 </tbody>
             </table>
          </div>
@@ -25,18 +22,9 @@ Vue.component("registration-requests", {
             unactivatedUsers: [],
         }
     },
-    methods: {
-      acceptUser(id){
-          axios.post("users/accept/" + id).then((response) => {
-              axios.get("/users/inactive").then((response) => {
-                  this.unactivatedUsers = response.data;
-              })
-          })
-      }
-    },
     mounted(){
         axios.get("/users/inactive").then((response) => {
             this.unactivatedUsers = response.data;
         })
-    }
+    },
 })

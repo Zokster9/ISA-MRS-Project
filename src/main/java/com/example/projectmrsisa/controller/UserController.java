@@ -1,5 +1,6 @@
 package com.example.projectmrsisa.controller;
 
+import com.example.projectmrsisa.dto.RegistrationReasoningDTO;
 import com.example.projectmrsisa.dto.UserDTO;
 import com.example.projectmrsisa.model.PrivilegedUser;
 import com.example.projectmrsisa.model.User;
@@ -22,7 +23,7 @@ public class UserController {
 
     @GetMapping(value="/inactive", produces = "application/json")
     public ResponseEntity<List<UserDTO>> getInactiveUsers(){
-        List<User> inactiveUsers = userService.findUsersByActivatedStatus(false);
+        List<User> inactiveUsers = userService.findUsersByActivatedStatus(false, false);
         List<UserDTO> inactiveUsersDTO = new ArrayList<UserDTO>();
         for (User iu : inactiveUsers){
             PrivilegedUser privilegedUser = PrivilegedUser.NOT_PRIVILEGED_USER;
@@ -35,7 +36,8 @@ public class UserController {
             else if (userService.findShipOwnerById(iu.getId()) != null){
                 privilegedUser = PrivilegedUser.SHIP_OWNER;
             }
-            inactiveUsersDTO.add(new UserDTO(iu, privilegedUser));
+            RegistrationReasoningDTO registrationReasoningDTO = new RegistrationReasoningDTO(userService.findRegistrationReasoningByUserId(iu));
+            inactiveUsersDTO.add(new UserDTO(iu, privilegedUser, registrationReasoningDTO));
         }
         return new ResponseEntity<>(inactiveUsersDTO, HttpStatus.OK);
     }
@@ -50,5 +52,14 @@ public class UserController {
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
-    //TODO declineUser
+    @Transactional
+    @PostMapping(value="/decline")
+    public ResponseEntity<UserDTO> declineUser(@RequestParam Integer id, @RequestParam String declineReasoning){
+        System.out.println(declineReasoning);
+        User user = userService.findUserById(id);
+        userService.updateUserDeletedStatusById(id);
+        UserDTO userDTO = new UserDTO(user);
+        //TODO: Razlog brisanja, poslati email
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+    }
 }

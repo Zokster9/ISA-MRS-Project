@@ -1,11 +1,8 @@
 package com.example.projectmrsisa.dto;
 
-import com.example.projectmrsisa.model.Address;
 import com.example.projectmrsisa.model.LoyaltyStatus;
 import com.example.projectmrsisa.model.PrivilegedUser;
 import com.example.projectmrsisa.model.User;
-
-import javax.persistence.*;
 
 public class UserDTO {
     private Integer id;
@@ -19,7 +16,7 @@ public class UserDTO {
     private int loyaltyPoints;
     private boolean isDeleted;
     private boolean isActive;
-    private String registrationReason;
+    private RegistrationReasoningDTO registrationReasoningDTO;
     private PrivilegedUser privilegedUser;
 
     public UserDTO(){
@@ -38,11 +35,10 @@ public class UserDTO {
         loyaltyPoints = user.getLoyaltyPoints();
         isDeleted = user.isDeleted();
         isActive = user.isActive();
-        registrationReason = user.getRegistrationReason();
         privilegedUser = PrivilegedUser.NOT_PRIVILEGED_USER;
     }
 
-    public UserDTO(User user, PrivilegedUser privilegedUser){
+    public UserDTO(User user, PrivilegedUser privilegedUser, RegistrationReasoningDTO registrationReasoningDTO){
         id = user.getId();
         email = user.getEmail();
         password = user.getPassword();
@@ -54,7 +50,7 @@ public class UserDTO {
         loyaltyPoints = user.getLoyaltyPoints();
         isDeleted = user.isDeleted();
         isActive = user.isActive();
-        registrationReason = user.getRegistrationReason();
+        this.registrationReasoningDTO = registrationReasoningDTO;
         this.privilegedUser = privilegedUser;
     }
 
@@ -146,19 +142,19 @@ public class UserDTO {
         isActive = active;
     }
 
-    public String getRegistrationReason() {
-        return registrationReason;
-    }
-
-    public void setRegistrationReason(String registrationReason) {
-        this.registrationReason = registrationReason;
-    }
-
     public PrivilegedUser getPrivilegedUser() {
         return privilegedUser;
     }
 
     public void setPrivilegedUser(PrivilegedUser privilegedUser) {
         this.privilegedUser = privilegedUser;
+    }
+
+    public RegistrationReasoningDTO getRegistrationReasoningDTO() {
+        return registrationReasoningDTO;
+    }
+
+    public void setRegistrationReasoningDTO(RegistrationReasoningDTO registrationReasoningDTO) {
+        this.registrationReasoningDTO = registrationReasoningDTO;
     }
 }

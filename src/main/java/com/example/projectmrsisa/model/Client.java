@@ -26,7 +26,7 @@ public class Client extends User {
     public Client(Integer id, String email, String password, String name, String surname, Address address,
                   String phoneNumber, LoyaltyStatus loyaltyStatus, String registrationReason, int loyaltyPoints, int penaltyPoints,
                   boolean isPenalized, Set<Reservation> reservations, Set<Service> subscriptions) {
-        super(id, email, password, name, surname, address, phoneNumber, loyaltyStatus, loyaltyPoints, registrationReason);
+        super(id, email, password, name, surname, address, phoneNumber, loyaltyStatus, loyaltyPoints);
         this.penaltyPoints = penaltyPoints;
         this.isPenalized = isPenalized;
         this.reservations = reservations;

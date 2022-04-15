@@ -1,9 +1,6 @@
 package com.example.projectmrsisa.service;
 
-import com.example.projectmrsisa.model.FishingInstructor;
-import com.example.projectmrsisa.model.RetreatOwner;
-import com.example.projectmrsisa.model.ShipOwner;
-import com.example.projectmrsisa.model.User;
+import com.example.projectmrsisa.model.*;
 import com.example.projectmrsisa.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,8 +13,8 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public List<User> findUsersByActivatedStatus(Boolean isActivated){
-        return userRepository.findUsersByActivatedStatus(isActivated);
+    public List<User> findUsersByActivatedStatus(Boolean isActivated, Boolean isDeleted){
+        return userRepository.findUsersByActivatedStatus(isActivated, isDeleted);
     }
 
     public FishingInstructor findFishingInstructorById(Integer id){
@@ -38,5 +35,13 @@ public class UserService {
 
     public void updateUserActivatedStatusById(Integer id){
         userRepository.updateUserActivatedStatusById(id);
+    }
+
+    public void updateUserDeletedStatusById(Integer id){
+        userRepository.updateUserDeletedStatusById(id);
+    }
+
+    public RegistrationReasoning findRegistrationReasoningByUserId(User user){
+        return userRepository.findRegistrationReasoningByUser(user);
     }
 }
