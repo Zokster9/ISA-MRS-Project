@@ -6,10 +6,11 @@ Vue.component("registration-requests-row", {
         <tr :key="user.id" :class="{activeAcceptButton: hoverAcceptButton, activeDeclineButton: hoverDeclineButton}">
             <td class="align-middle"> {{ user.name }} {{ user.surname }} </td>
             <td class="align-middle"> {{ user.registrationReasoningDTO.registrationReason }} </td>
-            <td class="align-middle"> <button type="button" class="btn btn-success" @mouseover="hoverAcceptButton = true" @mouseleave="hoverAcceptButton = false" @click="acceptUser(user.id)">Accept registration</button> </td>
+            <td class="align-middle" v-if="!isButtonHidden"> <button type="button" class="btn btn-success" @mouseover="hoverAcceptButton = true" @mouseleave="hoverAcceptButton = false" @click="acceptUser(user.id)">Accept registration</button> </td>
             <td class="align-middle" v-if="!isButtonHidden"> <button @mouseover="hoverDeclineButton = true" @mouseleave="hoverDeclineButton = false" type="button" class="btn btn-danger" @click="isButtonHidden = true"> Decline registration</button> </td>
             <td class="align-middle" v-if="isButtonHidden"> <textarea v-model="declineReasoning" placeholder="Reason for declining a registration: "></textarea></td>
             <td class="align-middle" v-if="isButtonHidden"> <button type="button" class="btn btn-danger" @click="declineUser(user.id)" @ :disabled="$v.declineReasoning.$invalid">Confirm declining a registration</button></td>
+            <td class="align-middle" v-if="isButtonHidden"> <button type="button" class="btn btn-warning" @click="isButtonHidden = false"> Back </button></td>
         </tr>
     `,
     data(){
@@ -23,7 +24,6 @@ Vue.component("registration-requests-row", {
     methods: {
         declineUser(id){
             axios.post("/users/decline?id=" + id + "&declineReasoning=" + this.declineReasoning).then((response) => {
-                alert("Uspeh");
                 window.location.reload();
             })
         },
