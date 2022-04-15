@@ -62,4 +62,11 @@ public class UserController {
         //TODO: Razlog brisanja, poslati email
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
+
+    @PostMapping("/register")
+    public ResponseEntity<UserDTO> register(@RequestBody UserDTO userDTO) {
+        System.out.println("Primio sam korisnika, vracam odgovor.");
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+    }
+
 }
