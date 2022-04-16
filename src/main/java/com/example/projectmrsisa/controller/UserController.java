@@ -1,7 +1,11 @@
 package com.example.projectmrsisa.controller;
 
+import com.example.projectmrsisa.dto.AddressDTO;
+import com.example.projectmrsisa.dto.FishingInstructorDTO;
 import com.example.projectmrsisa.dto.RegistrationReasoningDTO;
 import com.example.projectmrsisa.dto.UserDTO;
+import com.example.projectmrsisa.model.Address;
+import com.example.projectmrsisa.model.FishingInstructor;
 import com.example.projectmrsisa.model.PrivilegedUser;
 import com.example.projectmrsisa.model.User;
 import com.example.projectmrsisa.service.UserService;
@@ -61,5 +65,14 @@ public class UserController {
         UserDTO userDTO = new UserDTO(user);
         //TODO: Razlog brisanja, poslati email
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
+    }
+
+    @Transactional
+    @GetMapping(value="/findByEmail/{email}")
+    //TODO: Autorizacija
+    public ResponseEntity<FishingInstructorDTO> getFishingInstructor(@PathVariable String email){
+        FishingInstructor fishingInstructor = userService.findFishingInstructorByEmail(email);
+        FishingInstructorDTO fishingInstructorDTO = new FishingInstructorDTO(fishingInstructor);
+        return new ResponseEntity<>(fishingInstructorDTO, HttpStatus.OK);
     }
 }

@@ -6,7 +6,7 @@ Vue.component("profile-page-fishing-instructor", {
                 <nav-fishing-instructor @selected-item="showSelectedOption"></nav-fishing-instructor>
             </div>
             <div>
-                
+                <personal-info-fishing-instructor v-if="personalInfo === true" :user="user"></personal-info-fishing-instructor>
             </div>
         </div>
     `,
@@ -20,7 +20,8 @@ Vue.component("profile-page-fishing-instructor", {
             newReservation: false,
             writeReport: false,
             businessReports: false,
-            myCalendar: false
+            myCalendar: false,
+            user: "",
         }
     },
     methods:{
@@ -117,5 +118,11 @@ Vue.component("profile-page-fishing-instructor", {
                 this.myCalendar = true;
             }
         }
+    },
+    //TODO:tu ce biti neki jwt za email
+    mounted(){
+        axios.get("users/findByEmail/lordje@gmail.com").then((response) =>{
+            this.user = response.data
+        })
     }
 })

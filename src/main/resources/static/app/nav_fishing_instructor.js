@@ -24,7 +24,7 @@ Vue.component("nav-fishing-instructor", {
                 writeReport: false,
                 businessReports: false,
                 myCalendar: false
-            }
+            },
         }
     },
     methods:{
