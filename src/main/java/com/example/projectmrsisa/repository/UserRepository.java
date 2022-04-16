@@ -34,4 +34,5 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query("select rr from RegistrationReasoning rr where rr.privilegedUser = ?1")
     public RegistrationReasoning findRegistrationReasoningByUser(User user);
+
 }

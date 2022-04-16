@@ -1,6 +1,6 @@
 Vue.use(vuelidate.default)
 
-const isCapitalFirstLetter = (value) => RegExp("([A-Z]{1})([a-z]+)([^0-9]*)$").test(value);
+const isCapitalFirstLetter = (value) => RegExp(/([A-Z]{1})([a-z]+)([^0-9]*)$/).test(value);
 
 Vue.component("sign-up", {
     template: `
@@ -179,7 +179,6 @@ Vue.component("sign-up", {
             address: {
                 required : validators.required,
                 minLength : validators.minLength(1),
-                isCapitalFirstLetter
             },
             city: {
                 required : validators.required,

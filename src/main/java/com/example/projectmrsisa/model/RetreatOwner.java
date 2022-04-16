@@ -1,5 +1,7 @@
 package com.example.projectmrsisa.model;
 
+import com.example.projectmrsisa.dto.UserDTO;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,6 +20,17 @@ public class RetreatOwner extends User {
                         String phoneNumber, LoyaltyStatus loyaltyStatus, int loyaltyPoints, String registrationReason, Set<Retreat> retreats) {
         super(id, email, password, name, surname, address, phoneNumber, loyaltyStatus, loyaltyPoints);
         this.retreats = retreats;
+    }
+
+    public RetreatOwner(UserDTO userDTO, Address a) {
+        this.setEmail(userDTO.getEmail());
+        this.setPassword(userDTO.getPassword());
+        this.setName(userDTO.getName());
+        this.setSurname(userDTO.getSurname());
+        this.setAddress(a);
+        this.setPhoneNumber(userDTO.getPhoneNumber());
+        this.setLoyaltyStatus(LoyaltyStatus.Regular);
+        this.setLoyaltyPoints(0);
     }
 
     public Set<Retreat> getRetreats() {

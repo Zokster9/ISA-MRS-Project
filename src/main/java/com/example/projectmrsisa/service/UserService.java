@@ -1,7 +1,8 @@
 package com.example.projectmrsisa.service;
 
-import com.example.projectmrsisa.dto.UserDTO;
 import com.example.projectmrsisa.model.*;
+import com.example.projectmrsisa.repository.RetreatOwnerRepository;
+import com.example.projectmrsisa.repository.ShipOwnerRepository;
 import com.example.projectmrsisa.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,12 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RetreatOwnerRepository retreatOwnerRepository;
+
+    @Autowired
+    private ShipOwnerRepository shipOwnerRepository;
 
     public List<User> findUsersByActivatedStatus(Boolean isActivated, Boolean isDeleted){
         return userRepository.findUsersByActivatedStatus(isActivated, isDeleted);
@@ -42,21 +49,16 @@ public class UserService {
         userRepository.updateUserDeletedStatusById(id);
     }
 
-    public RegistrationReasoning findRegistrationReasoningByUserId(User user){
+    public RegistrationReasoning findRegistrationReasoningByUserId(User user) {
         return userRepository.findRegistrationReasoningByUser(user);
     }
 
-    public User registration(UserDTO userDTO) {
-        return null;
+    public RetreatOwner addRetreatOwner(RetreatOwner retreatOwner) {
+        return retreatOwnerRepository.save(retreatOwner);
     }
 
-    private boolean validData(UserDTO userDTO) {
-        if (userDTO.getEmail() == null || !userDTO.getEmail().matches("^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$")) {
-            return false;
-        }
-        if (userDTO.getPassword() == null || userDTO.getConfirmPassword() == null || userDTO.getPassword() != userDTO.getConfirmPassword()) {
-            return false;
-        }
-        return true;
+    public ShipOwner addShipOwner(ShipOwner shipOwner) {
+        return shipOwnerRepository.save(shipOwner);
     }
+
 }
