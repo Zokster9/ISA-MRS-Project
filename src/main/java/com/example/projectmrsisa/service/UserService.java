@@ -52,4 +52,8 @@ public class UserService {
     public FishingInstructor findFishingInstructorByEmail(String email){
         return fishingInstructorRepository.findFishingInstructorByEmail(email);
     }
+
+    public void updateFishingInstructorDeletedStatusByEmail(boolean isDeleted, String email){
+        fishingInstructorRepository.updateFishingInstructorDeletedStatusByEmail(isDeleted, email);
+    }
 }

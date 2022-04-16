@@ -30,10 +30,19 @@ Vue.component("personal-info-fishing-instructor", {
                 <div class="card-body"> 
                     <h5 class="card-title"> Account termination </h5>
                     <p class="card-text"> Once you terminate your account, you won't be able to have access to it ever again! </p>
-                    <router-link to="#" class="btn btn-danger"> Terminate account </router-link>
+                    <button class="btn btn-danger" @click="deleteAccount"> Terminate account </button>
                 </div>
             </div>
         </div>
     </div>
     `,
+    //TODO: Dobavi Email iz jwt-a
+    methods: {
+        deleteAccount(){
+            axios.post("/users/deleteByEmail/lordje@gmail.com").then((response)=>{
+                // TODO: izmeniti na pocetnu stranicu
+                window.location.assign("http:localhost:8088/#/");
+            })
+        }
+    }
 })

@@ -75,4 +75,13 @@ public class UserController {
         FishingInstructorDTO fishingInstructorDTO = new FishingInstructorDTO(fishingInstructor);
         return new ResponseEntity<>(fishingInstructorDTO, HttpStatus.OK);
     }
+    //TODO: Mozda ipak zaseban Controller za svakog korisnika
+    @Transactional
+    @PostMapping(value="/deleteByEmail/{email}")
+    //TODO: Autorizacija
+    public ResponseEntity<FishingInstructorDTO> deleteFishingInstructor(@PathVariable String email){
+        userService.updateFishingInstructorDeletedStatusByEmail(true, email);
+        FishingInstructorDTO fishingInstructorDTO = new FishingInstructorDTO(userService.findFishingInstructorByEmail(email));
+        return new ResponseEntity<>(fishingInstructorDTO, HttpStatus.OK);
+    }
 }
