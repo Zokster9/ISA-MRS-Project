@@ -9,7 +9,7 @@ Vue.component("main-screen", {
             </div>
             <div class="row justify-content-evenly" style="margin-top: 100px;">
                 <div class="col align-middle">
-                    <router-link exact to="/sign-in" tag="div" class="card mx-2">
+                    <router-link exact to="/retreats" tag="div" class="card mx-2">
                         <img src="images/retreat.png" class="card-img-top" alt="...">
                       <div class="card-body">
                         <h5 class="card-title">Retreats</h5>
@@ -18,7 +18,7 @@ Vue.component("main-screen", {
                     </router-link>
                 </div>
                 <div class="col align-middle">
-                    <router-link exact to="/sign-in" tag="div" class="card mx-2">
+                    <router-link exact to="/ships" tag="div" class="card mx-2">
                     <img src="images/boat.png" class="card-img-top" alt="...">
                       <div class="card-body">
                         <h5 class="card-title">Ships</h5>
@@ -27,7 +27,7 @@ Vue.component("main-screen", {
                     </router-link>
                 </div>
                 <div class="col align-middle">
-                    <router-link exact to="/sign-in" tag="div" class="card mx-2">
+                    <router-link exact to="/fishing-instructors" tag="div" class="card mx-2">
                     <img src="images/fishingInstructor.png" class="card-img-top" alt="...">
                       <div class="card-body">
                         <h5 class="card-title">Fishing instructors</h5>
