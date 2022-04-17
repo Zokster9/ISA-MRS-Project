@@ -87,7 +87,7 @@ Vue.component("sign-up", {
                             </div>
                             
                             <div class="form-group">
-                                <button @click.native="login" @enter.native="login" :disabled="$v.form.$invalid" type="submit" class="btn btn-dark btn-lg btn-block">Sign Up</button>
+                                <button @click.native="login" @enter.native="login" :disabled="$v.form.$invalid || isExplanationRequired" type="submit" class="btn btn-dark btn-lg btn-block">Sign Up</button>
                             </div>
                         </form>
                     </div>
@@ -119,7 +119,10 @@ Vue.component("sign-up", {
             return this.form.registrationType === "client";
         },
         isPrivilegedUser() {
-            return this.form.registrationType === "privilegedUser"
+            return this.form.registrationType === "privilegedUser";
+        },
+        isExplanationRequired() {
+            return this.isPrivilegedUser && this.form.registrationExplanation === "";
         }
     },
     methods: {},
@@ -164,12 +167,6 @@ Vue.component("sign-up", {
                 required : validators.required,
                 minLength : validators.minLength(12),
             },
-            registrationExplanation: {
-                required : validators.requiredIf(() => {
-                    return this.isPrivilegedUser
-                }),
-                minLength : validators.minLength(1),
-            }
         }
     },
 })
