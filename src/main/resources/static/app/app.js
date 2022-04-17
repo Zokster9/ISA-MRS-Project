@@ -3,7 +3,7 @@ const AddShip = { template: '<add-ship></add-ship>'};
 const router = new VueRouter({
     mode: 'hash',
     routes: [
-        { path: "/addShip/", component: AddShip }
+        { path: "/add-ship", component: AddShip }
 
     ]
 });

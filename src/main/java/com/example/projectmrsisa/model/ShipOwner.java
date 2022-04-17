@@ -8,7 +8,7 @@ import java.util.Set;
 @Table(name="ship_owners")
 public class ShipOwner extends User {
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ships")
+    @JoinColumn(name = "owner_id")
     private Set<Ship> ships = new HashSet<>();
 
     public ShipOwner() {

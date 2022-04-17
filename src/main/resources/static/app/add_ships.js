@@ -260,7 +260,7 @@ Vue.component('add-ship', {
                 description: this.form.description,
                 country: this.form.country,
                 city: this.form.city,
-                address: this.form.address,
+                street: this.form.address,
                 rulesOfConduct: this.form.rulesOfConduction,
                 type: this.form.shipType,
                 length: this.form.shipLength,
@@ -272,10 +272,11 @@ Vue.component('add-ship', {
                 fishingEquipment: this.form.fishingEquipment,
                 reservationCancellationConditions: this.form.reservationCancellationConditions,
                 pictures: this.form.pictures
-            }).then(function(response) {
-                alert("radi brt");
+            }).then((response) => {
+                alert("Ship added");
+                // TODO: preusmeriti na drugu stranu
             }).catch(function (error) {
-                alert("ne valja brt");
+                alert("Error occurred while adding ship!");
             });
         },
 

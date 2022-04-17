@@ -1,22 +1,26 @@
 package com.example.projectmrsisa.dto;
 
 import com.example.projectmrsisa.model.Address;
+import com.example.projectmrsisa.model.Ship;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.JoinColumn;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class ShipDTO {
 
+    private int id;
+    private int owner_id;
     private String name;
     private String description;
     private String country;
     private String city;
-    private String address;
+    private String street;
     private List<String> pictures;
     private List<String> rulesOfConduct;
     private String type;
@@ -31,12 +35,12 @@ public class ShipDTO {
 
     public ShipDTO() {}
 
-    public ShipDTO(String name, String description, String country, String city, String address, List<String> pictures, List<String> rulesOfConduct, String type, double length, String engineNum, int enginePower, String maxSpeed, List<String> navigationEquipment, int capacity, List<String> fishingEquipment, String reservationCancellationConditions) {
+    public ShipDTO(String name, String description, String country, String city, String street, List<String> pictures, List<String> rulesOfConduct, String type, double length, String engineNum, int enginePower, String maxSpeed, List<String> navigationEquipment, int capacity, List<String> fishingEquipment, String reservationCancellationConditions) {
         this.name = name;
         this.description = description;
         this.country = country;
         this.city = city;
-        this.address = address;
+        this.street = street;
         this.pictures = pictures;
         this.rulesOfConduct = rulesOfConduct;
         this.type = type;
@@ -48,6 +52,43 @@ public class ShipDTO {
         this.capacity = capacity;
         this.fishingEquipment = fishingEquipment;
         this.reservationCancellationConditions = reservationCancellationConditions;
+    }
+
+    public ShipDTO(Ship ship) {
+        this.id = ship.getId();
+        this.owner_id = ship.getOwner().getId();
+        this.name = ship.getName();
+        this.description = ship.getDescription();
+        this.country = ship.getAddress().getCountry();
+        this.city = ship.getAddress().getCity();
+        this.street = ship.getAddress().getStreet();
+        this.pictures = new ArrayList<>(ship.getPictures());
+        this.rulesOfConduct = new ArrayList<>(ship.getRulesOfConduct());
+        this.type = ship.getType();
+        this.length = ship.getLength();
+        this.engineNum = ship.getEngineNum();
+        this.enginePower = ship.getEnginePower();
+        this.maxSpeed = ship.getMaxSpeed();
+        this.navigationEquipment = new ArrayList<>(ship.getNavigationEquipment());
+        this.capacity = ship.getCapacity();
+        this.fishingEquipment = new ArrayList<>(ship.getFishingEquipment());
+        this.reservationCancellationConditions = ship.getReservationCancellationConditions();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getOwner_id() {
+        return owner_id;
+    }
+
+    public void setOwner_id(int owner_id) {
+        this.owner_id = owner_id;
     }
 
     public String getName() {
@@ -82,12 +123,12 @@ public class ShipDTO {
         this.city = city;
     }
 
-    public String getAddress() {
-        return address;
+    public String getStreet() {
+        return street;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setStreet(String address) {
+        this.street = address;
     }
 
     public List<String> getPictures() {

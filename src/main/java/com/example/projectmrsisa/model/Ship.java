@@ -1,5 +1,7 @@
 package com.example.projectmrsisa.model;
 
+import com.example.projectmrsisa.dto.ShipDTO;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,7 +26,7 @@ public class Ship extends Service {
     @Column(name = "capacity", nullable = false)
     private int capacity;
     @ElementCollection
-    @CollectionTable(name = "my_fishingEquipment", joinColumns = @JoinColumn(name = "id"))
+    @CollectionTable(name = "my_fishingEquipment_ships", joinColumns = @JoinColumn(name = "id"))
     @Column(name = "fishingEquipment", nullable = false)
     private Set<String> fishingEquipment = new HashSet<>();
     @Column(name = "reservationCancellationConditions", nullable = false)
@@ -47,6 +49,27 @@ public class Ship extends Service {
         this.capacity = capacity;
         this.fishingEquipment = fishingEquipment;
         this.reservationCancellationConditions = reservationCancellationConditions;
+    }
+
+    public Ship(ShipDTO shipDTO, Address address, ShipOwner shipOwner) {
+        this.setName(shipDTO.getName());
+        this.setDescription(shipDTO.getDescription());
+        this.setOwner(shipOwner);
+        this.setAddress(address);
+        this.setPictures(new HashSet<>(shipDTO.getPictures()));
+        this.setRulesOfConduct(new HashSet<>(shipDTO.getRulesOfConduct()));
+        this.setPrice(0);
+        this.setDeleted(false);
+        this.setActions(new HashSet<>());
+        this.type = shipDTO.getType();
+        this.length = shipDTO.getLength();
+        this.engineNum = shipDTO.getEngineNum();
+        this.enginePower = shipDTO.getEnginePower();
+        this.maxSpeed = shipDTO.getMaxSpeed();
+        this.navigationEquipment = new HashSet<>(shipDTO.getNavigationEquipment());
+        this.capacity = shipDTO.getCapacity();
+        this.fishingEquipment = new HashSet<>(shipDTO.getFishingEquipment());
+        this.reservationCancellationConditions = shipDTO.getReservationCancellationConditions();
     }
 
     public String getType() {

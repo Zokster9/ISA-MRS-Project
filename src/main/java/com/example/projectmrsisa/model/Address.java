@@ -1,5 +1,7 @@
 package com.example.projectmrsisa.model;
 
+import com.example.projectmrsisa.dto.AddressDTO;
+
 import javax.persistence.*;
 
 @Entity
@@ -23,6 +25,20 @@ public class Address {
         this.country = country;
         this.city = city;
         this.street = street;
+    }
+
+    public Address(AddressDTO addressDTO) {
+        this.country = addressDTO.getCountry();
+        this.city = addressDTO.getCity();
+        this.street = addressDTO.getStreet();
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getCountry() {

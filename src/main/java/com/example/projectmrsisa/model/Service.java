@@ -9,8 +9,7 @@ import java.util.Set;
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Service {
     @Id
-    @SequenceGenerator(name = "myServiceSeqGen", sequenceName = "myServiceSeq", initialValue = 1, allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "myServiceSeqGen")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id", unique = true, nullable = false)
     private Integer id;
     @Column(name="name", nullable = false)
@@ -36,7 +35,7 @@ public abstract class Service {
     @Column(name="isDeleted", nullable = false)
     private boolean isDeleted;
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "actions")
+    @JoinColumn(name = "service")
     private Set<Action> actions = new HashSet<>();
 
     public Service() {

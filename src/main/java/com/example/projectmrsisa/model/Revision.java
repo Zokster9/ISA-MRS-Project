@@ -3,7 +3,7 @@ package com.example.projectmrsisa.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name="clients")
+@Table(name="revisions")
 public class Revision {
     @Id
     @SequenceGenerator(name = "myRevisionSeqGen", sequenceName = "myRevisionSeq", initialValue = 1, allocationSize = 1)
