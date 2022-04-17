@@ -60,38 +60,12 @@ Vue.component('add-retreat', {
                 <div class="form-group mb-3">
                     <label>Additional services:</label>
                     <br>
-                    <div class="form-group mb-3">
-                        <input type="checkbox" v-model="form.additionalServices" value="WiFi"/>
-                        <label>WiFi</label>
-                    </div>
-                    <div class="form-group mb-3">
-                        <input type="checkbox" v-model="form.additionalServices" value="Garage"/>
-                        <label>Garage</label>
-                    </div>
-                    <div class="form-group mb-3">
-                        <input type="checkbox" v-model="form.additionalServices" value="Heating"/>
-                        <label>Heating</label>
-                    </div>
-                    <div class="form-group mb-3">
-                        <input type="checkbox" v-model="form.additionalServices" value="Kitchen"/>
-                        <label>Kitchen</label>
-                    </div>
-                    <div class="form-group mb-3">
-                        <input type="checkbox" v-model="form.additionalServices" value="Shower"/>
-                        <label>Shower</label>
-                    </div>
-                    <div class="form-group mb-3">
-                        <input type="checkbox" v-model="form.additionalServices" value="Barbeque"/>
-                        <label>Barbeque</label>
-                    </div>
-                    <div class="form-group mb-3">
-                        <input type="checkbox" v-model="form.additionalServices" value="Drinking water"/>
-                        <label>Drinking water</label>
-                    </div>
-                    <div class="form-group mb-3">
-                        <input type="checkbox" v-model="form.additionalServices" value="Bathroom"/>
-                        <label>Bathroom</label>
-                    </div>
+                    <template v-for="tag in tags">
+                        <div class="form-group mb-3">
+                            <input type="checkbox" v-model="form.additionalServices" :value="tag.name" :key="tag.id"/>
+                            <label :for="tag.key">{{tag.name}}</label>
+                        </div>
+                    </template>
                 </div>
                 <div class="form-group mb-3">
                     <label>Pictures:</label>
@@ -117,7 +91,9 @@ Vue.component('add-retreat', {
                 rulesOfConduction: [],
                 additionalServices: [],
                 pictures: []
-            }
+            },
+            tags: [],
+            retVal: null
         }
     },
 
@@ -162,14 +138,15 @@ Vue.component('add-retreat', {
                 description: this.form.description,
                 country: this.form.country,
                 city: this.form.city,
-                address: this.form.address,
+                street: this.form.address,
                 rulesOfConduct: this.form.rulesOfConduction,
                 pictures: this.form.pictures,
                 numOfRooms: this.form.numOfRooms,
                 numOfBeds: this.form.numOfBeds,
                 additionalServices: this.form.additionalServices
-            }).then(function(response) {
-                alert("radi brt");
+            }).then((response) => {
+                this.retVal = response.data;
+                alert("Added retreat");
             }).catch(function (error) {
                 alert("ne valja brt");
             });
@@ -181,5 +158,9 @@ Vue.component('add-retreat', {
                 return;
             for (let file of files) this.form.pictures.push(file.name);
         }
+    },
+
+    mounted() {
+        axios.get("/tags").then((response) => {this.tags = response.data});
     }
 });

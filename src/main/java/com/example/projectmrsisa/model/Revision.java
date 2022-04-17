@@ -3,7 +3,7 @@ package com.example.projectmrsisa.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name="clients")
+@Table(name="revisions")
 public class Revision {
     @Id
     @SequenceGenerator(name = "myRevisionSeqGen", sequenceName = "myRevisionSeq", initialValue = 1, allocationSize = 1)
@@ -19,10 +19,10 @@ public class Revision {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rating", nullable = false)
     private Rating rating;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "privilegedUser", nullable = false)
     private User privilegedUser;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client", nullable = false)
     private Client client;
 

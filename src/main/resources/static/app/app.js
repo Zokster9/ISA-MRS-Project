@@ -4,7 +4,7 @@ const AddRetreat = { template: '<add-retreat></add-retreat>'};
 const router = new VueRouter({
     mode: 'hash',
     routes: [
-        { path: "/", component: AddRetreat }
+        { path: "/add-retreat", component: AddRetreat }
 
     ]
 });

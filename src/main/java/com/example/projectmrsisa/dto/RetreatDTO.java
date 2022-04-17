@@ -1,22 +1,22 @@
 package com.example.projectmrsisa.dto;
 
-import com.example.projectmrsisa.model.Action;
-import com.example.projectmrsisa.model.Address;
-import com.example.projectmrsisa.model.Tag;
-import com.example.projectmrsisa.model.User;
+import com.example.projectmrsisa.model.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class RetreatDTO {
 
+    private int id;
+    private int ownerId;
     private String name;
     private String description;
     private String country;
     private String city;
-    private String address;
+    private String street;
     private List<String> pictures;
     private List<String> rulesOfConduct;
     private int numOfRooms;
@@ -25,17 +25,35 @@ public class RetreatDTO {
 
     public RetreatDTO() {}
 
-    public RetreatDTO(String name, String description, String country, String city, String address, List<String> pictures, List<String> rulesOfConduct, int numOfRooms, int numOfBeds, List<String> additionalServices) {
+    public RetreatDTO(String name, String description, String country, String city, String street, List<String> pictures, List<String> rulesOfConduct, int numOfRooms, int numOfBeds, List<String> additionalServices) {
         this.name = name;
         this.description = description;
         this.country = country;
         this.city = city;
-        this.address = address;
+        this.street = street;
         this.pictures = pictures;
         this.rulesOfConduct = rulesOfConduct;
         this.numOfRooms = numOfRooms;
         this.numOfBeds = numOfBeds;
         this.additionalServices = additionalServices;
+    }
+
+    public RetreatDTO(Retreat retreat) {
+        this.id = retreat.getId();
+        this.ownerId = retreat.getOwner().getId();
+        this.name= retreat.getName();
+        this.description = retreat.getDescription();
+        this.country = retreat.getAddress().getCountry();
+        this.city = retreat.getAddress().getCity();
+        this.street = retreat.getAddress().getStreet();
+        this.pictures = new ArrayList<>(retreat.getPictures());
+        this.rulesOfConduct = new ArrayList<>(retreat.getRulesOfConduct());
+        this.numOfBeds = retreat.getNumOfBeds();
+        this.numOfRooms = retreat.getNumOfRooms();
+        this.additionalServices = new ArrayList<>();
+        for (Tag t : retreat.getAdditionalServices()) {
+            this.additionalServices.add(t.getName());
+        }
     }
 
     public String getName() {
@@ -70,12 +88,12 @@ public class RetreatDTO {
         this.city = city;
     }
 
-    public String getAddress() {
-        return address;
+    public String getStreet() {
+        return street;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setStreet(String street) {
+        this.street = street;
     }
 
     public List<String> getPictures() {
