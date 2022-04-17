@@ -2,9 +2,12 @@ package com.example.projectmrsisa.dto;
 
 import com.example.projectmrsisa.model.Adventure;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdventureDTO {
+    private Integer id;
+    private Integer ownerId;
     private String name;
     private String description;
     private List<String> pictures;
@@ -15,9 +18,8 @@ public class AdventureDTO {
     private int maxNumOfPeople;
     private String reservationCancellationConditions;
     private boolean isDeleted;
-    //private AddressDTO addressDTO;
     private String country;
-    private String address;
+    private String street;
     private String city;
 
     public AdventureDTO(){
@@ -25,7 +27,7 @@ public class AdventureDTO {
     }
 
     public AdventureDTO(String name, String description, List<String> pictures, List<String> rulesOfConduct, double price,
-                        String instructorBiography, List<String> fishingEquipment, int maxNumOfPeople, String reservationCancellationConditions, String country, String address, String city){
+                        String instructorBiography, List<String> fishingEquipment, int maxNumOfPeople, String reservationCancellationConditions, String country, String street, String city){
         this.name = name;
         this.description = description;
         this.pictures = pictures;
@@ -36,11 +38,43 @@ public class AdventureDTO {
         this.maxNumOfPeople = maxNumOfPeople;
         this.reservationCancellationConditions = reservationCancellationConditions;
         this.isDeleted = false;
-        //this.addressDTO = new AddressDTO(country, address, city);
         this.country = country;
-        this.address = address;
+        this.street = street;
         this.city = city;
+    }
 
+    public AdventureDTO(Adventure adventure){
+        this.id = adventure.getId();
+        this.ownerId = adventure.getOwner().getId();
+        this.name = adventure.getName();
+        this.description = adventure.getDescription();
+        this.pictures = new ArrayList<>(adventure.getPictures());
+        this.rulesOfConduct = new ArrayList<>(adventure.getRulesOfConduct());
+        this.price = adventure.getPrice();
+        this.instructorBiography = adventure.getInstructorBiography();
+        this.fishingEquipment = new ArrayList<>(adventure.getFishingEquipment());
+        this.maxNumOfPeople = adventure.getMaxNumOfPeople();
+        this.reservationCancellationConditions = adventure.getReservationCancellationConditions();
+        this.isDeleted = adventure.isDeleted();
+        this.country = adventure.getAddress().getCountry();
+        this.city = adventure.getAddress().getCity();
+        this.street = adventure.getAddress().getStreet();
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(Integer ownerId) {
+        this.ownerId = ownerId;
     }
 
     public String getName() {
@@ -131,12 +165,12 @@ public class AdventureDTO {
         this.country = country;
     }
 
-    public String getAddress() {
-        return address;
+    public String getStreet() {
+        return street;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setStreet(String street) {
+        this.street = street;
     }
 
     public String getCity() {

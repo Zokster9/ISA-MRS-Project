@@ -1,6 +1,7 @@
 package com.example.projectmrsisa.dto;
 
 public class AddressDTO {
+    private Integer id;
     private String country;
     private String city;
     private String address;
@@ -8,7 +9,8 @@ public class AddressDTO {
     public AddressDTO(){
 
     }
-    public AddressDTO(String country, String city, String address){
+    public AddressDTO(Integer id, String country, String city, String address){
+        this.id = id;
         this.country = country;
         this.city = city;
         this.address = address;
@@ -36,5 +38,13 @@ public class AddressDTO {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

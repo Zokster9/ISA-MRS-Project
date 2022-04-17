@@ -1,6 +1,7 @@
 package com.example.projectmrsisa.service;
-
-import com.example.projectmrsisa.dto.AdventureDTO;
+import com.example.projectmrsisa.model.Adventure;
+import com.example.projectmrsisa.repository.AdventureRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -9,14 +10,11 @@ import java.util.List;
 @Service
 public class AdventureService {
 
-    List<AdventureDTO> adventures = new ArrayList<AdventureDTO>();
+    @Autowired
+    private AdventureRepository adventureRepository;
 
-    public AdventureDTO save(AdventureDTO adventure){
-        adventures.add(adventure);
-        return adventure;
+    public Adventure addAdventure(Adventure adventure){
+        return adventureRepository.save(adventure);
     }
 
-    /*public Adventure save(Adventure adventure){
-        return adventureRepository.save(adventure); //dodaj repository
-    }    */
 }

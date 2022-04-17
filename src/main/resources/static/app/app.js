@@ -4,7 +4,7 @@ const AddAdventure = { template: "<add-adventure></add-adventure>"}
 const router = new VueRouter({
     mode: 'hash',
     routes: [
-        { path: "/", component: AddAdventure },
+        { path: "/add-adventure", component: AddAdventure },
 
         { path: '*', component: NotFoundComponent },
     ]

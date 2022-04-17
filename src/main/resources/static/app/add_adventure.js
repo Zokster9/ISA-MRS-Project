@@ -20,8 +20,8 @@ Vue.component("add-adventure", {
             <input v-model="form.city" type="text" class="form-control" placeholder="This field is required!"/>
         </div>
         <div class="form-group mb-3">
-            <label>Address:</label>
-            <input v-model="form.address" type="text" class="form-control" placeholder="This field is required!"/>
+            <label>Street:</label>
+            <input v-model="form.street" type="text" class="form-control" placeholder="This field is required!"/>
         </div>
         <div class="form-group mb-3">
            <label for="rulesOfConduct">Rules of conduct: </label>
@@ -130,7 +130,7 @@ Vue.component("add-adventure", {
                 pictures: [],
                 country: "",
                 city: "",
-                address: ""
+                street: ""
             }
         }
     },
@@ -164,7 +164,7 @@ Vue.component("add-adventure", {
                 pictures: this.form.pictures,
                 country: this.form.country,
                 city: this.form.city,
-                address: this.form.address
+                street: this.form.street
                 //zatim header jwt token
             }).then(function(response){
                 alert("uspeo sam");
@@ -205,7 +205,7 @@ Vue.component("add-adventure", {
             city: {
                 required: validators.required
             },
-            address: {
+            street: {
                 required: validators.required
             }
         }
