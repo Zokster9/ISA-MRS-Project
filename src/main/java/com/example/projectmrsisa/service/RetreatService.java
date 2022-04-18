@@ -14,4 +14,8 @@ public class RetreatService {
     public Retreat addRetreat(Retreat retreat) {
         return retreatRepository.save(retreat);
     }
+    
+    public Retreat getRetreatById(Integer id) {
+        return retreatRepository.getRetreatById(id);
+    }
 }

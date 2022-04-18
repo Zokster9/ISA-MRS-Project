@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.Set;
 
@@ -88,5 +90,16 @@ public class RetreatController {
             return false;
         }
         return !retreatDTO.getStreet().equals("") && retreatDTO.getStreet() != null;
+    }
+
+    @GetMapping(value = "/{id}", produces = "application/json")
+    public ResponseEntity<RetreatDTO> getRetreatById(@PathVariable Integer id) {
+        // TODO: provera JWT
+        try {
+            Retreat retreat = retreatService.getRetreatById(id);
+            return new ResponseEntity<>(new RetreatDTO(retreat), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

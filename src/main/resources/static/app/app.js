@@ -13,6 +13,7 @@ const AddAdventure = { template: "<add-adventure></add-adventure>"}
 const NavFishingInstructor = {template: '<nav-fishing-instructor> </nav-fishing-instructor>'};
 const ProfilePageFishingInstructor = {template: '<profile-page-fishing-instructor> </profile-page-fishing-instructor>'}
 const PersonalInfoFishingInstructor = {template: '<personal-info-fishing-instructor> </personal-info-fishing-instructor>'}
+const RetreatPage = {template: '<retreat-page></retreat-page>'};
 
 const router = new VueRouter({
     mode: 'hash',
@@ -35,6 +36,7 @@ const router = new VueRouter({
         {path: "/profile-page-fishing-instructor", component: ProfilePageFishingInstructor},
         {path: "/nav-fishing-instructor", component: NavFishingInstructor},
         {path: "/personal-info-fishing-instructor", component: PersonalInfoFishingInstructor},
+        {path: "/retreat/:id", component: RetreatPage}
     ]
 });
 
