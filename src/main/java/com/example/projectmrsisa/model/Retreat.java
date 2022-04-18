@@ -1,5 +1,7 @@
 package com.example.projectmrsisa.model;
 
+import com.example.projectmrsisa.dto.RetreatDTO;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,6 +28,21 @@ public class Retreat extends Service {
         this.numOfRooms = numOfRooms;
         this.numOfBeds = numOfBeds;
         this.additionalServices = additionalServices;
+    }
+
+    public Retreat(RetreatDTO retreatDTO, Address address, Set<Tag> additionalServices, RetreatOwner owner) {
+        this.setName(retreatDTO.getName());
+        this.setDescription(retreatDTO.getDescription());
+        this.setOwner(owner);
+        this.setAddress(address);
+        this.setPictures(new HashSet<>(retreatDTO.getPictures()));
+        this.setRulesOfConduct(new HashSet<>(retreatDTO.getRulesOfConduct()));
+        this.setPrice(0);
+        this.setDeleted(false);
+        this.setActions(new HashSet<>());
+        this.numOfRooms = retreatDTO.getNumOfRooms();
+        this.numOfBeds = retreatDTO.getNumOfBeds();
+        this.setAdditionalServices(additionalServices);
     }
 
     public int getNumOfRooms() {

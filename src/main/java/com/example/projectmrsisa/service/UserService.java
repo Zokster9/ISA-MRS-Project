@@ -7,11 +7,17 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import com.example.projectmrsisa.repository.RetreatOwnerRepository;
+
+
 @Service
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RetreatOwnerRepository retreatOwnerRepository;
 
     public List<User> findUsersByActivatedStatus(Boolean isActivated, Boolean isDeleted){
         return userRepository.findUsersByActivatedStatus(isActivated, isDeleted);
@@ -43,5 +49,9 @@ public class UserService {
 
     public RegistrationReasoning findRegistrationReasoningByUserId(User user){
         return userRepository.findRegistrationReasoningByUser(user);
+    }
+
+    public RetreatOwner getRetreatOwnerById(int id) {
+        return retreatOwnerRepository.getById(id);
     }
 }
