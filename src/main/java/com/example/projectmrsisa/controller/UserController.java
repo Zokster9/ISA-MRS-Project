@@ -121,10 +121,15 @@ public class UserController {
                     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 }
             }else {
-                // TODO: ovde dodati kod za registraciju instruktora pecanja
+                try{
+                    FishingInstructor fishingInstructor = userService.addFishingInstructor(new FishingInstructor(userDTO, a));
+                    RegistrationReasoning registrationReasoning = registrationReasoningService.addRegistrationReasoning(new RegistrationReasoning(fishingInstructor, userDTO.getRegistrationExplanation()));
+                    return new ResponseEntity<>(new UserDTO(fishingInstructor, PrivilegedUser.FISHING_INSTRUCTOR, new RegistrationReasoningDTO(registrationReasoning)), HttpStatus.OK);
+                } catch (Exception e) {
+                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                }
             }
         }
-        return new ResponseEntity<>(userDTO, HttpStatus.OK); // ovo skloniti kada se odradi registracija za ostale role
     }
 
     private boolean validAddress(AddressDTO addressDTO) {

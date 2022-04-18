@@ -67,6 +67,7 @@ public class UserService {
     public RetreatOwner addRetreatOwner(RetreatOwner retreatOwner) {
         return retreatOwnerRepository.save(retreatOwner);
     }
+    public FishingInstructor addFishingInstructor(FishingInstructor fishingInstructor) { return fishingInstructorRepository.save(fishingInstructor);}
 
     public ShipOwner addShipOwner(ShipOwner shipOwner) {
         return shipOwnerRepository.save(shipOwner);
