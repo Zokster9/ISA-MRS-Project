@@ -8,13 +8,13 @@ const Retreats = { template: "<retreats></retreats>" };
 const Ships = { template: "<ships></ships>" };
 const FishingInstructors = { template: "<fishing-instructors></fishing-instructors>" };
 const AddRetreat = { template: '<add-retreat></add-retreat>'};
+const AddShip = { template: '<add-ship></add-ship>'};
 
 const router = new VueRouter({
     mode: 'hash',
     routes: [
         { path: "/registration-requests", component: RegistrationRequests },
         { path: "/registration-requests-row", component: RegistrationRequestsRow },
-
         { path: "/", component: MainScreen },
         { path: "/main-screen", component: MainScreen },
         { path: "/sign-in", component: SignIn },
@@ -22,10 +22,9 @@ const router = new VueRouter({
         { path: "/retreats", component: Retreats },
         { path: "/ships", component: Ships },
         { path: "/fishing-instructors", component: FishingInstructors },
-
         { path: '*', component: NotFoundComponent },
-
-        { path: "/add-retreat", component: AddRetreat }
+        { path: "/add-retreat", component: AddRetreat },
+        { path: "/add-ship", component: AddShip }
 
     ]
 });
