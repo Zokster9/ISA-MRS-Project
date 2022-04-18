@@ -92,7 +92,7 @@ Vue.component("sign-up", {
                             </div>
                             
                             <div class="form-group">
-                                <button @click="Register"  :disabled="$v.form.$invalid || isExplanationRequired" type="submit" class="btn btn-dark btn-lg btn-block">Sign Up</button>
+                                <button @click="register"  :disabled="$v.form.$invalid || isExplanationRequired" type="submit" class="btn btn-dark btn-lg btn-block">Sign Up</button>
                             </div>
                         </form>
                     </div>
@@ -131,7 +131,7 @@ Vue.component("sign-up", {
         }
     },
     methods: {
-        Register() {
+        register() {
             axios.post("/users/register", {
                 email: this.form.email,
                 password: this.form.password,
@@ -148,9 +148,10 @@ Vue.component("sign-up", {
                 privilegedUserType: this.form.privilegedUserType,
                 registrationExplanation: this.form.registrationExplanation
             }).then((response) => {
-                alert("User notified");
+                alert("Registration form was successful. Check your email for further information.");
+                router.push("/main-screen")
             }).catch(function (error) {
-                alert("Not working")
+                alert("Something went wrong.")
             });
         }
     },
