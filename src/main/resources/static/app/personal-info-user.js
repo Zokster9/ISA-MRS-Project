@@ -1,6 +1,6 @@
 Vue.use(vuelidate.default)
 
-Vue.component("personal-info-fishing-instructor", {
+Vue.component("personal-info-user", {
     props: ["user"],
     template:`
     <div>
@@ -52,8 +52,7 @@ Vue.component("personal-info-fishing-instructor", {
     methods: {
         deleteAccount(){
             axios.post("/users/sendTerminationReason?email=lordje@gmail.com&terminationReason=" + this.terminationReason).then((response)=>{
-                // TODO: izmeniti na pocetnu stranicu
-                //window.location.assign("http:localhost:8088/#/");
+                router.push("/main-screen")
                 alert("Napisan razlog");
             })
         },
