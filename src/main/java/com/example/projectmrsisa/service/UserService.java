@@ -1,6 +1,8 @@
 package com.example.projectmrsisa.service;
 
 import com.example.projectmrsisa.model.*;
+import com.example.projectmrsisa.repository.RetreatOwnerRepository;
+import com.example.projectmrsisa.repository.ShipOwnerRepository;
 import com.example.projectmrsisa.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,7 +52,7 @@ public class UserService {
         userRepository.updateUserDeletedStatusById(id);
     }
 
-    public RegistrationReasoning findRegistrationReasoningByUserId(User user){
+    public RegistrationReasoning findRegistrationReasoningByUserId(User user) {
         return userRepository.findRegistrationReasoningByUser(user);
     }
 
@@ -61,4 +63,12 @@ public class UserService {
     public ShipOwner getOwnerById(int id) {
         return shipOwnerRepository.getById(id);
     }
+    public RetreatOwner addRetreatOwner(RetreatOwner retreatOwner) {
+        return retreatOwnerRepository.save(retreatOwner);
+    }
+
+    public ShipOwner addShipOwner(ShipOwner shipOwner) {
+        return shipOwnerRepository.save(shipOwner);
+    }
+
 }

@@ -22,6 +22,11 @@ public class RegistrationReasoning {
 
     }
 
+    public RegistrationReasoning(User privilegedUser, String registrationReasoning) {
+        this.privilegedUser = privilegedUser;
+        this.registrationReasoning = registrationReasoning;
+    }
+
     public RegistrationReasoning(Integer id, User privilegedUser, String registrationReasoning){
         this.id = id;
         this.privilegedUser = privilegedUser;

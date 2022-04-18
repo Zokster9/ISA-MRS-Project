@@ -1,9 +1,11 @@
 Vue.use(vuelidate.default)
 
+const isCapitalFirstLetter = (value) => RegExp(/([A-Z]{1})([a-z]+)([^0-9]*)$/).test(value);
+
 Vue.component("sign-up", {
     template: `
     <div class="signUp">
-        <guest-navbar></guest-navbar>
+        
         <div class="app">
             <div class="vertical-center" style="margin-top: 85px">
                 <div class="inner-block">
@@ -90,7 +92,7 @@ Vue.component("sign-up", {
                             </div>
                             
                             <div class="form-group">
-                                <button @click.native="login" @enter.native="login" :disabled="$v.form.$invalid || isExplanationRequired" type="submit" class="btn btn-dark btn-lg btn-block">Sign Up</button>
+                                <button @click.native="Register" @enter.native="Register" :disabled="$v.form.$invalid || isExplanationRequired" type="submit" class="btn btn-dark btn-lg btn-block">Sign Up</button>
                             </div>
                         </form>
                     </div>
@@ -128,13 +130,37 @@ Vue.component("sign-up", {
             return this.isPrivilegedUser && this.form.registrationExplanation === "";
         }
     },
-    methods: {},
+    methods: {
+        Register() {
+            axios.post("/users/register", {
+                email: this.form.email,
+                password: this.form.password,
+                confirmPassword: this.form.confirmPassword,
+                name: this.form.name,
+                surname: this.form.surname,
+                addressDTO: {
+                    country: this.form.country,
+                    city: this.form.city,
+                    street: this.form.address
+                },
+                phoneNumber: this.form.phoneNumber,
+                registrationType: this.form.registrationType,
+                privilegedUserType: this.form.privilegedUserType,
+                registrationExplanation: this.form.registrationExplanation
+            }).then((response) => {
+                alert("User notified");
+            }).catch(function (error) {
+                alert("Not working")
+            });
+        }
+    },
     validations: {
         form: {
             email : {
                 required: validators.required,
                 minLength: validators.minLength(3),
-                maxLength: validators.maxLength(50)
+                maxLength: validators.maxLength(50),
+                mail : validators.email
             },
             password: {
                 required: validators.required,
@@ -147,12 +173,14 @@ Vue.component("sign-up", {
             name : {
                 required : validators.required,
                 minLength: validators.minLength(1),
-                maxLength: validators.maxLength(30)
+                maxLength: validators.maxLength(30),
+                isCapitalFirstLetter
             },
             surname : {
                 required : validators.required,
                 minLength : validators.minLength(1),
-                maxLength: validators.maxLength(30)
+                maxLength: validators.maxLength(30),
+                isCapitalFirstLetter
             },
             address: {
                 required : validators.required,
@@ -161,15 +189,17 @@ Vue.component("sign-up", {
             city: {
                 required : validators.required,
                 minLength : validators.minLength(1),
+                isCapitalFirstLetter
             },
             country: {
                 required : validators.required,
                 minLength : validators.minLength(1),
+                isCapitalFirstLetter
             },
             phoneNumber: {
                 required : validators.required,
                 minLength : validators.minLength(12),
             },
         }
-    },
+    }
 })

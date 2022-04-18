@@ -8,6 +8,7 @@ public class UserDTO {
     private Integer id;
     private String email;
     private String password;
+    private String confirmPassword;
     private String name;
     private String surname;
     private AddressDTO addressDTO;
@@ -16,6 +17,9 @@ public class UserDTO {
     private int loyaltyPoints;
     private boolean isDeleted;
     private boolean isActive;
+    private String registrationType;
+    private String privilegedUserType;
+    private String registrationExplanation;
     private RegistrationReasoningDTO registrationReasoningDTO;
     private PrivilegedUser privilegedUser;
 
@@ -156,5 +160,37 @@ public class UserDTO {
 
     public void setRegistrationReasoningDTO(RegistrationReasoningDTO registrationReasoningDTO) {
         this.registrationReasoningDTO = registrationReasoningDTO;
+    }
+
+    public String getRegistrationType() {
+        return registrationType;
+    }
+
+    public void setRegistrationType(String registrationType) {
+        this.registrationType = registrationType;
+    }
+
+    public String getPrivilegedUserType() {
+        return privilegedUserType;
+    }
+
+    public void setPrivilegedUserType(String privilegedUserType) {
+        this.privilegedUserType = privilegedUserType;
+    }
+
+    public String getRegistrationExplanation() {
+        return registrationExplanation;
+    }
+
+    public void setRegistrationExplanation(String registrationExplanation) {
+        this.registrationExplanation = registrationExplanation;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 }

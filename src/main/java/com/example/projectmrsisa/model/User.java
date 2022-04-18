@@ -1,5 +1,7 @@
 package com.example.projectmrsisa.model;
 
+import com.example.projectmrsisa.dto.UserDTO;
+
 import javax.persistence.*;
 
 @Entity
@@ -49,6 +51,19 @@ public abstract class User {
         this.phoneNumber = phoneNumber;
         this.loyaltyStatus = loyaltyStatus;
         this.loyaltyPoints = loyaltyPoints;
+        this.isDeleted = false;
+        this.isActive = false;
+    }
+
+    public User(UserDTO userDTO, Address address) {
+        this.email = userDTO.getEmail();
+        this.password = userDTO.getPassword();
+        this.name = userDTO.getName();
+        this.surname = userDTO.getSurname();
+        this.address = address;
+        this.phoneNumber = userDTO.getPhoneNumber();
+        this.loyaltyPoints = 0;
+        this.loyaltyStatus = LoyaltyStatus.Regular;
         this.isDeleted = false;
         this.isActive = false;
     }
