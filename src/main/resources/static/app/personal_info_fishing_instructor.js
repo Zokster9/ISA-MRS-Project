@@ -1,3 +1,5 @@
+Vue.use(vuelidate.default)
+
 Vue.component("personal-info-fishing-instructor", {
     props: ["user"],
     template:`
@@ -28,18 +30,32 @@ Vue.component("personal-info-fishing-instructor", {
             <div class="card-body text-danger"> 
                 <h5 class="card-title"> Account termination </h5>
                 <p class="card-text"> Once you terminate your account, you won't be able to have access to it ever again! </p>
-                <button class="btn btn-danger" @click="deleteAccount"> Terminate account </button>
+                <button v-if="!isTerminating" class="btn btn-danger" @click="isTerminating = true"> Terminate account </button>
+                <textarea v-if="isTerminating" v-model="terminationReason" placeholder="Enter the reason for termination:"></textarea>
+                <button v-if="isTerminating" @ :disabled="$v.terminationReason.$invalid" class="btn btn-danger" @click="deleteAccount"> Confirm termination</button>
             </div>
         </div>
     </div>
     `,
+    data(){
+        return {
+            isTerminating: false,
+            terminationReason: ""
+        }
+    },
+    validations:{
+        terminationReason: {
+            required: validators.required,
+        }
+    },
     //TODO: Dobavi Email iz jwt-a
     methods: {
         deleteAccount(){
-            axios.post("/users/deleteByEmail/lordje@gmail.com").then((response)=>{
+            axios.post("/users/sendTerminationReason?email=lordje@gmail.com&terminationReason=" + this.terminationReason).then((response)=>{
                 // TODO: izmeniti na pocetnu stranicu
-                window.location.assign("http:localhost:8088/#/");
+                //window.location.assign("http:localhost:8088/#/");
+                alert("Napisan razlog");
             })
-        }
+        },
     }
 })

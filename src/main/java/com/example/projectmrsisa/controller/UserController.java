@@ -4,10 +4,8 @@ import com.example.projectmrsisa.dto.AddressDTO;
 import com.example.projectmrsisa.dto.FishingInstructorDTO;
 import com.example.projectmrsisa.dto.RegistrationReasoningDTO;
 import com.example.projectmrsisa.dto.UserDTO;
-import com.example.projectmrsisa.model.Address;
-import com.example.projectmrsisa.model.FishingInstructor;
-import com.example.projectmrsisa.model.PrivilegedUser;
-import com.example.projectmrsisa.model.User;
+import com.example.projectmrsisa.model.*;
+import com.example.projectmrsisa.service.TerminationReasoningService;
 import com.example.projectmrsisa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +22,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private TerminationReasoningService terminationReasoningService;
 
     @GetMapping(value="/inactive", produces = "application/json")
     public ResponseEntity<List<UserDTO>> getInactiveUsers(){
@@ -77,10 +78,11 @@ public class UserController {
     }
     //TODO: Mozda ipak zaseban Controller za svakog korisnika
     @Transactional
-    @PostMapping(value="/deleteByEmail/{email}")
+    @PostMapping(value="/sendTerminationReason")
     //TODO: Autorizacija
-    public ResponseEntity<FishingInstructorDTO> deleteFishingInstructor(@PathVariable String email){
-        userService.updateFishingInstructorDeletedStatusByEmail(true, email);
+    public ResponseEntity<FishingInstructorDTO> sendTerminationReason(@RequestParam String email, @RequestParam String terminationReason){
+        FishingInstructor fishingInstructor = userService.findFishingInstructorByEmail(email);
+        TerminationReasoning terminationReasoning = terminationReasoningService.addTerminationReasoning(new TerminationReasoning(fishingInstructor, terminationReason));
         FishingInstructorDTO fishingInstructorDTO = new FishingInstructorDTO(userService.findFishingInstructorByEmail(email));
         return new ResponseEntity<>(fishingInstructorDTO, HttpStatus.OK);
     }
