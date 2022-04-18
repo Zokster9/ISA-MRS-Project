@@ -35,6 +35,8 @@ insert into clients (id, penalty_points, is_penalized) values (5, 0, false);
 insert into services (id, name, description, price, owner_id, address_id, is_deleted) values (1, 'Brvnara na Dunavu', 'Lepo mesto pored reke za kvalitetan odmor. Pogodno za zurke, proslave i drizenja sa prijateljima.', 50, 1, 3, false);
 insert into my_pictures (id, pictures) values (1, 'pic1.jpg');
 insert into my_pictures (id, pictures) values (1, 'pic2.jpg');
+insert into my_pictures (id, pictures) values (1, 'pic3.jpg');
+insert into my_pictures (id, pictures) values (1, 'pic4.jpg');
 insert into my_rules_of_conduct (id, rules_of_conduct) values (1, 'No blabla.');
 
 insert into services (id, name, description, price, owner_id, address_id, is_deleted) values (2, 'Nojeva barka', 'Brod za ljude sa dubokim dzepom.', 500, 2, 1, false);
@@ -61,6 +63,9 @@ insert into my_fishing_equipment_ships (id, fishing_equipment) values (2, 'Hooks
 insert into my_fishing_equipment_ships (id, fishing_equipment) values (2, 'Lines');
 
 insert into retreats (id, owner_id, num_of_beds, num_of_rooms) values (1, 1, 4, 2);
+insert into retreat_tags (retreat_id, tag_id) values (1, 1);
+insert into retreat_tags (retreat_id, tag_id) values (1, 6);
+insert into retreat_tags (retreat_id, tag_id) values (1, 4);
 
 insert into subscriptions (client_id, subscription_id) values (5, 1);
 insert into subscriptions (client_id, subscription_id) values (5, 2);

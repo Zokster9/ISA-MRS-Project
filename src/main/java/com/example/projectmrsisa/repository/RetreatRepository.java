@@ -1,0 +1,11 @@
+package com.example.projectmrsisa.repository;
+
+import com.example.projectmrsisa.model.Retreat;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+public interface RetreatRepository extends JpaRepository<Retreat, Integer> {
+
+    @Query("select r from Retreat r where r.id = ?1")
+    public Retreat getRetreatById(Integer id);
+}
