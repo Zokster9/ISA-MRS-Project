@@ -1,6 +1,6 @@
 Vue.use(vuelidate.default)
 
-Vue.component("personal-info-fishing-instructor", {
+Vue.component("personal-info-user", {
     props: ["user"],
     template:`
     <div>

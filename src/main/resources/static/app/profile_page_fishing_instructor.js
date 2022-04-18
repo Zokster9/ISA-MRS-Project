@@ -6,7 +6,7 @@ Vue.component("profile-page-fishing-instructor", {
                 <nav-fishing-instructor @selected-item="showSelectedOption"></nav-fishing-instructor>
             </div>
             <div class="mx-auto">
-                <personal-info-fishing-instructor v-if="personalInfo === true" :user="user"></personal-info-fishing-instructor>
+                <personal-info-user v-if="personalInfo === true" :user="user"></personal-info-user>
             </div>
         </div>
     `,

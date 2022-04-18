@@ -12,7 +12,7 @@ const AddShip = { template: '<add-ship></add-ship>'};
 const AddAdventure = { template: "<add-adventure></add-adventure>"}
 const NavFishingInstructor = {template: '<nav-fishing-instructor> </nav-fishing-instructor>'};
 const ProfilePageFishingInstructor = {template: '<profile-page-fishing-instructor> </profile-page-fishing-instructor>'}
-const PersonalInfoFishingInstructor = {template: '<personal-info-fishing-instructor> </personal-info-fishing-instructor>'}
+const ProfilePageClient = { template: '<profile-page-client></profile-page-client>' }
 const RetreatPage = {template: '<retreat-page></retreat-page>'};
 
 const router = new VueRouter({
@@ -34,8 +34,8 @@ const router = new VueRouter({
         {path: "/registration-requests", component: RegistrationRequests},
         {path: "/registration-requests-row", component: RegistrationRequestsRow},
         {path: "/profile-page-fishing-instructor", component: ProfilePageFishingInstructor},
+        { path: "/profile-page-client", component: ProfilePageClient },
         {path: "/nav-fishing-instructor", component: NavFishingInstructor},
-        {path: "/personal-info-fishing-instructor", component: PersonalInfoFishingInstructor},
         {path: "/retreat/:id", component: RetreatPage}
     ]
 });
