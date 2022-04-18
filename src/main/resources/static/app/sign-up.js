@@ -5,7 +5,7 @@ Vue.component("sign-up", {
     <div class="signUp">
         <guest-navbar></guest-navbar>
         <div class="app">
-            <div class="vertical-center" style="margin-top: 80px">
+            <div class="vertical-center" style="margin-top: 85px">
                 <div class="inner-block">
                     <div class="signUp">
                         <form @submit.prevent>
@@ -20,70 +20,73 @@ Vue.component("sign-up", {
                               <label class="form-check-label" for="inlineRadio2">Privileged User</label>
                             </div>
                             
-                            <div class="form-group">
-                                <label>Email</label>
-                                <input v-model="form.email" type="email" class="form-control form-control-lg">
+                            <div class="form-group required">
+                                <label class="control-label">Email </label>
+                                <input v-model="form.email" placeholder="Please enter your email..." type="email" class="form-control form-control-lg">
                             </div>
                             
-                            <div class="form-group">
-                                <label>Password</label>
-                                <input v-model="form.password" type="password" class="form-control form-control-lg">
+                            <div class="form-group required">
+                                <label class="control-label">Password </label>
+                                <input v-model="form.password" placeholder="Please enter your password..." type="password" class="form-control form-control-lg">
                             </div>
                             
-                            <div class="form-group">
-                                <label>Confirm password</label>
-                                <input v-model="form.confirmPassword" type="password" class="form-control form-control-lg">
+                            <div class="form-group required">
+                                <label class="control-label">Confirm password </label>
+                                <input v-model="form.confirmPassword" placeholder="Please confirm your password..." type="password" class="form-control form-control-lg">
                             </div>
                             
-                            <div class="form-group">
+                            <div class="form-group required">
                                 <table>
                                     <tr>
                                         <td>
-                                            <label for="name">Name</label>
-                                            <input v-model="form.name" id="name" type="text" pattern="[a-zA-Z\.]+$" class="form-control form-control-lg"/>
+                                            <label class="control-label" for="name">Name </label>
+                                            <input v-model="form.name" id="name" type="text" placeholder="Name..." pattern="[a-zA-Z\.]+$" class="form-control form-control-lg"/>
                                         </td>
                                         <td>
-                                            <label for="surname">Surname</label>
-                                            <input v-model="form.surname" id="surname" type="text" pattern="[a-zA-Z\.]+$" class="form-control form-control-lg"/>
+                                            <label class="control-label" for="surname">Surname </label>
+                                            <input v-model="form.surname" id="surname" type="text" placeholder="Surname..." pattern="[a-zA-Z\.]+$" class="form-control form-control-lg"/>
                                         </td>
                                     </tr>
                                 </table>
                             </div>
                             
-                            <div class="form-group">
-                                <label>Address</label>
-                                <input v-model="form.address" type="text" class="form-control form-control-lg">
+                            <div class="form-group required">
+                                <label class="control-label">Address </label>
+                                <input v-model="form.address" type="text" placeholder="Please enter your address..." class="form-control form-control-lg">
                             </div>
                             
-                            <div class="form-group">
+                            <div class="form-group required">
                                 <table>
                                     <tr>
                                         <td>
-                                            <label for="city">City</label>
-                                            <input v-model="form.city" id="city" type="text" pattern="[a-zA-Z\.]+$" class="form-control form-control-lg"/>
+                                            <label class="control-label" for="city">City </label>
+                                            <input v-model="form.city" id="city" type="text" placeholder="City..." pattern="[a-zA-Z\.]+$" class="form-control form-control-lg"/>
                                         </td>
                                         <td>
-                                            <label for="country">Country</label>
-                                            <input v-model="form.country" id="country" type="text" pattern="[a-zA-Z\.]+$" class="form-control form-control-lg"/>
+                                            <label class="control-label" for="country">Country </label>
+                                            <input v-model="form.country" id="country" type="text" placeholder="Country..." pattern="[a-zA-Z\.]+$" class="form-control form-control-lg"/>
                                         </td>
                                     </tr>
                                 </table>
                             </div>
                             
-                            <div class="form-group">
-                                <label>Phone number</label>
-                                <input v-model="form.phoneNumber" type="text" class="form-control form-control-lg">
+                            <div class="form-group required">
+                                <label class="control-label">Phone number </label>
+                                <input v-model="form.phoneNumber" type="text" placeholder="Please enter your phone number..." class="form-control form-control-lg">
                             </div>
                             
-                            <select v-if="isPrivilegedUser" v-model="form.privilegedUserType" class="form-select" aria-label="Privileged user types">
-                              <option selected value="retreatOwner">Retreat owner</option>
-                              <option value="shipOwner">Ship owner</option>
-                              <option value="fishingInstructor">Fishing instructor</option>
-                            </select>
+                            <div v-if="isPrivilegedUser" class="form-group required">
+                                <label class="control-label">Privileged user type </label>
+                                <select  v-model="form.privilegedUserType" class="form-select" aria-label="Privileged user types">
+                                  <option selected value="retreatOwner">Retreat owner</option>
+                                  <option value="shipOwner">Ship owner</option>
+                                  <option value="fishingInstructor">Fishing instructor</option>
+                                </select>
+                            </div>
                             
-                            <div v-if="isPrivilegedUser" class="form-group">
-                                <label>Registration explanation</label>
-                                <textarea v-model="form.registrationExplanation" class="form-control form-control-lg"></textarea>
+                            <div v-if="isPrivilegedUser" class="form-group required">
+                                <label class="control-label">Registration explanation </label>
+                                <textarea v-model="form.registrationExplanation" placeholder="Please enter why you should be allowed to register..." class="form-control form-control-lg"></textarea>
                             </div>
                             
                             <div class="form-group">

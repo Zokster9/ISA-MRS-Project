@@ -32,6 +32,16 @@ body,
     margin-top: 2%;
 }
 
+.form-group.required .control-label:after {
+    content: "*";
+    color: red;
+}
+
+/*.form-control::placeholder {*/
+/*    color: red;*/
+/*    opacity: 0.8;*/
+/*}*/
+
 .vertical-center {
     display: flex;
     text-align: left;

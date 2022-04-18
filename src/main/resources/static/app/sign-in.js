@@ -11,14 +11,14 @@ Vue.component("sign-in", {
                         <form @submit.prevent>
                             <h3>Sign In</h3>
                             
-                            <div class="form-group">
-                                <label>E-mail</label>
-                                <input v-model="form.email" type="email" class="form-control form-control-lg">
+                            <div class="form-group required">
+                                <label class="control-label">E-mail </label>
+                                <input v-model="form.email" type="email" class="form-control form-control-lg" placeholder="Please enter your email...">
                             </div>
                             
-                            <div class="form-group">
-                                <label>Password</label>
-                                <input v-model="form.password" type="password" class="form-control form-control-lg" pattern="/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/">
+                            <div class="form-group required">
+                                <label class="control-label">Password </label>
+                                <input v-model="form.password" type="password" class="form-control form-control-lg" placeholder="Please enter your password..." pattern="/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/">
                             </div>
                             
                             <div class="form-group">
