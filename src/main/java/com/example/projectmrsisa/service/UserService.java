@@ -9,10 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import com.example.projectmrsisa.repository.RetreatOwnerRepository;
-import com.example.projectmrsisa.repository.ShipOwnerRepository;
-import com.example.projectmrsisa.repository.FishingInstructorRepository;
-
 @Service
 public class UserService {
 
@@ -77,5 +73,9 @@ public class UserService {
 
     public FishingInstructor findFishingInstructorByEmail(String email){
         return fishingInstructorRepository.findFishingInstructorByEmail(email);
+    }
+
+    public void updateFishingInstructorDeletedStatusByEmail(boolean isDeleted, String email){
+        fishingInstructorRepository.updateFishingInstructorDeletedStatusByEmail(isDeleted, email);
     }
 }

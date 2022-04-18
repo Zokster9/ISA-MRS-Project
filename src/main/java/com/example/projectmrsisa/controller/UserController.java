@@ -3,9 +3,11 @@ package com.example.projectmrsisa.controller;
 import com.example.projectmrsisa.dto.AddressDTO;
 import com.example.projectmrsisa.dto.RegistrationReasoningDTO;
 import com.example.projectmrsisa.dto.UserDTO;
+import com.example.projectmrsisa.dto.FishingInstructorDTO;
 import com.example.projectmrsisa.model.*;
 import com.example.projectmrsisa.service.AddressService;
 import com.example.projectmrsisa.service.RegistrationReasoningService;
+import com.example.projectmrsisa.service.TerminationReasoningService;
 import com.example.projectmrsisa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +30,9 @@ public class UserController {
 
     @Autowired
     private RegistrationReasoningService registrationReasoningService;
+
+    @Autowired
+    private TerminationReasoningService terminationReasoningService;
 
     @GetMapping(value="/inactive", produces = "application/json")
     public ResponseEntity<List<UserDTO>> getInactiveUsers(){
@@ -147,4 +152,21 @@ public class UserController {
         return true;
     }
 
+    @GetMapping(value="/findByEmail/{email}")
+    //TODO: Autorizacija
+    public ResponseEntity<FishingInstructorDTO> getFishingInstructor(@PathVariable String email){
+        FishingInstructor fishingInstructor = userService.findFishingInstructorByEmail(email);
+        FishingInstructorDTO fishingInstructorDTO = new FishingInstructorDTO(fishingInstructor);
+        return new ResponseEntity<>(fishingInstructorDTO, HttpStatus.OK);
+    }
+    //TODO: Mozda ipak zaseban Controller za svakog korisnika
+    @Transactional
+    @PostMapping(value="/sendTerminationReason")
+    //TODO: Autorizacija
+    public ResponseEntity<FishingInstructorDTO> sendTerminationReason(@RequestParam String email, @RequestParam String terminationReason){
+        FishingInstructor fishingInstructor = userService.findFishingInstructorByEmail(email);
+        TerminationReasoning terminationReasoning = terminationReasoningService.addTerminationReasoning(new TerminationReasoning(fishingInstructor, terminationReason));
+        FishingInstructorDTO fishingInstructorDTO = new FishingInstructorDTO(userService.findFishingInstructorByEmail(email));
+        return new ResponseEntity<>(fishingInstructorDTO, HttpStatus.OK);
+    }
 }
