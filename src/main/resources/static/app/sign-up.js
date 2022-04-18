@@ -92,7 +92,7 @@ Vue.component("sign-up", {
                             </div>
                             
                             <div class="form-group">
-                                <button @click.native="Register" @enter.native="Register" :disabled="$v.form.$invalid || isExplanationRequired" type="submit" class="btn btn-dark btn-lg btn-block">Sign Up</button>
+                                <button @click="Register"  :disabled="$v.form.$invalid || isExplanationRequired" type="submit" class="btn btn-dark btn-lg btn-block">Sign Up</button>
                             </div>
                         </form>
                     </div>

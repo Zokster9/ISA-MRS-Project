@@ -8,6 +8,7 @@ import com.example.projectmrsisa.model.*;
 import com.example.projectmrsisa.service.AddressService;
 import com.example.projectmrsisa.service.RegistrationReasoningService;
 import com.example.projectmrsisa.service.TerminationReasoningService;
+import com.example.projectmrsisa.service.EmailService;
 import com.example.projectmrsisa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,9 @@ public class UserController {
     @Autowired
     private TerminationReasoningService terminationReasoningService;
 
+    @Autowired
+    private EmailService emailService;
+
     @GetMapping(value="/inactive", produces = "application/json")
     public ResponseEntity<List<UserDTO>> getInactiveUsers(){
         List<User> inactiveUsers = userService.findUsersByActivatedStatus(false, false);
@@ -58,21 +62,30 @@ public class UserController {
     @Transactional
     @PostMapping(value="/accept/{id}")
     public ResponseEntity<UserDTO> acceptUser(@PathVariable Integer id){
+        // TODO: Autentifikacija
         User user = userService.findUserById(id);
         userService.updateUserActivatedStatusById(user.getId());
         UserDTO userDTO = new UserDTO(user);
-        // TODO: Poslati email
+        try{
+            emailService.sendRegistrationAcceptedEmail(userDTO);
+        } catch( Exception e ){
+            return new ResponseEntity<>(userDTO, HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
     @Transactional
     @PostMapping(value="/decline")
     public ResponseEntity<UserDTO> declineUser(@RequestParam Integer id, @RequestParam String declineReasoning){
-        System.out.println(declineReasoning);
+        // TODO: Autentifikacija
         User user = userService.findUserById(id);
         userService.updateUserDeletedStatusById(id);
         UserDTO userDTO = new UserDTO(user);
-        //TODO: Razlog brisanja, poslati email
+        try {
+            emailService.sendRegistrationDeclinedEmail(userDTO, declineReasoning);
+        } catch( Exception e ){
+            return new ResponseEntity<>(userDTO, HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 

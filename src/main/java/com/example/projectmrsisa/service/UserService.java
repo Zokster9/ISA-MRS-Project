@@ -1,6 +1,7 @@
 package com.example.projectmrsisa.service;
 
 import com.example.projectmrsisa.model.*;
+import com.example.projectmrsisa.repository.FishingInstructorRepository;
 import com.example.projectmrsisa.repository.RetreatOwnerRepository;
 import com.example.projectmrsisa.repository.ShipOwnerRepository;
 import com.example.projectmrsisa.repository.UserRepository;
