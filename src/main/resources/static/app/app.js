@@ -9,6 +9,7 @@ const Ships = { template: "<ships></ships>" };
 const FishingInstructors = { template: "<fishing-instructors></fishing-instructors>" };
 const AddRetreat = { template: '<add-retreat></add-retreat>'};
 const AddShip = { template: '<add-ship></add-ship>'};
+const AddAdventure = { template: "<add-adventure></add-adventure>"}
 
 const router = new VueRouter({
     mode: 'hash',
@@ -24,7 +25,8 @@ const router = new VueRouter({
         { path: "/fishing-instructors", component: FishingInstructors },
         { path: '*', component: NotFoundComponent },
         { path: "/add-retreat", component: AddRetreat },
-        { path: "/add-ship", component: AddShip }
+        { path: "/add-ship", component: AddShip },
+        { path: "/add-adventure", component: AddAdventure },
 
     ]
 });

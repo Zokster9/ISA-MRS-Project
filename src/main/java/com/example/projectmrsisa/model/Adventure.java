@@ -1,5 +1,7 @@
 package com.example.projectmrsisa.model;
 
+import com.example.projectmrsisa.dto.AdventureDTO;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -30,6 +32,22 @@ public class Adventure extends Service {
         this.maxNumOfPeople = maxNumOfPeople;
         this.fishingEquipment = fishingEquipment;
         this.reservationCancellationConditions = reservationCancellationConditions;
+    }
+
+    public Adventure(AdventureDTO adventureDTO, Address address, FishingInstructor fishingInstructor){
+        this.setName(adventureDTO.getName());
+        this.setDescription(adventureDTO.getDescription());
+        this.setOwner(fishingInstructor);
+        this.setAddress(address);
+        this.setPictures(new HashSet<>(adventureDTO.getPictures()));
+        this.setRulesOfConduct(new HashSet<>(adventureDTO.getRulesOfConduct()));
+        this.setPrice(adventureDTO.getPrice());
+        this.setDeleted(false);
+        this.setActions(new HashSet<>());
+        this.setInstructorBiography(adventureDTO.getInstructorBiography());
+        this.setMaxNumOfPeople(adventureDTO.getMaxNumOfPeople());
+        this.setFishingEquipment(new HashSet<>(adventureDTO.getFishingEquipment()));
+        this.setReservationCancellationConditions(adventureDTO.getReservationCancellationConditions());
     }
 
     public String getInstructorBiography() {

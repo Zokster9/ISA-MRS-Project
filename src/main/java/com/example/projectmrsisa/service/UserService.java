@@ -11,6 +11,7 @@ import java.util.List;
 
 import com.example.projectmrsisa.repository.RetreatOwnerRepository;
 import com.example.projectmrsisa.repository.ShipOwnerRepository;
+import com.example.projectmrsisa.repository.FishingInstructorRepository;
 
 @Service
 public class UserService {
@@ -23,6 +24,9 @@ public class UserService {
 
     @Autowired
     private ShipOwnerRepository shipOwnerRepository;
+
+    @Autowired
+    private FishingInstructorRepository fishingInstructorRepository;
 
     public List<User> findUsersByActivatedStatus(Boolean isActivated, Boolean isDeleted){
         return userRepository.findUsersByActivatedStatus(isActivated, isDeleted);
@@ -71,4 +75,7 @@ public class UserService {
         return shipOwnerRepository.save(shipOwner);
     }
 
+    public FishingInstructor findFishingInstructorByEmail(String email){
+        return fishingInstructorRepository.findFishingInstructorByEmail(email);
+    }
 }
