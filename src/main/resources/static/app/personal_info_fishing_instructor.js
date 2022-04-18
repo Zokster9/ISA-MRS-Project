@@ -52,9 +52,7 @@ Vue.component("personal-info-fishing-instructor", {
     methods: {
         deleteAccount(){
             axios.post("/users/sendTerminationReason?email=lordje@gmail.com&terminationReason=" + this.terminationReason).then((response)=>{
-                // TODO: izmeniti na pocetnu stranicu
-                //window.location.assign("http:localhost:8088/#/");
-                alert("Napisan razlog");
+                alert("Termination request sent.");
             })
         },
     }

@@ -40,7 +40,7 @@ public class ShipController {
         //TODO: Dobaviti vlasnika broda uz pomoc JWT
         ShipOwner shipOwner;
         try {
-            shipOwner = userService.getOwnerById(2);
+            shipOwner = userService.getShipOwnerById(2);
         }catch (Exception e) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
         if (!validAddress(shipDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         if (!validateShipData(shipDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

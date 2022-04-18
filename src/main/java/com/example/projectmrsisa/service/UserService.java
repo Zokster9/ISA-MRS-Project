@@ -61,8 +61,16 @@ public class UserService {
         return retreatOwnerRepository.getById(id);
     }
 
-    public ShipOwner getOwnerById(int id) {
+    public RetreatOwner getRetreatOwnerByEmail(String email) {
+        return retreatOwnerRepository.getRetreatOwnerByEmail(email);
+    }
+
+    public ShipOwner getShipOwnerById(int id) {
         return shipOwnerRepository.getById(id);
+    }
+
+    public ShipOwner getShipOwnerByEmail(String email) {
+        return shipOwnerRepository.getShipOwnerByEmail(email);
     }
     public RetreatOwner addRetreatOwner(RetreatOwner retreatOwner) {
         return retreatOwnerRepository.save(retreatOwner);

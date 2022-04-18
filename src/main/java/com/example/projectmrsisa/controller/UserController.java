@@ -1,9 +1,6 @@
 package com.example.projectmrsisa.controller;
 
-import com.example.projectmrsisa.dto.AddressDTO;
-import com.example.projectmrsisa.dto.RegistrationReasoningDTO;
-import com.example.projectmrsisa.dto.UserDTO;
-import com.example.projectmrsisa.dto.FishingInstructorDTO;
+import com.example.projectmrsisa.dto.*;
 import com.example.projectmrsisa.model.*;
 import com.example.projectmrsisa.service.AddressService;
 import com.example.projectmrsisa.service.RegistrationReasoningService;
@@ -181,5 +178,35 @@ public class UserController {
         TerminationReasoning terminationReasoning = terminationReasoningService.addTerminationReasoning(new TerminationReasoning(fishingInstructor, terminationReason));
         FishingInstructorDTO fishingInstructorDTO = new FishingInstructorDTO(userService.findFishingInstructorByEmail(email));
         return new ResponseEntity<>(fishingInstructorDTO, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/sendTerminationReasonRetreatOwner")
+    public ResponseEntity<TerminationReasoningDTO> sendTerminationReasoningRetreatOwner(@RequestParam String email, @RequestParam String terminationReason) {
+        if (!validateTerminationRequest(terminationReason)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        try {
+            RetreatOwner retreatOwner = userService.getRetreatOwnerByEmail(email);
+            TerminationReasoning terminationReasoning = terminationReasoningService.addTerminationReasoning(new TerminationReasoning(retreatOwner, terminationReason));
+            emailService.sendTerminateRequestEmail(retreatOwner);
+            return new ResponseEntity<>(new TerminationReasoningDTO(terminationReasoning), HttpStatus.OK);
+        }catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(value = "/sendTerminationReasonShipOwner")
+    public ResponseEntity<TerminationReasoningDTO> sendTerminationReasoningShipOwner(@RequestParam String email, @RequestParam String terminationReason) {
+        if (!validateTerminationRequest(terminationReason)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        try {
+            ShipOwner shipOwner = userService.getShipOwnerByEmail(email);
+            TerminationReasoning terminationReasoning = terminationReasoningService.addTerminationReasoning(new TerminationReasoning(shipOwner, terminationReason));
+            emailService.sendTerminateRequestEmail(shipOwner);
+            return new ResponseEntity<>(new TerminationReasoningDTO(terminationReasoning), HttpStatus.OK);
+        }catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private boolean validateTerminationRequest(String terminationReasoning) {
+        return terminationReasoning != null && !terminationReasoning.equals("");
     }
 }

@@ -44,4 +44,14 @@ public class EmailService {
         //mails.add(mail);
         javaMailSender.send(mail);
     }
+
+    @Async
+    public void sendTerminateRequestEmail(User user) {
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(env.getProperty("spring.mail.username"));
+        mail.setFrom("isamrsprojekat@gmail.com");
+        mail.setSubject("Termination request notified");
+        mail.setText("Dear " + user.getName() + " " + user.getSurname() + " your termination request have been notified. You will receive email when system administrator decides what to do with your account.");
+        javaMailSender.send(mail);
+    }
 }
