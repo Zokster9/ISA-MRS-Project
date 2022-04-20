@@ -15,7 +15,9 @@ const ProfilePageFishingInstructor = {template: '<profile-page-fishing-instructo
 const ProfilePageClient = { template: '<profile-page-client></profile-page-client>' };
 const RetreatPage = {template: '<retreat-page></retreat-page>'};
 const NavAdmin = {template: '<nav-admin></nav-admin>'};
-const ProfilePageAdmin = {template: '<profile-page-admin></profile-page-admin>'}
+const ProfilePageAdmin = {template: '<profile-page-admin></profile-page-admin>'};
+const AccountTerminationRequests = {template: '<account-termiantion-requests></account-termiantion-requests>'};
+const AccountTerminationRequestsRow = {template: '<account-termination-requests-row></account-termination-requests-row>'};
 
 const router = new VueRouter({
     mode: 'hash',
@@ -41,6 +43,8 @@ const router = new VueRouter({
         {path: "/retreat/:id", component: RetreatPage},
         {path: "/nav-admin", component: NavAdmin},
         {path: "/profile-page-admin", component: ProfilePageAdmin},
+        {path: "/account-termination-requests", component: AccountTerminationRequests},
+        {path: "/termination-requests-row", component: AccountTerminationRequestsRow},
     ]
 });
 

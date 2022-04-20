@@ -6,7 +6,8 @@ Vue.component("profile-page-admin", {
                 <nav-admin @selected-item="showSelectedOption"></nav-admin>
             </div>
             <div class="mx-auto">
-                <personal-info-user v-if="personalInfo === true" :user="user"></personal-info-user>
+                <registration-requests v-if="registrationRequests === true"></registration-requests>
+                <account-termination-requests v-if="accountTerminationRequests === true"></account-termination-requests>
             </div>
         </div>
     `,
