@@ -11,9 +11,11 @@ const AddRetreat = { template: '<add-retreat></add-retreat>'};
 const AddShip = { template: '<add-ship></add-ship>'};
 const AddAdventure = { template: "<add-adventure></add-adventure>"}
 const NavFishingInstructor = {template: '<nav-fishing-instructor> </nav-fishing-instructor>'};
-const ProfilePageFishingInstructor = {template: '<profile-page-fishing-instructor> </profile-page-fishing-instructor>'}
-const ProfilePageClient = { template: '<profile-page-client></profile-page-client>' }
+const ProfilePageFishingInstructor = {template: '<profile-page-fishing-instructor> </profile-page-fishing-instructor>'};
+const ProfilePageClient = { template: '<profile-page-client></profile-page-client>' };
 const RetreatPage = {template: '<retreat-page></retreat-page>'};
+const NavAdmin = {template: '<nav-admin></nav-admin>'};
+const ProfilePageAdmin = {template: '<profile-page-admin></profile-page-admin>'}
 
 const router = new VueRouter({
     mode: 'hash',
@@ -36,7 +38,9 @@ const router = new VueRouter({
         {path: "/profile-page-fishing-instructor", component: ProfilePageFishingInstructor},
         { path: "/profile-page-client", component: ProfilePageClient },
         {path: "/nav-fishing-instructor", component: NavFishingInstructor},
-        {path: "/retreat/:id", component: RetreatPage}
+        {path: "/retreat/:id", component: RetreatPage},
+        {path: "/nav-admin", component: NavAdmin},
+        {path: "/profile-page-admin", component: ProfilePageAdmin},
     ]
 });
 
