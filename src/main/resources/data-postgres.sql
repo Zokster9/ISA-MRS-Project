@@ -14,7 +14,7 @@ insert into addresses (country, city, street) values ('Srbija', 'Loznica', 'Drin
 
 insert into users (email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values ('matijazaric9@gmail.com', 'matija123','Matija', 'Zaric', 4, '0657842312', false, false, 0, 0);
 insert into users (email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values ('sakal.teodor@gmail.com', 'teodor123', 'Teodor', 'Sakal Franciskovic', 1, '0636742312', false, false, 0, 0);
-insert into users (email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values ('lordje@gmail.com', 'djordje123', 'Djordje', 'Vajagic', 2, '0617647812', true, false, 0, 0);
+insert into users (email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values ('lordje@gmail.com', 'djordje123', 'Djordje', 'Vajagic', 2, '0617647812', false, false, 0, 0);
 insert into users (email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values ('zoki@gmail.com', 'zoran123', 'Zoran', 'Bukorac', 3, '0607846912', true, false, 0, 0);
 insert into users (email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values ('klijent@gmail.com', 'klijent123', 'Klijent', 'Klijentic', 2, '0667342312', true, false, 0, 0);
 

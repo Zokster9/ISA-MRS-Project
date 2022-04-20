@@ -44,4 +44,26 @@ public class EmailService {
         //mails.add(mail);
         javaMailSender.send(mail);
     }
+
+    @Async
+    public void sendTerminationAcceptedEmail(UserDTO user, String acceptedTerminationReason){
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(env.getProperty("spring.mail.username"));
+        mail.setFrom("isamrsprojekat@gmail.com");
+        mail.setSubject("Termination accepted");
+        mail.setText("Dear " + user.getName() + " " + user.getSurname() + " your account termination has been accepted because of the following reason: " + acceptedTerminationReason);
+        //mails.add(mail);
+        javaMailSender.send(mail);
+    }
+
+    @Async
+    public void sendTerminationDeclinedEmail(UserDTO user, String declinedTerminationReason){
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(env.getProperty("spring.mail.username"));
+        mail.setFrom("isamrsprojekat@gmail.com");
+        mail.setSubject("Termination declined");
+        mail.setText("Dear " + user.getName() + " " + user.getSurname() + " your account termination has been declined because of the following reason: " + declinedTerminationReason);
+        //mails.add(mail);
+        javaMailSender.send(mail);
+    }
 }

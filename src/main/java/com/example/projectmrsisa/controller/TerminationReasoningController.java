@@ -1,15 +1,17 @@
 package com.example.projectmrsisa.controller;
 
 import com.example.projectmrsisa.dto.TerminationReasoningDTO;
+import com.example.projectmrsisa.dto.UserDTO;
 import com.example.projectmrsisa.model.TerminationReasoning;
+import com.example.projectmrsisa.model.User;
+import com.example.projectmrsisa.service.EmailService;
 import com.example.projectmrsisa.service.TerminationReasoningService;
+import com.example.projectmrsisa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,12 @@ public class TerminationReasoningController {
 
     @Autowired
     private TerminationReasoningService terminationReasoningService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private EmailService emailService;
 
     @GetMapping(value="findToTerminate", produces="application/json")
     public ResponseEntity<List<TerminationReasoningDTO>> findToBeTerminatedUsers(){
@@ -32,13 +40,32 @@ public class TerminationReasoningController {
         return new ResponseEntity<>(trDTO, HttpStatus.OK);
     }
 
+    @Transactional
     @PostMapping(value="declineTermination")
-    public ResponseEntity<TerminationReasoningDTO> declineTermination(){
-        return null;
+    public ResponseEntity<UserDTO> declineTermination(@RequestParam Integer id, @RequestParam String declineReasoning){
+        User user = userService.findUserById(id);
+        terminationReasoningService.updateTerminationReasoningByAnsweredStatus(user);
+        UserDTO userDTO = new UserDTO(user);
+        try {
+            emailService.sendTerminationDeclinedEmail(userDTO, declineReasoning);
+        } catch( Exception e ){
+            return new ResponseEntity<>(userDTO, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
+    @Transactional
     @PostMapping(value="acceptTermination")
-    public ResponseEntity<TerminationReasoningDTO> acceptTermination(){
-        return null;
+    public ResponseEntity<UserDTO> acceptTermination(@RequestParam Integer id, @RequestParam String acceptReasoning){
+        User user = userService.findUserById(id);
+        terminationReasoningService.updateTerminationReasoningByAnsweredStatus(user);
+        userService.updateUserDeletedStatusById(id);
+        UserDTO userDTO = new UserDTO(user);
+        try {
+            emailService.sendTerminationAcceptedEmail(userDTO, acceptReasoning);
+        } catch( Exception e ){
+            return new ResponseEntity<>(userDTO, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 }

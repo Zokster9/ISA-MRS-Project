@@ -48,12 +48,12 @@ Vue.component("termination-requests-row", {
             this.isDeclineButtonHidden = false;
         },
         declineTermination(id){
-            axios.post("/users/decline?id=" + id + "&declineReasoning=" + this.declineReasoning).then((response) => {
+            axios.post("/termination/declineTermination?id=" + id + "&declineReasoning=" + this.declineReasoning).then((response) => {
                 window.location.reload();
             })
         },
         acceptTermination(id){
-            axios.post("/users/accept/" + id).then((response) => {
+            axios.post("/termination/acceptTermination?id=" + id + "&acceptReasoning=" + this.acceptReasoning).then((response) => {
                 window.location.reload();
             })
         },
