@@ -124,5 +124,5 @@ Vue.component("profile-page-fishing-instructor", {
         axios.get("users/findByEmail/lordje@gmail.com").then((response) =>{
             this.user = response.data
         })
-    }
+    },
 })

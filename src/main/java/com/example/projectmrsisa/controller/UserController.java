@@ -187,4 +187,11 @@ public class UserController {
         FishingInstructorDTO fishingInstructorDTO = new FishingInstructorDTO(userService.findFishingInstructorByEmail(email));
         return new ResponseEntity<>(fishingInstructorDTO, HttpStatus.OK);
     }
+
+    @Transactional
+    @PostMapping(value="/changePassword")
+    public ResponseEntity<UserDTO> changePasswordFishingInstructor(@RequestParam String email, @RequestParam String oldPassword, @RequestParam String newPassword){
+        System.out.println("tu sam");
+        return null;
+    }
 }
