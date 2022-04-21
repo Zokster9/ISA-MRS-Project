@@ -87,4 +87,20 @@ public class UserService {
     public void updateFishingInstructorDeletedStatusByEmail(boolean isDeleted, String email){
         fishingInstructorRepository.updateFishingInstructorDeletedStatusByEmail(isDeleted, email);
     }
+
+    public void updateUserName(String name, String email){
+        userRepository.updateUserName(name, email);
+    }
+
+    public void updateUserSurname(String surname, String email){
+        userRepository.updateUserSurname(surname, email);
+    }
+
+    public void updateUserAddress(Address address, String email){
+        userRepository.updateUserAddress(address, email);
+    }
+
+    public void updateUserPhoneNumber(String phoneNumber, String email){
+        userRepository.updateUserPhoneNumber(phoneNumber, email);
+    }
 }

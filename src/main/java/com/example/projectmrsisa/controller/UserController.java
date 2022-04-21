@@ -88,7 +88,39 @@ public class UserController {
         }
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
-    
+
+    @Transactional
+    @PostMapping("/changeInfo")
+    public ResponseEntity<UserDTO> changeInfo(@RequestBody UserDTO userDTO){
+        if (!validChangedUserInfo(userDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if(!validAddress(userDTO.getAddressDTO())) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        Address a;
+        try {
+            a = addressService.getAddress(new Address(userDTO.getAddressDTO()));
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        User u;
+        try {
+            u = userService.findUserByEmail(userDTO.getEmail());
+        } catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        if (!u.getName().equals(userDTO.getName())){
+            userService.updateUserName(userDTO.getName(), userDTO.getEmail());
+        }
+        if (!u.getSurname().equals(userDTO.getSurname())){
+            userService.updateUserSurname(userDTO.getSurname(), userDTO.getEmail());
+        }
+        if (!u.getAddress().getStreet().equals(userDTO.getAddressDTO().getStreet()) || !u.getAddress().getCity().equals(userDTO.getAddressDTO().getCity()) ||
+            !u.getAddress().getCountry().equals(userDTO.getAddressDTO().getCountry())){
+            userService.updateUserAddress(a, userDTO.getEmail());
+        }
+        if (!u.getPhoneNumber().equals(userDTO.getPhoneNumber())){
+            userService.updateUserPhoneNumber(userDTO.getPhoneNumber(), userDTO.getEmail());
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @Transactional
     @PostMapping("/register")
@@ -167,6 +199,19 @@ public class UserController {
             if (!userDTO.getPrivilegedUserType().equals("retreatOwner") && !userDTO.getPrivilegedUserType().equals("shipOwner") && !userDTO.getPrivilegedUserType().equals("fishingInstructor")) {
                 return false;
             }
+        }
+        return true;
+    }
+
+    private boolean validChangedUserInfo(UserDTO userDTO){
+        if (userDTO.getName() == null ||userDTO.getName().equals("") || !userDTO.getName().matches("([A-Z]{1})([a-z]+)([^0-9]*)$")) {
+            return false;
+        }
+        if (userDTO.getSurname() == null ||userDTO.getSurname().equals("") || !userDTO.getSurname().matches("([A-Z]{1})([a-z]+)([^0-9]*)$")) {
+            return false;
+        }
+        if (userDTO.getPhoneNumber() == null || userDTO.getPhoneNumber().equals("") || !userDTO.getPhoneNumber().matches("^[+]?(\\d{1,2})?[\\s.-]?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$")) {
+            return false;
         }
         return true;
     }
