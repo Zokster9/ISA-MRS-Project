@@ -35,4 +35,10 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("select rr from RegistrationReasoning rr where rr.privilegedUser = ?1")
     public RegistrationReasoning findRegistrationReasoningByUser(User user);
 
+    @Query("select u from User u where u.email = ?1")
+    public User findUserByEmail(String email);
+
+    @Modifying
+    @Query("update User u set u.password = ?1 where u.email = ?2")
+    public void updateUserPassword(String password, String email);
 }

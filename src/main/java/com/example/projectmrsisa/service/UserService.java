@@ -57,6 +57,13 @@ public class UserService {
         return userRepository.findRegistrationReasoningByUser(user);
     }
 
+    public User findUserByEmail(String email){
+        return userRepository.findUserByEmail(email);
+    }
+
+    public void updateUserPassword(String password, String email){
+        userRepository.updateUserPassword(password, email);
+    }
     public RetreatOwner getRetreatOwnerById(int id) {
         return retreatOwnerRepository.getById(id);
     }

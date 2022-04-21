@@ -190,8 +190,14 @@ public class UserController {
 
     @Transactional
     @PostMapping(value="/changePassword")
-    public ResponseEntity<UserDTO> changePasswordFishingInstructor(@RequestParam String email, @RequestParam String oldPassword, @RequestParam String newPassword){
-        System.out.println("tu sam");
-        return null;
+    public ResponseEntity<UserDTO> changePassword(@RequestParam String email, @RequestParam String oldPassword, @RequestParam String newPassword){
+        User user = userService.findUserByEmail(email);
+        if (!user.getPassword().equals(oldPassword)){
+            UserDTO userDTO = new UserDTO(user);
+            return new ResponseEntity<>(userDTO, HttpStatus.BAD_REQUEST);
+        }
+        userService.updateUserPassword(newPassword, email);
+        UserDTO userDTO = new UserDTO(user);
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 }

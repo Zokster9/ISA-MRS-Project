@@ -83,8 +83,9 @@ Vue.component("personal-info-user", {
             })
         },
         changePassword(){
-            axios.post("/users/changePassword?email=lordje@gmail.com&oldPassword=" + this.oldPassword + "&newPassword=" + this.newPassword).then((response)=>{
-                router.push("/profile-page-fishing-instructor")
+            axios.post("/users/changePassword?email=lordje@gmail.com&oldPassword=" + this.passwordChange.oldPassword + "&newPassword=" + this.passwordChange.newPassword).then((response)=>{
+                alert("Password successfully changed!")
+                window.location.reload();
             }).catch(error => {
                 alert("Old password is incorrect!")
             })
