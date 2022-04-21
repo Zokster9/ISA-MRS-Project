@@ -16,7 +16,7 @@ Vue.component("personal-info-user", {
             <div class="card-body"> 
                 <h5 class="card-title"> Change personal info </h5>
                 <p class="card-text"> Edit your personal info you have entered when registering. </p>
-                <router-link to="#" class="btn btn-primary"> Edit personal info </router-link>
+                <router-link exact to="/change-info" class="btn btn-primary"> Edit personal info </router-link>
             </div>
         </div>
         <div class="card mb-3 border-primary" style="max-width: 18rem;"> 

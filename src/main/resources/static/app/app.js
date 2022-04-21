@@ -18,6 +18,7 @@ const NavAdmin = {template: '<nav-admin></nav-admin>'};
 const ProfilePageAdmin = {template: '<profile-page-admin></profile-page-admin>'};
 const AccountTerminationRequests = {template: '<account-termiantion-requests></account-termiantion-requests>'};
 const AccountTerminationRequestsRow = {template: '<account-termination-requests-row></account-termination-requests-row>'};
+const ChangeInfo = {template: '<change-info></change-info>'};
 
 const router = new VueRouter({
     mode: 'hash',
@@ -45,6 +46,7 @@ const router = new VueRouter({
         {path: "/profile-page-admin", component: ProfilePageAdmin},
         {path: "/account-termination-requests", component: AccountTerminationRequests},
         {path: "/termination-requests-row", component: AccountTerminationRequestsRow},
+        {path: "/change-info", component: ChangeInfo}
     ]
 });
 
