@@ -18,4 +18,8 @@ public class ShipService {
     }
 
     public List<Ship> getShips() { return shipRepository.findAll(); }
+
+    public Ship findShipById(int id) {
+        return shipRepository.findShipById(id);
+    }
 }

@@ -21,6 +21,7 @@ public class ShipDTO {
     private String country;
     private String city;
     private String street;
+    private double price;
     private List<String> pictures;
     private List<String> rulesOfConduct;
     private String type;
@@ -35,12 +36,15 @@ public class ShipDTO {
 
     public ShipDTO() {}
 
-    public ShipDTO(String name, String description, String country, String city, String street, List<String> pictures, List<String> rulesOfConduct, String type, double length, String engineNum, int enginePower, String maxSpeed, List<String> navigationEquipment, int capacity, List<String> fishingEquipment, String reservationCancellationConditions) {
+    public ShipDTO(int id, int owner_id, String name, String description, String country, String city, String street, double price, List<String> pictures, List<String> rulesOfConduct, String type, double length, String engineNum, int enginePower, String maxSpeed, List<String> navigationEquipment, int capacity, List<String> fishingEquipment, String reservationCancellationConditions) {
+        this.id = id;
+        this.owner_id = owner_id;
         this.name = name;
         this.description = description;
         this.country = country;
         this.city = city;
         this.street = street;
+        this.price = price;
         this.pictures = pictures;
         this.rulesOfConduct = rulesOfConduct;
         this.type = type;
@@ -63,6 +67,7 @@ public class ShipDTO {
         this.city = ship.getAddress().getCity();
         this.street = ship.getAddress().getStreet();
         this.pictures = new ArrayList<>(ship.getPictures());
+        this.price = ship.getPrice();
         this.rulesOfConduct = new ArrayList<>(ship.getRulesOfConduct());
         this.type = ship.getType();
         this.length = ship.getLength();
@@ -217,5 +222,13 @@ public class ShipDTO {
 
     public void setReservationCancellationConditions(String reservationCancellationConditions) {
         this.reservationCancellationConditions = reservationCancellationConditions;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

@@ -36,6 +36,7 @@
     import { required, minLength, email } from 'vuelidate/lib/validators'
     import axios from 'axios'
     import VueAxios from 'vue-axios'
+import router from '@/router'
 
     Vue.use(VueAxios, axios)
     Vue.use(Vuelidate)

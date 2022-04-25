@@ -90,6 +90,11 @@ const routes = [
     name: 'retreats',
     component: () => import('../views/RetreatsView.vue')
   },
+  {
+    path: '/ship/:id',
+    name: 'ship',
+    component: () => import('../views/ShipView.vue')
+  }
 ]
 
 const router = new VueRouter({
