@@ -20,7 +20,7 @@
                         </ul>
                     </div>
                     <div>
-                        <h5 style="margin: 5px">Fishing equipment</h5>
+                        <h5 style="margin: 5px">Included fishing equipment</h5>
                         <ul>
                             <template v-for="equipment in adventure.fishingEquipment">
                                 <li style="margin: 5px" :key="equipment">{{equipment}}</li>
@@ -41,12 +41,24 @@
                         <p style="margin: 5px">{{adventure.description}}</p>
                     </div>
                     <div>
+                        <h5 style="margin: 5px">Instructor biography</h5>
+                        <p style="margin: 5px">{{adventure.instructorBiography}}</p>
+                    </div>
+                    <div>
                         <h5 style="margin: 5px">Reservation cancellation conditions</h5>
 						<p style="margin: 5px">{{adventure.reservationCancellationConditions}}</p>
                     </div>
                     <div>
                         <h5 style="margin: 5px">Address</h5>
                         <p style="margin: 5px">{{adventure.country}}, {{adventure.city}}, {{adventure.street}}</p>
+                    </div>
+                    <div>
+                        <h5 style="margin: 5px"> Price </h5>
+                        <p style="margin: 5px"> {{adventure.price}} euros </p>
+                    </div>
+                    <div>
+                        <h5 style="margin: 5px"> Maximum amount of people </h5>
+                        <p style="margin: 5px"> {{adventure.maxNumOfPeople}} people </p>
                     </div>
 					<div>
 						<iframe :src="mapSrc" style="margin: 15px; border-radius: 25px; border: 1px solid #323539"></iframe>
