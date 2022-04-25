@@ -133,3 +133,16 @@ body,
     width: 70px;
     height: auto;
 }
+
+.adventure-main-pic {
+    width: 100%;
+    height:400px;
+}
+
+.adventure-container {
+    max-width: 800px;
+}
+
+.adventure-other-imgs{
+    width: 100%;
+}

@@ -1,0 +1,109 @@
+.activeAcceptButton{
+    background-color:darkseagreen;
+}
+
+.activeDeclineButton{
+    background-color:indianred;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+}
+
+html,
+body,
+.container,
+.main,
+.row,
+.app,
+.signIn,
+.signUp,
+.vertical-center {
+    width: 100%;
+    height: 100%;
+}
+
+.form-group,
+.form-check,
+.form-select {
+    margin-top: 4%;
+}
+
+.form-group button{
+    width: 100%;
+    height: 100%;
+    margin-top: 2%;
+}
+
+.form-group.required .control-label:after {
+    content: "*";
+    color: red;
+}
+
+/*.form-control::placeholder {*/
+/*    color: red;*/
+/*    opacity: 0.8;*/
+/*}*/
+
+.vertical-center {
+    display: flex;
+    text-align: left;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.vertical-center h3 {
+    text-align: center;
+    margin: 0;
+    line-height: 1;
+    padding-bottom: 20px;
+}
+
+.card {
+    cursor: pointer;
+    border-radius: 20px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    transition: all 0.2s ease;
+}
+
+.card:hover {
+    box-shadow: 5px 6px 6px 2px #e9ecef;
+    transform: scale(1.1)
+}
+
+.card-img-top {
+    height: 161px;
+    width: auto;
+    object-fit: cover;
+}
+
+.inner-block {
+    width: 450px;
+    margin: auto;
+    background: #ffffff;
+    box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
+    padding: 40px 55px 45px 55px;
+    border-radius: 15px;
+    transition: all .3s;
+}
+
+.navbar-light {
+    background-color: #ffffff;
+    box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
+}
+
+.nav-item {
+    margin-left: 10px;
+}
+
+.logo {
+    width: 70px;
+    height: auto;
+}

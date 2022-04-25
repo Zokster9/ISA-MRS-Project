@@ -90,6 +90,11 @@ const routes = [
     name: 'retreats',
     component: () => import('../views/RetreatsView.vue')
   },
+  {
+    path: '/adventure-page/:id',
+    name: 'adventure-page',
+    component: () => import('../views/AdventurePageView.vue')
+  }
 ]
 
 const router = new VueRouter({
