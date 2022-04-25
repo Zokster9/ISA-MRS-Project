@@ -8,9 +8,11 @@ import com.example.projectmrsisa.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -93,9 +95,11 @@ public class UserController {
 
     @Transactional
     @PostMapping("/changeInfo")
-    public ResponseEntity<UserDTO> changeInfo(@RequestBody UserDTO userDTO){
+    @PreAuthorize("hasAnyRole('admin', 'client', 'retreatOwner', 'shipOwner', 'fishingInstructor')")
+    public ResponseEntity<UserDTO> changeInfo(@RequestBody UserDTO userDTO, Principal user){
         if (!validChangedUserInfo(userDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         if(!validAddress(userDTO.getAddressDTO())) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (!userDTO.getEmail().equals(user.getName())) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         Address a;
         try {
             a = addressService.getAddress(new Address(userDTO.getAddressDTO()));
@@ -129,14 +133,12 @@ public class UserController {
     public ResponseEntity<UserDTO> register(@RequestBody UserDTO userDTO) {
         if (!validUser(userDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         if (!validAddress(userDTO.getAddressDTO())) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (!validRegistrationData(userDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         Address a;
         Role role;
-        System.out.println("Dosao sam ovde");
         try {
             a = addressService.getAddress(new Address(userDTO.getAddressDTO()));
-            System.out.println("Dosao sam ovde 1");
             role = roleService.findRoleByName("ROLE_" + userDTO.getPrivilegedUserType());
-            System.out.println("Dosao sam ovde 2");
         }catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -146,9 +148,7 @@ public class UserController {
         }else {
             try{
                 if (role == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-                System.out.println("Dosao sam ovde 3");
                 User user = userService.save(new User(userDTO, a, role));
-                System.out.println("Dosao sam ovde 4");
                 RegistrationReasoning registrationReasoning = registrationReasoningService.addRegistrationReasoning(new RegistrationReasoning(user, userDTO.getRegistrationExplanation()));
                 return new ResponseEntity<>(new UserDTO(user, PrivilegedUser.RETREAT_OWNER, new RegistrationReasoningDTO(registrationReasoning)), HttpStatus.CREATED);
             }catch (Exception e) {
@@ -174,23 +174,17 @@ public class UserController {
         if (userDTO.getPassword() == null || userDTO.getConfirmPassword() == null || !userDTO.getPassword().equals(userDTO.getConfirmPassword())) {
             return false;
         }
-        if (userDTO.getName() == null ||userDTO.getName().equals("") || !userDTO.getName().matches("([A-Z]{1})([a-z]+)([^0-9]*)$")) {
-            return false;
-        }
-        if (userDTO.getSurname() == null ||userDTO.getSurname().equals("") || !userDTO.getSurname().matches("([A-Z]{1})([a-z]+)([^0-9]*)$")) {
-            return false;
-        }
+        if (!validChangedUserInfo(userDTO)) return false;
         if (userDTO.getPhoneNumber() == null || userDTO.getPhoneNumber().equals("") || !userDTO.getPhoneNumber().matches("^[+]?(\\d{1,2})?[\\s.-]?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$")) {
             return false;
         }
-        if (!userDTO.getRegistrationType().equals("client") && !userDTO.getRegistrationType().equals("privilegedUser")) {
-            return false;
-        }
+        return userDTO.getRegistrationType().equals("client") || userDTO.getRegistrationType().equals("privilegedUser");
+    }
+
+    private boolean validRegistrationData(UserDTO userDTO) {
         if (userDTO.getRegistrationType().equals("privilegedUser")) {
             if (userDTO.getRegistrationExplanation() == null || userDTO.getRegistrationExplanation().equals("")) return false;
-            if (!userDTO.getPrivilegedUserType().equals("retreatOwner") && !userDTO.getPrivilegedUserType().equals("shipOwner") && !userDTO.getPrivilegedUserType().equals("fishingInstructor")) {
-                return false;
-            }
+            return userDTO.getPrivilegedUserType().equals("retreatOwner") || userDTO.getPrivilegedUserType().equals("shipOwner") || userDTO.getPrivilegedUserType().equals("fishingInstructor");
         }
         return true;
     }
@@ -202,10 +196,7 @@ public class UserController {
         if (userDTO.getSurname() == null ||userDTO.getSurname().equals("") || !userDTO.getSurname().matches("([A-Z]{1})([a-z]+)([^0-9]*)$")) {
             return false;
         }
-        if (userDTO.getPhoneNumber() == null || userDTO.getPhoneNumber().equals("") || !userDTO.getPhoneNumber().matches("^[+]?(\\d{1,2})?[\\s.-]?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$")) {
-            return false;
-        }
-        return true;
+        return userDTO.getPhoneNumber() != null && !userDTO.getPhoneNumber().equals("") && userDTO.getPhoneNumber().matches("^[+]?(\\d{1,2})?[\\s.-]?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$");
     }
 
     @GetMapping(value="/findByEmail/{email}")
@@ -237,5 +228,12 @@ public class UserController {
         userService.updateUserPassword(newPassword, email);
         UserDTO userDTO = new UserDTO(user);
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/getLoggedUser")
+    @PreAuthorize("hasAnyRole('admin', 'client', 'retreatOwner', 'shipOwner', 'fishingInstructor')")
+    public ResponseEntity<UserDTO> getLoggedUser(Principal loggedUser) {
+        User user = userService.findUserByEmail(loggedUser.getName());
+        return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
     }
 }
