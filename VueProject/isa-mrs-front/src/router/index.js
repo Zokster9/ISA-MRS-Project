@@ -90,6 +90,11 @@ const routes = [
     name: 'retreats',
     component: () => import('../views/RetreatsView.vue')
   },
+  {
+    path: '/service-availability',
+    name: '/service-availability',
+    component: () => import('../views/ServiceAvailabilityView.vue')
+  }
 ]
 
 const router = new VueRouter({

@@ -2,6 +2,7 @@ package com.example.projectmrsisa.controller;
 
 import com.example.projectmrsisa.dto.AddressDTO;
 import com.example.projectmrsisa.dto.RegistrationReasoningDTO;
+import com.example.projectmrsisa.dto.ServiceDTO;
 import com.example.projectmrsisa.dto.UserDTO;
 import com.example.projectmrsisa.model.*;
 import com.example.projectmrsisa.service.*;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +37,9 @@ public class UserController {
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private ServiceService serviceService;
 
     @GetMapping(value="/inactive", produces = "application/json")
     public ResponseEntity<List<UserDTO>> getInactiveUsers(){
@@ -237,5 +242,16 @@ public class UserController {
         userService.updateUserPassword(newPassword, email);
         UserDTO userDTO = new UserDTO(user);
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
+    }
+    //todo: izmeni sa jwt
+    @GetMapping(value="/findMyEntities/{email}")
+    public ResponseEntity<List<ServiceDTO>> findMyEntities(@PathVariable String email){
+        User user = userService.findUserByEmail(email);
+        List<Service> ownersServices = serviceService.findOwnersServices(user);
+        List<ServiceDTO> ownersServicesDTO = new ArrayList<>();
+        for (Service s : ownersServices){
+            ownersServicesDTO.add(new ServiceDTO(s));
+        }
+        return new ResponseEntity<>(ownersServicesDTO, HttpStatus.OK);
     }
 }

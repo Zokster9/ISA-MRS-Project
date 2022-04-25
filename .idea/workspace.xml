@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="4b5cb4c0-aaeb-4179-8a5e-dc5b238f85d6" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="JpbToolWindowState">
+    <option name="myId2FirstActivated">
+      <map>
+        <entry key="com.haulmont.jpb.jpaInspector" value="true" />
+        <entry key="com.haulmont.jpb.jpaPalette" value="true" />
+        <entry key="com.haulmont.jpb.jpaStructure" value="true" />
+      </map>
+    </option>
+    <option name="myId2Visible">
+      <map>
+        <entry key="com.haulmont.jpb.jpaInspector" value="true" />
+        <entry key="com.haulmont.jpb.jpaPalette" value="false" />
+        <entry key="com.haulmont.jpb.jpaStructure" value="true" />
+      </map>
+    </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="Use Maven wrapper" />
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectId" id="27TJEqvHo7vmCoA7ZmX3eL1XAZj" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DatabaseDriversLRU" value="postgresql" />
+    <property name="RequestMappingsPanelOrder0" value="0" />
+    <property name="RequestMappingsPanelOrder1" value="1" />
+    <property name="RequestMappingsPanelWidth0" value="75" />
+    <property name="RequestMappingsPanelWidth1" value="75" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\T\Desktop\MRSISAProjekat\ISA-MRS-Project\src\main\resources" />
+      <recent name="C:\Users\T\Desktop\MRSISAProjekat\ISA-MRS-Project\static\css" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\T\Desktop\MRSISAProjekat\ISA-MRS-Project\src\main\resources\static\css" />
+      <recent name="C:\Users\T\Desktop\MRSISAProjekat\ISA-MRS-Project\src\main\resources\static" />
+      <recent name="C:\Users\T\Desktop\MRSISAProjekat\ISA-MRS-Project\src\main\resources" />
+      <recent name="C:\Users\T\Desktop\MRSISAProjekat\ISA-MRS-Project\static\css" />
+      <recent name="C:\Users\T\Desktop\MRSISAProjekat\ISA-MRS-Project\static" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Spring Boot.ProjectMrsIsaApplication">
+    <configuration name="index.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/ISA-MRS-Project/Project-MRS-ISA/static/index.html" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
+    <configuration name="ProjectMrsIsaApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="Project-MRS-ISA" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.projectmrsisa.ProjectMrsIsaApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JavaScript Debug.index.html" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4b5cb4c0-aaeb-4179-8a5e-dc5b238f85d6" name="Changes" comment="" />
+      <created>1649338040595</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1649338040595</updated>
+      <workItem from="1649338042845" duration="113000" />
+      <workItem from="1649338174052" duration="20547000" />
+      <workItem from="1649495322783" duration="11996000" />
+      <workItem from="1649514085000" duration="1836000" />
+      <workItem from="1649614561455" duration="2790000" />
+      <workItem from="1649663999570" duration="6853000" />
+      <workItem from="1649675263836" duration="14211000" />
+      <workItem from="1649705156468" duration="255000" />
+      <workItem from="1649794238888" duration="2897000" />
+      <workItem from="1649944058368" duration="2349000" />
+      <workItem from="1649947174747" duration="236000" />
+      <workItem from="1649947456837" duration="21342000" />
+      <workItem from="1650005494735" duration="28414000" />
+      <workItem from="1650051825297" duration="72000" />
+      <workItem from="1650052368949" duration="7050000" />
+      <workItem from="1650093974601" duration="14710000" />
+      <workItem from="1650200878776" duration="12189000" />
+      <workItem from="1650267802224" duration="6749000" />
+      <workItem from="1650293025827" duration="1156000" />
+      <workItem from="1650307647826" duration="1090000" />
+      <workItem from="1650315844748" duration="1000" />
+      <workItem from="1650454714610" duration="12364000" />
+      <workItem from="1650548719763" duration="14703000" />
+      <workItem from="1650575810284" duration="237000" />
+      <workItem from="1650626043042" duration="1203000" />
+      <workItem from="1650649626005" duration="306000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="javax.persistence.TransactionRequiredException" package="javax.persistence" />
+          <option name="timeStamp" value="4" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="com.example.projectmrsisa.model.Address$HibernateProxy$iyBYfYmX" memberName="$$_hibernate_interceptor" />
+      </pinned-members>
+    </pin-to-top-manager>
+  </component>
+</project>
