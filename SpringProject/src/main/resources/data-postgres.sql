@@ -12,23 +12,29 @@ insert into addresses (country, city, street) values ('Srbija', 'Novi Sad', 'Sek
 insert into addresses (country, city, street) values ('Srbija', 'Sremska Kamenica', 'Dunavska 1');
 insert into addresses (country, city, street) values ('Srbija', 'Loznica', 'Drinska 84');
 
-insert into users (email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values ('matijazaric9@gmail.com', 'matija123','Matija', 'Zaric', 4, '+381657842312', false, false, 0, 0);
-insert into users (email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values ('sakal.teodor@gmail.com', 'teodor123', 'Teodor', 'Sakal Franciskovic', 1, '+381636742312', false, false, 0, 0);
-insert into users (email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values ('lordje@gmail.com', 'djordje123', 'Djordje', 'Vajagic', 2, '+381617647812', false, false, 0, 0);
-insert into users (email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values ('zoki@gmail.com', 'zoran123', 'Zoran', 'Bukorac', 3, '+381607846912', true, false, 0, 0);
-insert into users (email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values ('klijent@gmail.com', 'klijent123', 'Klijent', 'Klijentic', 2, '+381667342312', true, false, 0, 0);
+insert into roles (name) values ('ROLE_retreatOwner');
+insert into roles (name) values ('ROLE_shipOwner');
+insert into roles (name) values ('ROLE_fishingInstructor');
+insert into roles (name) values ('ROLE_client');
+insert into roles (name) values ('ROLE_admin');
+
+-- za matiju sifra matija123
+-- ostalima je: sifra123
+insert into users (email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values ('matijazaric9@gmail.com', '$2a$10$6zhtvn7zujmExlDo2pDwUODVq09LpFBuBL62g6Bsd2lOJjnuctrKC','Matija', 'Zaric', 4, '+381657842312', false, false, 0, 0);
+insert into users (email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values ('sakal.teodor@gmail.com', '$2a$10$w6tNOTFjGcs32pYE6VP7o.to.Lo9Map0/Rb4PHHd51WT87ynGzlDy', 'Teodor', 'Sakal Franciskovic', 1, '+381636742312', false, false, 0, 0);
+insert into users (email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values ('lordje@gmail.com', '$2a$10$w6tNOTFjGcs32pYE6VP7o.to.Lo9Map0/Rb4PHHd51WT87ynGzlDy', 'Djordje', 'Vajagic', 2, '+381617647812', false, false, 0, 0);
+insert into users (email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values ('zoki@gmail.com', '$2a$10$w6tNOTFjGcs32pYE6VP7o.to.Lo9Map0/Rb4PHHd51WT87ynGzlDy', 'Zoran', 'Bukorac', 3, '+381607846912', true, false, 0, 0);
+insert into users (email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values ('klijent@gmail.com', '$2a$10$w6tNOTFjGcs32pYE6VP7o.to.Lo9Map0/Rb4PHHd51WT87ynGzlDy', 'Klijent', 'Klijentic', 2, '+381667342312', true, false, 0, 0);
 
 insert into registration_reasoning (privileged_user, registration_reasoning) values (1, 'I want to be retreat owner');
 insert into registration_reasoning (privileged_user, registration_reasoning) values (2, 'I want to be ship owner');
 insert into registration_reasoning (privileged_user, registration_reasoning) values (3, 'I want to be fishing instructor owner');
 
-insert into retreat_owners (id) values (1);
-
-insert into ship_owners (id) values (2);
-
-insert into fishing_instructors (id) values (3);
-
-insert into admins (id) values (4);
+insert into user_role (user_id, role_id) values (1, 1);
+insert into user_role (user_id, role_id) values (2, 2);
+insert into user_role (user_id, role_id) values (3, 3);
+insert into user_role (user_id, role_id) values (4, 5);
+insert into user_role (user_id, role_id) values (5, 4);
 
 insert into clients (id, penalty_points, is_penalized) values (5, 0, false);
 
@@ -51,18 +57,18 @@ insert into my_pictures (id, pictures) values (3, 'pic6.jpg');
 insert into my_rules_of_conduct (id, rules_of_conduct) values (3, 'Isnt allowed: smoking.');
 insert into my_rules_of_conduct (id, rules_of_conduct) values (3, 'No noisy music.');
 
-insert into adventures (id, owner_id, instructor_biography, max_num_of_people, reservation_cancellation_conditions) values (3, 3, 'They call me Lordje the greatest.', 3, 'Just text me.');
+insert into adventures (id, instructor_biography, max_num_of_people, reservation_cancellation_conditions) values (3, 'They call me Lordje the greatest.', 3, 'Just text me.');
 insert into my_fishing_equipment_adventures (id, fishing_equipment) values (3, 'Hooks');
 insert into my_fishing_equipment_adventures (id, fishing_equipment) values (3, 'Nets');
 insert into my_fishing_equipment_adventures (id, fishing_equipment) values (3, 'Gaffs');
 
-insert into ships (id, owner_id, type, length, engine_num, engine_power, capacity, max_speed, reservation_cancellation_conditions) values (2, 2, 'Brod', 55, 'A123B5', 200, 100, '50 km/h', 'Prilikom otkaza rezervacije, vlasniku se uplacuje 5% cene');
+insert into ships (id, type, length, engine_num, engine_power, capacity, max_speed, reservation_cancellation_conditions) values (2, 'Brod', 55, 'A123B5', 200, 100, '50 km/h', 'Prilikom otkaza rezervacije, vlasniku se uplacuje 5% cene');
 insert into my_navigation_equipment (id, navigation_equipment) values (2, 'GPS');
 insert into my_navigation_equipment (id, navigation_equipment) values (2, 'Other type of GPS');
 insert into my_fishing_equipment_ships (id, fishing_equipment) values (2, 'Hooks');
 insert into my_fishing_equipment_ships (id, fishing_equipment) values (2, 'Lines');
 
-insert into retreats (id, owner_id, num_of_beds, num_of_rooms) values (1, 1, 4, 2);
+insert into retreats (id, num_of_beds, num_of_rooms) values (1, 4, 2);
 insert into retreat_tags (retreat_id, tag_id) values (1, 1);
 insert into retreat_tags (retreat_id, tag_id) values (1, 6);
 insert into retreat_tags (retreat_id, tag_id) values (1, 4);

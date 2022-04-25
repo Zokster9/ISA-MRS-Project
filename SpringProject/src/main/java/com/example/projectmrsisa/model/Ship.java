@@ -51,7 +51,7 @@ public class Ship extends Service {
         this.reservationCancellationConditions = reservationCancellationConditions;
     }
 
-    public Ship(ShipDTO shipDTO, Address address, ShipOwner shipOwner) {
+    public Ship(ShipDTO shipDTO, Address address, User shipOwner) {
         this.setName(shipDTO.getName());
         this.setDescription(shipDTO.getDescription());
         this.setOwner(shipOwner);

@@ -3,7 +3,7 @@ package com.example.projectmrsisa.controller;
 import com.example.projectmrsisa.dto.ShipDTO;
 import com.example.projectmrsisa.model.Address;
 import com.example.projectmrsisa.model.Ship;
-import com.example.projectmrsisa.model.ShipOwner;
+import com.example.projectmrsisa.model.User;
 import com.example.projectmrsisa.service.AddressService;
 import com.example.projectmrsisa.service.ShipService;
 import com.example.projectmrsisa.service.UserService;
@@ -32,7 +32,7 @@ public class ShipController {
     @Autowired
     private AddressService addressService;
 
-    @GetMapping(produces = "application/json")
+    @GetMapping(value="/getAll", produces = "application/json")
     public ResponseEntity<List<ShipDTO>> getShips() {
         try {
             List<Ship> ships = shipService.getShips();
@@ -49,9 +49,9 @@ public class ShipController {
     @PostMapping(value="/create-ship", consumes = "application/json")
     public ResponseEntity<ShipDTO> createShip(@RequestBody ShipDTO shipDTO) {
         //TODO: Dobaviti vlasnika broda uz pomoc JWT
-        ShipOwner shipOwner;
+        User shipOwner;
         try {
-            shipOwner = userService.getOwnerById(2);
+            shipOwner = userService.findUserById(2);
         }catch (Exception e) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
         if (!validAddress(shipDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         if (!validateShipData(shipDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

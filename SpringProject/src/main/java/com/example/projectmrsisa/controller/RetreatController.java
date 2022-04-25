@@ -1,10 +1,7 @@
 package com.example.projectmrsisa.controller;
 
 import com.example.projectmrsisa.dto.RetreatDTO;
-import com.example.projectmrsisa.model.Address;
-import com.example.projectmrsisa.model.Retreat;
-import com.example.projectmrsisa.model.RetreatOwner;
-import com.example.projectmrsisa.model.Tag;
+import com.example.projectmrsisa.model.*;
 import com.example.projectmrsisa.service.AddressService;
 import com.example.projectmrsisa.service.RetreatService;
 import com.example.projectmrsisa.service.TagService;
@@ -34,7 +31,7 @@ public class RetreatController {
     @Autowired
     private UserService userService;
 
-    @GetMapping(produces = "application/json")
+    @GetMapping(value="/getAll", produces = "application/json")
     public ResponseEntity<List<RetreatDTO>> getRetreats() {
         try {
             List<Retreat> retreats = retreatService.getRetreats();
@@ -52,9 +49,9 @@ public class RetreatController {
     public ResponseEntity<RetreatDTO> createRetreat(@RequestBody RetreatDTO retreatDTO) {
         //TODO: Dobaviti vlasnika broda uz pomoc JWT
         //  privremeno
-        RetreatOwner retreatOwner;
+        User retreatOwner;
         try {
-            retreatOwner = userService.getRetreatOwnerById(1);
+            retreatOwner = userService.findUserById(1);
         } catch (Exception e) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
         if (!validAddress(retreatDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         if (!validateRetreatData(retreatDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

@@ -12,15 +12,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("select u from User u where u.isActive = ?1 and u.isDeleted = ?2")
     public List<User> findUsersByActivatedStatus(Boolean isActivated, Boolean isDeleted);
 
-    @Query("select f from FishingInstructor f where f.id = ?1")
-    public FishingInstructor findFishingInstructorById(Integer id);
-
-    @Query("select r from RetreatOwner r where r.id = ?1")
-    public RetreatOwner findRetreatOwnerById(Integer id);
-
-    @Query("select s from ShipOwner s where s.id = ?1")
-    public ShipOwner findShipOwnerById(Integer id);
-
     @Query("select u from User u where u.id = ?1")
     public User findUserById(Integer id);
 
@@ -57,4 +48,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Modifying
     @Query("update User u set u.phoneNumber = ?1 where u.email = ?2")
     public void updateUserPhoneNumber(String phoneNumber, String email);
+
+    @Modifying
+    @Query("update User u set u.isDeleted = ?1 where u.email = ?2")
+    public void updateUserDeletedStatusByEmail(boolean isDeleted, String email);
 }

@@ -15,11 +15,11 @@
                             
                             <div class="form-group required">
                                 <label class="control-label">Password </label>
-                                <input v-model="form.password" type="password" class="form-control form-control-lg" placeholder="Please enter your password..." pattern="/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/">
+                                <input v-model="form.password" type="password" class="form-control form-control-lg" placeholder="Please enter your password...">
                             </div>
                             
                             <div class="form-group">
-                                <button @click.native="login" @enter.native="login" :disabled="$v.form.$invalid" type="submit" class="btn btn-dark btn-lg btn-block">Sign In</button>
+                                <button @click="signIn" :disabled="$v.form.$invalid" type="submit" class="btn btn-dark btn-lg btn-block">Sign In</button>
                             </div>
                         </form>
                     </div>
@@ -55,11 +55,24 @@
         },
         methods: {
             signIn() {
-                axios.post("http://localhost:8088/sign-in/", {
+                axios.post("http://localhost:8088/auth/login", {
                     email: this.form.email,
                     password: this.form.password
                 }).then(response => {
-                    window.sessionStorage.setItem("user", JSON.stringify(response.data));
+					localStorage.setItem("accessToken", response.data.accessToken);
+					if (response.data.roleName === "ROLE_retreatOwner") {
+						// TODO: prebaciti na stranicu vlasnika vikendice
+					}else if (response.data.roleName === "ROLE_shipOwner") {
+						// TODO: prebaciti na stranicu vlasnika broda
+					}else if (response.data.roleName === "ROLE_fishingInstructor") {
+						// TODO: prebaciti na stranicu instruktora pecanja
+					}else if (response.data.roleName === "ROLE_client") {
+						// TODO: prebaciti na stranicu klijenta
+					}else if (response.data.roleName === "ROLE_admin") {
+						// TODO: prebaciti na stranicu admina
+					}else {
+						alert("Some kind of error, dont know what.");
+					}
                 }).catch(() => {
                     alert("Incorrect login details")
                     console.log("Ne ide brt")

@@ -4,10 +4,17 @@ import com.example.projectmrsisa.dto.UserDTO;
 
 import javax.persistence.*;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 @Entity
 @Table(name="users")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class User {
+public class User implements UserDetails{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id", unique = true, nullable = false)
@@ -34,6 +41,12 @@ public abstract class User {
     @Column(name="isActive", nullable = false)
     private boolean isActive;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private List<Role> roles;
+
     public User() {
         this.loyaltyStatus = LoyaltyStatus.Regular;
         this.isDeleted = false;
@@ -55,7 +68,7 @@ public abstract class User {
         this.isActive = false;
     }
 
-    public User(UserDTO userDTO, Address address) {
+    public User(UserDTO userDTO, Address address, Role role) {
         this.email = userDTO.getEmail();
         this.password = userDTO.getPassword();
         this.name = userDTO.getName();
@@ -66,6 +79,8 @@ public abstract class User {
         this.loyaltyStatus = LoyaltyStatus.Regular;
         this.isDeleted = false;
         this.isActive = false;
+        this.roles = new ArrayList<>();
+        this.roles.add(role);
     }
 
     public Integer getId() {
@@ -154,5 +169,39 @@ public abstract class User {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.roles;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return isActive;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
     }
 }

@@ -4,14 +4,14 @@ package com.example.projectmrsisa.controller;
 import com.example.projectmrsisa.dto.AdventureDTO;
 import com.example.projectmrsisa.model.Address;
 import com.example.projectmrsisa.model.Adventure;
-import com.example.projectmrsisa.model.FishingInstructor;
+import com.example.projectmrsisa.model.User;
 import com.example.projectmrsisa.service.AddressService;
 import com.example.projectmrsisa.service.AdventureService;
 import com.example.projectmrsisa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +33,7 @@ public class AdventureController {
     @PostMapping(consumes = "application/json", produces = "application/json")
     public ResponseEntity<AdventureDTO> createAdventure(@RequestBody AdventureDTO adventureDTO) {
         //TODO: jwt za vlasnika avanture, pa iz njega email
-        FishingInstructor fishingInstructor = userService.findFishingInstructorByEmail("lordje@gmail.com");
+        User fishingInstructor = userService.findUserByEmail("lordje@gmail.com");
 
         if (adventureDTO.getName().length() < 5 || adventureDTO.getName() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -59,7 +59,7 @@ public class AdventureController {
 
         Address address = addressService.getAddress(new Address(adventureDTO.getCountry(), adventureDTO.getCity(), adventureDTO.getStreet()));
         Adventure adventure = adventureService.addAdventure(new Adventure(adventureDTO, address, fishingInstructor));
-        return new ResponseEntity<>(new AdventureDTO(adventure), HttpStatus.OK); // moze i CREATED bolje?
+        return new ResponseEntity<>(new AdventureDTO(adventure), HttpStatus.CREATED);
     }
 
 }

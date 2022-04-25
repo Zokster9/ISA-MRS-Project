@@ -30,7 +30,7 @@ public class Retreat extends Service {
         this.additionalServices = additionalServices;
     }
 
-    public Retreat(RetreatDTO retreatDTO, Address address, Set<Tag> additionalServices, RetreatOwner owner) {
+    public Retreat(RetreatDTO retreatDTO, Address address, Set<Tag> additionalServices, User owner) {
         this.setName(retreatDTO.getName());
         this.setDescription(retreatDTO.getDescription());
         this.setOwner(owner);

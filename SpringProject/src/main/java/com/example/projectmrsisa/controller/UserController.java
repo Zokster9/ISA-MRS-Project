@@ -3,13 +3,8 @@ package com.example.projectmrsisa.controller;
 import com.example.projectmrsisa.dto.AddressDTO;
 import com.example.projectmrsisa.dto.RegistrationReasoningDTO;
 import com.example.projectmrsisa.dto.UserDTO;
-import com.example.projectmrsisa.dto.FishingInstructorDTO;
 import com.example.projectmrsisa.model.*;
-import com.example.projectmrsisa.service.AddressService;
-import com.example.projectmrsisa.service.RegistrationReasoningService;
-import com.example.projectmrsisa.service.TerminationReasoningService;
-import com.example.projectmrsisa.service.EmailService;
-import com.example.projectmrsisa.service.UserService;
+import com.example.projectmrsisa.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,20 +33,27 @@ public class UserController {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private RoleService roleService;
+
     @GetMapping(value="/inactive", produces = "application/json")
     public ResponseEntity<List<UserDTO>> getInactiveUsers(){
         List<User> inactiveUsers = userService.findUsersByActivatedStatus(false, false);
         List<UserDTO> inactiveUsersDTO = new ArrayList<UserDTO>();
         for (User iu : inactiveUsers){
             PrivilegedUser privilegedUser = PrivilegedUser.NOT_PRIVILEGED_USER;
-            if (userService.findFishingInstructorById(iu.getId()) != null ){
-                privilegedUser = PrivilegedUser.FISHING_INSTRUCTOR;
-            }
-            else if (userService.findRetreatOwnerById(iu.getId()) != null){
-                privilegedUser = PrivilegedUser.RETREAT_OWNER;
-            }
-            else if (userService.findShipOwnerById(iu.getId()) != null){
-                privilegedUser = PrivilegedUser.SHIP_OWNER;
+            List<Role> userRoles = iu.getRoles();
+            Role role = userRoles.get(0);
+            switch (role.getName()) {
+                case "ROLE_fishingInstructor":
+                    privilegedUser = PrivilegedUser.FISHING_INSTRUCTOR;
+                    break;
+                case "ROLE_retreatOwner":
+                    privilegedUser = PrivilegedUser.RETREAT_OWNER;
+                    break;
+                case "ROLE_shipOwner":
+                    privilegedUser = PrivilegedUser.SHIP_OWNER;
+                    break;
             }
             RegistrationReasoningDTO registrationReasoningDTO = new RegistrationReasoningDTO(userService.findRegistrationReasoningByUserId(iu));
             inactiveUsersDTO.add(new UserDTO(iu, privilegedUser, registrationReasoningDTO));
@@ -128,8 +130,13 @@ public class UserController {
         if (!validUser(userDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         if (!validAddress(userDTO.getAddressDTO())) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         Address a;
+        Role role;
+        System.out.println("Dosao sam ovde");
         try {
             a = addressService.getAddress(new Address(userDTO.getAddressDTO()));
+            System.out.println("Dosao sam ovde 1");
+            role = roleService.findRoleByName("ROLE_" + userDTO.getPrivilegedUserType());
+            System.out.println("Dosao sam ovde 2");
         }catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -137,30 +144,15 @@ public class UserController {
             // TODO: ovde dodati kod za registraciju klijenta
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // ovo skloniti kad se odradi
         }else {
-            if (userDTO.getPrivilegedUserType().equals("retreatOwner")) {
-                try{
-                    RetreatOwner retreatOwner = userService.addRetreatOwner(new RetreatOwner(userDTO, a));
-                    RegistrationReasoning registrationReasoning = registrationReasoningService.addRegistrationReasoning(new RegistrationReasoning(retreatOwner, userDTO.getRegistrationExplanation()));
-                    return new ResponseEntity<>(new UserDTO(retreatOwner, PrivilegedUser.RETREAT_OWNER, new RegistrationReasoningDTO(registrationReasoning)), HttpStatus.OK);
-                }catch (Exception e) {
-                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-                }
-            }else if (userDTO.getPrivilegedUserType().equals("shipOwner")) {
-                try {
-                    ShipOwner shipOwner = userService.addShipOwner(new ShipOwner(userDTO, a));
-                    RegistrationReasoning registrationReasoning = registrationReasoningService.addRegistrationReasoning(new RegistrationReasoning(shipOwner, userDTO.getRegistrationExplanation()));
-                    return new ResponseEntity<>(new UserDTO(shipOwner, PrivilegedUser.SHIP_OWNER, new RegistrationReasoningDTO(registrationReasoning)), HttpStatus.OK);
-                }catch (Exception e) {
-                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-                }
-            }else {
-                try{
-                    FishingInstructor fishingInstructor = userService.addFishingInstructor(new FishingInstructor(userDTO, a));
-                    RegistrationReasoning registrationReasoning = registrationReasoningService.addRegistrationReasoning(new RegistrationReasoning(fishingInstructor, userDTO.getRegistrationExplanation()));
-                    return new ResponseEntity<>(new UserDTO(fishingInstructor, PrivilegedUser.FISHING_INSTRUCTOR, new RegistrationReasoningDTO(registrationReasoning)), HttpStatus.OK);
-                } catch (Exception e) {
-                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-                }
+            try{
+                if (role == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                System.out.println("Dosao sam ovde 3");
+                User user = userService.save(new User(userDTO, a, role));
+                System.out.println("Dosao sam ovde 4");
+                RegistrationReasoning registrationReasoning = registrationReasoningService.addRegistrationReasoning(new RegistrationReasoning(user, userDTO.getRegistrationExplanation()));
+                return new ResponseEntity<>(new UserDTO(user, PrivilegedUser.RETREAT_OWNER, new RegistrationReasoningDTO(registrationReasoning)), HttpStatus.CREATED);
+            }catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
         }
     }
@@ -218,20 +210,20 @@ public class UserController {
 
     @GetMapping(value="/findByEmail/{email}")
     //TODO: Autorizacija
-    public ResponseEntity<FishingInstructorDTO> getFishingInstructor(@PathVariable String email){
-        FishingInstructor fishingInstructor = userService.findFishingInstructorByEmail(email);
-        FishingInstructorDTO fishingInstructorDTO = new FishingInstructorDTO(fishingInstructor);
-        return new ResponseEntity<>(fishingInstructorDTO, HttpStatus.OK);
+    public ResponseEntity<UserDTO> getUser(@PathVariable String email){
+        User user = userService.findUserByEmail(email);
+        UserDTO userDTO = new UserDTO(user);
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
     //TODO: Mozda ipak zaseban Controller za svakog korisnika
     @Transactional
     @PostMapping(value="/sendTerminationReason")
     //TODO: Autorizacija
-    public ResponseEntity<FishingInstructorDTO> sendTerminationReason(@RequestParam String email, @RequestParam String terminationReason){
-        FishingInstructor fishingInstructor = userService.findFishingInstructorByEmail(email);
-        TerminationReasoning terminationReasoning = terminationReasoningService.addTerminationReasoning(new TerminationReasoning(fishingInstructor, terminationReason));
-        FishingInstructorDTO fishingInstructorDTO = new FishingInstructorDTO(userService.findFishingInstructorByEmail(email));
-        return new ResponseEntity<>(fishingInstructorDTO, HttpStatus.OK);
+    public ResponseEntity<UserDTO> sendTerminationReason(@RequestParam String email, @RequestParam String terminationReason){
+        User user = userService.findUserByEmail(email);
+        TerminationReasoning terminationReasoning = terminationReasoningService.addTerminationReasoning(new TerminationReasoning(user, terminationReason));
+        UserDTO userDTO = new UserDTO(user);
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
     @Transactional

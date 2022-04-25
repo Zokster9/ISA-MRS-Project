@@ -34,7 +34,7 @@ public class Adventure extends Service {
         this.reservationCancellationConditions = reservationCancellationConditions;
     }
 
-    public Adventure(AdventureDTO adventureDTO, Address address, FishingInstructor fishingInstructor){
+    public Adventure(AdventureDTO adventureDTO, Address address, User fishingInstructor){
         this.setName(adventureDTO.getName());
         this.setDescription(adventureDTO.getDescription());
         this.setOwner(fishingInstructor);
