@@ -1,16 +1,16 @@
 package com.example.projectmrsisa.controller;
 
-import com.example.projectmrsisa.dto.AddressDTO;
-import com.example.projectmrsisa.dto.RegistrationReasoningDTO;
-import com.example.projectmrsisa.dto.UserDTO;
+import com.example.projectmrsisa.dto.*;
 import com.example.projectmrsisa.model.*;
 import com.example.projectmrsisa.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -131,12 +131,9 @@ public class UserController {
         if (!validAddress(userDTO.getAddressDTO())) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         Address a;
         Role role;
-        System.out.println("Dosao sam ovde");
         try {
             a = addressService.getAddress(new Address(userDTO.getAddressDTO()));
-            System.out.println("Dosao sam ovde 1");
             role = roleService.findRoleByName("ROLE_" + userDTO.getPrivilegedUserType());
-            System.out.println("Dosao sam ovde 2");
         }catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -146,9 +143,7 @@ public class UserController {
         }else {
             try{
                 if (role == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-                System.out.println("Dosao sam ovde 3");
                 User user = userService.save(new User(userDTO, a, role));
-                System.out.println("Dosao sam ovde 4");
                 RegistrationReasoning registrationReasoning = registrationReasoningService.addRegistrationReasoning(new RegistrationReasoning(user, userDTO.getRegistrationExplanation()));
                 return new ResponseEntity<>(new UserDTO(user, PrivilegedUser.RETREAT_OWNER, new RegistrationReasoningDTO(registrationReasoning)), HttpStatus.CREATED);
             }catch (Exception e) {
@@ -215,27 +210,35 @@ public class UserController {
         UserDTO userDTO = new UserDTO(user);
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
-    //TODO: Mozda ipak zaseban Controller za svakog korisnika
+
     @Transactional
     @PostMapping(value="/sendTerminationReason")
-    //TODO: Autorizacija
-    public ResponseEntity<UserDTO> sendTerminationReason(@RequestParam String email, @RequestParam String terminationReason){
-        User user = userService.findUserByEmail(email);
-        TerminationReasoning terminationReasoning = terminationReasoningService.addTerminationReasoning(new TerminationReasoning(user, terminationReason));
+    @PreAuthorize("hasAnyRole('client', 'retreatOwner', 'shipOwner', 'fishingInstructor')")
+    public ResponseEntity<UserDTO> sendTerminationReason(@RequestBody TerminationReasonDTO terminationReasonDTO, Principal principal){
+        if (terminationReasonDTO.getTerminationReason() == null || terminationReasonDTO.getTerminationReason().equals("")) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        User user = userService.findUserByEmail(principal.getName());
+        TerminationReasoning terminationReasoning = terminationReasoningService.addTerminationReasoning(new TerminationReasoning(user, terminationReasonDTO.getTerminationReason()));
         UserDTO userDTO = new UserDTO(user);
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
     @Transactional
     @PostMapping(value="/changePassword")
-    public ResponseEntity<UserDTO> changePassword(@RequestParam String email, @RequestParam String oldPassword, @RequestParam String newPassword){
-        User user = userService.findUserByEmail(email);
-        if (!user.getPassword().equals(oldPassword)){
-            UserDTO userDTO = new UserDTO(user);
-            return new ResponseEntity<>(userDTO, HttpStatus.BAD_REQUEST);
+    @PreAuthorize("hasAnyRole('admin', 'client', 'retreatOwner', 'shipOwner', 'fishingInstructor')")
+    public ResponseEntity<UserDTO> changePassword(@RequestBody PasswordChangeDTO passwordChangeDTO, Principal loggedUser){
+        User user = userService.findUserByEmail(loggedUser.getName());
+        if (passwordChangeDTO.getNewPassword() == null || passwordChangeDTO.getConfirmPassword() == null || !passwordChangeDTO.getNewPassword().equals(passwordChangeDTO.getConfirmPassword())) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        userService.updateUserPassword(newPassword, email);
+        userService.updateUserPassword(passwordChangeDTO.getNewPassword(), user.getEmail());
         UserDTO userDTO = new UserDTO(user);
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/getLoggedUser")
+    @PreAuthorize("hasAnyRole('admin', 'client', 'retreatOwner', 'shipOwner', 'fishingInstructor')")
+    public ResponseEntity<UserDTO> getLoggedUser(Principal principal) {
+        User user = userService.findUserByEmail(principal.getName());
+        return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
     }
 }
