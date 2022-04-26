@@ -56,6 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/users/register").permitAll()
                 .antMatchers("/ships/getAll").permitAll()
                 .antMatchers("/adventures/getAll").permitAll()
+                .antMatchers("/users/findByEmail/{id}").permitAll()
                 .antMatchers("/retreats/getAll").permitAll()
                 .anyRequest().authenticated().and()
                 .cors().and()
