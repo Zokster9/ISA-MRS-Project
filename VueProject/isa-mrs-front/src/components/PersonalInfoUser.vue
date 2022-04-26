@@ -4,7 +4,7 @@
             <div class="card-body"> 
                 <h5 class="card-title"> Welcome, {{ user.name }}  {{ user.surname }} </h5>
                 <h6 class="card-subtitle mb-2 text-muted">Preview of personal info: </h6>
-                <p class="card-text"> Email address: {{ user.email }} <br> Address: {{ user.country }}, {{ user.city }}, {{ user.street }}
+                <p class="card-text"> Email address: {{ user.email }} <br> Address: {{ user.addressDTO.country }}, {{ user.addressDTO.city }}, {{ user.addressDTO.street }}
                 <br> Loyalty status: {{ user.loyaltyStatus }} <br> Loyalty points: {{ user.loyaltyPoints }} </p>
             </div>
         </div>
@@ -70,7 +70,6 @@
             },
             passwordChange: {
                 oldPassword: {
-                    //TODO: oldPassword mora biti isto sto i user.password
                     required,
                 },
                 newPassword: {
