@@ -19,7 +19,7 @@
     Vue.use(VueAxios, axios)
 
     export default {
-        name: 'ProfilePageFishingInstructor',
+        name: 'ProfilePageShipOwner',
         components: {
             NavbarUser,
             PersonalInfoUser
