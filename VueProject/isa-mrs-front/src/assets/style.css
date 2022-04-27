@@ -6,6 +6,14 @@
     background-color:indianred;
 }
 
+.activeEditButton{
+    background-color: yellow;
+}
+
+.activeDeleteButton{
+    background-color: indianred;
+}
+
 * {
     box-sizing: border-box;
 }

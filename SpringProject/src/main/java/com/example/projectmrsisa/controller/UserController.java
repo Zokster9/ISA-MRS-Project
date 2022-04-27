@@ -238,11 +238,11 @@ public class UserController {
         User user = userService.findUserByEmail(principal.getName());
         return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
     }
-    
-    //todo: izmeni sa jwt
-    @GetMapping(value="/findMyEntities/{email}")
-    public ResponseEntity<List<ServiceDTO>> findMyEntities(@PathVariable String email){
-        User user = userService.findUserByEmail(email);
+
+    @GetMapping(value="/findMyEntities")
+    @PreAuthorize("hasAnyRole('retreatOwner', 'shipOwner', 'fishingInstructor')")
+    public ResponseEntity<List<ServiceDTO>> findMyEntities(Principal principal){
+        User user = userService.findUserByEmail(principal.getName());
         List<Service> ownersServices = serviceService.findOwnersServices(user);
         List<ServiceDTO> ownersServicesDTO = new ArrayList<>();
         for (Service s : ownersServices){

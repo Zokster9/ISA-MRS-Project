@@ -102,8 +102,13 @@ const routes = [
   },
   {
     path: '/service-availability',
-    name: '/service-availability',
+    name: 'service-availability',
     component: () => import('../views/ServiceAvailabilityView.vue')
+  },
+  {
+    path: '/service-crud',
+    name: 'service-crud',
+    component: () => import('../views/ServiceCrudView.vue')
   }
 ]
 
