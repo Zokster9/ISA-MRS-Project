@@ -20,7 +20,6 @@
                 <h5 class="card-title"> Change your password </h5>
                 <p class="card-text"> Change your current password with a new one. </p>
                 <button v-if="!isChangingPassword" class="btn btn-primary" @click="isChangingPassword = true"> Change password </button>
-                <input v-if="isChangingPassword" type="password" class="form-control mb-1" v-model="passwordChange.oldPassword" placeholder="Enter old password: ">
                 <input v-if="isChangingPassword" type="password" class="form-control mb-1" v-model="passwordChange.newPassword" placeholder="Enter new password: ">
                 <input v-if="isChangingPassword" type="password" class="form-control mb-2" v-model="passwordChange.confirmNewPassword" placeholder="Confirm new password: ">
                 <button v-if="isChangingPassword" @ :disabled="$v.passwordChange.$invalid" class="btn btn-success" @click="changePassword"> Confirm new password</button>
@@ -58,7 +57,6 @@
                 terminationReason: "",
                 isChangingPassword: false,
                 passwordChange: {
-                    oldPassword: "",
                     newPassword: "",
                     confirmNewPassword: ""
                 },
@@ -69,9 +67,6 @@
                 required,
             },
             passwordChange: {
-                oldPassword: {
-                    required,
-                },
                 newPassword: {
                     required,
                 },
@@ -81,17 +76,31 @@
                 }
             },
         },
-        //TODO: Dobavi Email iz jwt-a
         methods: {
             deleteAccount(){
-                axios.post("http://localhost:8088/users/sendTerminationReason?email=lordje@gmail.com&terminationReason=" + this.terminationReason)
+                axios.post("http://localhost:8088/users/sendTerminationReason", 
+				{
+					terminationReason: this.terminationReason
+				},
+				{
+					headers: {
+						Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+					}
+				})
                 .then(() => {
                     this.$router.push("/main-screen")
                     alert("Napisan razlog");
                 })
             },
             changePassword(){
-                axios.post("http://localhost:8088/users/changePassword?email=lordje@gmail.com&oldPassword=" + this.passwordChange.oldPassword + "&newPassword=" + this.passwordChange.newPassword)
+                axios.post("http://localhost:8088/users/changePassword", {
+                    newPassword: this.passwordChange.newPassword,
+                    confirmPassword: this.passwordChange.confirmNewPassword
+                }, {
+                    headers: {
+                        Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+                    }
+                })
                 .then(()=>{
                     alert("Password successfully changed!")
                     window.location.reload();

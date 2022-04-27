@@ -21,10 +21,10 @@ insert into roles (name) values ('ROLE_admin');
 -- za matiju sifra matija123
 -- ostalima je: sifra123
 insert into users (email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values ('matijazaric9@gmail.com', '$2a$10$6zhtvn7zujmExlDo2pDwUODVq09LpFBuBL62g6Bsd2lOJjnuctrKC','Matija', 'Zaric', 4, '+381657842312', false, false, 0, 0);
-insert into users (email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values ('sakal.teodor@gmail.com', '$2a$10$w6tNOTFjGcs32pYE6VP7o.to.Lo9Map0/Rb4PHHd51WT87ynGzlDy', 'Teodor', 'Sakal Franciskovic', 1, '+381636742312', false, false, 0, 0);
-insert into users (email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values ('lordje@gmail.com', '$2a$10$w6tNOTFjGcs32pYE6VP7o.to.Lo9Map0/Rb4PHHd51WT87ynGzlDy', 'Djordje', 'Vajagic', 2, '+381617647812', false, false, 0, 0);
-insert into users (email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values ('zoki@gmail.com', '$2a$10$w6tNOTFjGcs32pYE6VP7o.to.Lo9Map0/Rb4PHHd51WT87ynGzlDy', 'Zoran', 'Bukorac', 3, '+381607846912', true, false, 0, 0);
-insert into users (email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values ('klijent@gmail.com', '$2a$10$w6tNOTFjGcs32pYE6VP7o.to.Lo9Map0/Rb4PHHd51WT87ynGzlDy', 'Klijent', 'Klijentic', 2, '+381667342312', true, false, 0, 0);
+insert into users (email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values ('sakal.teodor@gmail.com', '$2a$10$5bqbvqKlyaN8wBVdvl7UeefSJ8ja584oeYMbhK9FQgcjWK2laRxRO', 'Teodor', 'Sakal Franciskovic', 1, '+381636742312', false, false, 0, 0);
+insert into users (email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values ('lordje@gmail.com', '$2a$10$5bqbvqKlyaN8wBVdvl7UeefSJ8ja584oeYMbhK9FQgcjWK2laRxRO', 'Djordje', 'Vajagic', 2, '+381617647812', true, false, 0, 0);
+insert into users (email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values ('zoki@gmail.com', '$2a$10$5bqbvqKlyaN8wBVdvl7UeefSJ8ja584oeYMbhK9FQgcjWK2laRxRO', 'Zoran', 'Bukorac', 3, '+381607846912', true, false, 0, 0);
+insert into users (email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values ('klijent@gmail.com', '$2a$10$5bqbvqKlyaN8wBVdvl7UeefSJ8ja584oeYMbhK9FQgcjWK2laRxRO', 'Klijent', 'Klijentic', 2, '+381667342312', true, false, 0, 0);
 
 insert into registration_reasoning (privileged_user, registration_reasoning) values (1, 'I want to be retreat owner');
 insert into registration_reasoning (privileged_user, registration_reasoning) values (2, 'I want to be ship owner');
