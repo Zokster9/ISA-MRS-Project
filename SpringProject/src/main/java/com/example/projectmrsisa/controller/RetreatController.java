@@ -9,6 +9,7 @@ import com.example.projectmrsisa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -99,9 +100,9 @@ public class RetreatController {
         return !retreatDTO.getStreet().equals("") && retreatDTO.getStreet() != null;
     }
 
-    @GetMapping(value = "/{id}", produces = "application/json")
+    @GetMapping(value = "/get/{id}", produces = "application/json")
+    @PreAuthorize("hasRole('retreatOwner')")
     public ResponseEntity<RetreatDTO> getRetreatById(@PathVariable Integer id) {
-        // TODO: provera JWT
         try {
             Retreat retreat = retreatService.getRetreatById(id);
             return new ResponseEntity<>(new RetreatDTO(retreat), HttpStatus.OK);

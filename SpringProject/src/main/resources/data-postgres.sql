@@ -46,8 +46,9 @@ insert into my_pictures (id, pictures) values (1, 'pic4.jpg');
 insert into my_rules_of_conduct (id, rules_of_conduct) values (1, 'No blabla.');
 
 insert into services (name, description, price, owner_id, address_id, is_deleted) values ('Nojeva barka', 'Brod za ljude sa dubokim dzepom.', 500, 2, 1, false);
-insert into my_pictures (id, pictures) values (2, 'pic3.jpg');
-insert into my_pictures (id, pictures) values (2, 'pic4.jpg');
+insert into my_pictures (id, pictures) values (2, 'ship1.jpg');
+insert into my_pictures (id, pictures) values (2, 'ship2.jpg');
+insert into my_pictures (id, pictures) values (2, 'ship3.jpg');
 insert into my_rules_of_conduct (id, rules_of_conduct) values (2, 'Nooooooo noooooooo.');
 insert into my_rules_of_conduct (id, rules_of_conduct) values (2, 'No L l LlLlL .');
 

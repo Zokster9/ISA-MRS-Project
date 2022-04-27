@@ -1,11 +1,11 @@
 <template>
-    <div v-if="retreat" style="margin: 100px">
+    <div v-if="ship" style="margin: 100px">
         <div class="d-flex flex-row" style="margin: 50px">
             <div class="d-flex flex-column" style="width: 50%">
                 <div class="slideshow-container">
 					<div class="mySlides" style="display: block;">
-						<div class="numbertext">{{this.currentPicture + 1}} / {{this.retreat.pictures.length}}</div>
-						<img :src="require(`../assets/${this.retreat.pictures[this.currentPicture]}`)" style="width:100%; height:400px; border-radius:25px">
+						<div class="numbertext">{{this.currentPicture + 1}} / {{ship.pictures.length}}</div>
+						<img :src="require(`../assets/${this.ship.pictures[this.currentPicture]}`)" style="width:100%; height:400px; border-radius:25px">
 					</div>
 					<a class="prev" @click="changePicture(-1)">&#10094;</a>
 					<a class="next" @click="changePicture(1)">&#10095;</a>
@@ -14,16 +14,24 @@
 					<div>
                         <h5 style="margin: 5px">Rules of conduct</h5>
                         <ul>
-                            <template v-for="rule in retreat.rulesOfConduct">
+                            <template v-for="rule in ship.rulesOfConduct">
                                 <li style="margin: 5px" :key="rule">{{rule}}</li>
                             </template>
                         </ul>
                     </div>
                     <div>
-                        <h5 style="margin: 5px">Additional services</h5>
+                        <h5 style="margin: 5px">Fishing equipment</h5>
                         <ul>
-                            <template v-for="service in retreat.additionalServices">
-                                <li style="margin: 5px" :key="service">{{service}}</li>
+                            <template v-for="equipment in ship.fishingEquipment">
+                                <li style="margin: 5px" :key="equipment">{{equipment}}</li>
+                            </template>
+                        </ul>
+                    </div>
+                    <div>
+                        <h5 style="margin: 5px">Navigation equipment</h5>
+                        <ul>
+                            <template v-for="equipment in ship.navigationEquipment">
+                                <li style="margin: 5px" :key="equipment">{{equipment}}</li>
                             </template>
                         </ul>
                     </div>
@@ -32,23 +40,42 @@
             <div class="d-flex flex-column" style="width: 50%; margin: 5px">
                 <div style="height: 10%; margin: 5px">
                     <h1>
-                        <span>{{retreat.name}}</span>
+                        <span>{{ship.name}}</span>
                     </h1>
                 </div>
-                <div style="height: 80%; margin: 5px; border: 1px solid #323539; border-radius: 25px">
+                <div style="height: 80%; margin: 5px; border: 1px solid #323539; border-radius: 25px; ">
                     <div>
                         <h5 style="margin: 5px">Description</h5>
-                        <p style="margin: 5px">{{retreat.description}}</p>
+                        <p style="margin: 5px">{{ship.description}}</p>
                     </div>
                     <div class="d-flex flex-row">
-                        <h5 style="margin: 5px">Number of rooms: {{retreat.numOfRooms}}</h5>
+                        <h5 style="margin: 5px">Type: {{ship.type}}</h5>
                     </div>
                     <div class="d-flex flex-row">
-                        <h5 style="margin: 5px">Number of beds: {{retreat.numOfBeds}}</h5>
+                        <h5 style="margin: 5px">Length: {{ship.length}}</h5>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <h5 style="margin: 5px">Engine number: {{ship.engineNum}}</h5>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <h5 style="margin: 5px">Engine power: {{ship.enginePower}}</h5>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <h5 style="margin: 5px">Max speed: {{ship.maxSpeed}}</h5>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <h5 style="margin: 5px">Capacity: {{ship.capacity}}</h5>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <h5 style="margin: 5px">Price: {{ship.price}}</h5>
+                    </div>
+                    <div>
+                        <h5 style="margin: 5px">Reservation cancellation conditions</h5>
+						<p style="margin: 5px">{{ship.reservationCancellationConditions}}</p>
                     </div>
                     <div>
                         <h5 style="margin: 5px">Address</h5>
-                        <p style="margin: 5px">{{retreat.country}}, {{retreat.city}}, {{retreat.street}}</p>
+                        <p style="margin: 5px">{{ship.country}}, {{ship.city}}, {{ship.street}}</p>
                     </div>
 					<div>
 						<iframe :src="mapSrc" style="margin: 15px; border-radius: 25px; border: 1px solid #323539"></iframe>
@@ -82,10 +109,10 @@
     Vue.use(VueAxios, axios)
 
     export default {
-        name: 'RetreatView',
+        name: 'ShipView',
         data() {
             return {
-                retreat: null,
+                ship: null,
 				currentPicture: 0,
 				mapSrc: ""
             }
@@ -93,8 +120,8 @@
         methods: {
 			changePicture(n) {
 				if (this.currentPicture + n < 0) {
-					this.currentPicture = this.retreat.pictures.length - 1;
-				}else if (this.currentPicture + n > this.retreat.pictures.length - 1) {
+					this.currentPicture = this.ship.pictures.length - 1;
+				}else if (this.currentPicture + n > this.ship.pictures.length - 1) {
 					this.currentPicture = 0;
 				}else {
 					this.currentPicture += n;
@@ -102,16 +129,16 @@
 			}
         },
         mounted(){
-            axios.get("http://localhost:8088/retreats/get/" + this.$route.params.id, 
+            axios.get("http://localhost:8088/ships/get/" + this.$route.params.id, 
 				{
 					headers: {
 						Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
 					}
 				}).then((response) => {
-					this.retreat = response.data;
+					this.ship = response.data;
 					this.mapSrc = "https://maps.google.com/maps?q=" + response.data.country + "," + response.data.city + "," + response.data.street + "&t=&z=13&ie=UTF8&iwloc=&output=embed"
 				}
-			);
+			)
         },
     }
 </script>
