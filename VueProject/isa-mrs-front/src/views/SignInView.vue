@@ -64,6 +64,7 @@ import router from '@/router'
 					localStorage.setItem("role", response.data.roleName);
 					if (response.data.roleName === "ROLE_retreatOwner") {
 						// TODO: prebaciti na stranicu vlasnika vikendice
+                        router.push('/profile-page-retreat-owner');
 					}else if (response.data.roleName === "ROLE_shipOwner") {
 						// TODO: prebaciti na stranicu vlasnika broda
 					}else if (response.data.roleName === "ROLE_fishingInstructor") {
