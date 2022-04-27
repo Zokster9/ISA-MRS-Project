@@ -36,6 +36,9 @@ public class UserController {
     @Autowired
     private RoleService roleService;
 
+    @Autowired
+    private ServiceService serviceService;
+
     @GetMapping(value="/inactive", produces = "application/json")
     public ResponseEntity<List<UserDTO>> getInactiveUsers(){
         List<User> inactiveUsers = userService.findUsersByActivatedStatus(false, false);
@@ -234,5 +237,17 @@ public class UserController {
     public ResponseEntity<UserDTO> getLoggedUser(Principal principal) {
         User user = userService.findUserByEmail(principal.getName());
         return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
+    }
+    
+    //todo: izmeni sa jwt
+    @GetMapping(value="/findMyEntities/{email}")
+    public ResponseEntity<List<ServiceDTO>> findMyEntities(@PathVariable String email){
+        User user = userService.findUserByEmail(email);
+        List<Service> ownersServices = serviceService.findOwnersServices(user);
+        List<ServiceDTO> ownersServicesDTO = new ArrayList<>();
+        for (Service s : ownersServices){
+            ownersServicesDTO.add(new ServiceDTO(s));
+        }
+        return new ResponseEntity<>(ownersServicesDTO, HttpStatus.OK);
     }
 }

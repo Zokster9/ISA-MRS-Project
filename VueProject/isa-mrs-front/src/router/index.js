@@ -99,6 +99,11 @@ const routes = [
     path: '/adventure-page/:id',
     name: 'adventure-page',
     component: () => import('../views/AdventurePageView.vue')
+  },
+  {
+    path: '/service-availability',
+    name: '/service-availability',
+    component: () => import('../views/ServiceAvailabilityView.vue')
   }
 ]
 
