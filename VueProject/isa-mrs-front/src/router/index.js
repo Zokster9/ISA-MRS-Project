@@ -94,6 +94,11 @@ const routes = [
     path: '/ship/:id',
     name: 'ship',
     component: () => import('../views/ShipView.vue')
+  },
+  {
+    path: '/adventure-page/:id',
+    name: 'adventure-page',
+    component: () => import('../views/AdventurePageView.vue')
   }
 ]
 

@@ -17,4 +17,5 @@ public class AdventureService {
         return adventureRepository.save(adventure);
     }
 
+    public Adventure findAdventureById(Integer id) { return adventureRepository.findAdventureById(id); }
 }

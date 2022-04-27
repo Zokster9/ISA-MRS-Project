@@ -2,8 +2,10 @@ package com.example.projectmrsisa.controller;
 
 
 import com.example.projectmrsisa.dto.AdventureDTO;
+import com.example.projectmrsisa.dto.RetreatDTO;
 import com.example.projectmrsisa.model.Address;
 import com.example.projectmrsisa.model.Adventure;
+import com.example.projectmrsisa.model.Retreat;
 import com.example.projectmrsisa.model.User;
 import com.example.projectmrsisa.service.AddressService;
 import com.example.projectmrsisa.service.AdventureService;
@@ -12,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/adventures")
@@ -60,6 +59,17 @@ public class AdventureController {
         Address address = addressService.getAddress(new Address(adventureDTO.getCountry(), adventureDTO.getCity(), adventureDTO.getStreet()));
         Adventure adventure = adventureService.addAdventure(new Adventure(adventureDTO, address, fishingInstructor));
         return new ResponseEntity<>(new AdventureDTO(adventure), HttpStatus.CREATED);
+    }
+
+    @GetMapping(value = "/getAdventure/{id}", produces = "application/json")
+    public ResponseEntity<AdventureDTO> getAdventureById(@PathVariable Integer id) {
+        // TODO: provera JWT
+        try {
+            Adventure adventure = adventureService.findAdventureById(id);
+            return new ResponseEntity<>(new AdventureDTO(adventure), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
 }
