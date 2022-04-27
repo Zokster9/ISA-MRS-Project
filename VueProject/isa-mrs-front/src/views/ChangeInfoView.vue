@@ -9,18 +9,18 @@
                             
                             <div class="form-group required">
                                 <label>Email </label>
-                                <input v-model="user.email" placeholder="Please enter your email..." readonly type="email" class="form-control form-control-lg">
+                                <input v-model="form.email" placeholder="Please enter your email..." readonly type="email" class="form-control form-control-lg">
                             </div>             
                             <div class="form-group required">
                                 <table>
                                     <tr>
                                         <td>
                                             <label for="name">Name </label>
-                                            <input v-model="user.name" id="name" type="text" placeholder="Name..." pattern="[a-zA-Z\.]+$" class="form-control form-control-lg"/>
+                                            <input v-model="form.name" id="name" type="text" placeholder="Name..." class="form-control form-control-lg"/>
                                         </td>
                                         <td>
                                             <label for="surname">Surname </label>
-                                            <input v-model="user.surname" id="surname" type="text" placeholder="Surname..." pattern="[a-zA-Z\.]+$" class="form-control form-control-lg"/>
+                                            <input v-model="form.surname" id="surname" type="text" placeholder="Surname..." class="form-control form-control-lg"/>
                                         </td>
                                     </tr>
                                 </table>
@@ -28,7 +28,7 @@
                             
                             <div class="form-group required">
                                 <label>Address </label>
-                                <input v-model="user.address" type="text" placeholder="Please enter your address..."  class="form-control form-control-lg">
+                                <input v-model="form.address" type="text" placeholder="Please enter your address..."  class="form-control form-control-lg">
                             </div>
                             
                             <div class="form-group required">
@@ -36,11 +36,11 @@
                                     <tr>
                                         <td>
                                             <label for="city">City </label>
-                                            <input v-model="user.city" id="city" type="text" placeholder="City..." pattern="[a-zA-Z\.]+$" class="form-control form-control-lg"/>
+                                            <input v-model="form.city" id="city" type="text" placeholder="City..." class="form-control form-control-lg"/>
                                         </td>
                                         <td>
                                             <label for="country">Country </label>
-                                            <input v-model="user.country" id="country" type="text" placeholder="Country..." pattern="[a-zA-Z\.]+$" class="form-control form-control-lg"/>
+                                            <input v-model="form.country" id="country" type="text" placeholder="Country..." class="form-control form-control-lg"/>
                                         </td>
                                     </tr>
                                 </table>
@@ -48,11 +48,11 @@
                             
                             <div class="form-group required">
                                 <label>Phone number </label>
-                                <input v-model="user.phoneNumber" type="text" placeholder="Please enter your phone number..." class="form-control form-control-lg">
+                                <input v-model="form.phoneNumber" type="text" placeholder="Please enter your phone number..." class="form-control form-control-lg">
                             </div>
                             
                             <div class="form-group">
-                                <button @click="changeInfo"  :disabled="$v.user.$invalid" type="submit" class="btn btn-dark btn-lg btn-block">Change info</button>
+                                <button @click="changeInfo"  :disabled="$v.form.$invalid" type="submit" class="btn btn-dark btn-lg btn-block">Change info</button>
                             </div>
                         </form>
                     </div>
@@ -78,7 +78,7 @@
     export default {
         data () {
             return {
-                user: {
+                form:{
                     email: "",
                     name: "",
                     surname: "",
@@ -86,32 +86,48 @@
                     city: "",
                     country: "",
                     phoneNumber: ""
-                }
+                },
+				user: null
             }
         },
         methods: {
             changeInfo() {
                 axios.post("http://localhost:8088/users/changeInfo", {
-                    email: this.user.email,
-                    name: this.user.name,
-                    surname: this.user.surname,
+                    email: this.form.email,
+                    name: this.form.name,
+                    surname: this.form.surname,
                     addressDTO: {
-                        country: this.user.country,
-                        city: this.user.city,
-                        street: this.user.address,
+                        country: this.form.country,
+                        city: this.form.city,
+                        street: this.form.address,
                     },
-                    phoneNumber: this.user.phoneNumber,
-                }).then(() => {
+                    phoneNumber: this.form.phoneNumber,
+                }, {
+					headers: {
+						Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+					}
+				}).then(() => {
                     alert("Successfully changed personal information!");
-                    //TODO: U odnosu na jwt bacati na odredjenu stranicu
-                    this.$router.push("/profile-page-fishing-instructor")
+                    if (window.localStorage.getItem("role") === "ROLE_retreatOwner") {
+						// TODO: prebaciti na stranicu vlasnika vikendice
+					}else if (window.localStorage.getItem("role") === "ROLE_shipOwner") {
+						// TODO: prebaciti na stranicu vlasnika broda
+					}else if (window.localStorage.getItem("role") === "ROLE_fishingInstructor") {
+						this.$router.push("/profile-page-fishing-instructor")
+					}else if (window.localStorage.getItem("role") === "ROLE_client") {
+						// TODO: prebaciti na stranicu klijenta
+					}else if (window.localStorage.getItem("role") === "ROLE_admin") {
+						// TODO: prebaciti na stranicu admina
+					}else {
+						alert("Some kind of error, dont know what.");
+					}
                 }).catch(() => {
                     alert("Something went wrong.")
                 });
             }
         },
         validations: {
-            user: {
+            form: {
                 email : {
                     required,
                     minLength: minLength(3),
@@ -151,16 +167,22 @@
                 },
             }
         },
-        mounted() {
-            axios.get("http://localhost:8088/users/findByEmail/lordje@gmail.com").then((response) => {
-                this.user.name = response.data.name
-                this.user.surname = response.data.surname
-                this.user.email = response.data.email
-                this.user.address = response.data.street
-                this.user.country = response.data.country
-                this.user.city = response.data.city
-                this.user.phoneNumber = response.data.phoneNumber
+		mounted() {
+			axios.get("http://localhost:8088/users/getLoggedUser", {
+				headers: {
+					Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+				}
+			}).then((response) =>{
+                this.user = response.data;
+				this.form.name = response.data.name;
+				this.form.surname = response.data.surname;
+				this.form.email = response.data.email;
+				this.form.address = response.data.addressDTO.street;
+				this.form.country = response.data.addressDTO.country;
+				this.form.city = response.data.addressDTO.city;
+				this.form.phoneNumber = response.data.phoneNumber;
             })
-        },
+		
+		}
     }
 </script>

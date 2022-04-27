@@ -29,9 +29,12 @@
                 user: "",
             }
         },
-        //TODO:tu ce biti neki jwt za email
         mounted(){
-            axios.get("http://localhost:8088/users/findByEmail/lordje@gmail.com").then((response) =>{
+            axios.get("http://localhost:8088/users/getLoggedUser", {
+				headers: {
+					Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+				}
+			}).then((response) =>{
                 this.user = response.data
             })
         }

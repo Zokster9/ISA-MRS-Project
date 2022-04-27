@@ -61,12 +61,14 @@ import router from '@/router'
                     password: this.form.password
                 }).then(response => {
 					localStorage.setItem("accessToken", response.data.accessToken);
+					localStorage.setItem("role", response.data.roleName);
 					if (response.data.roleName === "ROLE_retreatOwner") {
 						// TODO: prebaciti na stranicu vlasnika vikendice
 					}else if (response.data.roleName === "ROLE_shipOwner") {
 						// TODO: prebaciti na stranicu vlasnika broda
 					}else if (response.data.roleName === "ROLE_fishingInstructor") {
 						// TODO: prebaciti na stranicu instruktora pecanja
+						this.$router.push("/profile-page-fishing-instructor");
 					}else if (response.data.roleName === "ROLE_client") {
 						// TODO: prebaciti na stranicu klijenta
 					}else if (response.data.roleName === "ROLE_admin") {
