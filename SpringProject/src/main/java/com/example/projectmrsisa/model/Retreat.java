@@ -68,4 +68,8 @@ public class Retreat extends Service {
     public void setAdditionalServices(Set<Tag> additionalServices) {
         this.additionalServices = additionalServices;
     }
+
+    public void addAdditionalService(Tag additionalService) {
+        this.additionalServices.add(additionalService);
+    }
 }

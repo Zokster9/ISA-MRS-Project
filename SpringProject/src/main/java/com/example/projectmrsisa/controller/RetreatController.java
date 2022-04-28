@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -107,6 +108,23 @@ public class RetreatController {
             Retreat retreat = retreatService.getRetreatById(id);
             return new ResponseEntity<>(new RetreatDTO(retreat), HttpStatus.OK);
         } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Transactional
+    @PutMapping(value = "/update-retreat/{id}", produces = "application/json")
+    @PreAuthorize("hasRole('retreatOwner')")
+    public ResponseEntity<RetreatDTO> updateRetreat(@PathVariable Integer id, @RequestBody RetreatDTO retreatDTO) {
+        if (!validAddress(retreatDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (!validateRetreatData(retreatDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        // TODO: provera da li postoje rezervacije za vikendicu
+        try {
+            Retreat retreat = retreatService.getRetreatById(id);
+            Set<Tag> newAdditionalServices = tagService.findTags(retreatDTO.getAdditionalServices());
+            retreat = retreatService.updateRetreat(retreat, retreatDTO, newAdditionalServices);
+            return new ResponseEntity<>(new RetreatDTO(retreat), HttpStatus.OK);
+        }catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
