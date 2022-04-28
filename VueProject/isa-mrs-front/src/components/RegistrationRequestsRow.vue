@@ -33,12 +33,20 @@
         },
         methods: {
             declineUser(id){
-                axios.post("http://localhost:8088/users/decline?id=" + id + "&declineReasoning=" + this.declineReasoning).then(() => {
+                axios.post("http://localhost:8088/users/decline?id=" + id + "&declineReasoning=" + this.declineReasoning,{
+                    headers:{
+                        Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+                    }
+                }).then(() => {
                     window.location.reload();
                 })
             },
             acceptUser(id){
-                axios.post("http://localhost:8088/users/accept/" + id).then(() => {
+                axios.post("http://localhost:8088/users/accept/" + id,{ 
+                    headers:{
+                        Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+                    }
+                }).then(() => {
                     window.location.reload();
                 })
             },

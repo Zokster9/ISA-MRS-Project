@@ -57,13 +57,21 @@
                 this.isDeclineButtonHidden = false;
             },
             declineTermination(id){
-                axios.post("http://localhost:8088/termination/declineTermination?id=" + id + "&declineReasoning=" + this.declineReasoning)
+                axios.post("http://localhost:8088/termination/declineTermination?id=" + id + "&declineReasoning=" + this.declineReasoning,{
+                    headers: {
+                        Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+                    }
+                })
                 .then(() => {
                     window.location.reload();
                 })
             },
             acceptTermination(id){
-                axios.post("http://localhost:8088/termination/acceptTermination?id=" + id + "&acceptReasoning=" + this.acceptReasoning)
+                axios.post("http://localhost:8088/termination/acceptTermination?id=" + id + "&acceptReasoning=" + this.acceptReasoning,{
+                    headers: {
+                        Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+                    }
+                })
                 .then(() => {
                     window.location.reload();
                 })

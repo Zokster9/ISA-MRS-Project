@@ -10,6 +10,7 @@ import com.example.projectmrsisa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,8 +31,8 @@ public class TerminationReasoningController {
     private EmailService emailService;
 
     @GetMapping(value="findToTerminate", produces="application/json")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<List<TerminationReasoningDTO>> findToBeTerminatedUsers(){
-        //TODO: JWT
         List<TerminationReasoning> unansweredTerminationReasonings = terminationReasoningService.findUnansweredTerminationReasonings();
         List<TerminationReasoningDTO>  trDTO = new ArrayList<TerminationReasoningDTO>();
         for (TerminationReasoning tr : unansweredTerminationReasonings){
@@ -42,6 +43,7 @@ public class TerminationReasoningController {
 
     @Transactional
     @PostMapping(value="declineTermination")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<UserDTO> declineTermination(@RequestParam Integer id, @RequestParam String declineReasoning){
         User user = userService.findUserById(id);
         terminationReasoningService.updateTerminationReasoningByAnsweredStatus(user);
@@ -56,6 +58,7 @@ public class TerminationReasoningController {
 
     @Transactional
     @PostMapping(value="acceptTermination")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<UserDTO> acceptTermination(@RequestParam Integer id, @RequestParam String acceptReasoning){
         User user = userService.findUserById(id);
         terminationReasoningService.updateTerminationReasoningByAnsweredStatus(user);

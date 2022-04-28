@@ -40,6 +40,7 @@ public class UserController {
     private ServiceService serviceService;
 
     @GetMapping(value="/inactive", produces = "application/json")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<List<UserDTO>> getInactiveUsers(){
         List<User> inactiveUsers = userService.findUsersByActivatedStatus(false, false);
         List<UserDTO> inactiveUsersDTO = new ArrayList<UserDTO>();
@@ -66,8 +67,8 @@ public class UserController {
 
     @Transactional
     @PostMapping(value="/accept/{id}")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<UserDTO> acceptUser(@PathVariable Integer id){
-        // TODO: Autentifikacija
         User user = userService.findUserById(id);
         userService.updateUserActivatedStatusById(user.getId());
         UserDTO userDTO = new UserDTO(user);
@@ -81,8 +82,8 @@ public class UserController {
 
     @Transactional
     @PostMapping(value="/decline")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<UserDTO> declineUser(@RequestParam Integer id, @RequestParam String declineReasoning){
-        // TODO: Autentifikacija
         User user = userService.findUserById(id);
         userService.updateUserDeletedStatusById(id);
         UserDTO userDTO = new UserDTO(user);

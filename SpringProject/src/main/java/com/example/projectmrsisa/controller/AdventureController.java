@@ -17,6 +17,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping(value = "/adventures")
 public class AdventureController {
@@ -31,9 +33,9 @@ public class AdventureController {
     private AddressService addressService;
 
     @PostMapping(consumes = "application/json", produces = "application/json")
-    public ResponseEntity<AdventureDTO> createAdventure(@RequestBody AdventureDTO adventureDTO) {
-        //TODO: jwt za vlasnika avanture, pa iz njega email
-        User fishingInstructor = userService.findUserByEmail("lordje@gmail.com");
+    @PreAuthorize("hasRole('fishingInstructor')")
+    public ResponseEntity<AdventureDTO> createAdventure(@RequestBody AdventureDTO adventureDTO, Principal principal) {
+        User fishingInstructor = userService.findUserByEmail(principal.getName());
 
         if (adventureDTO.getName().length() < 5 || adventureDTO.getName() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -63,8 +65,8 @@ public class AdventureController {
     }
 
     @GetMapping(value = "/getAdventure/{id}", produces = "application/json")
+    @PreAuthorize("hasRole('fishingInstructor')")
     public ResponseEntity<AdventureDTO> getAdventureById(@PathVariable Integer id) {
-        // TODO: provera JWT
         try {
             Adventure adventure = adventureService.findAdventureById(id);
             return new ResponseEntity<>(new AdventureDTO(adventure), HttpStatus.OK);
