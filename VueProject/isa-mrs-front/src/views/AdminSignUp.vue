@@ -1,75 +1,81 @@
 <template>
-    <div class="signUp">
-        <div class="app">
-            <div class="vertical-center" style="margin-top: 85px">
-                <NavbarAdmin></NavbarAdmin>
-                <div class="inner-block">
-                    <div class="signUp">
-                        <form @submit.prevent>
-                            <h3>Add new administrator</h3>
-                            
-                            <div class="form-group required">
-                                <label class="control-label">Email </label>
-                                <input v-model="form.email" placeholder="Please enter email..." type="email" class="form-control form-control-lg">
+    <div class="d-flex flex-row">
+        <div>
+            <NavbarAdmin></NavbarAdmin>
+        </div>
+        <div class="row justify-content-center">
+            <div class="signUp">
+                <div class="app">
+                    <div class="vertical-center" style="margin-top: 85px">
+                        <div class="inner-block">
+                            <div class="signUp">
+                                <form @submit.prevent>
+                                    <h3>Add new administrator</h3>
+                                    
+                                    <div class="form-group required">
+                                        <label class="control-label">Email </label>
+                                        <input v-model="form.email" placeholder="Please enter email..." type="email" class="form-control form-control-lg">
+                                    </div>
+                                    
+                                    <div class="form-group required">
+                                        <label class="control-label">Password </label>
+                                        <input v-model="form.password" placeholder="Please enter password..." type="password" class="form-control form-control-lg">
+                                    </div>
+                                    
+                                    <div class="form-group required">
+                                        <label class="control-label">Confirm password </label>
+                                        <input v-model="form.confirmPassword" placeholder="Please confirm password..." type="password" class="form-control form-control-lg">
+                                    </div>
+                                    
+                                    <div class="form-group required">
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <label class="control-label" for="name">Name </label>
+                                                    <input v-model="form.name" id="name" type="text" placeholder="Name..." pattern="[a-zA-Z\.]+$" class="form-control form-control-lg"/>
+                                                </td>
+                                                <td>
+                                                    <label class="control-label" for="surname">Surname </label>
+                                                    <input v-model="form.surname" id="surname" type="text" placeholder="Surname..." pattern="[a-zA-Z\.]+$" class="form-control form-control-lg"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    
+                                    <div class="form-group required">
+                                        <label class="control-label">Address </label>
+                                        <input v-model="form.address" type="text" placeholder="Please enter address..." class="form-control form-control-lg">
+                                    </div>
+                                    
+                                    <div class="form-group required">
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <label class="control-label" for="city">City </label>
+                                                    <input v-model="form.city" id="city" type="text" placeholder="City..." pattern="[a-zA-Z\.]+$" class="form-control form-control-lg"/>
+                                                </td>
+                                                <td>
+                                                    <label class="control-label" for="country">Country </label>
+                                                    <input v-model="form.country" id="country" type="text" placeholder="Country..." pattern="[a-zA-Z\.]+$" class="form-control form-control-lg"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    
+                                    <div class="form-group required">
+                                        <label class="control-label">Phone number </label>
+                                        <input v-model="form.phoneNumber" type="text" placeholder="Please enter phone number..." class="form-control form-control-lg">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <button @click="register"  :disabled="$v.form.$invalid" type="submit" class="btn btn-dark btn-lg btn-block">Sign Up</button>
+                                    </div>
+                                </form>
                             </div>
-                            
-                            <div class="form-group required">
-                                <label class="control-label">Password </label>
-                                <input v-model="form.password" placeholder="Please enter password..." type="password" class="form-control form-control-lg">
-                            </div>
-                            
-                            <div class="form-group required">
-                                <label class="control-label">Confirm password </label>
-                                <input v-model="form.confirmPassword" placeholder="Please confirm password..." type="password" class="form-control form-control-lg">
-                            </div>
-                            
-                            <div class="form-group required">
-                                <table>
-                                    <tr>
-                                        <td>
-                                            <label class="control-label" for="name">Name </label>
-                                            <input v-model="form.name" id="name" type="text" placeholder="Name..." pattern="[a-zA-Z\.]+$" class="form-control form-control-lg"/>
-                                        </td>
-                                        <td>
-                                            <label class="control-label" for="surname">Surname </label>
-                                            <input v-model="form.surname" id="surname" type="text" placeholder="Surname..." pattern="[a-zA-Z\.]+$" class="form-control form-control-lg"/>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                            
-                            <div class="form-group required">
-                                <label class="control-label">Address </label>
-                                <input v-model="form.address" type="text" placeholder="Please enter address..." class="form-control form-control-lg">
-                            </div>
-                            
-                            <div class="form-group required">
-                                <table>
-                                    <tr>
-                                        <td>
-                                            <label class="control-label" for="city">City </label>
-                                            <input v-model="form.city" id="city" type="text" placeholder="City..." pattern="[a-zA-Z\.]+$" class="form-control form-control-lg"/>
-                                        </td>
-                                        <td>
-                                            <label class="control-label" for="country">Country </label>
-                                            <input v-model="form.country" id="country" type="text" placeholder="Country..." pattern="[a-zA-Z\.]+$" class="form-control form-control-lg"/>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                            
-                            <div class="form-group required">
-                                <label class="control-label">Phone number </label>
-                                <input v-model="form.phoneNumber" type="text" placeholder="Please enter phone number..." class="form-control form-control-lg">
-                            </div>
-                            
-                            <div class="form-group">
-                                <button @click="register"  :disabled="$v.form.$invalid || isExplanationRequired" type="submit" class="btn btn-dark btn-lg btn-block">Sign Up</button>
-                            </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </div>            
         </div>
     </div>
 </template>

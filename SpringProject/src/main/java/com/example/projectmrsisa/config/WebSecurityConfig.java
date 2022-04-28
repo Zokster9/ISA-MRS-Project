@@ -58,6 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/adventures/getAll").permitAll()
                 .antMatchers("/users/findByEmail/{id}").permitAll()
                 .antMatchers("/retreats/getAll").permitAll()
+                .antMatchers("/users/registerAdmin").permitAll()
                 .anyRequest().authenticated().and()
                 .cors().and()
                 .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, customUserDetailsService), BasicAuthenticationFilter.class);

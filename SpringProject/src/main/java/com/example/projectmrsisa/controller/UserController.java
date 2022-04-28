@@ -158,9 +158,27 @@ public class UserController {
         }
     }
 
-    //@Transactional
-    //@PostMapping("/registerAdmin")
-    //public ResponseEntity<>
+    @Transactional
+    @PostMapping("/registerAdmin")
+    //@PreAuthorize("hasRole('mainAdmin')")
+    public ResponseEntity<UserDTO> registerAdmin(@RequestBody UserDTO adminDTO){
+        if (!validAdmin(adminDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (!validAddress(adminDTO.getAddressDTO())) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        Address a;
+        Role role;
+        try{
+            a = addressService.getAddress(new Address(adminDTO.getAddressDTO()));
+            role = roleService.findRoleByName("ROLE_admin");
+        } catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        try{
+            User admin = userService.save(new User(adminDTO, a, role));
+            return new ResponseEntity<>(new UserDTO(admin), HttpStatus.CREATED);
+        } catch ( Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 
     private boolean validAddress(AddressDTO addressDTO) {
         if (addressDTO.getCountry().equals("") || addressDTO.getCountry() == null || !addressDTO.getCountry().matches("([A-Z]{1})([a-z]+)([^0-9]*)$")) {
@@ -186,6 +204,20 @@ public class UserController {
         return userDTO.getRegistrationType().equals("client") || userDTO.getRegistrationType().equals("privilegedUser");
     }
 
+    private boolean validAdmin(UserDTO adminDTO) {
+        if (adminDTO.getEmail() == null || !adminDTO.getEmail().matches("^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$")) {
+            return false;
+        }
+        if (adminDTO.getPassword() == null || adminDTO.getConfirmPassword() == null || !adminDTO.getPassword().equals(adminDTO.getConfirmPassword())) {
+            return false;
+        }
+        if (!validChangedUserInfo(adminDTO)) return false;
+        if (adminDTO.getPhoneNumber() == null || adminDTO.getPhoneNumber().equals("") || !adminDTO.getPhoneNumber().matches("^[+]?(\\d{1,2})?[\\s.-]?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$")) {
+            return false;
+        }
+        return true;
+    }
+
     private boolean validRegistrationData(UserDTO userDTO) {
         if (userDTO.getRegistrationType().equals("privilegedUser")) {
             if (userDTO.getRegistrationExplanation() == null || userDTO.getRegistrationExplanation().equals("")) return false;
@@ -203,6 +235,7 @@ public class UserController {
         }
         return userDTO.getPhoneNumber() != null && !userDTO.getPhoneNumber().equals("") && userDTO.getPhoneNumber().matches("^[+]?(\\d{1,2})?[\\s.-]?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$");
     }
+
 
     @GetMapping(value="/findByEmail/{email}")
     //TODO: Autorizacija
