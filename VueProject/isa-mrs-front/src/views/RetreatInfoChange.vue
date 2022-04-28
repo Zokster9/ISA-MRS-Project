@@ -65,7 +65,7 @@
                     <label>Additional services:</label>
                     <br>
                     <template v-for="tag in tags">
-                        <div class="form-group mb-3" :key="tag">
+                        <div class="form-group mb-3" :key="tag.id">
                             <input type="checkbox" v-model="form.additionalServices" :value="tag.name" :key="tag.id"/>
                             <label :for="tag.key">{{tag.name}}</label>
                         </div>
@@ -85,6 +85,7 @@
     import Vue from 'vue'
     import axios from 'axios'
     import VueAxios from 'vue-axios'
+import router from '@/router'
 
     Vue.use(VueAxios, axios)
 
@@ -140,7 +141,34 @@
         },
         methods: {
             changeRetreat() {
-
+                if (this.formIsValid) {
+                    this.sendData();
+                }
+            },
+            sendData() {
+                axios.put("http://localhost:8088/retreats/update-retreat/" + this.$route.params.id, {
+                    name: this.form.name,
+                    description: this.form.description,
+                    country: this.form.country,
+                    city: this.form.city,
+                    street: this.form.address,
+                    rulesOfConduct: this.form.rulesOfConduction,
+                    pictures: this.form.pictures,
+                    numOfRooms: this.form.numOfRooms,
+                    numOfBeds: this.form.numOfBeds,
+                    price: this.form.price,
+                    additionalServices: this.form.additionalServices
+                },
+				{
+					headers: {
+						'Authorization': 'Bearer ' + window.localStorage.getItem("accessToken")
+					}
+				}).then(() => {
+                    alert("Retreat updated!");
+                    router.back();
+                }).catch(() => {
+                    alert("ne valja brt");
+                });
             },
             addPicture(e) {
                 let files = e.target.files || e.dataTransfer.files;

@@ -65,7 +65,7 @@
                     <label>Additional services:</label>
                     <br>
                     <template v-for="tag in tags">
-                        <div class="form-group mb-3" :key="tag">
+                        <div class="form-group mb-3" :key="tag.id">
                             <input type="checkbox" v-model="form.additionalServices" :value="tag.name" :key="tag.id"/>
                             <label :for="tag.key">{{tag.name}}</label>
                         </div>
