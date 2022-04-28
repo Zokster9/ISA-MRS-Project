@@ -40,9 +40,12 @@
             }
         },
         mounted(){
-            //TODO: jwt
-            axios.get("http://localhost:8088/users/findMyEntities/lordje@gmail.com").then((response) => {
-                this.services = response.data;
+            axios.get("http://localhost:8088/users/findMyEntities", {
+				headers: {
+					Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+				}
+			}).then((response) =>{
+                this.services = response.data
             })
         },
     }

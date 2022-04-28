@@ -19,31 +19,36 @@
             return {
                 hoverEditButton: false,
                 hoverDeleteButton: false,
-                id: "",
+                mid: "",
                 userService: ""
             }
         },        
         methods: {
             //router link na stranicu sa servisom koji ima dati ID
             editService(id){
-                this.id = id;
+                this.mid = id;
             },
             //poziv na back da izbrise servis
             deleteService(id){
-                if (window.location.getItem("role") === "ROLE_retreatOwner"){
-                    this.userService = "retreats";
-                }else if (window.location.getItem("role") === "ROLE_shipOwner"){
-                    this.userService = "ships";
-                }else if (window.location.getItem("role") === "ROLE_fishingInstructor"){
-                    this.userService = "adventures";
-                }
-                axios.post("http://localhost:8088/" + this.userService + "/deleteService/" + id, {
-				headers: {
-					Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
-				}
-			}).then(() => {
-                    window.location.reload();
+                this.determineUserService();
+                let path = "http://localhost:8088/" + this.userService + "/deleteService/" + id; 
+                axios.post(path, 
+                {
+                    headers: {
+                        Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+                    }
+                }).then(() =>{
+                    window.location.reload()
                 })
+            },
+            determineUserService(){
+                if (window.localStorage.getItem("role") === "ROLE_retreatOwner"){
+                    this.userService = "retreats";
+                }else if (window.localStorage.getItem("role") === "ROLE_shipOwner"){
+                    this.userService = "ships";
+                }else if (window.localStorage.getItem("role") === "ROLE_fishingInstructor"){
+                    this.userService = "adventures";
+                }               
             }
         },
     }

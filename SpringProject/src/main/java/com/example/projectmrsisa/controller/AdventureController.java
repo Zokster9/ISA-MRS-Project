@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -72,16 +73,16 @@ public class AdventureController {
         }
     }
 
+    @Transactional
     @PostMapping(value = "/deleteService/{id}")
     @PreAuthorize("hasRole('fishingInstructor')")
-    public ResponseEntity deleteAdventure(@PathVariable Integer id){
+    public ResponseEntity deleteService(@PathVariable Integer id){
         try {
             //TODO: Provera da li je servis rezervisan!
             adventureService.deleteAdventureById(id);
-            return new ResponseEntity(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch(Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-
 }
