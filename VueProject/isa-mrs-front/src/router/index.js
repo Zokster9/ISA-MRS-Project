@@ -110,6 +110,11 @@ const routes = [
     name: 'service-crud',
     component: () => import('../views/ServiceCrudView.vue')
   }
+  {
+    path: '/activate-account/:id',
+    name: 'activate-account',
+    component: () => import('../views/ActivateAccountView.vue')
+  },
 ]
 
 const router = new VueRouter({

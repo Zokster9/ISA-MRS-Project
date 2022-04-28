@@ -22,6 +22,9 @@ public class UserController {
     private UserService userService;
 
     @Autowired
+    private ClientService clientService;
+
+    @Autowired
     private AddressService addressService;
 
     @Autowired
@@ -76,6 +79,15 @@ public class UserController {
         } catch( Exception e ){
             return new ResponseEntity<>(userDTO, HttpStatus.BAD_REQUEST);
         }
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+    }
+
+    @Transactional
+    @PostMapping(value="/activate-client/{id}")
+    public ResponseEntity<UserDTO> activateClient(@PathVariable Integer id) {
+        User user = userService.findUserById(id);
+        userService.updateUserActivatedStatusById(user.getId());
+        UserDTO userDTO = new UserDTO(user);
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
@@ -144,15 +156,22 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         if (userDTO.getRegistrationType().equals("client")) {
-            // TODO: ovde dodati kod za registraciju klijenta
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // ovo skloniti kad se odradi
-        }else {
-            try{
+            try {
+                if (role == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                Client client = clientService.save(new Client(userDTO, a, role));
+                ClientDTO clientDTO = new ClientDTO(client);
+                emailService.sendActivationEmail(clientDTO);
+                return new ResponseEntity<>(new ClientDTO(client), HttpStatus.CREATED);
+            } catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        } else {
+            try {
                 if (role == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 User user = userService.save(new User(userDTO, a, role));
                 RegistrationReasoning registrationReasoning = registrationReasoningService.addRegistrationReasoning(new RegistrationReasoning(user, userDTO.getRegistrationExplanation()));
                 return new ResponseEntity<>(new UserDTO(user, PrivilegedUser.RETREAT_OWNER, new RegistrationReasoningDTO(registrationReasoning)), HttpStatus.CREATED);
-            }catch (Exception e) {
+            } catch (Exception e) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
         }

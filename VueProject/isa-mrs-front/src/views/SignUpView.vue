@@ -147,6 +147,7 @@
         },
         methods: {
             register() {
+                if (this.isClient) this.form.privilegedUserType = "client"
                 axios.post("http://localhost:8088/users/register", {
                     email: this.form.email,
                     password: this.form.password,
@@ -212,7 +213,7 @@
                 },
                 phoneNumber: {
                     required,
-                    minLength : minLength(12),
+                    minLength : minLength(13),
                     isPhoneNumberCorrect
                 },
             }
