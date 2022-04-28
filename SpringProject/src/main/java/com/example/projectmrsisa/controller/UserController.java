@@ -1,6 +1,7 @@
 package com.example.projectmrsisa.controller;
 
 import com.example.projectmrsisa.dto.AddressDTO;
+import com.example.projectmrsisa.dto.ClientDTO;
 import com.example.projectmrsisa.dto.RegistrationReasoningDTO;
 import com.example.projectmrsisa.dto.UserDTO;
 import com.example.projectmrsisa.model.*;
@@ -8,6 +9,7 @@ import com.example.projectmrsisa.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +22,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ClientService clientService;
 
     @Autowired
     private AddressService addressService;
@@ -73,6 +78,15 @@ public class UserController {
         } catch( Exception e ){
             return new ResponseEntity<>(userDTO, HttpStatus.BAD_REQUEST);
         }
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+    }
+
+    @Transactional
+    @PostMapping(value="/activate-client/{id}")
+    public ResponseEntity<UserDTO> activateClient(@PathVariable Integer id) {
+        User user = userService.findUserById(id);
+        userService.updateUserActivatedStatusById(user.getId());
+        UserDTO userDTO = new UserDTO(user);
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
@@ -137,21 +151,28 @@ public class UserController {
             System.out.println("Dosao sam ovde 1");
             role = roleService.findRoleByName("ROLE_" + userDTO.getPrivilegedUserType());
             System.out.println("Dosao sam ovde 2");
-        }catch (Exception e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         if (userDTO.getRegistrationType().equals("client")) {
-            // TODO: ovde dodati kod za registraciju klijenta
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // ovo skloniti kad se odradi
-        }else {
-            try{
+            try {
+                if (role == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                Client client = clientService.save(new Client(userDTO, a, role));
+                ClientDTO clientDTO = new ClientDTO(client);
+                emailService.sendActivationEmail(clientDTO);
+                return new ResponseEntity<>(new ClientDTO(client), HttpStatus.CREATED);
+            } catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        } else {
+            try {
                 if (role == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 System.out.println("Dosao sam ovde 3");
                 User user = userService.save(new User(userDTO, a, role));
                 System.out.println("Dosao sam ovde 4");
                 RegistrationReasoning registrationReasoning = registrationReasoningService.addRegistrationReasoning(new RegistrationReasoning(user, userDTO.getRegistrationExplanation()));
                 return new ResponseEntity<>(new UserDTO(user, PrivilegedUser.RETREAT_OWNER, new RegistrationReasoningDTO(registrationReasoning)), HttpStatus.CREATED);
-            }catch (Exception e) {
+            } catch (Exception e) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
         }

@@ -90,6 +90,11 @@ const routes = [
     name: 'retreats',
     component: () => import('../views/RetreatsView.vue')
   },
+  {
+    path: '/activate-account/:id',
+    name: 'activate-account',
+    component: () => import('../views/ActivateAccountView.vue')
+  },
 ]
 
 const router = new VueRouter({

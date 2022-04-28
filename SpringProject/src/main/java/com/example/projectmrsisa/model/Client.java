@@ -1,5 +1,7 @@
 package com.example.projectmrsisa.model;
 
+import com.example.projectmrsisa.dto.UserDTO;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,6 +33,12 @@ public class Client extends User {
         this.isPenalized = isPenalized;
         this.reservations = reservations;
         this.subscriptions = subscriptions;
+    }
+
+    public Client(UserDTO userDTO, Address address, Role role) {
+        super(userDTO, address, role);
+        this.penaltyPoints = 0;
+        this.isPenalized = false;
     }
 
     public int getPenaltyPoints() {

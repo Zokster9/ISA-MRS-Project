@@ -60,6 +60,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/retreats/getAll").permitAll()
                 .antMatchers("/users/changePassword").permitAll()
                 .antMatchers("/users/changeInfo").permitAll()
+                .antMatchers("/users/activate-client/{id}").permitAll()
                 .anyRequest().authenticated().and()
                 .cors().and()
                 .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, customUserDetailsService), BasicAuthenticationFilter.class);
