@@ -72,4 +72,16 @@ public class AdventureController {
         }
     }
 
+    @PostMapping(value = "/deleteService/{id}")
+    @PreAuthorize("hasRole('fishingInstructor')")
+    public ResponseEntity deleteAdventure(@PathVariable Integer id){
+        try {
+            //TODO: Provera da li je servis rezervisan!
+            adventureService.deleteAdventureById(id);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch(Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }

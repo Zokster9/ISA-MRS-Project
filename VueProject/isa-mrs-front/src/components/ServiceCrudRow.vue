@@ -15,6 +15,14 @@
 
     export default {
         props: ["service"],
+        data(){
+            return {
+                hoverEditButton: false,
+                hoverDeleteButton: false,
+                id: "",
+                userService: ""
+            }
+        },        
         methods: {
             //router link na stranicu sa servisom koji ima dati ID
             editService(id){
@@ -22,14 +30,20 @@
             },
             //poziv na back da izbrise servis
             deleteService(id){
-                this.id = id;
-            }
-        },
-        data(){
-            return {
-                hoverEditButton: false,
-                hoverDeleteButton: false,
-                id: ""
+                if (window.location.getItem("role") === "ROLE_retreatOwner"){
+                    this.userService = "retreats";
+                }else if (window.location.getItem("role") === "ROLE_shipOwner"){
+                    this.userService = "ships";
+                }else if (window.location.getItem("role") === "ROLE_fishingInstructor"){
+                    this.userService = "adventures";
+                }
+                axios.post("http://localhost:8088/" + this.userService + "/deleteService/" + id, {
+				headers: {
+					Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+				}
+			}).then(() => {
+                    window.location.reload();
+                })
             }
         },
     }
