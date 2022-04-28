@@ -63,17 +63,16 @@
 					localStorage.setItem("accessToken", response.data.accessToken);
 					localStorage.setItem("role", response.data.roleName);
 					if (response.data.roleName === "ROLE_retreatOwner") {
-						// TODO: prebaciti na stranicu vlasnika vikendice
-					}else if (response.data.roleName === "ROLE_shipOwner") {
+						// TODO: prebaciti na stranicu vlasnika vikendica
+					} else if (response.data.roleName === "ROLE_shipOwner") {
 						// TODO: prebaciti na stranicu vlasnika broda
-					}else if (response.data.roleName === "ROLE_fishingInstructor") {
-						// TODO: prebaciti na stranicu instruktora pecanja
+					} else if (response.data.roleName === "ROLE_fishingInstructor") {
 						this.$router.push("/profile-page-fishing-instructor");
-					}else if (response.data.roleName === "ROLE_client") {
-						// TODO: prebaciti na stranicu klijenta
-					}else if (response.data.roleName === "ROLE_admin") {
-						// TODO: prebaciti na stranicu admina
-					}else {
+					} else if (response.data.roleName === "ROLE_client") {
+						this.$router.push("/profile-page-client");
+					} else if (response.data.roleName === "ROLE_admin") {
+						this.$router.push("/profile-page-admin");
+					} else {
 						alert("Some kind of error, dont know what.");
 					}
                 }).catch(() => {

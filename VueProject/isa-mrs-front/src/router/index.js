@@ -109,7 +109,7 @@ const routes = [
     path: '/service-crud',
     name: 'service-crud',
     component: () => import('../views/ServiceCrudView.vue')
-  }
+  },
   {
     path: '/activate-account/:id',
     name: 'activate-account',
