@@ -10,6 +10,7 @@
     import Vue from 'vue' 
     import axios from 'axios'
     import VueAxios from 'vue-axios'
+    import router from '@/router'
 
     Vue.use(VueAxios, axios)
 
@@ -19,6 +20,15 @@
             //router link na stranicu sa servisom koji ima dati ID
             editService(id){
                 this.id = id;
+                if (window.localStorage.getItem("role") === "ROLE_retreatOwner") {
+                    router.push('/retreat-info/' + id);
+				}else if (window.localStorage.getItem("role") === "ROLE_shipOwner") {
+                    router.push('/ship-info/' + id);
+				}else if (window.localStorage.getItem("role") === "ROLE_fishingInstructor") {
+                    router.push('/adventure-info/' + id);
+				}else {
+                    alert('Some kind of error happened!');
+                }
             },
             //poziv na back da izbrise servis
             deleteService(id){
