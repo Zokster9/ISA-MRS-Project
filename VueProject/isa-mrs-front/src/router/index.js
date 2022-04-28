@@ -109,6 +109,11 @@ const routes = [
     path: '/service-crud',
     name: 'service-crud',
     component: () => import('../views/ServiceCrudView.vue')
+  },
+  {
+    path: '/admin-sign-up',
+    name: 'admin-sign-up',
+    component: () => import('../views/AdminSignUp.vue')
   }
 ]
 

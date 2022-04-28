@@ -71,8 +71,8 @@
 						this.$router.push("/profile-page-fishing-instructor");
 					}else if (response.data.roleName === "ROLE_client") {
 						// TODO: prebaciti na stranicu klijenta
-					}else if (response.data.roleName === "ROLE_admin") {
-						// TODO: prebaciti na stranicu admina
+					}else if (response.data.roleName === "ROLE_admin" || response.data.roleName === "ROLE_mainAdmin") {
+						this.$router.push("/profile-page-admin");
 					}else {
 						alert("Some kind of error, dont know what.");
 					}

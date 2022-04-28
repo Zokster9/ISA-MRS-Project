@@ -158,6 +158,10 @@ public class UserController {
         }
     }
 
+    //@Transactional
+    //@PostMapping("/registerAdmin")
+    //public ResponseEntity<>
+
     private boolean validAddress(AddressDTO addressDTO) {
         if (addressDTO.getCountry().equals("") || addressDTO.getCountry() == null || !addressDTO.getCountry().matches("([A-Z]{1})([a-z]+)([^0-9]*)$")) {
             return false;
