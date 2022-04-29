@@ -222,3 +222,8 @@ body,
   from {opacity: .4}
   to {opacity: 1}
 }
+
+.disabledNavbarOption {
+    opacity: 0.5;
+    pointer-events: none;
+}

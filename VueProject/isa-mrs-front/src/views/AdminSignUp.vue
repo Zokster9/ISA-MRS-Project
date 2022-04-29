@@ -131,7 +131,13 @@
                         street: this.form.address
                     },
                     phoneNumber: this.form.phoneNumber,
-                }).then(() => {
+                },
+                {
+                    headers:{
+                        Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+                    }
+                }
+                ).then(() => {
                     alert("Registration form was successful.");
                     this.$router.push("/profile-page-admin")
                 }).catch(() => {

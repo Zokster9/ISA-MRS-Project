@@ -160,7 +160,7 @@ public class UserController {
 
     @Transactional
     @PostMapping("/registerAdmin")
-    //@PreAuthorize("hasRole('mainAdmin')")
+    @PreAuthorize("hasRole('mainAdmin')")
     public ResponseEntity<UserDTO> registerAdmin(@RequestBody UserDTO adminDTO){
         if (!validAdmin(adminDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         if (!validAddress(adminDTO.getAddressDTO())) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -269,8 +269,22 @@ public class UserController {
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
+    @Transactional
+    @PutMapping(value = "/activateAdmin")
+    @PreAuthorize("hasRole('admin')")
+    public ResponseEntity<UserDTO> activateAdmin(@RequestBody PasswordChangeDTO passwordChangeDTO, Principal loggedUser){
+        User user = userService.findUserByEmail(loggedUser.getName());
+        if (passwordChangeDTO.getNewPassword() == null || passwordChangeDTO.getConfirmPassword() == null || !passwordChangeDTO.getNewPassword().equals(passwordChangeDTO.getConfirmPassword())){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        userService.updateUserPassword(passwordChangeDTO.getNewPassword(), user.getEmail());
+        userService.updateUserActivatedStatusById(user.getId());
+        UserDTO userDTO = new UserDTO(user);
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+    }
+
     @GetMapping(value = "/getLoggedUser")
-    @PreAuthorize("hasAnyRole('admin', 'client', 'retreatOwner', 'shipOwner', 'fishingInstructor')")
+    @PreAuthorize("hasAnyRole('admin', 'client', 'retreatOwner', 'shipOwner', 'fishingInstructor', 'mainAdmin')")
     public ResponseEntity<UserDTO> getLoggedUser(Principal principal) {
         User user = userService.findUserByEmail(principal.getName());
         return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
