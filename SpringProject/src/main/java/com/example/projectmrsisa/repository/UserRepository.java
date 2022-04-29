@@ -20,6 +20,10 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     public void updateUserActivatedStatusById(Integer id);
 
     @Modifying
+    @Query("update User u set u.isActive = false where u.id =?1")
+    public void deactivateUserById(Integer id);
+
+    @Modifying
     @Query("update User u set u.isDeleted = true where u.id = ?1")
     public void updateUserDeletedStatusById(Integer id);
 
@@ -52,4 +56,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Modifying
     @Query("update User u set u.isDeleted = ?1 where u.email = ?2")
     public void updateUserDeletedStatusByEmail(boolean isDeleted, String email);
+
+    @Modifying
+    @Query("update RegistrationReasoning  r set r.isAnswered = true where r.privilegedUser = ?1")
+    public void updateRegistrationReasoningAnsweredStatus(User user);
 }

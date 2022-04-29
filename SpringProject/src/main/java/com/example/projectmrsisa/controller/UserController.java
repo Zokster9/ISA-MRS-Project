@@ -60,7 +60,9 @@ public class UserController {
                     break;
             }
             RegistrationReasoningDTO registrationReasoningDTO = new RegistrationReasoningDTO(userService.findRegistrationReasoningByUserId(iu));
-            inactiveUsersDTO.add(new UserDTO(iu, privilegedUser, registrationReasoningDTO));
+            if (!registrationReasoningDTO.isAnswered()){
+                inactiveUsersDTO.add(new UserDTO(iu, privilegedUser, registrationReasoningDTO));
+            }
         }
         return new ResponseEntity<>(inactiveUsersDTO, HttpStatus.OK);
     }
@@ -71,6 +73,7 @@ public class UserController {
     public ResponseEntity<UserDTO> acceptUser(@RequestBody RegistrationChoiceDTO registrationChoiceDTO){
         User user = userService.findUserById(registrationChoiceDTO.getUserId());
         userService.updateUserActivatedStatusById(user.getId());
+        userService.updateRegistrationReasoningStatus(user);
         UserDTO userDTO = new UserDTO(user);
         try{
             emailService.sendRegistrationAcceptedEmail(userDTO);
@@ -86,6 +89,7 @@ public class UserController {
     public ResponseEntity<UserDTO> declineUser(@RequestBody RegistrationChoiceDTO registrationChoiceDTO){
         User user = userService.findUserById(registrationChoiceDTO.getUserId());
         userService.updateUserDeletedStatusById(registrationChoiceDTO.getUserId());
+        userService.updateRegistrationReasoningStatus(user);
         UserDTO userDTO = new UserDTO(user);
         try {
             emailService.sendRegistrationDeclinedEmail(userDTO, registrationChoiceDTO.getDeclineReasoning());
@@ -216,6 +220,7 @@ public class UserController {
         if (terminationReasonDTO.getTerminationReason() == null || terminationReasonDTO.getTerminationReason().equals("")) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         User user = userService.findUserByEmail(principal.getName());
         TerminationReasoning terminationReasoning = terminationReasoningService.addTerminationReasoning(new TerminationReasoning(user, terminationReasonDTO.getTerminationReason()));
+        userService.deactivateUserById(user.getId()); // deaktiviram korisnika
         UserDTO userDTO = new UserDTO(user);
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }

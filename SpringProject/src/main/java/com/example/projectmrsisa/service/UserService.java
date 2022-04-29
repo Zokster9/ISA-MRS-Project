@@ -35,6 +35,10 @@ public class UserService {
         userRepository.updateUserActivatedStatusById(id);
     }
 
+    public void deactivateUserById(Integer id){
+        userRepository.deactivateUserById(id);
+    }
+
     public void updateUserDeletedStatusById(Integer id){
         userRepository.updateUserDeletedStatusById(id);
     }
@@ -73,5 +77,8 @@ public class UserService {
 
     public void updateUserPhoneNumber(String phoneNumber, String email){
         userRepository.updateUserPhoneNumber(phoneNumber, email);
+    }
+    public void updateRegistrationReasoningStatus(User user){
+        userRepository.updateRegistrationReasoningAnsweredStatus(user);
     }
 }

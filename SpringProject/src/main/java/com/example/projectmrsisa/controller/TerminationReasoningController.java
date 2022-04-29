@@ -48,6 +48,7 @@ public class TerminationReasoningController {
     public ResponseEntity<UserDTO> declineTermination(@RequestBody TerminationChoiceDTO terminationChoiceDTO){
         User user = userService.findUserById(terminationChoiceDTO.getUserId());
         terminationReasoningService.updateTerminationReasoningByAnsweredStatus(user);
+        userService.updateUserActivatedStatusById(terminationChoiceDTO.getUserId()); // aktiviram korisnika opet
         UserDTO userDTO = new UserDTO(user);
         try {
             emailService.sendTerminationDeclinedEmail(userDTO, terminationChoiceDTO.getTerminationChoiceReason());

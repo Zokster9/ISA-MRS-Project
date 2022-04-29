@@ -6,6 +6,7 @@ public class RegistrationReasoningDTO {
     private Integer id;
     private String registrationReason;
     private Integer privilegedUserId;
+    private boolean isAnswered;
 
     public RegistrationReasoningDTO(){
 
@@ -15,6 +16,7 @@ public class RegistrationReasoningDTO {
         id = registrationReasoning.getId();
         registrationReason = registrationReasoning.getRegistrationReasoning();
         privilegedUserId = registrationReasoning.getPrivilegedUser().getId();
+        isAnswered = registrationReasoning.isAnswered();
     }
 
     public Integer getId() {
@@ -39,5 +41,13 @@ public class RegistrationReasoningDTO {
 
     public void setPrivilegedUserId(Integer privilegedUserId) {
         this.privilegedUserId = privilegedUserId;
+    }
+
+    public boolean isAnswered() {
+        return isAnswered;
+    }
+
+    public void setAnswered(boolean answered) {
+        isAnswered = answered;
     }
 }

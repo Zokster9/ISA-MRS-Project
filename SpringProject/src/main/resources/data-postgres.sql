@@ -26,9 +26,9 @@ insert into users (email, password, name, surname, address_id, phone_number, is_
 insert into users (email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values ('zoki@gmail.com', '$2a$10$5bqbvqKlyaN8wBVdvl7UeefSJ8ja584oeYMbhK9FQgcjWK2laRxRO', 'Zoran', 'Bukorac', 3, '+381607846912', true, false, 0, 0);
 insert into users (email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values ('klijent@gmail.com', '$2a$10$5bqbvqKlyaN8wBVdvl7UeefSJ8ja584oeYMbhK9FQgcjWK2laRxRO', 'Klijent', 'Klijentic', 2, '+381667342312', true, false, 0, 0);
 
-insert into registration_reasoning (privileged_user, registration_reasoning) values (1, 'I want to be retreat owner');
-insert into registration_reasoning (privileged_user, registration_reasoning) values (2, 'I want to be ship owner');
-insert into registration_reasoning (privileged_user, registration_reasoning) values (3, 'I want to be fishing instructor owner');
+insert into registration_reasoning (privileged_user, registration_reasoning, is_answered) values (1, 'I want to be retreat owner', true);
+insert into registration_reasoning (privileged_user, registration_reasoning, is_answered) values (2, 'I want to be ship owner', false);
+insert into registration_reasoning (privileged_user, registration_reasoning, is_answered) values (3, 'I want to be fishing instructor owner', false);
 
 insert into user_role (user_id, role_id) values (1, 1);
 insert into user_role (user_id, role_id) values (2, 2);
