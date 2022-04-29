@@ -1,5 +1,6 @@
 package com.example.projectmrsisa.controller;
 
+import com.example.projectmrsisa.dto.TerminationChoiceDTO;
 import com.example.projectmrsisa.dto.TerminationReasoningDTO;
 import com.example.projectmrsisa.dto.UserDTO;
 import com.example.projectmrsisa.model.TerminationReasoning;
@@ -30,7 +31,7 @@ public class TerminationReasoningController {
     @Autowired
     private EmailService emailService;
 
-    @GetMapping(value="findToTerminate", produces="application/json")
+    @GetMapping(value="/findToTerminate", produces="application/json")
     @PreAuthorize("hasRole('admin')")
     public ResponseEntity<List<TerminationReasoningDTO>> findToBeTerminatedUsers(){
         List<TerminationReasoning> unansweredTerminationReasonings = terminationReasoningService.findUnansweredTerminationReasonings();
@@ -42,14 +43,14 @@ public class TerminationReasoningController {
     }
 
     @Transactional
-    @PostMapping(value="declineTermination")
+    @PostMapping(value="/declineTermination")
     @PreAuthorize("hasRole('admin')")
-    public ResponseEntity<UserDTO> declineTermination(@RequestParam Integer id, @RequestParam String declineReasoning){
-        User user = userService.findUserById(id);
+    public ResponseEntity<UserDTO> declineTermination(@RequestBody TerminationChoiceDTO terminationChoiceDTO){
+        User user = userService.findUserById(terminationChoiceDTO.getUserId());
         terminationReasoningService.updateTerminationReasoningByAnsweredStatus(user);
         UserDTO userDTO = new UserDTO(user);
         try {
-            emailService.sendTerminationDeclinedEmail(userDTO, declineReasoning);
+            emailService.sendTerminationDeclinedEmail(userDTO, terminationChoiceDTO.getTerminationChoiceReason());
         } catch( Exception e ){
             return new ResponseEntity<>(userDTO, HttpStatus.BAD_REQUEST);
         }
@@ -57,15 +58,15 @@ public class TerminationReasoningController {
     }
 
     @Transactional
-    @PostMapping(value="acceptTermination")
+    @PostMapping(value="/acceptTermination")
     @PreAuthorize("hasRole('admin')")
-    public ResponseEntity<UserDTO> acceptTermination(@RequestParam Integer id, @RequestParam String acceptReasoning){
-        User user = userService.findUserById(id);
+    public ResponseEntity<UserDTO> acceptTermination(@RequestBody TerminationChoiceDTO terminationChoiceDTO){
+        User user = userService.findUserById(terminationChoiceDTO.getUserId());
         terminationReasoningService.updateTerminationReasoningByAnsweredStatus(user);
-        userService.updateUserDeletedStatusById(id);
+        userService.updateUserDeletedStatusById(terminationChoiceDTO.getUserId());
         UserDTO userDTO = new UserDTO(user);
         try {
-            emailService.sendTerminationAcceptedEmail(userDTO, acceptReasoning);
+            emailService.sendTerminationAcceptedEmail(userDTO, terminationChoiceDTO.getTerminationChoiceReason());
         } catch( Exception e ){
             return new ResponseEntity<>(userDTO, HttpStatus.BAD_REQUEST);
         }

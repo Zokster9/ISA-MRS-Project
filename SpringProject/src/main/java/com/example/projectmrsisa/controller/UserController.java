@@ -66,10 +66,10 @@ public class UserController {
     }
 
     @Transactional
-    @PostMapping(value="/accept/{id}")
+    @PostMapping(value="/accept")
     @PreAuthorize("hasRole('admin')")
-    public ResponseEntity<UserDTO> acceptUser(@PathVariable Integer id){
-        User user = userService.findUserById(id);
+    public ResponseEntity<UserDTO> acceptUser(@RequestBody RegistrationChoiceDTO registrationChoiceDTO){
+        User user = userService.findUserById(registrationChoiceDTO.getUserId());
         userService.updateUserActivatedStatusById(user.getId());
         UserDTO userDTO = new UserDTO(user);
         try{
@@ -83,12 +83,12 @@ public class UserController {
     @Transactional
     @PostMapping(value="/decline")
     @PreAuthorize("hasRole('admin')")
-    public ResponseEntity<UserDTO> declineUser(@RequestParam Integer id, @RequestParam String declineReasoning){
-        User user = userService.findUserById(id);
-        userService.updateUserDeletedStatusById(id);
+    public ResponseEntity<UserDTO> declineUser(@RequestBody RegistrationChoiceDTO registrationChoiceDTO){
+        User user = userService.findUserById(registrationChoiceDTO.getUserId());
+        userService.updateUserDeletedStatusById(registrationChoiceDTO.getUserId());
         UserDTO userDTO = new UserDTO(user);
         try {
-            emailService.sendRegistrationDeclinedEmail(userDTO, declineReasoning);
+            emailService.sendRegistrationDeclinedEmail(userDTO, registrationChoiceDTO.getDeclineReasoning());
         } catch( Exception e ){
             return new ResponseEntity<>(userDTO, HttpStatus.BAD_REQUEST);
         }

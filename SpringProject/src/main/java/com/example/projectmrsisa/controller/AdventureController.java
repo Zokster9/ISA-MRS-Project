@@ -3,6 +3,7 @@ package com.example.projectmrsisa.controller;
 
 import com.example.projectmrsisa.dto.AdventureDTO;
 import com.example.projectmrsisa.dto.RetreatDTO;
+import com.example.projectmrsisa.dto.ServiceDTO;
 import com.example.projectmrsisa.model.Address;
 import com.example.projectmrsisa.model.Adventure;
 import com.example.projectmrsisa.model.Retreat;
@@ -76,12 +77,12 @@ public class AdventureController {
     }
 
     @Transactional
-    @PostMapping(value = "/deleteService/{id}")
+    @PostMapping(value = "/deleteService")
     @PreAuthorize("hasRole('fishingInstructor')")
-    public ResponseEntity deleteService(@PathVariable Integer id){
+    public ResponseEntity deleteService(@RequestBody ServiceDTO serviceDTO){
         try {
             //TODO: Provera da li je servis rezervisan!
-            adventureService.deleteAdventureById(id);
+            adventureService.deleteAdventureById(serviceDTO.getId());
             return new ResponseEntity<>(HttpStatus.OK);
         } catch(Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

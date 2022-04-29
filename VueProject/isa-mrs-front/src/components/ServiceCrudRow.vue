@@ -1,8 +1,8 @@
 <template>
     <tr :key="service.id" :class="{activeDeleteButton: hoverDeleteButton, activeEditButton: hoverEditButton}">
         <td class="align-middle text-center"> {{service.name}} </td>
-        <td class="align-middle text-center"> <button type="button" @mouseover="hoverEditButton = true" @mouseleave="hoverEditButton = false" class="btn btn-warning" @click="editService(service.id)">Edit service info</button></td>
-        <td class="align-middle text-center"> <button type="button" @mouseover="hoverDeleteButton = true" @mouseleave="hoverDeleteButton = false" class="btn btn-danger" @click="deleteService(service.id)">Delete service</button></td>
+        <td class="align-middle text-center"> <button type="button" @mouseover="hoverEditButton = true" @mouseleave="hoverEditButton = false" class="btn btn-warning" @click="editService">Edit service info</button></td>
+        <td class="align-middle text-center"> <button type="button" @mouseover="hoverDeleteButton = true" @mouseleave="hoverDeleteButton = false" class="btn btn-danger" @click="deleteService">Delete service</button></td>
     </tr>
 </template>
 
@@ -25,14 +25,20 @@
         },        
         methods: {
             //router link na stranicu sa servisom koji ima dati ID
-            editService(id){
-                this.mid = id;
+            editService(){
+                
             },
             //poziv na back da izbrise servis
-            deleteService(id){
+            deleteService(){
                 this.determineUserService();
-                let path = "http://localhost:8088/" + this.userService + "/deleteService/" + id; 
-                axios.post(path, 
+                let path = "http://localhost:8088/" + this.userService + "/deleteService"; 
+                axios.post(path,
+                {
+                    id: this.service.id,
+                    name: this.service.name,
+                    description: this.service.description,
+                    pictures: this.service.pictures
+                }, 
                 {
                     headers: {
                         Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
