@@ -66,6 +66,7 @@
 						// TODO: prebaciti na stranicu vlasnika vikendice
 					}else if (response.data.roleName === "ROLE_shipOwner") {
 						// TODO: prebaciti na stranicu vlasnika broda
+                        router.push("/service-crud");
 					}else if (response.data.roleName === "ROLE_fishingInstructor") {
 						// TODO: prebaciti na stranicu instruktora pecanja
 						router.push("/profile-page-fishing-instructor");

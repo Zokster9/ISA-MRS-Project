@@ -133,6 +133,12 @@ const routes = [{
         name: 'retreat-info',
         component: () =>
             import ('../views/RetreatInfoChange.vue')
+    },
+    {
+        path: '/ship-info/:id',
+        name: 'ship-info',
+        component: () =>
+            import ('../views/ShipInfoChangeView.vue')
     }
 ]
 
