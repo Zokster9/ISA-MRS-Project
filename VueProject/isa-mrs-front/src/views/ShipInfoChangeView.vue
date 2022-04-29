@@ -178,7 +178,7 @@
                     <p v-if="!cancellationIsValid" class="alert alert-danger">Reservation cancellation conditions are required.</p>
                 </div>
                 <div class="form-group mb-3">
-                    <button @click="updateRetreat" type="submit" class="btn btn-primary float-end">Add retreat</button>
+                    <button @click="updateRetreat" type="submit" class="btn btn-primary float-end">Update ship</button>
                 </div>
         </form>
 </template>
@@ -187,6 +187,7 @@
     import Vue from 'vue'
     import axios from 'axios'
     import VueAxios from 'vue-axios'
+import router from '@/router'
 
     Vue.use(VueAxios, axios)
 
@@ -269,7 +270,34 @@
                 }
             },
             sendData() {
-                
+                axios.put("http://localhost:8088/ships/update-ship/" + this.$route.params.id, {
+                    name: this.form.name,
+                    description: this.form.description,
+                    country: this.form.country,
+                    city: this.form.city,
+                    street: this.form.address,
+                    rulesOfConduct: this.form.rulesOfConduction,
+                    type: this.form.shipType,
+                    length: this.form.shipLength,
+                    engineNum: this.form.engineNumber,
+                    enginePower: this.form.enginePower,
+                    maxSpeed: this.form.maxSpeed,
+                    capacity: this.form.capacity,
+                    navigationEquipment: this.form.navigationEquipment,
+                    fishingEquipment: this.form.fishingEquipment,
+                    reservationCancellationConditions: this.form.reservationCancellationConditions,
+                    pictures: this.form.pictures,
+                    price: this.form.price
+                }, {
+                    headers: {
+						'Authorization': 'Bearer ' + window.localStorage.getItem("accessToken")
+					}
+                }).then((response) => {
+                    alert(response.data.name + " ship updated!");
+                    router.push('/service-crud');
+                }).catch(() => {
+                    alert("Error occurred while adding ship!");
+                });
             },
             addPicture(e) {
                 let files = e.target.files || e.dataTransfer.files;

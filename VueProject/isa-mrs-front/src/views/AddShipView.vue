@@ -178,7 +178,7 @@
                     <p v-if="!cancellationIsValid" class="alert alert-danger">Reservation cancellation conditions are required.</p>
                 </div>
                 <div class="form-group mb-3">
-                    <button @click="addRetreat" type="submit" class="btn btn-primary float-end">Add retreat</button>
+                    <button @click="addRetreat" type="submit" class="btn btn-primary float-end">Add ship</button>
                 </div>
         </form>
 </template>
