@@ -143,4 +143,12 @@ public class Ship extends Service {
     public void setReservationCancellationConditions(String reservationCancellationConditions) {
         this.reservationCancellationConditions = reservationCancellationConditions;
     }
+
+    public void addFishingEquipment(String fishingEquipment) {
+        this.fishingEquipment.add(fishingEquipment);
+    }
+
+    public void addNavigationEquipment(String navigationEquipment) {
+        this.navigationEquipment.add(navigationEquipment);
+    }
 }

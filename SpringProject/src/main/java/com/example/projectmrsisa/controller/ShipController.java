@@ -1,9 +1,8 @@
 package com.example.projectmrsisa.controller;
 
+import com.example.projectmrsisa.dto.RetreatDTO;
 import com.example.projectmrsisa.dto.ShipDTO;
-import com.example.projectmrsisa.model.Address;
-import com.example.projectmrsisa.model.Ship;
-import com.example.projectmrsisa.model.User;
+import com.example.projectmrsisa.model.*;
 import com.example.projectmrsisa.service.AddressService;
 import com.example.projectmrsisa.service.ShipService;
 import com.example.projectmrsisa.service.UserService;
@@ -11,12 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value="/ships")
@@ -127,6 +128,22 @@ public class ShipController {
         try {
             Ship ship = shipService.findShipById(id);
             if (ship == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ShipDTO(ship), HttpStatus.OK);
+        }catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Transactional
+    @PutMapping(value = "/update-ship/{id}", produces = "application/json")
+    @PreAuthorize("hasRole('shipOwner')")
+    public ResponseEntity<ShipDTO> updateRetreat(@PathVariable Integer id, @RequestBody ShipDTO shipDTO) {
+        if (!validAddress(shipDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (!validateShipData(shipDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        // TODO: provera da li postoje rezervacije za vikendicu
+        try {
+            Ship ship = shipService.findShipById(id);
+            ship = shipService.updateRetreat(ship, shipDTO);
             return new ResponseEntity<>(new ShipDTO(ship), HttpStatus.OK);
         }catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

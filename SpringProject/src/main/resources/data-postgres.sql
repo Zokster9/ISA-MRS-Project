@@ -50,8 +50,8 @@ insert into services (name, description, price, owner_id, address_id, is_deleted
 insert into my_pictures (id, pictures) values (2, 'ship1.jpg');
 insert into my_pictures (id, pictures) values (2, 'ship2.jpg');
 insert into my_pictures (id, pictures) values (2, 'ship3.jpg');
-insert into my_rules_of_conduct (id, rules_of_conduct) values (2, 'Nooooooo noooooooo.');
-insert into my_rules_of_conduct (id, rules_of_conduct) values (2, 'No L l LlLlL .');
+insert into my_rules_of_conduct (id, rules_of_conduct) values (2, 'Smoking disallowed');
+insert into my_rules_of_conduct (id, rules_of_conduct) values (2, 'Weapons disallowed');
 
 insert into services (name, description, price, owner_id, address_id, is_deleted) values ('Instrukcije pecanja', 'Naucite da pecate. Strpljiv i veoma prijatan instruktor', 30, 3, 3, false);
 insert into my_pictures (id, pictures) values (3, 'adventure1.jpg');
@@ -67,8 +67,9 @@ insert into my_fishing_equipment_adventures (id, fishing_equipment) values (3, '
 insert into my_fishing_equipment_adventures (id, fishing_equipment) values (3, 'Gaffs');
 
 insert into ships (id, type, length, engine_num, engine_power, capacity, max_speed, reservation_cancellation_conditions) values (2, 'Brod', 55, 'A123B5', 200, 100, '50 km/h', 'Prilikom otkaza rezervacije, vlasniku se uplacuje 5% cene');
-insert into my_navigation_equipment (id, navigation_equipment) values (2, 'GPS');
-insert into my_navigation_equipment (id, navigation_equipment) values (2, 'Other type of GPS');
+insert into my_navigation_equipment (id, navigation_equipment) values (2, 'Gyro Compass');
+insert into my_navigation_equipment (id, navigation_equipment) values (2, 'Radar');
+insert into my_navigation_equipment (id, navigation_equipment) values (2, 'Autopilot');
 insert into my_fishing_equipment_ships (id, fishing_equipment) values (2, 'Hooks');
 insert into my_fishing_equipment_ships (id, fishing_equipment) values (2, 'Lines');
 
