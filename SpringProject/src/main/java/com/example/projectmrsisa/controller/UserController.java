@@ -22,6 +22,9 @@ public class UserController {
     private UserService userService;
 
     @Autowired
+    private AdminService adminService;
+
+    @Autowired
     private AddressService addressService;
 
     @Autowired
@@ -161,20 +164,21 @@ public class UserController {
     @Transactional
     @PostMapping("/registerAdmin")
     @PreAuthorize("hasRole('mainAdmin')")
-    public ResponseEntity<UserDTO> registerAdmin(@RequestBody UserDTO adminDTO){
-        if (!validAdmin(adminDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        if (!validAddress(adminDTO.getAddressDTO())) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    public ResponseEntity<AdminDTO> registerAdmin(@RequestBody UserDTO userDTO){
+        if (!validAdmin(userDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (!validAddress(userDTO.getAddressDTO())) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         Address a;
         Role role;
         try{
-            a = addressService.getAddress(new Address(adminDTO.getAddressDTO()));
+            a = addressService.getAddress(new Address(userDTO.getAddressDTO()));
             role = roleService.findRoleByName("ROLE_admin");
         } catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         try{
-            User admin = userService.save(new User(adminDTO, a, role));
-            return new ResponseEntity<>(new UserDTO(admin), HttpStatus.CREATED);
+            User user = userService.save(new User(userDTO, a, role, true));
+            Admin admin = adminService.saveAdmin(new Admin(user));
+            return new ResponseEntity<>(new AdminDTO(admin), HttpStatus.CREATED);
         } catch ( Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -278,7 +282,7 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         userService.updateUserPassword(passwordChangeDTO.getNewPassword(), user.getEmail());
-        userService.updateUserActivatedStatusById(user.getId());
+        adminService.updatePasswordChangedStatus(user.getId());
         UserDTO userDTO = new UserDTO(user);
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
@@ -288,6 +292,14 @@ public class UserController {
     public ResponseEntity<UserDTO> getLoggedUser(Principal principal) {
         User user = userService.findUserByEmail(principal.getName());
         return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
+    }
+
+    @GetMapping(value= "/getLoggedAdmin")
+    @PreAuthorize("hasAnyRole('admin', 'mainAdmin')")
+    public ResponseEntity<AdminUserDTO> getLoggedAdmin(Principal principal){
+        User user = userService.findUserByEmail(principal.getName());
+        Admin admin = adminService.findAdminByUserId(user.getId());
+        return new ResponseEntity<>(new AdminUserDTO(admin, user), HttpStatus.OK);
     }
 
     @GetMapping(value="/findMyEntities")

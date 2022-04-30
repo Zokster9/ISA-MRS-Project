@@ -1,12 +1,19 @@
 package com.example.projectmrsisa.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name="admins")
-public class Admin extends User {
+public class Admin {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true, nullable = false)
+    private Integer id;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "admin_id", nullable = false)
+    private User user;
+
     @Column(name="isPasswordChanged")
     private boolean isPasswordChanged;
 
@@ -14,9 +21,8 @@ public class Admin extends User {
 
     }
 
-    public Admin(Integer id, String email, String password, String name, String surname, Address address,
-                String phoneNumber, LoyaltyStatus loyaltyStatus, int loyaltyPoints) {
-        super(id, email, password, name, surname, address, phoneNumber, loyaltyStatus, loyaltyPoints);
+    public Admin(User user) {
+        this.user = user;
         this.isPasswordChanged = false;
     }
 
@@ -26,5 +32,21 @@ public class Admin extends User {
 
     public void setPasswordChanged(boolean passwordChanged) {
         isPasswordChanged = passwordChanged;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

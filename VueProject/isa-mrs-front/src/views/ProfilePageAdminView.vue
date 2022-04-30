@@ -8,7 +8,7 @@
         <div class="mx-auto" v-if="isFirstTimeAdmin"> 
             <div class="card mb-3 border-primary mt-5" style="max-width: 18rem;">
                 <div class="card-body"> 
-                    <h5 class="card-title"> Welcome, {{ this.user.name }}  {{ this.user.surname }} </h5>
+                    <h5 class="card-title"> Welcome, {{ data.name }} {{ data.surname }}</h5>
                     <h6 class="card-subtitle mb-2 text-muted">Please enter your new password: </h6>
                     <input type="password" class="form-control mb-1" v-model="password.newPassword" placeholder="Enter new password: ">
                     <input type="password" class="form-control mb-2" v-model="password.confirmNewPassword" placeholder="Confirm new password: ">
@@ -37,7 +37,7 @@
         },
         data(){
             return {
-                user: "",
+                data: "",
                 password:{
                     newPassword: "",
                     confirmNewPassword: ""
@@ -74,14 +74,14 @@
             }
         },
         mounted () {
-            axios.get("http://localhost:8088/users/getLoggedUser",
+            axios.get("http://localhost:8088/users/getLoggedAdmin",
             {
                 headers: {
                     Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
                 }
             }).then((response)=>{
-                this.user = response.data;
-                if (this.user.active === false && window.localStorage.getItem("role") === "ROLE_admin"){
+                this.data = response.data;
+                if (this.data.passwordChanged === false && window.localStorage.getItem("role") === "ROLE_admin"){
                     this.isFirstTimeAdmin = true;
                 }
                 else{
