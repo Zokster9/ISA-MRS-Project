@@ -36,7 +36,7 @@
                 if (window.localStorage.getItem("role") === "ROLE_retreatOwner") {
                     this.deleteRetreat(id);
 				}else if (window.localStorage.getItem("role") === "ROLE_shipOwner") {
-                    router.push('/ship-info/' + id);
+                    this.deleteShip(id);
 				}else if (window.localStorage.getItem("role") === "ROLE_fishingInstructor") {
                     router.push('/adventure-info/' + id);
 				}else {
@@ -50,6 +50,16 @@
                     }
                 }).then(() => {
                     alert("Retreat successfully deleted.");
+                    window.location.reload();
+                })
+            },
+            deleteShip(id) {
+                axios.delete('http://localhost:8088/ships/delete-ship/' + id, {
+                    headers: {
+                        Authorization: 'Bearer ' + window.localStorage.getItem('accessToken')
+                    }
+                }).then(() => {
+                    alert("Ship successfully deleted.");
                     window.location.reload();
                 })
             }
