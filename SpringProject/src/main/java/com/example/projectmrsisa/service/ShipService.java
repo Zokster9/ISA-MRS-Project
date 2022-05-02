@@ -57,4 +57,8 @@ public class ShipService {
         }
         return shipRepository.save(ship);
     }
+
+    public void deleteShipById(Integer id) {
+        shipRepository.deleteShipById(id);
+    }
 }

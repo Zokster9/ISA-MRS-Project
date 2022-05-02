@@ -140,12 +140,27 @@ public class ShipController {
     public ResponseEntity<ShipDTO> updateRetreat(@PathVariable Integer id, @RequestBody ShipDTO shipDTO) {
         if (!validAddress(shipDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         if (!validateShipData(shipDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        // TODO: provera da li postoje rezervacije za vikendicu
+        // TODO: provera da li postoje rezervacije za brod
         try {
             Ship ship = shipService.findShipById(id);
             ship = shipService.updateRetreat(ship, shipDTO);
             return new ResponseEntity<>(new ShipDTO(ship), HttpStatus.OK);
         }catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Transactional
+    @DeleteMapping(value = "/delete-ship/{id}")
+    @PreAuthorize("hasRole('shipOwner')")
+    public ResponseEntity<ShipDTO> deleteShip(@PathVariable Integer id) {
+        try {
+            // TODO: provera da li postoje rezervacije za brod
+            Ship ship = shipService.findShipById(id);
+            if (ship == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            shipService.deleteShipById(id);
+            return new ResponseEntity<>(new ShipDTO(ship), HttpStatus.OK);
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
