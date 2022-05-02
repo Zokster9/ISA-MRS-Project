@@ -9,4 +9,8 @@ public interface RetreatRepository extends JpaRepository<Retreat, Integer> {
 
     @Query("select r from Retreat r where r.id = ?1")
     public Retreat getRetreatById(Integer id);
+
+    @Modifying
+    @Query("update Retreat r set r.isDeleted = true where r.id = ?1")
+    public void deleteRetreatById(Integer id);
 }

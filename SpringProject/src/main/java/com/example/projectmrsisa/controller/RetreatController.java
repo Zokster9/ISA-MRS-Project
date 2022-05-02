@@ -39,6 +39,7 @@ public class RetreatController {
             List<Retreat> retreats = retreatService.getRetreats();
             List<RetreatDTO> retreatDTOS = new ArrayList<>();
             for (Retreat retreat : retreats) {
+                if (retreat.isDeleted()) continue;
                 retreatDTOS.add(new RetreatDTO(retreat));
             }
             return new ResponseEntity<>(retreatDTOS, HttpStatus.OK);
@@ -125,6 +126,21 @@ public class RetreatController {
             retreat = retreatService.updateRetreat(retreat, retreatDTO, newAdditionalServices);
             return new ResponseEntity<>(new RetreatDTO(retreat), HttpStatus.OK);
         }catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Transactional
+    @DeleteMapping(value = "/delete-retreat/{id}")
+    @PreAuthorize("hasRole('retreatOwner')")
+    public ResponseEntity<RetreatDTO> deleteRetreat(@PathVariable Integer id) {
+        try {
+            // TODO: provera da li postoje rezervacije za vikendicu
+            Retreat retreat = retreatService.getRetreatById(id);
+            if (retreat == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            retreatService.deleteRetreat(id);
+            return new ResponseEntity<>(new RetreatDTO(retreat), HttpStatus.OK);
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

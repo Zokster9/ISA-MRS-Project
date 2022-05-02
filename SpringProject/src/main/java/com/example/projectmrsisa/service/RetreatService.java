@@ -51,4 +51,8 @@ public class RetreatService {
         }
         return retreatRepository.save(retreat);
     }
+
+    public void deleteRetreat(Integer id) {
+        retreatRepository.deleteRetreatById(id);
+    }
 }
