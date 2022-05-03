@@ -33,7 +33,7 @@
             </div>
             <div class="form-group mb-3">
                 <label> Maximum number of people </label>
-                <input v-model="form.maxNumOfPeople" type="number" class="form-control"/>
+                <input v-model.number="form.maxNumOfPeople" type="number" class="form-control"/>
                 <p v-if="!maxNumOfPeopleIsValid" class="alert alert-danger">Maximum amount of people is required, and it must be number greater than 0.</p>
             </div>
             <div class="form-group mb-3">
@@ -198,9 +198,12 @@ import router from '@/router'
                 if (this.formIsValid) {
                     this.sendData();
                 }
+                else{
+                    alert("alo");
+                }
             },
             sendData() {
-                axios.put("http://localhost:8088/adventures/update-adventure/" + this.$route.params.id, {
+                axios.put("http://localhost:8088/adventures/updateAdventure/" + this.$route.params.id, {
                     name: this.form.name,
                     description: this.form.description,
                     country: this.form.country,

@@ -93,4 +93,8 @@ public class Adventure extends Service {
     public void setAdditionalServices(Set<Tag> additionalServices) {
         this.additionalServices = additionalServices;
     }*/
+
+    public void addFishingEquipment(String fishingEquipment){
+        this.fishingEquipment.add(fishingEquipment);
+    }
 }

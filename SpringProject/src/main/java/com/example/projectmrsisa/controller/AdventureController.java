@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -73,4 +74,29 @@ public class AdventureController {
         }
     }
 
+    private boolean validAddress(AdventureDTO adventureDTO) {
+        if (adventureDTO.getCountry().equals("") || adventureDTO.getCountry() == null || !adventureDTO.getCountry().matches("([A-Z]{1})([a-z]+)([^0-9]*)$")) {
+            return false;
+        }
+        if (adventureDTO.getCity().equals("") || adventureDTO.getCity() == null || !adventureDTO.getCity().matches("([A-Z]{1})([a-z]+)([^0-9]*)$")) {
+            return false;
+        }
+        return !adventureDTO.getStreet().equals("") && adventureDTO.getStreet() != null;
+    }
+
+    @Transactional
+    @PutMapping(value="/updateAdventure/{id}", produces = "application/json")
+    @PreAuthorize("hasRole('fishingInstructor')")
+    public ResponseEntity<AdventureDTO> updateRetreat(@PathVariable Integer id, @RequestBody AdventureDTO adventureDTO){
+        //if (!validAddress(adventureDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        //todo:dodati proveru za celokupnu avanturu
+        try{
+            Adventure adventure = adventureService.findAdventureById(id);
+            //todo:Tagovi
+            adventure = adventureService.updateAdventure(adventure, adventureDTO /*,tags*/);
+            return new ResponseEntity<>(new AdventureDTO(adventure), HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }
