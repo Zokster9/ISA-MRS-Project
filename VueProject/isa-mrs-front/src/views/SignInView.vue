@@ -36,7 +36,7 @@
     import { required, minLength, email } from 'vuelidate/lib/validators'
     import axios from 'axios'
     import VueAxios from 'vue-axios'
-//import router from '@/router'
+    import router from '@/router'
 
     Vue.use(VueAxios, axios)
     Vue.use(Vuelidate)
@@ -63,15 +63,15 @@
 					localStorage.setItem("accessToken", response.data.accessToken);
 					localStorage.setItem("role", response.data.roleName);
 					if (response.data.roleName === "ROLE_retreatOwner") {
-						// TODO: prebaciti na stranicu vlasnika vikendica
-					} else if (response.data.roleName === "ROLE_shipOwner") {
+                        router.push('/profile-page-retreat-owner');
+					}else if (response.data.roleName === "ROLE_shipOwner") {
 						// TODO: prebaciti na stranicu vlasnika broda
 					} else if (response.data.roleName === "ROLE_fishingInstructor") {
-						this.$router.push("/profile-page-fishing-instructor");
+						router.push("/profile-page-fishing-instructor");
 					} else if (response.data.roleName === "ROLE_client") {
-						this.$router.push("/profile-page-client");
+						router.push("/profile-page-client");
 					} else if (response.data.roleName === "ROLE_admin") {
-						this.$router.push("/profile-page-admin");
+						router.push("/profile-page-admin");
 					} else {
 						alert("Some kind of error, dont know what.");
 					}
