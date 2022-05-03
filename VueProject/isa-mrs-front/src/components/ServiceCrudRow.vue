@@ -1,8 +1,8 @@
 <template>
     <tr :key="service.id" :class="{activeDeleteButton: hoverDeleteButton, activeEditButton: hoverEditButton}">
         <td class="align-middle text-center"> {{service.name}} </td>
-        <td class="align-middle text-center"> <button type="button" @mouseover="hoverEditButton = true" @mouseleave="hoverEditButton = false" class="btn btn-warning" @click="editService">Edit service info</button></td>
-        <td class="align-middle text-center"> <button type="button" @mouseover="hoverDeleteButton = true" @mouseleave="hoverDeleteButton = false" class="btn btn-danger" @click="deleteService">Delete service</button></td>
+        <td class="align-middle text-center"> <button type="button" @mouseover="hoverEditButton = true" @mouseleave="hoverEditButton = false" class="btn btn-warning" @click="editService(service.id)">Edit service info</button></td>
+        <td class="align-middle text-center"> <button type="button" @mouseover="hoverDeleteButton = true" @mouseleave="hoverDeleteButton = false" class="btn btn-danger" @click="deleteService(service.id)">Delete service</button></td>
     </tr>
 </template>
 
@@ -63,7 +63,7 @@
                     window.location.reload();
                 })
             },
-            deleteAdventure(id) {
+            deleteAdventure() {
                 let path = "http://localhost:8088/adventures/deleteService"; 
                 axios.post(path,
                 {

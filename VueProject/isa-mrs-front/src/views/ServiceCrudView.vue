@@ -1,7 +1,7 @@
 <template>
     <div class="d-flex flex-row">
         <div>
-            <NavbarFishingInstructor></NavbarFishingInstructor>
+            <NavbarUser></NavbarUser>
         </div>
         <div class="row justify-content-center">
             <div class="col-auto">
@@ -27,7 +27,7 @@
 </template>
 <script>
 
-    import NavbarFishingInstructor from '@/components/NavbarFishingInstructor.vue'
+    import NavbarUser from '@/components/NavbarUser.vue'
     import ServiceCrudRow from '@/components/ServiceCrudRow.vue'
     import Vue from 'vue'
     import axios from 'axios'
@@ -38,7 +38,7 @@
     export default {
         name: 'ServiceAvailability',
         components: {
-            NavbarFishingInstructor,
+            NavbarUser,
             ServiceCrudRow
         },
         data(){

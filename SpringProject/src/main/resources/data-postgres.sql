@@ -61,8 +61,8 @@ insert into my_pictures (id, pictures) values (3, 'adventure1.jpg');
 insert into my_pictures (id, pictures) values (3, 'adventure2.jpg');
 insert into my_pictures (id, pictures) values (3, 'adventure3.jpg');
 insert into my_pictures (id, pictures) values (3, 'adventure4.png');
-insert into my_rules_of_conduct (id, rules_of_conduct) values (3, 'Isnt allowed: smoking.');
-insert into my_rules_of_conduct (id, rules_of_conduct) values (3, 'No noisy music.');
+insert into my_rules_of_conduct (id, rules_of_conduct) values (3, 'Must be properly dressed');
+insert into my_rules_of_conduct (id, rules_of_conduct) values (3, 'Can''t be noisy');
 
 insert into adventures (id, instructor_biography, max_num_of_people, reservation_cancellation_conditions) values (3, 'They call me Lordje the greatest.', 3, 'Just text me.');
 insert into my_fishing_equipment_adventures (id, fishing_equipment) values (3, 'Hooks');

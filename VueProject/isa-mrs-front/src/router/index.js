@@ -163,6 +163,12 @@ const routes = [{
         name: 'admin-sign-up',
         component: () =>
             import ('../views/AdminSignUp.vue')
+    },
+    {
+        path: '/update-adventure/:id',
+        name: 'update-adventure',
+        component: () =>
+            import ('../views/UpdateAdventure.vue')
     }
 ]
 

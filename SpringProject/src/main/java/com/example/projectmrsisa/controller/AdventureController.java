@@ -88,4 +88,47 @@ public class AdventureController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    private boolean validAddress(AdventureDTO adventureDTO) {
+        if (adventureDTO.getCountry().equals("") || adventureDTO.getCountry() == null || !adventureDTO.getCountry().matches("([A-Z]{1})([a-z]+)([^0-9]*)$")) {
+            return false;
+        }
+        if (adventureDTO.getCity().equals("") || adventureDTO.getCity() == null || !adventureDTO.getCity().matches("([A-Z]{1})([a-z]+)([^0-9]*)$")) {
+            return false;
+        }
+        return !adventureDTO.getStreet().equals("") && adventureDTO.getStreet() != null;
+    }
+
+    @Transactional
+    @PutMapping(value="/updateAdventure/{id}", produces = "application/json")
+    @PreAuthorize("hasRole('fishingInstructor')")
+    public ResponseEntity<AdventureDTO> updateRetreat(@PathVariable Integer id, @RequestBody AdventureDTO adventureDTO){
+        if (!validAddress(adventureDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (adventureDTO.getName().length() < 5 || adventureDTO.getName() == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        if (adventureDTO.getDescription().length() < 5 || adventureDTO.getDescription() == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        if (adventureDTO.getPrice() < 5) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        if (adventureDTO.getMaxNumOfPeople() < 1) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        if (adventureDTO.getReservationCancellationConditions().length() < 5 || adventureDTO.getReservationCancellationConditions() == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        if (adventureDTO.getInstructorBiography().length() < 5 || adventureDTO.getInstructorBiography() == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        try{
+            Adventure adventure = adventureService.findAdventureById(id);
+            //todo:Tagovi
+            adventure = adventureService.updateAdventure(adventure, adventureDTO /*,tags*/);
+            return new ResponseEntity<>(new AdventureDTO(adventure), HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }
