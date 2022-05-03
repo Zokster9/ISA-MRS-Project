@@ -208,7 +208,7 @@ import router from '@/router'
                     description: this.form.description,
                     country: this.form.country,
                     city: this.form.city,
-                    street: this.form.street,
+                    street: this.form.address,
                     rulesOfConduct: this.form.rulesOfConduct,
                     pictures: this.form.pictures,
                     maxNumOfPeople: this.form.maxNumOfPeople,

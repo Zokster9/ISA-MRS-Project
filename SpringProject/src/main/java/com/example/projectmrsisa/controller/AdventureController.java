@@ -88,8 +88,25 @@ public class AdventureController {
     @PutMapping(value="/updateAdventure/{id}", produces = "application/json")
     @PreAuthorize("hasRole('fishingInstructor')")
     public ResponseEntity<AdventureDTO> updateRetreat(@PathVariable Integer id, @RequestBody AdventureDTO adventureDTO){
-        //if (!validAddress(adventureDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        //todo:dodati proveru za celokupnu avanturu
+        if (!validAddress(adventureDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (adventureDTO.getName().length() < 5 || adventureDTO.getName() == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        if (adventureDTO.getDescription().length() < 5 || adventureDTO.getDescription() == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        if (adventureDTO.getPrice() < 5) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        if (adventureDTO.getMaxNumOfPeople() < 1) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        if (adventureDTO.getReservationCancellationConditions().length() < 5 || adventureDTO.getReservationCancellationConditions() == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        if (adventureDTO.getInstructorBiography().length() < 5 || adventureDTO.getInstructorBiography() == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         try{
             Adventure adventure = adventureService.findAdventureById(id);
             //todo:Tagovi
