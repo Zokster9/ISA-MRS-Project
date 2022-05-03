@@ -1,6 +1,6 @@
 <template>
     <form class="w-50 mx-auto mt-5">
-            <h2> New ship </h2>
+            <h2> Ship info </h2>
                 <div class="form-group mb-3">
                     <label>Name</label>
                     <input v-model="form.name" type="text" class="form-control"/>
@@ -13,17 +13,17 @@
                 </div>
                 <div class="form-group mb-3">
                     <label>Country</label>
-                    <input v-model="form.country" type="text" class="form-control"/>
+                    <input v-model="form.country" readonly type="text" class="form-control"/>
                     <p v-if="!countryIsValid" class="alert alert-danger">Country is required, and it starts with first capital letter.</p>
                 </div>
                 <div class="form-group mb-3">
                     <label>City</label>
-                    <input v-model="form.city" type="text" class="form-control"/>
+                    <input v-model="form.city" readonly type="text" class="form-control"/>
                     <p v-if="!cityIsValid" class="alert alert-danger">City is required, and it starts with first capital letter.</p>
                 </div>
                 <div class="form-group mb-3">
                     <label>Address</label>
-                    <input v-model="form.address" type="text" class="form-control"/>
+                    <input v-model="form.address" readonly type="text" class="form-control"/>
                     <p v-if="!addressIsValid" class="alert alert-danger">Address is required.</p>
                 </div>
                 <div class="form-group mb-3">
@@ -178,7 +178,7 @@
                     <p v-if="!cancellationIsValid" class="alert alert-danger">Reservation cancellation conditions are required.</p>
                 </div>
                 <div class="form-group mb-3">
-                    <button @click="addRetreat" type="submit" class="btn btn-primary float-end">Add ship</button>
+                    <button @click="updateRetreat" type="submit" class="btn btn-primary float-end">Update ship</button>
                 </div>
         </form>
 </template>
@@ -187,6 +187,7 @@
     import Vue from 'vue'
     import axios from 'axios'
     import VueAxios from 'vue-axios'
+import router from '@/router'
 
     Vue.use(VueAxios, axios)
 
@@ -212,7 +213,8 @@
                     fishingEquipment: [],
                     reservationCancellationConditions: null,
                     pictures: []
-                }
+                },
+                ship: null
             }
         },
         computed: {
@@ -262,13 +264,13 @@
             }
         },
         methods: {
-            addRetreat() {
+            updateRetreat() {
                 if (this.formIsValid) {
                     this.sendData();
                 }
             },
             sendData() {
-                axios.post("http://localhost:8088/ships/create-ship", {
+                axios.put("http://localhost:8088/ships/update-ship/" + this.$route.params.id, {
                     name: this.form.name,
                     description: this.form.description,
                     country: this.form.country,
@@ -286,9 +288,13 @@
                     reservationCancellationConditions: this.form.reservationCancellationConditions,
                     pictures: this.form.pictures,
                     price: this.form.price
-                }).then(() => {
-                    alert("Ship added");
-                    // TODO: preusmeriti na drugu stranu
+                }, {
+                    headers: {
+						'Authorization': 'Bearer ' + window.localStorage.getItem("accessToken")
+					}
+                }).then((response) => {
+                    alert(response.data.name + " ship updated!");
+                    router.push('/service-crud');
                 }).catch(() => {
                     alert("Error occurred while adding ship!");
                 });
@@ -299,6 +305,34 @@
                     return;
                 for (let file of files) this.form.pictures.push(file.name);
             }
+        },
+
+        mounted() {
+            axios.get("http://localhost:8088/ships/get/" + this.$route.params.id, {
+                headers: {
+					Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+				}
+            }).then((response) => {
+                this.ship = response.data;
+                this.form.name = response.data.name;
+                this.form.description = response.data.description;
+                this.form.country = response.data.country;
+                this.form.city = response.data.city;
+                this.form.address = response.data.street;
+                this.form.price = response.data.price;
+                this.form.price = response.data.price;
+                this.form.rulesOfConduction = response.data.rulesOfConduct;
+                this.form.fishingEquipment = response.data.fishingEquipment;
+                this.form.pictures = response.data.pictures;
+                this.form.shipType = response.data.type;
+                this.form.shipLength = response.data.length;
+                this.form.capacity = response.data.capacity;
+                this.form.reservationCancellationConditions = response.data.reservationCancellationConditions;
+                this.form.engineNumber = response.data.engineNum;
+                this.form.enginePower = response.data.enginePower;
+                this.form.maxSpeed = response.data.maxSpeed;
+                this.form.navigationEquipment = response.data.navigationEquipment;
+            });
         }
     }
 </script>

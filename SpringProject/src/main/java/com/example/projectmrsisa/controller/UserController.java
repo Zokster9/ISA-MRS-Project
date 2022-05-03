@@ -265,6 +265,7 @@ public class UserController {
         List<Service> ownersServices = serviceService.findOwnersServices(user);
         List<ServiceDTO> ownersServicesDTO = new ArrayList<>();
         for (Service s : ownersServices){
+            if (s.isDeleted()) continue;
             ownersServicesDTO.add(new ServiceDTO(s));
         }
         return new ResponseEntity<>(ownersServicesDTO, HttpStatus.OK);

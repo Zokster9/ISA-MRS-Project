@@ -37,7 +37,7 @@ public class Retreat extends Service {
         this.setAddress(address);
         this.setPictures(new HashSet<>(retreatDTO.getPictures()));
         this.setRulesOfConduct(new HashSet<>(retreatDTO.getRulesOfConduct()));
-        this.setPrice(0);
+        this.setPrice(retreatDTO.getPrice());
         this.setDeleted(false);
         this.setActions(new HashSet<>());
         this.numOfRooms = retreatDTO.getNumOfRooms();
@@ -67,5 +67,9 @@ public class Retreat extends Service {
 
     public void setAdditionalServices(Set<Tag> additionalServices) {
         this.additionalServices = additionalServices;
+    }
+
+    public void addAdditionalService(Tag additionalService) {
+        this.additionalServices.add(additionalService);
     }
 }

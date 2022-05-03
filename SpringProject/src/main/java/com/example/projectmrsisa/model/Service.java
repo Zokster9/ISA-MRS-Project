@@ -135,4 +135,12 @@ public abstract class Service {
     public void setActions(Set<Action> actions) {
         this.actions = actions;
     }
+
+    public void addPicture(String picture) {
+        this.pictures.add(picture);
+    }
+
+    public void addRuleOfConduct(String ruleOfConduct) {
+        this.rulesOfConduct.add(ruleOfConduct);
+    }
 }

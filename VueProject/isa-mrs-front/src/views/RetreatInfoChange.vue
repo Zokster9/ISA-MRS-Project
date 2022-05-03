@@ -1,6 +1,6 @@
 <template>
     <form class="w-50 mx-auto mt-5">
-            <h2> New retreat </h2>
+            <h2> Retreat info </h2>
                 <div class="form-group mb-3">
                     <label>Name</label>
                     <input v-model="form.name" type="text" class="form-control"/>
@@ -13,17 +13,17 @@
                 </div>
                 <div class="form-group mb-3">
                     <label>Country</label>
-                    <input v-model="form.country" type="text" class="form-control"/>
+                    <input v-model="form.country" readonly type="text" class="form-control"/>
                     <p v-if="!countryIsValid" class="alert alert-danger">Country is required, and it starts with first capital letter.</p>
                 </div>
                 <div class="form-group mb-3">
                     <label>City</label>
-                    <input v-model="form.city" type="text" class="form-control"/>
+                    <input v-model="form.city" readonly type="text" class="form-control"/>
                     <p v-if="!cityIsValid" class="alert alert-danger">City is required, and it starts with first capital letter.</p>
                 </div>
                 <div class="form-group mb-3">
                     <label>Address</label>
-                    <input v-model="form.address" type="text" class="form-control"/>
+                    <input v-model="form.address" readonly type="text" class="form-control"/>
                     <p v-if="!addressIsValid" class="alert alert-danger">Address is required.</p>
                 </div>
                 <div class="form-group mb-3">
@@ -76,7 +76,7 @@
                     <input accept="image/*" type="file" class="form-control" @change="addPicture($event)" multiple/>
                 </div>
                 <div class="form-group mb-3">
-                    <button @click="addRetreat" type="submit" class="btn btn-primary float-end">Add retreat</button>
+                    <button @click="changeRetreat" type="submit" class="btn btn-primary float-end">Update retreat</button>
                 </div>
         </form>
 </template>
@@ -85,6 +85,7 @@
     import Vue from 'vue'
     import axios from 'axios'
     import VueAxios from 'vue-axios'
+import router from '@/router'
 
     Vue.use(VueAxios, axios)
 
@@ -105,8 +106,8 @@
                     additionalServices: [],
                     pictures: []
                 },
-                tags: [],
-                retVal: null
+                retreat: null,
+                tags: []
             }
         },
         computed: {
@@ -139,13 +140,13 @@
             }
         },
         methods: {
-            addRetreat() {
+            changeRetreat() {
                 if (this.formIsValid) {
                     this.sendData();
                 }
             },
             sendData() {
-                axios.post("http://localhost:8088/retreats/create-retreat", {
+                axios.put("http://localhost:8088/retreats/update-retreat/" + this.$route.params.id, {
                     name: this.form.name,
                     description: this.form.description,
                     country: this.form.country,
@@ -160,16 +161,15 @@
                 },
 				{
 					headers: {
-						Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+						'Authorization': 'Bearer ' + window.localStorage.getItem("accessToken")
 					}
-				}).then((response) => {
-                    this.retVal = response.data;
-                    alert("Added retreat");
+				}).then(() => {
+                    alert("Retreat updated!");
+                    router.back();
                 }).catch(() => {
                     alert("ne valja brt");
                 });
             },
-
             addPicture(e) {
                 let files = e.target.files || e.dataTransfer.files;
                 if (!files.length)
@@ -179,7 +179,29 @@
         },
 
         mounted() {
-            axios.get("http://localhost:8088/tags").then((response) => {this.tags = response.data});
+            axios.get("http://localhost:8088/retreats/get/" + this.$route.params.id, {
+                headers: {
+					Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+				}
+            }).then((response) => {
+                this.retreat = response.data;
+                this.form.name = response.data.name;
+                this.form.description = response.data.description;
+                this.form.country = response.data.country;
+                this.form.city = response.data.city;
+                this.form.address = response.data.street;
+                this.form.numOfRooms = response.data.numOfRooms;
+                this.form.numOfBeds = response.data.numOfBeds;
+                this.form.price = response.data.price;
+                this.form.rulesOfConduction = response.data.rulesOfConduct;
+                this.form.additionalServices = response.data.additionalServices;
+                this.form.pictures = response.data.pictures;
+            });
+            axios.get("http://localhost:8088/tags", {
+                headers: {
+                    Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+                }
+            }).then((response) => {this.tags = response.data});
         }
     }
 </script>

@@ -17,6 +17,7 @@ public class RetreatDTO {
     private String country;
     private String city;
     private String street;
+    private double price;
     private List<String> pictures;
     private List<String> rulesOfConduct;
     private int numOfRooms;
@@ -25,7 +26,7 @@ public class RetreatDTO {
 
     public RetreatDTO() {}
 
-    public RetreatDTO(String name, String description, String country, String city, String street, List<String> pictures, List<String> rulesOfConduct, int numOfRooms, int numOfBeds, List<String> additionalServices) {
+    public RetreatDTO(String name, String description, String country, String city, String street, List<String> pictures, List<String> rulesOfConduct, int numOfRooms, int numOfBeds, double price, List<String> additionalServices) {
         this.name = name;
         this.description = description;
         this.country = country;
@@ -36,6 +37,7 @@ public class RetreatDTO {
         this.numOfRooms = numOfRooms;
         this.numOfBeds = numOfBeds;
         this.additionalServices = additionalServices;
+        this.price = price;
     }
 
     public RetreatDTO(Retreat retreat) {
@@ -50,6 +52,7 @@ public class RetreatDTO {
         this.rulesOfConduct = new ArrayList<>(retreat.getRulesOfConduct());
         this.numOfBeds = retreat.getNumOfBeds();
         this.numOfRooms = retreat.getNumOfRooms();
+        this.price = retreat.getPrice();
         this.additionalServices = new ArrayList<>();
         for (Tag t : retreat.getAdditionalServices()) {
             this.additionalServices.add(t.getName());
@@ -134,5 +137,13 @@ public class RetreatDTO {
 
     public void setAdditionalServices(List<String> additionalServices) {
         this.additionalServices = additionalServices;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

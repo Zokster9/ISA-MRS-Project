@@ -145,6 +145,18 @@ const routes = [{
         name: 'profile-page-ship-owner',
         component: () =>
             import ('../views/ProfilePageShipOwnerView.vue')
+    },
+    {
+        path: '/retreat-info/:id',
+        name: 'retreat-info',
+        component: () =>
+            import ('../views/RetreatInfoChange.vue')
+    },
+    {
+        path: '/ship-info/:id',
+        name: 'ship-info',
+        component: () =>
+            import ('../views/ShipInfoChangeView.vue')
     }
 ]
 
