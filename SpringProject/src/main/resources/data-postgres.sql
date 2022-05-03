@@ -17,6 +17,7 @@ insert into roles (name) values ('ROLE_shipOwner');
 insert into roles (name) values ('ROLE_fishingInstructor');
 insert into roles (name) values ('ROLE_client');
 insert into roles (name) values ('ROLE_admin');
+insert into roles (name) values ('ROLE_mainAdmin');
 
 -- za matiju sifra matija123
 -- ostalima je: sifra123
@@ -26,6 +27,8 @@ insert into users (email, password, name, surname, address_id, phone_number, is_
 insert into users (email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values ('zoki@gmail.com', '$2a$10$5bqbvqKlyaN8wBVdvl7UeefSJ8ja584oeYMbhK9FQgcjWK2laRxRO', 'Zoran', 'Bukorac', 3, '+381607846912', true, false, 0, 0);
 insert into users (email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values ('klijent@gmail.com', '$2a$10$5bqbvqKlyaN8wBVdvl7UeefSJ8ja584oeYMbhK9FQgcjWK2laRxRO', 'Klijent', 'Klijentic', 2, '+381667342312', true, false, 0, 0);
 
+insert into admins(admin_id, is_password_changed) values (4, true);
+
 insert into registration_reasoning (privileged_user, registration_reasoning) values (1, 'I want to be retreat owner');
 insert into registration_reasoning (privileged_user, registration_reasoning) values (2, 'I want to be ship owner');
 insert into registration_reasoning (privileged_user, registration_reasoning) values (3, 'I want to be fishing instructor owner');
@@ -33,7 +36,7 @@ insert into registration_reasoning (privileged_user, registration_reasoning) val
 insert into user_role (user_id, role_id) values (1, 1);
 insert into user_role (user_id, role_id) values (2, 2);
 insert into user_role (user_id, role_id) values (3, 3);
-insert into user_role (user_id, role_id) values (4, 5);
+insert into user_role (user_id, role_id) values (4, 6);
 insert into user_role (user_id, role_id) values (5, 4);
 
 insert into clients (id, penalty_points, is_penalized) values (5, 0, false);

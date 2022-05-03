@@ -25,6 +25,9 @@ public class UserController {
     private ClientService clientService;
 
     @Autowired
+    private AdminService adminService;
+
+    @Autowired
     private AddressService addressService;
 
     @Autowired
@@ -177,6 +180,29 @@ public class UserController {
         }
     }
 
+    @Transactional
+    @PostMapping("/registerAdmin")
+    @PreAuthorize("hasRole('mainAdmin')")
+    public ResponseEntity<AdminDTO> registerAdmin(@RequestBody UserDTO userDTO){
+        if (!validAdmin(userDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (!validAddress(userDTO.getAddressDTO())) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        Address a;
+        Role role;
+        try{
+            a = addressService.getAddress(new Address(userDTO.getAddressDTO()));
+            role = roleService.findRoleByName("ROLE_admin");
+        } catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        try{
+            User user = userService.save(new User(userDTO, a, role, true));
+            Admin admin = adminService.saveAdmin(new Admin(user));
+            return new ResponseEntity<>(new AdminDTO(admin), HttpStatus.CREATED);
+        } catch ( Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
     private boolean validAddress(AddressDTO addressDTO) {
         if (addressDTO.getCountry().equals("") || addressDTO.getCountry() == null || !addressDTO.getCountry().matches("([A-Z]{1})([a-z]+)([^0-9]*)$")) {
             return false;
@@ -201,6 +227,20 @@ public class UserController {
         return userDTO.getRegistrationType().equals("client") || userDTO.getRegistrationType().equals("privilegedUser");
     }
 
+    private boolean validAdmin(UserDTO adminDTO) {
+        if (adminDTO.getEmail() == null || !adminDTO.getEmail().matches("^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$")) {
+            return false;
+        }
+        if (adminDTO.getPassword() == null || adminDTO.getConfirmPassword() == null || !adminDTO.getPassword().equals(adminDTO.getConfirmPassword())) {
+            return false;
+        }
+        if (!validChangedUserInfo(adminDTO)) return false;
+        if (adminDTO.getPhoneNumber() == null || adminDTO.getPhoneNumber().equals("") || !adminDTO.getPhoneNumber().matches("^[+]?(\\d{1,2})?[\\s.-]?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$")) {
+            return false;
+        }
+        return true;
+    }
+
     private boolean validRegistrationData(UserDTO userDTO) {
         if (userDTO.getRegistrationType().equals("privilegedUser")) {
             if (userDTO.getRegistrationExplanation() == null || userDTO.getRegistrationExplanation().equals("")) return false;
@@ -218,6 +258,7 @@ public class UserController {
         }
         return userDTO.getPhoneNumber() != null && !userDTO.getPhoneNumber().equals("") && userDTO.getPhoneNumber().matches("^[+]?(\\d{1,2})?[\\s.-]?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$");
     }
+
 
     @GetMapping(value="/findByEmail/{email}")
     //TODO: Autorizacija
@@ -251,11 +292,33 @@ public class UserController {
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
+    @Transactional
+    @PutMapping(value = "/activateAdmin")
+    @PreAuthorize("hasRole('admin')")
+    public ResponseEntity<UserDTO> activateAdmin(@RequestBody PasswordChangeDTO passwordChangeDTO, Principal loggedUser){
+        User user = userService.findUserByEmail(loggedUser.getName());
+        if (passwordChangeDTO.getNewPassword() == null || passwordChangeDTO.getConfirmPassword() == null || !passwordChangeDTO.getNewPassword().equals(passwordChangeDTO.getConfirmPassword())){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        userService.updateUserPassword(passwordChangeDTO.getNewPassword(), user.getEmail());
+        adminService.updatePasswordChangedStatus(user.getId());
+        UserDTO userDTO = new UserDTO(user);
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+    }
+
     @GetMapping(value = "/getLoggedUser")
-    @PreAuthorize("hasAnyRole('admin', 'client', 'retreatOwner', 'shipOwner', 'fishingInstructor')")
+    @PreAuthorize("hasAnyRole('admin', 'client', 'retreatOwner', 'shipOwner', 'fishingInstructor', 'mainAdmin')")
     public ResponseEntity<UserDTO> getLoggedUser(Principal principal) {
         User user = userService.findUserByEmail(principal.getName());
         return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
+    }
+
+    @GetMapping(value= "/getLoggedAdmin")
+    @PreAuthorize("hasAnyRole('admin', 'mainAdmin')")
+    public ResponseEntity<AdminUserDTO> getLoggedAdmin(Principal principal){
+        User user = userService.findUserByEmail(principal.getName());
+        Admin admin = adminService.findAdminByUserId(user.getId());
+        return new ResponseEntity<>(new AdminUserDTO(admin, user), HttpStatus.OK);
     }
 
     @GetMapping(value="/findMyEntities")

@@ -157,6 +157,12 @@ const routes = [{
         name: 'ship-info',
         component: () =>
             import ('../views/ShipInfoChangeView.vue')
+    },
+    {
+        path: '/admin-sign-up',
+        name: 'admin-sign-up',
+        component: () =>
+            import ('../views/AdminSignUp.vue')
     }
 ]
 

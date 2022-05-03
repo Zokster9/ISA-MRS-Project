@@ -83,6 +83,21 @@ public class User implements UserDetails{
         this.roles.add(role);
     }
 
+    public User(UserDTO userDTO, Address address, Role role, boolean isAdmin) {
+        this.email = userDTO.getEmail();
+        this.password = userDTO.getPassword();
+        this.name = userDTO.getName();
+        this.surname = userDTO.getSurname();
+        this.address = address;
+        this.phoneNumber = userDTO.getPhoneNumber();
+        this.loyaltyPoints = 0;
+        this.loyaltyStatus = LoyaltyStatus.Regular;
+        this.isDeleted = false;
+        this.isActive = isAdmin;
+        this.roles = new ArrayList<>();
+        this.roles.add(role);
+    }
+
     public Integer getId() {
         return id;
     }
