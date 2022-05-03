@@ -62,6 +62,7 @@ public class AdventureController {
     }
 
     @GetMapping(value = "/getAdventure/{id}", produces = "application/json")
+    @PreAuthorize("hasRole('fishingInstructor')")
     public ResponseEntity<AdventureDTO> getAdventureById(@PathVariable Integer id) {
         // TODO: provera JWT
         try {

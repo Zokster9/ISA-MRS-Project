@@ -109,6 +109,11 @@ const routes = [
     path: '/service-crud',
     name: 'service-crud',
     component: () => import('../views/ServiceCrudView.vue')
+  },
+  {
+    path:'/update-adventure/:id',
+    name: 'update-adventure',
+    component: () => import('../views/UpdateAdventure.vue')
   }
 ]
 

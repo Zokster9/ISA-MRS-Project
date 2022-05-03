@@ -19,6 +19,9 @@ public class Adventure extends Service {
     private Set<String> fishingEquipment = new HashSet<>();
     @Column(name = "reservationCancellationConditions", nullable = false)
     private String reservationCancellationConditions;
+    //@JoinTable(name = "adventure_tags", joinColumns = @JoinColumn(name = "adventure_id", referencedColumnName = "id"),
+           // inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
+    //private Set<Tag> additionalServices = new HashSet<>();
 
     public Adventure() {
     }
@@ -26,12 +29,13 @@ public class Adventure extends Service {
     public Adventure(Integer id, String name, String description, User owner, Address address, Set<String> pictures,
                      Set<String> rulesOfConduct, double price, boolean isDeleted, Set<Action> actions,
                      String instructorBiography, int maxNumOfPeople, Set<String> fishingEquipment,
-                     String reservationCancellationConditions) {
+                     String reservationCancellationConditions /*,Set<Tag> additionalServices*/) {
         super(id, name, description, owner, address, pictures, rulesOfConduct, price, isDeleted, actions);
         this.instructorBiography = instructorBiography;
         this.maxNumOfPeople = maxNumOfPeople;
         this.fishingEquipment = fishingEquipment;
         this.reservationCancellationConditions = reservationCancellationConditions;
+        //this.additionalServices = additionalServices;
     }
 
     public Adventure(AdventureDTO adventureDTO, Address address, User fishingInstructor){
@@ -81,4 +85,12 @@ public class Adventure extends Service {
     public void setReservationCancellationConditions(String reservationCancellationConditions) {
         this.reservationCancellationConditions = reservationCancellationConditions;
     }
+
+   /* public Set<Tag> getAdditionalServices() {
+        return additionalServices;
+    }
+
+    public void setAdditionalServices(Set<Tag> additionalServices) {
+        this.additionalServices = additionalServices;
+    }*/
 }
