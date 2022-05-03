@@ -139,6 +139,12 @@ const routes = [{
         name: 'profile-page-retreat-owner',
         component: () =>
             import ('../views/ProfilePageRetreatOwnerView.vue')
+    },
+    {
+        path: '/profile-page-ship-owner',
+        name: 'profile-page-ship-owner',
+        component: () =>
+            import ('../views/ProfilePageShipOwnerView.vue')
     }
 ]
 

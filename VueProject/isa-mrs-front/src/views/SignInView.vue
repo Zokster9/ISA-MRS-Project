@@ -65,7 +65,7 @@
 					if (response.data.roleName === "ROLE_retreatOwner") {
                         router.push('/profile-page-retreat-owner');
 					}else if (response.data.roleName === "ROLE_shipOwner") {
-						// TODO: prebaciti na stranicu vlasnika broda
+						router.push('/profile-page-ship-owner');
 					} else if (response.data.roleName === "ROLE_fishingInstructor") {
 						router.push("/profile-page-fishing-instructor");
 					} else if (response.data.roleName === "ROLE_client") {
