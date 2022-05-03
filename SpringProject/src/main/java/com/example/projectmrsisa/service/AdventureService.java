@@ -18,4 +18,6 @@ public class AdventureService {
     }
 
     public Adventure findAdventureById(Integer id) { return adventureRepository.findAdventureById(id); }
+
+    public void deleteAdventureById(Integer id) { adventureRepository.deleteAdventureById(id); }
 }

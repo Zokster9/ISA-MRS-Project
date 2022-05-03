@@ -5,12 +5,12 @@
         
         <td class="align-middle" v-if="!isAcceptButtonHidden && !hideAcceptButton"> <button type="button" class="btn btn-success" @mouseover="hoverAcceptButton = true" @mouseleave="hoverAcceptButton = false" @click="acceptButtonPressed()">Accept account termination</button> </td>
         <td class="align-middle" v-if="isAcceptButtonHidden"> <textarea v-model="acceptReasoning" placeholder="Reason for accepting termination of an account: "></textarea></td>
-        <td class="align-middle" v-if="isAcceptButtonHidden"> <button type="button" class="btn btn-success" @click="acceptTermination(termination.userId)" @ :disabled="$v.acceptReasoning.$invalid">Confirm accepting account termination</button></td>
+        <td class="align-middle" v-if="isAcceptButtonHidden"> <button type="button" class="btn btn-success" @click="acceptTermination()" @ :disabled="$v.acceptReasoning.$invalid">Confirm accepting account termination</button></td>
         <td class="align-middle" v-if="isAcceptButtonHidden"> <button type="button" class="btn btn-warning" @click="acceptBackPressed()"> Back </button></td>
         
         <td class="align-middle" v-if="!isDeclineButtonHidden && !hideDeclineButton"> <button @mouseover="hoverDeclineButton = true" @mouseleave="hoverDeclineButton = false" type="button" class="btn btn-danger" @click="declineButtonPressed()"> Decline account termination</button> </td>
         <td class="align-middle" v-if="isDeclineButtonHidden"> <textarea v-model="declineReasoning" placeholder="Reason for declining termination of an account: "></textarea></td>
-        <td class="align-middle" v-if="isDeclineButtonHidden"> <button type="button" class="btn btn-danger" @click="declineTermination(termination.userId)" @ :disabled="$v.declineReasoning.$invalid">Confirm declining a registration</button></td>
+        <td class="align-middle" v-if="isDeclineButtonHidden"> <button type="button" class="btn btn-danger" @click="declineTermination()" @ :disabled="$v.declineReasoning.$invalid">Confirm declining a registration</button></td>
         <td class="align-middle" v-if="isDeclineButtonHidden"> <button type="button" class="btn btn-warning" @click="declineBackPressed()"> Back </button></td>
     </tr>
 </template>
@@ -56,14 +56,32 @@
                 this.hideAcceptButton = false;
                 this.isDeclineButtonHidden = false;
             },
-            declineTermination(id){
-                axios.post("http://localhost:8088/termination/declineTermination?id=" + id + "&declineReasoning=" + this.declineReasoning)
+            declineTermination(){
+                axios.post("http://localhost:8088/termination/declineTermination",
+                {
+                    userId: this.termination.userId,
+                    terminationChoiceReason: this.declineReasoning
+                },
+                {
+                    headers: {
+                        Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+                    }
+                })
                 .then(() => {
                     window.location.reload();
                 })
             },
-            acceptTermination(id){
-                axios.post("http://localhost:8088/termination/acceptTermination?id=" + id + "&acceptReasoning=" + this.acceptReasoning)
+            acceptTermination(){
+                axios.post("http://localhost:8088/termination/acceptTermination",
+                {
+                    userId: this.termination.userId,
+                    terminationChoiceReason: this.acceptReasoning
+                },
+                {
+                    headers: {
+                        Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+                    }
+                })
                 .then(() => {
                     window.location.reload();
                 })

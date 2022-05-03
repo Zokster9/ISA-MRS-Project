@@ -41,7 +41,11 @@
             }
         },
         mounted(){
-            axios.get("http://localhost:8088/users/inactive").then((response) => {
+            axios.get("http://localhost:8088/users/inactive",{
+                headers:{
+                    Authorization: "Bearer " + window.localStorage.getItem("accessToken")
+                }
+            }).then((response) => {
                 this.unactivatedUsers = response.data;
             })
         },

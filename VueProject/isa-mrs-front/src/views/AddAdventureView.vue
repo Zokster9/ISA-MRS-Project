@@ -175,9 +175,14 @@
                     pictures: this.form.pictures,
                     country: this.form.country,
                     city: this.form.city,
-                    street: this.form.street
-                    //zatim header jwt token
-                }).then(() => {
+                    street: this.form.street,   
+                },
+                {
+                    headers:{
+                        Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+                    }
+                }
+                ).then(() => {
                     alert("uspeo sam");
                 }).catch(() => {
                 alert("ne valja brt");

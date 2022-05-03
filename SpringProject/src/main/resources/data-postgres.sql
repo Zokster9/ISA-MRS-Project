@@ -29,9 +29,9 @@ insert into users (email, password, name, surname, address_id, phone_number, is_
 
 insert into admins(admin_id, is_password_changed) values (4, true);
 
-insert into registration_reasoning (privileged_user, registration_reasoning) values (1, 'I want to be retreat owner');
-insert into registration_reasoning (privileged_user, registration_reasoning) values (2, 'I want to be ship owner');
-insert into registration_reasoning (privileged_user, registration_reasoning) values (3, 'I want to be fishing instructor owner');
+insert into registration_reasoning (privileged_user, registration_reasoning, is_answered) values (1, 'I want to be retreat owner', true);
+insert into registration_reasoning (privileged_user, registration_reasoning, is_answered) values (2, 'I want to be ship owner', false);
+insert into registration_reasoning (privileged_user, registration_reasoning, is_answered) values (3, 'I want to be fishing instructor owner', false);
 
 insert into user_role (user_id, role_id) values (1, 1);
 insert into user_role (user_id, role_id) values (2, 2);

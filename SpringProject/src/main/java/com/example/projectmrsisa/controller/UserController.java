@@ -46,6 +46,7 @@ public class UserController {
     private ServiceService serviceService;
 
     @GetMapping(value="/inactive", produces = "application/json")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<List<UserDTO>> getInactiveUsers(){
         List<User> inactiveUsers = userService.findUsersByActivatedStatus(false, false);
         List<UserDTO> inactiveUsersDTO = new ArrayList<UserDTO>();
@@ -65,17 +66,20 @@ public class UserController {
                     break;
             }
             RegistrationReasoningDTO registrationReasoningDTO = new RegistrationReasoningDTO(userService.findRegistrationReasoningByUserId(iu));
-            inactiveUsersDTO.add(new UserDTO(iu, privilegedUser, registrationReasoningDTO));
+            if (!registrationReasoningDTO.isAnswered()){
+                inactiveUsersDTO.add(new UserDTO(iu, privilegedUser, registrationReasoningDTO));
+            }
         }
         return new ResponseEntity<>(inactiveUsersDTO, HttpStatus.OK);
     }
 
     @Transactional
-    @PostMapping(value="/accept/{id}")
-    public ResponseEntity<UserDTO> acceptUser(@PathVariable Integer id){
-        // TODO: Autentifikacija
-        User user = userService.findUserById(id);
+    @PostMapping(value="/accept")
+    @PreAuthorize("hasRole('admin')")
+    public ResponseEntity<UserDTO> acceptUser(@RequestBody RegistrationChoiceDTO registrationChoiceDTO){
+        User user = userService.findUserById(registrationChoiceDTO.getUserId());
         userService.updateUserActivatedStatusById(user.getId());
+        userService.updateRegistrationReasoningStatus(user);
         UserDTO userDTO = new UserDTO(user);
         try{
             emailService.sendRegistrationAcceptedEmail(userDTO);
@@ -96,13 +100,14 @@ public class UserController {
 
     @Transactional
     @PostMapping(value="/decline")
-    public ResponseEntity<UserDTO> declineUser(@RequestParam Integer id, @RequestParam String declineReasoning){
-        // TODO: Autentifikacija
-        User user = userService.findUserById(id);
-        userService.updateUserDeletedStatusById(id);
+    @PreAuthorize("hasRole('admin')")
+    public ResponseEntity<UserDTO> declineUser(@RequestBody RegistrationChoiceDTO registrationChoiceDTO){
+        User user = userService.findUserById(registrationChoiceDTO.getUserId());
+        userService.updateUserDeletedStatusById(registrationChoiceDTO.getUserId());
+        userService.updateRegistrationReasoningStatus(user);
         UserDTO userDTO = new UserDTO(user);
         try {
-            emailService.sendRegistrationDeclinedEmail(userDTO, declineReasoning);
+            emailService.sendRegistrationDeclinedEmail(userDTO, registrationChoiceDTO.getDeclineReasoning());
         } catch( Exception e ){
             return new ResponseEntity<>(userDTO, HttpStatus.BAD_REQUEST);
         }
@@ -275,6 +280,7 @@ public class UserController {
         if (terminationReasonDTO.getTerminationReason() == null || terminationReasonDTO.getTerminationReason().equals("")) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         User user = userService.findUserByEmail(principal.getName());
         TerminationReasoning terminationReasoning = terminationReasoningService.addTerminationReasoning(new TerminationReasoning(user, terminationReasonDTO.getTerminationReason()));
+        userService.deactivateUserById(user.getId()); // deaktiviram korisnika
         UserDTO userDTO = new UserDTO(user);
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }

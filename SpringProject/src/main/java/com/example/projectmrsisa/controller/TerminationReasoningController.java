@@ -1,5 +1,6 @@
 package com.example.projectmrsisa.controller;
 
+import com.example.projectmrsisa.dto.TerminationChoiceDTO;
 import com.example.projectmrsisa.dto.TerminationReasoningDTO;
 import com.example.projectmrsisa.dto.UserDTO;
 import com.example.projectmrsisa.model.TerminationReasoning;
@@ -10,6 +11,7 @@ import com.example.projectmrsisa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,9 +31,9 @@ public class TerminationReasoningController {
     @Autowired
     private EmailService emailService;
 
-    @GetMapping(value="findToTerminate", produces="application/json")
+    @GetMapping(value="/findToTerminate", produces="application/json")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<List<TerminationReasoningDTO>> findToBeTerminatedUsers(){
-        //TODO: JWT
         List<TerminationReasoning> unansweredTerminationReasonings = terminationReasoningService.findUnansweredTerminationReasonings();
         List<TerminationReasoningDTO>  trDTO = new ArrayList<TerminationReasoningDTO>();
         for (TerminationReasoning tr : unansweredTerminationReasonings){
@@ -41,13 +43,15 @@ public class TerminationReasoningController {
     }
 
     @Transactional
-    @PostMapping(value="declineTermination")
-    public ResponseEntity<UserDTO> declineTermination(@RequestParam Integer id, @RequestParam String declineReasoning){
-        User user = userService.findUserById(id);
+    @PostMapping(value="/declineTermination")
+    @PreAuthorize("hasRole('admin')")
+    public ResponseEntity<UserDTO> declineTermination(@RequestBody TerminationChoiceDTO terminationChoiceDTO){
+        User user = userService.findUserById(terminationChoiceDTO.getUserId());
         terminationReasoningService.updateTerminationReasoningByAnsweredStatus(user);
+        userService.updateUserActivatedStatusById(terminationChoiceDTO.getUserId()); // aktiviram korisnika opet
         UserDTO userDTO = new UserDTO(user);
         try {
-            emailService.sendTerminationDeclinedEmail(userDTO, declineReasoning);
+            emailService.sendTerminationDeclinedEmail(userDTO, terminationChoiceDTO.getTerminationChoiceReason());
         } catch( Exception e ){
             return new ResponseEntity<>(userDTO, HttpStatus.BAD_REQUEST);
         }
@@ -55,14 +59,15 @@ public class TerminationReasoningController {
     }
 
     @Transactional
-    @PostMapping(value="acceptTermination")
-    public ResponseEntity<UserDTO> acceptTermination(@RequestParam Integer id, @RequestParam String acceptReasoning){
-        User user = userService.findUserById(id);
+    @PostMapping(value="/acceptTermination")
+    @PreAuthorize("hasRole('admin')")
+    public ResponseEntity<UserDTO> acceptTermination(@RequestBody TerminationChoiceDTO terminationChoiceDTO){
+        User user = userService.findUserById(terminationChoiceDTO.getUserId());
         terminationReasoningService.updateTerminationReasoningByAnsweredStatus(user);
-        userService.updateUserDeletedStatusById(id);
+        userService.updateUserDeletedStatusById(terminationChoiceDTO.getUserId());
         UserDTO userDTO = new UserDTO(user);
         try {
-            emailService.sendTerminationAcceptedEmail(userDTO, acceptReasoning);
+            emailService.sendTerminationAcceptedEmail(userDTO, terminationChoiceDTO.getTerminationChoiceReason());
         } catch( Exception e ){
             return new ResponseEntity<>(userDTO, HttpStatus.BAD_REQUEST);
         }

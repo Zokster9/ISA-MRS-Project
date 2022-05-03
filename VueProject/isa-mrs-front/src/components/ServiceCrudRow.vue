@@ -1,8 +1,8 @@
 <template>
     <tr :key="service.id" :class="{activeDeleteButton: hoverDeleteButton, activeEditButton: hoverEditButton}">
         <td class="align-middle text-center"> {{service.name}} </td>
-        <td class="align-middle text-center"> <button type="button" @mouseover="hoverEditButton = true" @mouseleave="hoverEditButton = false" class="btn btn-warning" @click="editService(service.id)">Edit service info</button></td>
-        <td class="align-middle text-center"> <button type="button" @mouseover="hoverDeleteButton = true" @mouseleave="hoverDeleteButton = false" class="btn btn-danger" @click="deleteService(service.id)">Delete service</button></td>
+        <td class="align-middle text-center"> <button type="button" @mouseover="hoverEditButton = true" @mouseleave="hoverEditButton = false" class="btn btn-warning" @click="editService">Edit service info</button></td>
+        <td class="align-middle text-center"> <button type="button" @mouseover="hoverDeleteButton = true" @mouseleave="hoverDeleteButton = false" class="btn btn-danger" @click="deleteService">Delete service</button></td>
     </tr>
 </template>
 
@@ -38,7 +38,7 @@
 				}else if (window.localStorage.getItem("role") === "ROLE_shipOwner") {
                     this.deleteShip(id);
 				}else if (window.localStorage.getItem("role") === "ROLE_fishingInstructor") {
-                    router.push('/adventure-info/' + id);
+                    this.deleteAdventure(id);
 				}else {
                     alert('Some kind of error happened!');
                 }
@@ -62,14 +62,32 @@
                     alert("Ship successfully deleted.");
                     window.location.reload();
                 })
+            },
+            deleteAdventure(id) {
+                let path = "http://localhost:8088/adventures/deleteService"; 
+                axios.post(path,
+                {
+                    id: this.service.id,
+                    name: this.service.name,
+                    description: this.service.description,
+                    pictures: this.service.pictures
+                }, 
+                {
+                    headers: {
+                        Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+                    }
+                }).then(() =>{
+                    window.location.reload()
+                })
             }
         },
         data(){
             return {
                 hoverEditButton: false,
                 hoverDeleteButton: false,
-                id: ""
+                mid: "",
+                userService: ""
             }
-        },
+        },        
     }
 </script>

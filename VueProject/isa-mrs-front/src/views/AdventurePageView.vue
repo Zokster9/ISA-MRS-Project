@@ -110,7 +110,11 @@
 			}
         },
         mounted () {
-            axios.get("http://localhost:8088/adventures/getAdventure/" + this.$route.params.id).then((response) => {
+            axios.get("http://localhost:8088/adventures/getAdventure/" + this.$route.params.id,{
+                headers:{
+                    Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+                }
+            }).then((response) => {
                 this.adventure = response.data;
                 this.mapSrc = "https://maps.google.com/maps?q=" + response.data.country + "," + response.data.city + "," + response.data.street + "&t=&z=13&ie=UTF8&iwloc=&output=embed";
             });

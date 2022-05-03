@@ -3,6 +3,7 @@ package com.example.projectmrsisa.controller;
 
 import com.example.projectmrsisa.dto.AdventureDTO;
 import com.example.projectmrsisa.dto.RetreatDTO;
+import com.example.projectmrsisa.dto.ServiceDTO;
 import com.example.projectmrsisa.model.Address;
 import com.example.projectmrsisa.model.Adventure;
 import com.example.projectmrsisa.model.Retreat;
@@ -14,7 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @RestController
 @RequestMapping(value = "/adventures")
@@ -30,9 +34,9 @@ public class AdventureController {
     private AddressService addressService;
 
     @PostMapping(consumes = "application/json", produces = "application/json")
-    public ResponseEntity<AdventureDTO> createAdventure(@RequestBody AdventureDTO adventureDTO) {
-        //TODO: jwt za vlasnika avanture, pa iz njega email
-        User fishingInstructor = userService.findUserByEmail("lordje@gmail.com");
+    @PreAuthorize("hasRole('fishingInstructor')")
+    public ResponseEntity<AdventureDTO> createAdventure(@RequestBody AdventureDTO adventureDTO, Principal principal) {
+        User fishingInstructor = userService.findUserByEmail(principal.getName());
 
         if (adventureDTO.getName().length() < 5 || adventureDTO.getName() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -62,8 +66,8 @@ public class AdventureController {
     }
 
     @GetMapping(value = "/getAdventure/{id}", produces = "application/json")
+    @PreAuthorize("hasRole('fishingInstructor')")
     public ResponseEntity<AdventureDTO> getAdventureById(@PathVariable Integer id) {
-        // TODO: provera JWT
         try {
             Adventure adventure = adventureService.findAdventureById(id);
             return new ResponseEntity<>(new AdventureDTO(adventure), HttpStatus.OK);
@@ -72,4 +76,16 @@ public class AdventureController {
         }
     }
 
+    @Transactional
+    @PostMapping(value = "/deleteService")
+    @PreAuthorize("hasRole('fishingInstructor')")
+    public ResponseEntity deleteService(@RequestBody ServiceDTO serviceDTO){
+        try {
+            //TODO: Provera da li je servis rezervisan!
+            adventureService.deleteAdventureById(serviceDTO.getId());
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch(Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }

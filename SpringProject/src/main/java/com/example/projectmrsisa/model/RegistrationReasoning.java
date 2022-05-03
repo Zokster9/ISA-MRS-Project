@@ -18,6 +18,9 @@ public class RegistrationReasoning {
     @Column(name= "registrationReasoning", nullable = false)
     private String registrationReasoning;
 
+    @Column(name= "isAnswered", nullable = false)
+    private boolean isAnswered;
+
     public RegistrationReasoning(){
 
     }
@@ -25,12 +28,14 @@ public class RegistrationReasoning {
     public RegistrationReasoning(User privilegedUser, String registrationReasoning) {
         this.privilegedUser = privilegedUser;
         this.registrationReasoning = registrationReasoning;
+        this.isAnswered = false;
     }
 
-    public RegistrationReasoning(Integer id, User privilegedUser, String registrationReasoning){
+    public RegistrationReasoning(Integer id, User privilegedUser, String registrationReasoning, boolean isAnswered){
         this.id = id;
         this.privilegedUser = privilegedUser;
         this.registrationReasoning = registrationReasoning;
+        this.isAnswered = isAnswered;
     }
 
     public Integer getId() {
@@ -55,5 +60,13 @@ public class RegistrationReasoning {
 
     public void setRegistrationReasoning(String registrationReasoning) {
         this.registrationReasoning = registrationReasoning;
+    }
+
+    public boolean isAnswered() {
+        return isAnswered;
+    }
+
+    public void setAnswered(boolean answered) {
+        isAnswered = answered;
     }
 }
