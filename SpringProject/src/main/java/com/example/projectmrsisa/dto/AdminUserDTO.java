@@ -14,6 +14,7 @@ public class AdminUserDTO {
     private boolean isDeleted;
     private boolean isActive;
     private boolean isPasswordChanged;
+    private Integer loyaltyPoints;
 
     public AdminUserDTO(){
 
@@ -30,6 +31,7 @@ public class AdminUserDTO {
         this.isDeleted = user.isDeleted();
         this.isActive = user.isActive();
         this.isPasswordChanged = admin.isPasswordChanged();
+        this.loyaltyPoints = -1;
     }
 
     public Integer getId() {
@@ -110,5 +112,13 @@ public class AdminUserDTO {
 
     public void setPasswordChanged(boolean passwordChanged) {
         isPasswordChanged = passwordChanged;
+    }
+
+    public Integer getLoyaltyPoints() {
+        return loyaltyPoints;
+    }
+
+    public void setLoyaltyPoints(Integer loyaltyPoints) {
+        this.loyaltyPoints = loyaltyPoints;
     }
 }

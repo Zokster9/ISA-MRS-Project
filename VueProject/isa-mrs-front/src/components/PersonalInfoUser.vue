@@ -4,8 +4,8 @@
             <div class="card-body"> 
                 <h5 class="card-title"> Welcome, {{ user.name }}  {{ user.surname }} </h5>
                 <h6 class="card-subtitle mb-2 text-muted">Preview of personal info: </h6>
-                <p class="card-text"> Email address: {{ user.email }} <br> Address: {{ user.addressDTO.country }}, {{ user.addressDTO.city }}, {{ user.addressDTO.street }}
-                <br> Loyalty status: {{ user.loyaltyStatus }} <br> Loyalty points: {{ user.loyaltyPoints }} </p>
+                <p class="card-text"> Email address: {{ user.email }} </p> <p> Address: {{ user.addressDTO.country }}, {{ user.addressDTO.city }}, {{ user.addressDTO.street }}
+                 </p><p v-if="user.loyaltyPoints > - 1"> Loyalty status: {{ user.loyaltyStatus }} </p> <p v-if="user.loyaltyPoints > -1">Loyalty points: {{ user.loyaltyPoints }} </p>
             </div>
         </div>
         <div class="card mb-3 border-primary" style="max-width: 18rem;"> 
@@ -26,7 +26,7 @@
                 <button v-if="isChangingPassword" class="btn btn-primary" @click="isChangingPassword = false"> Back </button>
             </div>
         </div>
-        <div class="card mb-3 border-danger" style="max-width: 18rem;"> 
+        <div v-if="user.loyaltyPoints > -1" class="card mb-3 border-danger" style="max-width: 18rem;"> 
             <div class="card-body text-danger"> 
                 <h5 class="card-title"> Account termination </h5>
                 <p class="card-text"> Once you terminate your account, you won't be able to have access to it ever again! </p>
@@ -108,6 +108,6 @@
                     alert("Old password is incorrect!")
                 })
             },
-        }
+        },
     }
 </script>
