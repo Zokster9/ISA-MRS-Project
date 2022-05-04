@@ -171,10 +171,16 @@ const routes = [{
             import ('../views/UpdateAdventure.vue')
     },
     {
-        path:'/admin-services-view',
+        path: '/admin-services-view',
         name: 'admin-services-view',
         component: () =>
             import ('../views/AdminServicesView.vue')
+    },
+    {
+        path: '/admin-users-view',
+        name: 'admin-users-view',
+        component: () =>
+            import('../views/AdminUsersView.vue')
     }
 ]
 

@@ -80,4 +80,8 @@ public class UserService {
     public void updateRegistrationReasoningStatus(User user){
         userRepository.updateRegistrationReasoningAnsweredStatus(user);
     }
+
+    public List<User> findAll(){
+        return userRepository.findAll();
+    }
 }

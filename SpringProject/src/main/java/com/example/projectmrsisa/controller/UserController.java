@@ -359,4 +359,46 @@ public class UserController {
         UserDTO userDTO = new UserDTO(user, privilegedUser);
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
+
+    @GetMapping(value="/findAllUsers")
+    @PreAuthorize("hasAnyRole('admin', 'mainAdmin')")
+    public ResponseEntity<List<UserDTO>> findAllUsers(Principal principal){
+        List<User> users = userService.findAll();
+        User mainAdmin = userService.findUserByEmail(principal.getName());
+        List<UserDTO> usersDTO = new ArrayList<>();
+        for (User user : users){
+            if (user.isDeleted()) continue;
+            if (user.getId().equals(mainAdmin.getId())) continue;
+            List<Role> roles = user.getRoles();
+            Role userRole = roles.get(0);
+            PrivilegedUser privilegedUser;
+            if (userRole.getName().equals("ROLE_fishingInstructor")){
+                privilegedUser = PrivilegedUser.FISHING_INSTRUCTOR;
+            }
+            else if (userRole.getName().equals("ROLE_shipOwner")){
+                privilegedUser = PrivilegedUser.SHIP_OWNER;
+            }
+            else if (userRole.getName().equals("ROLE_retreatOwner")){
+                privilegedUser = PrivilegedUser.RETREAT_OWNER;
+            }
+            else if (userRole.getName().equals("ROLE_client")){
+                privilegedUser = PrivilegedUser.NOT_PRIVILEGED_USER;
+            }
+            else {
+                privilegedUser = PrivilegedUser.ADMIN;
+            }
+            usersDTO.add(new UserDTO(user, privilegedUser));
+        }
+        return new ResponseEntity<>(usersDTO, HttpStatus.OK);
+    }
+
+    @Transactional
+    @DeleteMapping(value="/delete/{id}")
+    @PreAuthorize("hasAnyRole('admin', 'mainAdmin')")
+    public ResponseEntity<UserDTO> deleteUser(@PathVariable Integer id){
+        User user = userService.findUserById(id);
+        userService.updateUserDeletedStatusById(id);
+        serviceService.deleteServicesByOwner(user);
+        return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
+    }
 }
