@@ -103,7 +103,7 @@ public class RetreatController {
     }
 
     @GetMapping(value = "/get/{id}", produces = "application/json")
-    @PreAuthorize("hasRole('retreatOwner')")
+    @PreAuthorize("hasAnyRole('retreatOwner', 'admin', 'mainAdmin')")
     public ResponseEntity<RetreatDTO> getRetreatById(@PathVariable Integer id) {
         try {
             Retreat retreat = retreatService.getRetreatById(id);

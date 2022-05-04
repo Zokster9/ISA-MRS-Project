@@ -41,6 +41,7 @@ public class ShipController {
             List<Ship> ships = shipService.getShips();
             List<ShipDTO> shipDTOS = new ArrayList<>();
             for (Ship ship : ships) {
+                if(ship.isDeleted()) continue;
                 shipDTOS.add(new ShipDTO(ship));
             }
             return new ResponseEntity<>(shipDTOS, HttpStatus.OK);
@@ -123,7 +124,7 @@ public class ShipController {
     }
 
     @GetMapping(value = "/get/{id}", produces = "application/json")
-    @PreAuthorize("hasRole('shipOwner')")
+    @PreAuthorize("hasAnyRole('shipOwner', 'admin', 'mainAdmin')")
     public ResponseEntity<ShipDTO> getShipById(@PathVariable Integer id) {
         try {
             Ship ship = shipService.findShipById(id);

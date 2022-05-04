@@ -70,28 +70,13 @@
             }
         },
         mounted () {
-            axios.get("http://localhost:8088/ships/getAll",
-            {
-                headers:{
-                    Authorization: "Bearer " + window.localStorage.getItem("accessToken")
-                }
-            }).then((response) => {
+            axios.get("http://localhost:8088/ships/getAll").then((response) => {
                 this.ships = response.data
             }),
-            axios.get("http://localhost:8088/retreats/getAll",
-            {
-                headers:{
-                    Authorization: "Bearer " + window.localStorage.getItem("accessToken")
-                }
-            }).then((response) => {
+            axios.get("http://localhost:8088/retreats/getAll").then((response) => {
                 this.retreats = response.data
             }),
-            axios.get("http://localhost:8088/adventures/getAll",
-            {
-                headers:{
-                    Authorization: "Bearer " + window.localStorage.getItem("accessToken")
-                }
-            }).then((response) => {
+            axios.get("http://localhost:8088/adventures/getAll").then((response) => {
                 this.adventures = response.data
             })
         }

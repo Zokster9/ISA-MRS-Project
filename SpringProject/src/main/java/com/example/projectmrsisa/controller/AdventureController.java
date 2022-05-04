@@ -64,7 +64,7 @@ public class AdventureController {
     }
 
     @GetMapping(value = "/getAdventure/{id}", produces = "application/json")
-    @PreAuthorize("hasRole('fishingInstructor')")
+    @PreAuthorize("hasAnyRole('fishingInstructor', 'admin', 'mainAdmin')")
     public ResponseEntity<AdventureDTO> getAdventureById(@PathVariable Integer id) {
         try {
             Adventure adventure = adventureService.findAdventureById(id);
@@ -75,12 +75,12 @@ public class AdventureController {
     }
 
     @Transactional
-    @PostMapping(value = "/deleteService")
+    @DeleteMapping(value = "/delete-adventure/{id}")
     @PreAuthorize("hasRole('fishingInstructor')")
-    public ResponseEntity deleteService(@RequestBody ServiceDTO serviceDTO){
+    public ResponseEntity deleteAdventure(@PathVariable Integer id){
         try {
             //TODO: Provera da li je servis rezervisan!
-            adventureService.deleteAdventureById(serviceDTO.getId());
+            adventureService.deleteAdventureById(id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch(Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -136,6 +136,7 @@ public class AdventureController {
             List<Adventure> adventures = adventureService.getAdventures();
             List<AdventureDTO> adventureDTOS = new ArrayList<>();
             for (Adventure adventure : adventures) {
+                if (adventure.isDeleted()) continue;
                 adventureDTOS.add(new AdventureDTO(adventure));
             }
             return new ResponseEntity<>(adventureDTOS, HttpStatus.OK);

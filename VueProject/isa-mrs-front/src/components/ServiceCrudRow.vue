@@ -63,20 +63,14 @@
                     window.location.reload();
                 })
             },
-            deleteAdventure() {
-                let path = "http://localhost:8088/adventures/deleteService"; 
-                axios.post(path,
-                {
-                    id: this.service.id,
-                    name: this.service.name,
-                    description: this.service.description,
-                    pictures: this.service.pictures
-                }, 
+            deleteAdventure(id) {
+                axios.delete('http://localhost:8088/adventures/delete-adventure/' + id,
                 {
                     headers: {
                         Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
                     }
                 }).then(() =>{
+                    alert("Adventure successfully deleted.")
                     window.location.reload()
                 })
             }

@@ -340,7 +340,7 @@ public class UserController {
         return new ResponseEntity<>(ownersServicesDTO, HttpStatus.OK);
     }
 
-    @GetMapping(value="findOwnerOfService/{id}")
+    @GetMapping(value="/findOwnerOfService/{id}")
     @PreAuthorize("hasAnyRole('admin', 'mainAdmin')")
     public ResponseEntity<UserDTO> findOwnerOfService(@PathVariable Integer id){
         User user = userService.findUserById(id);

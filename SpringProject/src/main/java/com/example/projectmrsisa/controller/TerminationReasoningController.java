@@ -6,6 +6,7 @@ import com.example.projectmrsisa.dto.UserDTO;
 import com.example.projectmrsisa.model.TerminationReasoning;
 import com.example.projectmrsisa.model.User;
 import com.example.projectmrsisa.service.EmailService;
+import com.example.projectmrsisa.service.ServiceService;
 import com.example.projectmrsisa.service.TerminationReasoningService;
 import com.example.projectmrsisa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class TerminationReasoningController {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private ServiceService serviceService;
 
     @GetMapping(value="/findToTerminate", produces="application/json")
     @PreAuthorize("hasAnyRole('admin', 'mainAdmin')")
@@ -65,6 +69,7 @@ public class TerminationReasoningController {
         User user = userService.findUserById(terminationChoiceDTO.getUserId());
         terminationReasoningService.updateTerminationReasoningByAnsweredStatus(user);
         userService.updateUserDeletedStatusById(terminationChoiceDTO.getUserId());
+        serviceService.deleteServicesByOwner(user);
         UserDTO userDTO = new UserDTO(user);
         try {
             emailService.sendTerminationAcceptedEmail(userDTO, terminationChoiceDTO.getTerminationChoiceReason());
