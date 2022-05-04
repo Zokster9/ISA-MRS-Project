@@ -46,7 +46,7 @@ public class UserController {
     private ServiceService serviceService;
 
     @GetMapping(value="/inactive", produces = "application/json")
-    @PreAuthorize("hasRole('admin')")
+    @PreAuthorize("hasAnyRole('admin', 'mainAdmin')")
     public ResponseEntity<List<UserDTO>> getInactiveUsers(){
         List<User> inactiveUsers = userService.findUsersByActivatedStatus(false, false);
         List<UserDTO> inactiveUsersDTO = new ArrayList<UserDTO>();
@@ -75,7 +75,7 @@ public class UserController {
 
     @Transactional
     @PostMapping(value="/accept")
-    @PreAuthorize("hasRole('admin')")
+    @PreAuthorize("hasAnyRole('admin', 'mainAdmin')")
     public ResponseEntity<UserDTO> acceptUser(@RequestBody RegistrationChoiceDTO registrationChoiceDTO){
         User user = userService.findUserById(registrationChoiceDTO.getUserId());
         userService.updateUserActivatedStatusById(user.getId());
@@ -100,7 +100,7 @@ public class UserController {
 
     @Transactional
     @PostMapping(value="/decline")
-    @PreAuthorize("hasRole('admin')")
+    @PreAuthorize("hasAnyRole('admin', 'mainAdmin')")
     public ResponseEntity<UserDTO> declineUser(@RequestBody RegistrationChoiceDTO registrationChoiceDTO){
         User user = userService.findUserById(registrationChoiceDTO.getUserId());
         userService.updateUserDeletedStatusById(registrationChoiceDTO.getUserId());
@@ -116,7 +116,7 @@ public class UserController {
 
     @Transactional
     @PostMapping("/changeInfo")
-    @PreAuthorize("hasAnyRole('admin', 'client', 'retreatOwner', 'shipOwner', 'fishingInstructor')")
+    @PreAuthorize("hasAnyRole('admin', 'client', 'retreatOwner', 'shipOwner', 'fishingInstructor', 'mainAdmin')")
     public ResponseEntity<UserDTO> changeInfo(@RequestBody UserDTO userDTO, Principal user){
         if (!validChangedUserInfo(userDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         if(!validAddress(userDTO.getAddressDTO())) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -287,7 +287,7 @@ public class UserController {
 
     @Transactional
     @PostMapping(value="/changePassword")
-    @PreAuthorize("hasAnyRole('admin', 'client', 'retreatOwner', 'shipOwner', 'fishingInstructor')")
+    @PreAuthorize("hasAnyRole('admin', 'client', 'retreatOwner', 'shipOwner', 'fishingInstructor', 'mainAdmin')")
     public ResponseEntity<UserDTO> changePassword(@RequestBody PasswordChangeDTO passwordChangeDTO, Principal loggedUser){
         User user = userService.findUserByEmail(loggedUser.getName());
         if (passwordChangeDTO.getNewPassword() == null || passwordChangeDTO.getConfirmPassword() == null || !passwordChangeDTO.getNewPassword().equals(passwordChangeDTO.getConfirmPassword())) {

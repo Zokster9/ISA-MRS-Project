@@ -32,7 +32,7 @@ public class TerminationReasoningController {
     private EmailService emailService;
 
     @GetMapping(value="/findToTerminate", produces="application/json")
-    @PreAuthorize("hasRole('admin')")
+    @PreAuthorize("hasAnyRole('admin', 'mainAdmin')")
     public ResponseEntity<List<TerminationReasoningDTO>> findToBeTerminatedUsers(){
         List<TerminationReasoning> unansweredTerminationReasonings = terminationReasoningService.findUnansweredTerminationReasonings();
         List<TerminationReasoningDTO>  trDTO = new ArrayList<TerminationReasoningDTO>();
@@ -44,7 +44,7 @@ public class TerminationReasoningController {
 
     @Transactional
     @PostMapping(value="/declineTermination")
-    @PreAuthorize("hasRole('admin')")
+    @PreAuthorize("hasAnyRole('admin', 'mainAdmin')")
     public ResponseEntity<UserDTO> declineTermination(@RequestBody TerminationChoiceDTO terminationChoiceDTO){
         User user = userService.findUserById(terminationChoiceDTO.getUserId());
         terminationReasoningService.updateTerminationReasoningByAnsweredStatus(user);
@@ -60,7 +60,7 @@ public class TerminationReasoningController {
 
     @Transactional
     @PostMapping(value="/acceptTermination")
-    @PreAuthorize("hasRole('admin')")
+    @PreAuthorize("hasAnyRole('admin', 'mainAdmin')")
     public ResponseEntity<UserDTO> acceptTermination(@RequestBody TerminationChoiceDTO terminationChoiceDTO){
         User user = userService.findUserById(terminationChoiceDTO.getUserId());
         terminationReasoningService.updateTerminationReasoningByAnsweredStatus(user);

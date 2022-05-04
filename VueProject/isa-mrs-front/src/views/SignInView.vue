@@ -70,7 +70,7 @@
 						router.push("/profile-page-fishing-instructor");
 					} else if (response.data.roleName === "ROLE_client") {
 						router.push("/profile-page-client");
-					} else if (response.data.roleName === "ROLE_admin") {
+					} else if (response.data.roleName === "ROLE_admin" || response.data.roleName === "ROLE_mainAdmin") {
 						router.push("/profile-page-admin");
 					} else {
 						alert("Some kind of error, dont know what.");

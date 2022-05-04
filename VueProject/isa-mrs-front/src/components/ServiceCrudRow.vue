@@ -25,7 +25,7 @@
 				}else if (window.localStorage.getItem("role") === "ROLE_shipOwner") {
                     router.push('/ship-info/' + id);
 				}else if (window.localStorage.getItem("role") === "ROLE_fishingInstructor") {
-                    router.push('/adventure-info/' + id);
+                    router.push('/update-adventure/' + id);
 				}else {
                     alert('Some kind of error happened!');
                 }
