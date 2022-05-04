@@ -34,14 +34,52 @@
         //TODO: BACK POZIV OVDE
         methods: {
             addAvailability(id){
-                alert(this.startDate)
-                alert(this.startTime)
-                alert(this.endDate)
-                alert(this.endTime)
-                alert(id);
+                if (window.localStorage.getItem("role") === "ROLE_retreatOwner") {
+                    this.addRetreatAvailability(id);
+				}else if (window.localStorage.getItem("role") === "ROLE_shipOwner") {
+                    this.addShipAvailability(id);
+				}else if (window.localStorage.getItem("role") === "ROLE_fishingInstructor") {
+                    // TODO: dodati za avanturu
+				}else {
+                    alert('Some kind of error happened!');
+                }
             },
+            addRetreatAvailability(id) {
+                axios.post('http://localhost:8088/retreats/add-availability/' + id, {
+                    dateFrom: new Date(this.startDate),
+                    dateTo: new Date(this.endDate),
+                    timeFrom: this.startTime,
+                    timeTo: this.endTime
+                }, {
+                    headers: {
+                        Authorization: 'Bearer ' + window.localStorage.getItem('accessToken')
+                    }
+                }).then(() => {
+                    alert('Service availability added!');
+                })
+            },
+            addShipAvailability(id) {
+                axios.post('http://localhost:8088/ships/add-availability/' + id, {
+                    dateFrom: new Date(this.startDate),
+                    dateTo: new Date(this.endDate),
+                    timeFrom: this.startTime,
+                    timeTo: this.endTime
+                }, {
+                    headers: {
+                        Authorization: 'Bearer ' + window.localStorage.getItem('accessToken')
+                    }
+                }).then(() => {
+                    alert('Service availability added!');
+                })
+            }
         },
         computed: {
+            isTimeValid() {
+                let reg = new RegExp("[0-9]{2}':'[0-9]{2}");
+                if (!reg.test(this.startTime)) return false;
+                if (!reg.test(this.endTime)) return false; 
+                return true;
+            },
             isValid(){
                 if (!this.startDate || !this.startTime || !this.endDate || !this.endTime){
                     return false;

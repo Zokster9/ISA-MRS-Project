@@ -1,6 +1,6 @@
 package com.example.projectmrsisa.controller;
 
-import com.example.projectmrsisa.dto.RetreatDTO;
+import com.example.projectmrsisa.dto.ServiceAvailabilityDTO;
 import com.example.projectmrsisa.dto.ShipDTO;
 import com.example.projectmrsisa.model.*;
 import com.example.projectmrsisa.service.AddressService;
@@ -163,5 +163,18 @@ public class ShipController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @PostMapping(value = "/add-availability/{id}")
+    @PreAuthorize("hasRole('shipOwner')")
+    public ResponseEntity<ServiceAvailabilityDTO> addRetreatAvailability(@PathVariable Integer id, @RequestBody ServiceAvailabilityDTO serviceAvailabilityDTO) {
+        //if (!validServiceAvailability(serviceAvailabilityDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(serviceAvailabilityDTO, HttpStatus.ACCEPTED);
+//        try {
+//            List<ServiceAvailability> availabilityList = serviceAvailabilityService.findAvailabilitiesByDates(serviceAvailabilityDTO.getDateFrom(), serviceAvailabilityDTO.getDateTo());
+//            return new ResponseEntity<>(serviceAvailabilityDTO, HttpStatus.ACCEPTED);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
     }
 }
