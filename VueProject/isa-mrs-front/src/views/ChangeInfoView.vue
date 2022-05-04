@@ -116,8 +116,8 @@
 						this.$router.push("/profile-page-fishing-instructor")
 					}else if (window.localStorage.getItem("role") === "ROLE_client") {
 						// TODO: prebaciti na stranicu klijenta
-					}else if (window.localStorage.getItem("role") === "ROLE_admin") {
-						// TODO: prebaciti na stranicu admina
+					}else if (window.localStorage.getItem("role") === "ROLE_admin" || window.localStorage.getItem("role") === "ROLE_mainAdmin") {
+						this.$router.push("/profile-page-admin")
 					}else {
 						alert("Some kind of error, dont know what.");
 					}
