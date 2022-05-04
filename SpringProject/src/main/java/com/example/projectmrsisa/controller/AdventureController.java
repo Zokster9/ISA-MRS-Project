@@ -2,12 +2,8 @@ package com.example.projectmrsisa.controller;
 
 
 import com.example.projectmrsisa.dto.AdventureDTO;
-import com.example.projectmrsisa.dto.RetreatDTO;
 import com.example.projectmrsisa.dto.ServiceDTO;
-import com.example.projectmrsisa.model.Address;
-import com.example.projectmrsisa.model.Adventure;
-import com.example.projectmrsisa.model.Retreat;
-import com.example.projectmrsisa.model.User;
+import com.example.projectmrsisa.model.*;
 import com.example.projectmrsisa.service.AddressService;
 import com.example.projectmrsisa.service.AdventureService;
 import com.example.projectmrsisa.service.UserService;
@@ -19,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/adventures")
@@ -128,6 +126,20 @@ public class AdventureController {
             adventure = adventureService.updateAdventure(adventure, adventureDTO /*,tags*/);
             return new ResponseEntity<>(new AdventureDTO(adventure), HttpStatus.OK);
         } catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value="/getAll", produces = "application/json")
+    public ResponseEntity<List<AdventureDTO>> getAdventures() {
+        try {
+            List<Adventure> adventures = adventureService.getAdventures();
+            List<AdventureDTO> adventureDTOS = new ArrayList<>();
+            for (Adventure adventure : adventures) {
+                adventureDTOS.add(new AdventureDTO(adventure));
+            }
+            return new ResponseEntity<>(adventureDTOS, HttpStatus.OK);
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

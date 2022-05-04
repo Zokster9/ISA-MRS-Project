@@ -41,4 +41,6 @@ public class AdventureService {
         //TODO:additional services fali!
         return adventureRepository.save(adventure);
     }
+
+    public List<Adventure> getAdventures() { return adventureRepository.findAll();}
 }

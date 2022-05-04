@@ -42,6 +42,21 @@ public class UserDTO {
         privilegedUser = PrivilegedUser.NOT_PRIVILEGED_USER;
     }
 
+    public UserDTO(User user, PrivilegedUser privilegedUser){
+        id = user.getId();
+        email = user.getEmail();
+        password = user.getPassword();
+        name = user.getName();
+        surname = user.getSurname();
+        addressDTO = new AddressDTO(user.getAddress());
+        phoneNumber = user.getPhoneNumber();
+        loyaltyStatus = user.getLoyaltyStatus();
+        loyaltyPoints = user.getLoyaltyPoints();
+        isDeleted = user.isDeleted();
+        isActive = user.isActive();
+        this.privilegedUser = privilegedUser;
+    }
+
     public UserDTO(User user, PrivilegedUser privilegedUser, RegistrationReasoningDTO registrationReasoningDTO){
         id = user.getId();
         email = user.getEmail();

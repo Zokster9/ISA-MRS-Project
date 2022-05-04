@@ -339,4 +339,24 @@ public class UserController {
         }
         return new ResponseEntity<>(ownersServicesDTO, HttpStatus.OK);
     }
+
+    @GetMapping(value="findOwnerOfService/{id}")
+    @PreAuthorize("hasAnyRole('admin', 'mainAdmin')")
+    public ResponseEntity<UserDTO> findOwnerOfService(@PathVariable Integer id){
+        User user = userService.findUserById(id);
+        List<Role> roles = user.getRoles();
+        Role userRole = roles.get(0);
+        PrivilegedUser privilegedUser = PrivilegedUser.NOT_PRIVILEGED_USER;
+        if (userRole.getName().equals("ROLE_fishingInstructor")){
+            privilegedUser = PrivilegedUser.FISHING_INSTRUCTOR;
+        }
+        else if (userRole.getName().equals("ROLE_shipOwner")){
+            privilegedUser = PrivilegedUser.SHIP_OWNER;
+        }
+        else if (userRole.getName().equals("ROLE_retreatOwner")){
+            privilegedUser = PrivilegedUser.RETREAT_OWNER;
+        }
+        UserDTO userDTO = new UserDTO(user, privilegedUser);
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+    }
 }
