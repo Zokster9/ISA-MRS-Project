@@ -1,5 +1,7 @@
 package com.example.projectmrsisa.dto;
 
+import com.example.projectmrsisa.model.ServiceAvailability;
+
 import java.util.Date;
 
 public class ServiceAvailabilityDTO {
@@ -22,6 +24,14 @@ public class ServiceAvailabilityDTO {
         this.dateTo = dateTo;
         this.timeFrom = timeFrom;
         this.timeTo = timeTo;
+    }
+
+    public ServiceAvailabilityDTO(ServiceAvailability serviceAvailability) {
+        this.serviceId = serviceAvailability.getService().getId();
+        this.dateFrom = serviceAvailability.getDateFrom();
+        this.dateTo = serviceAvailability.getDateTo();
+        this.timeFrom = serviceAvailability.getTimeFrom();
+        this.timeTo = serviceAvailability.getTimeTo();
     }
 
     public int getServiceId() {

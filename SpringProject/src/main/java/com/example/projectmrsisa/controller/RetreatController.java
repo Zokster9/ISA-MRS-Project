@@ -150,30 +150,32 @@ public class RetreatController {
     @PostMapping(value = "/add-availability/{id}")
     @PreAuthorize("hasRole('retreatOwner')")
     public ResponseEntity<ServiceAvailabilityDTO> addRetreatAvailability(@PathVariable Integer id, @RequestBody ServiceAvailabilityDTO serviceAvailabilityDTO) {
-        //if (!validServiceAvailability(serviceAvailabilityDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        System.out.println(serviceAvailabilityDTO.getDateFrom());
-        System.out.println(serviceAvailabilityDTO.getDateTo());
-        return new ResponseEntity<>(serviceAvailabilityDTO, HttpStatus.ACCEPTED);
-//        try {
-//            List<ServiceAvailability> availabilityList = serviceAvailabilityService.findAvailabilitiesByDates(serviceAvailabilityDTO.getDateFrom(), serviceAvailabilityDTO.getDateTo());
-//            return new ResponseEntity<>(serviceAvailabilityDTO, HttpStatus.ACCEPTED);
-//        } catch (Exception e) {
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
+        if (!validServiceAvailability(serviceAvailabilityDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        try {
+            Retreat retreat = retreatService.getRetreatById(id);
+            if (retreat == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ServiceAvailability serviceAvailability = new ServiceAvailability(serviceAvailabilityDTO, retreat);
+            serviceAvailability = serviceAvailabilityService.addAvailability(id, serviceAvailability);
+            if (serviceAvailability == null) return new ResponseEntity<>(HttpStatus.CONFLICT);
+            return new ResponseEntity<>(new ServiceAvailabilityDTO(serviceAvailability), HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
-//    private boolean validServiceAvailability(ServiceAvailabilityDTO serviceAvailabilityDTO) {
-//        if (serviceAvailabilityDTO.getDateFrom() == null) return false;
-//        if (serviceAvailabilityDTO.getDateTo() == null) return false;
-//        Date dateFrom = new Date(serviceAvailabilityDTO.getDateFrom());
-//        Date dateTo = new Date(serviceAvailabilityDTO.getDateTo());
-//        if (dateFrom.compareTo(dateTo) > 0) return false;
-//        if (serviceAvailabilityDTO.getTimeFrom() == null || !serviceAvailabilityDTO.getTimeFrom().matches("[0-9]{2}':'[0-9]{2}")) return false;
-//        if (serviceAvailabilityDTO.getTimeTo() == null || !serviceAvailabilityDTO.getTimeTo().matches("[0-9]{2}':'[0-9]{2}")) return false;
-//        if (dateFrom.compareTo(dateTo) == 0) {
-//            return Integer.parseInt(serviceAvailabilityDTO.getTimeFrom().split(":")[0]) * 60 + Integer.parseInt(serviceAvailabilityDTO.getTimeFrom().split(":")[1])
-//                    < Integer.parseInt(serviceAvailabilityDTO.getTimeTo().split(":")[0]) * 60 + Integer.parseInt(serviceAvailabilityDTO.getTimeTo().split(":")[1]);
-//        }
-//        return true;
-//    }
+    private boolean validServiceAvailability(ServiceAvailabilityDTO serviceAvailabilityDTO) {
+        Date today = new Date();
+        if (serviceAvailabilityDTO.getDateFrom() == null) return false;
+        if (serviceAvailabilityDTO.getDateTo() == null) return false;
+        Date dateFrom = serviceAvailabilityDTO.getDateFrom();
+        Date dateTo = serviceAvailabilityDTO.getDateTo();
+        if (dateFrom.compareTo(today) < 0) return false;
+        if (dateTo.compareTo(today) < 0 ) return false;
+        if (dateFrom.compareTo(dateTo) > 0) return false;
+        if (dateFrom.compareTo(dateTo) == 0) {
+            return Integer.parseInt(serviceAvailabilityDTO.getTimeFrom().split(":")[0]) * 60 + Integer.parseInt(serviceAvailabilityDTO.getTimeFrom().split(":")[1])
+                    < Integer.parseInt(serviceAvailabilityDTO.getTimeTo().split(":")[0]) * 60 + Integer.parseInt(serviceAvailabilityDTO.getTimeTo().split(":")[1]);
+        }
+        return true;
+    }
 }

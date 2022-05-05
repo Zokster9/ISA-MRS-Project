@@ -1,5 +1,7 @@
 package com.example.projectmrsisa.model;
 
+import com.example.projectmrsisa.dto.ServiceAvailabilityDTO;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -37,6 +39,14 @@ public class ServiceAvailability {
         this.dateTo = dateTo;
         this.timeFrom = timeFrom;
         this.timeTo = timeTo;
+    }
+
+    public ServiceAvailability(ServiceAvailabilityDTO serviceAvailabilityDTO, Service service) {
+        this.service = service;
+        this.dateFrom = serviceAvailabilityDTO.getDateFrom();
+        this.dateTo = serviceAvailabilityDTO.getDateTo();
+        this.timeFrom = serviceAvailabilityDTO.getTimeFrom();
+        this.timeTo = serviceAvailabilityDTO.getTimeTo();
     }
 
     public int getId() {

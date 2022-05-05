@@ -56,6 +56,9 @@
                     }
                 }).then(() => {
                     alert('Service availability added!');
+                }).catch(error => {
+                    if (error.response.status === 409) alert("Specified availability exists.");
+                    else alert("Could not add service availability");
                 })
             },
             addShipAvailability(id) {
@@ -70,6 +73,9 @@
                     }
                 }).then(() => {
                     alert('Service availability added!');
+                }).catch(error => {
+                    if (error.response.status === 409) alert("Specified availability exists.");
+                    else alert("Could not add service availability");
                 })
             }
         },
@@ -81,9 +87,12 @@
                 return true;
             },
             isValid(){
+                let today = new Date();
                 if (!this.startDate || !this.startTime || !this.endDate || !this.endTime){
                     return false;
                 }
+                if (new Date(this.startDate) < today) return false;
+                if (new Date(this.endDate) < today) return false;
                 if (new Date(this.startDate).getTime() > new Date(this.endDate).getTime()){
                     return false;
                 }
