@@ -1,14 +1,21 @@
 #TODO: mozda dodati i sliku servisa u tabelu (pokupljeno je sa back-a)
 <template>
     <tr :key="service.id">
-        <td class="align-middle"> {{service.name}} </td>
-        <td class="align-middle"> Starting date and time: </td>
-        <td class="align-middle"> <input type="date" v-model="startDate" placeholder="Start date"></td>
-        <td class="align-middle"> <input type="time" v-model="startTime" placeholder="Start time"></td>
-        <td class="align-middle"> Ending date and time: </td>
-        <td class="align-middle"> <input type="date" v-model="endDate" placeholder="End date"></td>
-        <td class="align-middle"> <input type="time" v-model="endTime" placeholder="End time"></td>
-        <td class="align-middle"> <button :disabled="!isValid" type="button" class="btn btn-success" @click="addAvailability(service.id)">Confirm</button></td>
+        <td class="align-middle text-center">
+             <figcaption class="mb-1"> {{service.name}} </figcaption>
+             <img :src="require('@/assets/' + service.pictures[0])" style="width:200px; height:200px" class="rounded">
+        </td>
+        <td class="align-middle"> 
+            <div class="form-text mb-1" style="color:black;"> Starting date and time: </div>
+            <div class="form-outline mb-1"> <input type="date" v-model="startDate" placeholder="Start date" style="width:137px;"> </div>
+            <div class="form-outline"> <input type="time" v-model="startTime" placeholder="Start time" style="width:137px;"> </div>
+        </td>
+        <td class="align-middle">
+            <div class="form-text mb-1" style="color:black;"> Ending date and time: </div>
+            <div class="form-outline mb-1"> <input type="date" v-model="endDate" placeholder="End date" style="width:137px;"> </div>
+            <div class="form-outline"> <input type="time" v-model="endTime" placeholder="End time" style="width:137px;"> </div>
+        </td>
+        <td class="align-middle"> <button :disabled="!isValid" type="button" class="btn btn-success" style="height:px;" @click="addAvailability(service.id)">Confirm</button></td>
     </tr>
 </template>
 
@@ -31,7 +38,6 @@
                 endTime: "",
             }
         },
-        //TODO: BACK POZIV OVDE
         methods: {
             addAvailability(id){
                 if (window.localStorage.getItem("role") === "ROLE_retreatOwner") {
@@ -39,7 +45,7 @@
 				}else if (window.localStorage.getItem("role") === "ROLE_shipOwner") {
                     this.addShipAvailability(id);
 				}else if (window.localStorage.getItem("role") === "ROLE_fishingInstructor") {
-                    // TODO: dodati za avanturu
+                    this.addAdventureAvailability(id);
 				}else {
                     alert('Some kind of error happened!');
                 }
@@ -68,6 +74,23 @@
                     timeFrom: this.startTime,
                     timeTo: this.endTime
                 }, {
+                    headers: {
+                        Authorization: 'Bearer ' + window.localStorage.getItem('accessToken')
+                    }
+                }).then(() => {
+                    alert('Service availability added!');
+                }).catch(error => {
+                    if (error.response.status === 409) alert("Specified availability exists.");
+                    else alert("Could not add service availability");
+                })
+            },
+            addAdventureAvailability(id) {
+                axios.post('http://localhost:8088/adventures/add-availability/' + id, {
+                    dateFrom: new Date(this.startDate),
+                    dateTo: new Date(this.endDate),
+                    timeFrom: this.startTime,
+                    timeTo: this.endTime
+                },{
                     headers: {
                         Authorization: 'Bearer ' + window.localStorage.getItem('accessToken')
                     }
