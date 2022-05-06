@@ -3,7 +3,7 @@
         <div>
             <NavbarUser></NavbarUser>
         </div>
-        <div class="row justify-content-center">
+        <div class="row justify-content-center mx-auto">
             <div class="col-auto">
                 <br>
                 <br>
@@ -12,6 +12,11 @@
                         <th colspan="100%" class="text-center h2"> My services </th>
                     </thead>
                     <tbody>
+                        <tr>
+                            <td class="text-center align-items"> <b> Service name </b> </td>
+                            <td class="text-center align-items"> <b> EDIT </b> </td>
+                            <td class="text-center align-items"> <b> DELETE </b> </td>
+                        </tr>
                         <ServiceCrudRow v-for="service in services" :service="service" :key="service.id"></ServiceCrudRow>
                         <tr>
                             <td colspan="2"><input v-model="searchText" type="text" class="form-control" placeholder="Search by name, address, or conduct."></td>
