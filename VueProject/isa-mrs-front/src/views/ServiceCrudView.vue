@@ -15,7 +15,7 @@
                         <ServiceCrudRow v-for="service in services" :service="service" :key="service.id"></ServiceCrudRow>
                         <tr>
                             <td colspan="2"><input v-model="searchText" type="text" class="form-control" placeholder="Search by name, address, or conduct."></td>
-                            <td> <button type="button" class="btn btn-primary float-end" @onclick="search">Search services</button></td>
+                            <td class="text-center" colspan="2"> <button type="button float-center" class="btn btn-primary" @onclick="search">Search services</button></td>
                         </tr>
                     </tbody>
                 </table>

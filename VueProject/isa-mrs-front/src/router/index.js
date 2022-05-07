@@ -169,6 +169,12 @@ const routes = [{
         name: 'update-adventure',
         component: () =>
             import ('../views/UpdateAdventure.vue')
+    },
+    {
+        path:'/add-action/:id',
+        name:'add-action',
+        component: () =>
+            import ('../views/AddActionView.vue')
     }
 ]
 
