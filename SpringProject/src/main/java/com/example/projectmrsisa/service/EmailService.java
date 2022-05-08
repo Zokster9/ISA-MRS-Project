@@ -153,7 +153,7 @@ public class EmailService {
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(env.getProperty("spring.mail.username"));
         mail.setFrom("isamrsprojekat@gmail.com");
-        mail.setSubject("Termination declined");
+        mail.setSubject("Fast reservation for your subscription");
         mail.setText("Fast reservation has been added for service that you have been subscribed. Go check it out.");
         for (String email: emails) {
             javaMailSender.send(mail);

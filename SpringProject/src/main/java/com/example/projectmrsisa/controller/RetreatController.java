@@ -64,12 +64,11 @@ public class RetreatController {
     }
 
     @PostMapping(value = "/create-retreat", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<RetreatDTO> createRetreat(@RequestBody RetreatDTO retreatDTO) {
-        //TODO: Dobaviti vlasnika broda uz pomoc JWT
-        //  privremeno
+    @PreAuthorize("hasRole('retreatOwner')")
+    public ResponseEntity<RetreatDTO> createRetreat(@RequestBody RetreatDTO retreatDTO, Principal loggedUser) {
         User retreatOwner;
         try {
-            retreatOwner = userService.findUserById(1);
+            retreatOwner = userService.findUserByEmail(loggedUser.getName());
         } catch (Exception e) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
         if (!validAddress(retreatDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         if (!validateRetreatData(retreatDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

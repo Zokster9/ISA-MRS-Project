@@ -1,11 +1,10 @@
 package com.example.projectmrsisa.controller;
 
+import com.example.projectmrsisa.dto.ActionDTO;
 import com.example.projectmrsisa.dto.RetreatDTO;
 import com.example.projectmrsisa.dto.ShipDTO;
 import com.example.projectmrsisa.model.*;
-import com.example.projectmrsisa.service.AddressService;
-import com.example.projectmrsisa.service.ShipService;
-import com.example.projectmrsisa.service.UserService;
+import com.example.projectmrsisa.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @RequestMapping(value="/ships")
@@ -35,6 +31,24 @@ public class ShipController {
     @Autowired
     private AddressService addressService;
 
+    @Autowired
+    private TagService tagService;
+
+    @Autowired
+    private ReservationService reservationService;
+
+    @Autowired
+    private ActionService actionService;
+
+    @Autowired
+    private SubscriptionService subscriptionService;
+
+    @Autowired
+    private ClientService clientService;
+
+    @Autowired
+    private EmailService emailService;
+
     @GetMapping(value="/getAll", produces = "application/json")
     public ResponseEntity<List<ShipDTO>> getShips() {
         try {
@@ -50,18 +64,20 @@ public class ShipController {
     }
 
     @PostMapping(value="/create-ship", consumes = "application/json")
-    public ResponseEntity<ShipDTO> createShip(@RequestBody ShipDTO shipDTO) {
-        //TODO: Dobaviti vlasnika broda uz pomoc JWT
+    @PreAuthorize("hasRole('shipOwner')")
+    public ResponseEntity<ShipDTO> createShip(@RequestBody ShipDTO shipDTO, Principal loggedUser) {
         User shipOwner;
         try {
-            shipOwner = userService.findUserById(2);
+            shipOwner = userService.findUserByEmail(loggedUser.getName());
         }catch (Exception e) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
         if (!validAddress(shipDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         if (!validateShipData(shipDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         Address a;
+        Set<Tag> additionalServices;
         try {
             a = addressService.getAddress(new Address(shipDTO.getCountry(), shipDTO.getCity(), shipDTO.getStreet()));
-            Ship ship = shipService.addShip(new Ship(shipDTO, a, shipOwner));
+            additionalServices = tagService.findTags(shipDTO.getAdditionalServices(), "ship");
+            Ship ship = shipService.addShip(new Ship(shipDTO, a, shipOwner, additionalServices));
             return new ResponseEntity<ShipDTO>(new ShipDTO(ship), HttpStatus.OK);
         } catch (Exception e) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
     }
@@ -85,6 +101,7 @@ public class ShipController {
         if (shipDTO.getEnginePower() <= 40) {
             return false;
         }
+        if (shipDTO.getPrice() <= 0) return false;
         if (shipDTO.getMaxSpeed() == null || shipDTO.getMaxSpeed().matches("[1-9][0-9]* 'km/h'")) {
             return false;
         }
@@ -143,7 +160,8 @@ public class ShipController {
         // TODO: provera da li postoje rezervacije za brod
         try {
             Ship ship = shipService.findShipById(id);
-            ship = shipService.updateRetreat(ship, shipDTO);
+            Set<Tag> newAdditionalServices = tagService.findTags(shipDTO.getAdditionalServices(), "ship");
+            ship = shipService.updateShip(ship, shipDTO, newAdditionalServices);
             return new ResponseEntity<>(new ShipDTO(ship), HttpStatus.OK);
         }catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -163,5 +181,50 @@ public class ShipController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @PostMapping(value = "/add-action/{id}")
+    @PreAuthorize("hasRole('shipOwner')")
+    public ResponseEntity<ActionDTO> addAction(@PathVariable Integer id, @RequestBody ActionDTO actionDTO, Principal loggedUser) {
+        if (!validAction(actionDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        try {
+            Ship ship = shipService.findShipById(id);
+            if (ship == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            if (!ship.getOwner().getEmail().equals(loggedUser.getName())) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            if (!reservationService.checkIfReservationsExistForDate(id, actionDTO.getDateFrom(), actionDTO.getDateTo())) return new ResponseEntity<>(HttpStatus.CONFLICT);
+            if (!actionService.actionAlreadyExists(ship.getActions(), actionDTO.getDateFrom(), actionDTO.getDateTo())) return new ResponseEntity<>(HttpStatus.CONFLICT);
+            Set<Tag> additionalServices = tagService.findTags(actionDTO.getAdditionalServices(), "ship");
+            Action action = new Action(actionDTO, additionalServices);
+            action = actionService.addAction(action);
+            ship = shipService.addAction(ship, action);
+            List<String> emails = subscriptionService.findClientsWithSubscription(clientService.findAll(), id);
+            emailService.sendSubscriptionEmails(emails);
+            return new ResponseEntity<>(new ActionDTO(action), HttpStatus.ACCEPTED);
+        }catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private boolean validAction(ActionDTO actionDTO) {
+        if (!validDates(actionDTO.getDateFrom(), actionDTO.getDateTo(), actionDTO.getTimeFrom(), actionDTO.getTimeTo())) return false;
+        System.out.println(actionDTO.getMaxNumOfPeople());
+        if (actionDTO.getMaxNumOfPeople() <= 0) return false;
+        for (String as: actionDTO.getAdditionalServices()) {
+            if (as.equals("") || as.length() > 14) return false;
+        }
+        return !(actionDTO.getPrice() <= 0);
+    }
+
+    private boolean validDates(Date dateFrom, Date dateTo, String timeFrom, String timeTo) {
+        Date today = new Date();
+        if (dateFrom == null || dateTo == null || timeFrom == null || timeTo == null) return false;
+        if (dateFrom.compareTo(today) < 0) return false;
+        if (dateTo.compareTo(today) < 0 ) return false;
+        if (dateFrom.compareTo(dateTo) > 0) return false;
+        if (dateFrom.compareTo(dateTo) == 0) {
+            return Integer.parseInt(timeFrom) * 60 + Integer.parseInt(timeFrom)
+                    < Integer.parseInt(timeTo) * 60 + Integer.parseInt(timeTo);
+        }
+        return true;
     }
 }

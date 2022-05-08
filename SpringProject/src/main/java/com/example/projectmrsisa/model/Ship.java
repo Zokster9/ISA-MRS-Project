@@ -51,7 +51,7 @@ public class Ship extends Service {
         this.reservationCancellationConditions = reservationCancellationConditions;
     }
 
-    public Ship(ShipDTO shipDTO, Address address, User shipOwner) {
+    public Ship(ShipDTO shipDTO, Address address, User shipOwner, Set<Tag> additionalServices) {
         this.setName(shipDTO.getName());
         this.setDescription(shipDTO.getDescription());
         this.setOwner(shipOwner);
@@ -70,6 +70,7 @@ public class Ship extends Service {
         this.capacity = shipDTO.getCapacity();
         this.fishingEquipment = new HashSet<>(shipDTO.getFishingEquipment());
         this.reservationCancellationConditions = shipDTO.getReservationCancellationConditions();
+        this.setAdditionalServices(additionalServices);
     }
 
     public String getType() {

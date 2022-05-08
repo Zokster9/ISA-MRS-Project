@@ -36,13 +36,13 @@ public class RetreatService {
         if (retreat.getNumOfBeds() != retreatDTO.getNumOfBeds()) retreat.setNumOfBeds(retreatDTO.getNumOfBeds());
         if (retreat.getNumOfRooms() != retreatDTO.getNumOfRooms()) retreat.setNumOfRooms(retreatDTO.getNumOfRooms());
         if (retreat.getPrice() != retreatDTO.getPrice()) retreat.setPrice(retreatDTO.getPrice());
-        if (retreat.getPictures().size() < retreatDTO.getPictures().size()) {
+        if (retreat.getPictures().size() != retreatDTO.getPictures().size()) {
             retreat.setPictures(new HashSet<>(retreatDTO.getPictures()));
         }
-        if (retreat.getRulesOfConduct().size() < retreatDTO.getRulesOfConduct().size()) {
+        if (retreat.getRulesOfConduct().size() != retreatDTO.getRulesOfConduct().size()) {
             retreat.setRulesOfConduct(new HashSet<>(retreatDTO.getRulesOfConduct()));
         }
-        if (retreat.getAdditionalServices().size() < additionalServices.size()) {
+        if (retreat.getAdditionalServices().size() != additionalServices.size()) {
             retreat.setAdditionalServices(additionalServices);
         }
         return retreatRepository.save(retreat);
