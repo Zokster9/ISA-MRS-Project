@@ -150,7 +150,7 @@ const routes = [{
         path: '/retreat-info/:id',
         name: 'retreat-info',
         component: () =>
-            import ('../views/RetreatInfoChange.vue')
+            import ('../views/RetreatInfoChangeView.vue')
     },
     {
         path: '/ship-info/:id',
@@ -162,13 +162,19 @@ const routes = [{
         path: '/admin-sign-up',
         name: 'admin-sign-up',
         component: () =>
-            import ('../views/AdminSignUp.vue')
+            import ('../views/AdminSignUpView.vue')
     },
     {
         path: '/update-adventure/:id',
         name: 'update-adventure',
         component: () =>
-            import ('../views/UpdateAdventure.vue')
+            import ('../views/UpdateAdventureView.vue')
+    },
+    {
+        path: '/home-page-client',
+        name: 'home-page-client',
+        component: () =>
+            import ('../views/HomepageClientView.vue')
     }
 ]
 

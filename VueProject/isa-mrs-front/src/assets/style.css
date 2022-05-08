@@ -30,6 +30,11 @@ body {
     background-size: cover;
 }
 
+#home-page-div {
+    height: 100%; 
+    width: 100%;
+}
+
 #ships-screen {
     width:100%; 
     height:100%; 
@@ -216,6 +221,16 @@ body,
 
 .active, .dot:hover {
   background-color: #717171;
+}
+
+.homepage {
+    text-align: center;
+}
+
+.homepage h1 {
+    margin: auto;
+    line-height: 50px;
+    vertical-align: middle;
 }
 
 @keyframes fade {

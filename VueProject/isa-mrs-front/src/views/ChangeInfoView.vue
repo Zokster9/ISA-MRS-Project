@@ -104,19 +104,19 @@
                     phoneNumber: this.form.phoneNumber,
                 }, {
 					headers: {
-						Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+						Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
 					}
 				}).then(() => {
                     alert("Successfully changed personal information!");
-                    if (window.localStorage.getItem("role") === "ROLE_retreatOwner") {
+                    if (window.sessionStorage.getItem("role") === "ROLE_retreatOwner") {
 						// TODO: prebaciti na stranicu vlasnika vikendice
-					}else if (window.localStorage.getItem("role") === "ROLE_shipOwner") {
+					}else if (window.sessionStorage.getItem("role") === "ROLE_shipOwner") {
 						// TODO: prebaciti na stranicu vlasnika broda
-					}else if (window.localStorage.getItem("role") === "ROLE_fishingInstructor") {
+					}else if (window.sessionStorage.getItem("role") === "ROLE_fishingInstructor") {
 						this.$router.push("/profile-page-fishing-instructor")
-					}else if (window.localStorage.getItem("role") === "ROLE_client") {
+					}else if (window.sessionStorage.getItem("role") === "ROLE_client") {
 						// TODO: prebaciti na stranicu klijenta
-					}else if (window.localStorage.getItem("role") === "ROLE_admin") {
+					}else if (window.sessionStorage.getItem("role") === "ROLE_admin") {
 						// TODO: prebaciti na stranicu admina
 					}else {
 						alert("Some kind of error, dont know what.");
@@ -170,7 +170,7 @@
 		mounted() {
 			axios.get("http://localhost:8088/users/getLoggedUser", {
 				headers: {
-					Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+					Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
 				}
 			}).then((response) =>{
                 this.user = response.data;

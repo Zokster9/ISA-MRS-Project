@@ -220,7 +220,7 @@ import router from '@/router'
                 },
 				{
 					headers: {
-						'Authorization': 'Bearer ' + window.localStorage.getItem("accessToken")
+						'Authorization': 'Bearer ' + window.sessionStorage.getItem("accessToken")
 					}
 				}).then(() => {
                     alert("Adventure updated!");
@@ -239,7 +239,7 @@ import router from '@/router'
         mounted() {
             axios.get("http://localhost:8088/adventures/getAdventure/" + this.$route.params.id, {
                 headers: {
-					Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+					Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
 				}
             }).then((response) => {
                 this.adventure = response.data;
@@ -259,7 +259,7 @@ import router from '@/router'
             });
             axios.get("http://localhost:8088/tags", {
                 headers: {
-                    Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+                    Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                 }
             }).then((response) => {this.tags = response.data});
         }

@@ -43,7 +43,7 @@
         mounted(){
             axios.get("http://localhost:8088/users/inactive",{
                 headers:{
-                    Authorization: "Bearer " + window.localStorage.getItem("accessToken")
+                    Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
                 }
             }).then((response) => {
                 this.unactivatedUsers = response.data;

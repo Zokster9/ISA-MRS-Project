@@ -60,8 +60,8 @@
                     email: this.form.email,
                     password: this.form.password
                 }).then(response => {
-					localStorage.setItem("accessToken", response.data.accessToken);
-					localStorage.setItem("role", response.data.roleName);
+					sessionStorage.setItem("accessToken", response.data.accessToken);
+					sessionStorage.setItem("role", response.data.roleName);
 					if (response.data.roleName === "ROLE_retreatOwner") {
                         router.push('/profile-page-retreat-owner');
 					}else if (response.data.roleName === "ROLE_shipOwner") {
@@ -69,7 +69,7 @@
 					} else if (response.data.roleName === "ROLE_fishingInstructor") {
 						router.push("/profile-page-fishing-instructor");
 					} else if (response.data.roleName === "ROLE_client") {
-						router.push("/profile-page-client");
+						router.push("/home-page-client");
 					} else if (response.data.roleName === "ROLE_admin" || response.data.roleName === "ROLE_mainAdmin") {
 						router.push("/profile-page-admin");
 					} else {

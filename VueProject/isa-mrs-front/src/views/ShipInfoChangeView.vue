@@ -290,7 +290,7 @@ import router from '@/router'
                     price: this.form.price
                 }, {
                     headers: {
-						'Authorization': 'Bearer ' + window.localStorage.getItem("accessToken")
+						'Authorization': 'Bearer ' + window.sessionStorage.getItem("accessToken")
 					}
                 }).then((response) => {
                     alert(response.data.name + " ship updated!");
@@ -310,7 +310,7 @@ import router from '@/router'
         mounted() {
             axios.get("http://localhost:8088/ships/get/" + this.$route.params.id, {
                 headers: {
-					Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+					Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
 				}
             }).then((response) => {
                 this.ship = response.data;

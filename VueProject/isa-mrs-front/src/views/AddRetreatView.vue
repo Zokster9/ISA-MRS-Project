@@ -160,7 +160,7 @@
                 },
 				{
 					headers: {
-						Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+						Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
 					}
 				}).then((response) => {
                     this.retVal = response.data;
