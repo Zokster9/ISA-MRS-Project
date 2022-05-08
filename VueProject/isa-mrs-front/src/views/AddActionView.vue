@@ -91,33 +91,9 @@
             }
         },
         methods: {
-            //TODO: menjaj ovde parametre ako treba
             addAction() {
                 if (window.localStorage.getItem("role") === "ROLE_fishingInstructor"){
-                    axios.post("http://localhost:8088/adventures/addAction/" + this.$route.params.id,
-                    {
-                        dateFrom: this.form.startDate,
-                        timeFrom: this.form.startTime,
-                        dateTo: this.form.endDate,
-                        timeTo: this.form.endTime,
-                        maxNumOfPeople: this.form.maxNumOfPeople,
-                        price: this.form.price,
-                        addressDTO: {
-                            country: this.form.country,
-                            city: this.form.city,
-                            street: this.form.address,
-                        },
-                        tags: this.form.tags,
-                    },
-                    {
-                        headers:{
-                            Authorization: "Bearer " + window.localStorage.getItem("accessToken")
-                        }
-                    }).then(() => {
-                        alert("Successfully added new action!")
-                    }).catch(() => {
-                        alert("Something went wrong!")
-                    })
+                    this.sendData("adventures")
                 }
                 else if (window.localStorage.getItem("role") === "ROLE_shipOwner"){
                     this.sendData("ships");
@@ -185,15 +161,13 @@
         },
 		mounted() {
             if (window.localStorage.getItem("role") === "ROLE_fishingInstructor"){
-                axios.get("http://localhost:8088/adventures/getAdventure/" + this.$route.params.id, {
+                axios.get('http://localhost:8088/adventures/getAdventure/' + this.$route.params.id, {
                     headers: {
                         Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
                     }
-                }).then((response) =>{
-                    this.form.country = response.data.country;
-                    this.form.address = response.data.street;
-                    this.form.city = response.data.city;
-                })
+                }).then((response) => {
+                    this.tags = response.data.additionalServices;
+                });
             }
             else if (window.localStorage.getItem("role") === "ROLE_shipOwner"){
                 axios.get('http://localhost:8088/ships/get/' + this.$route.params.id, {
