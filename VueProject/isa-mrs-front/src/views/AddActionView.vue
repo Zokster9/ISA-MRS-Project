@@ -35,25 +35,6 @@
                                     </tr>
                                 </table>
                             </div>
-                            <div class="form-group required">
-                                <label>Address </label>
-                                <input v-model="form.address" id="address" type="text" readonly class="form-control form-control-lg">
-                            </div>
-                            
-                            <div class="form-group required">
-                                <table>
-                                    <tr>
-                                        <td>
-                                            <label for="city">City </label>
-                                            <input v-model="form.city" id="city" type="text" readonly class="form-control form-control-lg"/>
-                                        </td>
-                                        <td>
-                                            <label for="country">Country </label>
-                                            <input v-model="form.country" id="country" type="text" readonly class="form-control form-control-lg"/>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
 
                             <div class="form-group required">
                                 <label>Max number of people</label>
@@ -65,7 +46,16 @@
                                 <input v-model.number="form.price" type="number" class="form-control form-control-lg">
                             </div>
 
-                            <!-- TODO: Checkboxovi za tagove servise. Potrebno je prethodno uopstiti u modelu da svi servisi imaju svoje Tagove. -->
+                            <div class="form-group mb-3">
+                                <label>Additional services:</label>
+                                <br>
+                                <template v-for="tag in this.tags">
+                                    <div class="form-group mb-3" :key="tag">
+                                        <input type="checkbox" v-model="form.additionalServices" :value="tag"/>
+                                        <label :for="tag">{{tag}}</label>
+                                    </div>
+                                </template>
+                            </div>
                             
                             <div class="form-group">
                                 <button @click="addAction"  :disabled="isFormValid == false" type="submit" class="btn btn-dark btn-lg btn-block">Add action</button>
@@ -94,12 +84,10 @@
                     endDate: "",
                     endTime: "",
                     maxNumOfPeople: "",
-                    address: "",
-                    city: "",
-                    country: "",
                     price: "",
-                    tags: []
+                    additionalServices: []
                 },
+                tags: []
             }
         },
         methods: {
@@ -147,11 +135,7 @@
                         timeTo: this.form.endTime,
                         maxNumOfPeople: this.form.maxNumOfPeople,
                         price: this.form.price,
-                        /*addressDTO: {
-                            country: this.form.country,
-                            city: this.form.city,
-                            street: this.form.address,
-                        },
+                        /*
                         tags: this.form.tags,*/
                     },
                     {
@@ -160,8 +144,10 @@
                         }
                 }).then(() => {
                     alert("Successfully added new action for your retreat!")
-                }).catch( () => {
-                    alert("Something went wrong!")
+                }).catch( error => {
+                    if (error.response.status === 409) alert("Reservations for this period already exists.");
+                    else if (error.response.status === 403) alert("You do not have access for this!");
+                    else alert("Could not add service availability");
                 })
             }
         },
@@ -211,10 +197,16 @@
                 })
             }
             else if (window.localStorage.getItem("role") === "ROLE_shipOwner"){
-                //TODO: Dobavi celokupnu adresu
+                // TODO
             }
             else if (window.localStorage.getItem("role") === "ROLE_retreatOwner"){
-                //TODO: Dobavi celokupnu adresu
+                axios.get('http://localhost:8088/retreats/get/' + this.$route.params.id, {
+                    headers: {
+                        Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+                    }
+                }).then((response) => {
+                    this.tags = response.data.additionalServices;
+                });
             }
 		
 		}
