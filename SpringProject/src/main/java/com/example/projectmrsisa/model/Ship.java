@@ -38,8 +38,8 @@ public class Ship extends Service {
     public Ship(Integer id, String name, String description, User owner, Address address, Set<String> pictures,
                 Set<String> rulesOfConduct, double price, boolean isDeleted, Set<Action> actions, String type,
                 double length, String engineNum, int enginePower, String maxSpeed, Set<String> navigationEquipment,
-                int capacity, Set<String> fishingEquipment, String reservationCancellationConditions) {
-        super(id, name, description, owner, address, pictures, rulesOfConduct, price, isDeleted, actions);
+                int capacity, Set<String> fishingEquipment, String reservationCancellationConditions, Set<Tag> additionalServices) {
+        super(id, name, description, owner, address, pictures, rulesOfConduct, price, isDeleted, actions, additionalServices);
         this.type = type;
         this.length = length;
         this.engineNum = engineNum;

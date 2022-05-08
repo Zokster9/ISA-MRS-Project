@@ -1,11 +1,15 @@
-insert into tags (name, description) values ('WiFi', 'WiFi access');
-insert into tags (name, description) values ('Garage', 'Parking spot for your car');
-insert into tags (name, description) values ('Heating', 'You can heat up the room if you feel cold');
-insert into tags (name, description) values ('Kitchen', 'You can prepare food');
-insert into tags (name, description) values ('Shower', 'You can wash yourself');
-insert into tags (name, description) values ('Barbeque', 'Barbeque with your friends');
-insert into tags (name, description) values ('Drinking water', 'You do not need to bring your own water');
-insert into tags (name, description) values ('Bathroom', 'Fully equipped bathroom');
+insert into tags (name, description) values ('WiFi', 'retreat');
+insert into tags (name, description) values ('Garage', 'retreat');
+insert into tags (name, description) values ('Heating', 'retreat');
+insert into tags (name, description) values ('Kitchen', 'retreat');
+insert into tags (name, description) values ('Shower', 'retreat');
+insert into tags (name, description) values ('Barbeque', 'retreat');
+insert into tags (name, description) values ('Drinking water', 'retreat');
+insert into tags (name, description) values ('Bathroom', 'retreat');
+insert into tags (name, description) values ('WiFi', 'ship');
+insert into tags (name, description) values ('Mini bar', 'ship');
+insert into tags (name, description) values ('TV', 'ship');
+insert into tags (name, description) values ('Jacuzzi', 'ship');
 
 insert into addresses (country, city, street) values ('Srbija', 'Subotica', 'Brace Radica 21');
 insert into addresses (country, city, street) values ('Srbija', 'Novi Sad', 'Sekspirova 4');
@@ -21,7 +25,7 @@ insert into roles (name) values ('ROLE_mainAdmin');
 
 -- za matiju sifra matija123
 -- ostalima je: sifra123
-insert into users (email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values ('matijazaric9@gmail.com', '$2a$10$6zhtvn7zujmExlDo2pDwUODVq09LpFBuBL62g6Bsd2lOJjnuctrKC','Matija', 'Zaric', 4, '+381657842312', false, false, 0, 0);
+insert into users (email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values ('matijazaric9@gmail.com', '$2a$10$6zhtvn7zujmExlDo2pDwUODVq09LpFBuBL62g6Bsd2lOJjnuctrKC','Matija', 'Zaric', 4, '+381657842312', true, false, 0, 0);
 insert into users (email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values ('sakal.teodor@gmail.com', '$2a$10$5bqbvqKlyaN8wBVdvl7UeefSJ8ja584oeYMbhK9FQgcjWK2laRxRO', 'Teodor', 'Sakal Franciskovic', 1, '+381636742312', false, false, 0, 0);
 insert into users (email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values ('lordje@gmail.com', '$2a$10$5bqbvqKlyaN8wBVdvl7UeefSJ8ja584oeYMbhK9FQgcjWK2laRxRO', 'Djordje', 'Vajagic', 2, '+381617647812', true, false, 0, 0);
 insert into users (email, password, name, surname, address_id, phone_number, is_active, is_deleted, loyalty_points, loyalty_status) values ('zoki@gmail.com', '$2a$10$5bqbvqKlyaN8wBVdvl7UeefSJ8ja584oeYMbhK9FQgcjWK2laRxRO', 'Zoran', 'Bukorac', 3, '+381607846912', true, false, 0, 0);
@@ -77,9 +81,12 @@ insert into my_fishing_equipment_ships (id, fishing_equipment) values (2, 'Hooks
 insert into my_fishing_equipment_ships (id, fishing_equipment) values (2, 'Lines');
 
 insert into retreats (id, num_of_beds, num_of_rooms) values (1, 4, 2);
-insert into retreat_tags (retreat_id, tag_id) values (1, 1);
-insert into retreat_tags (retreat_id, tag_id) values (1, 6);
-insert into retreat_tags (retreat_id, tag_id) values (1, 4);
+
+insert into service_tags (service_id, tag_id) values (1, 1);
+insert into service_tags (service_id, tag_id) values (1, 6);
+insert into service_tags (service_id, tag_id) values (1, 4);
+insert into service_tags (service_id, tag_id) values (2, 9);
+insert into service_tags (service_id, tag_id) values (2, 12);
 
 insert into subscriptions (client_id, subscription_id) values (5, 1);
 insert into subscriptions (client_id, subscription_id) values (5, 2);

@@ -37,13 +37,17 @@ public abstract class Service {
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "service")
     private Set<Action> actions = new HashSet<>();
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "service_tags", joinColumns = @JoinColumn(name = "service_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
+    private Set<Tag> additionalServices = new HashSet<>();
 
     public Service() {
         this.isDeleted = false;
     }
 
     public Service(Integer id, String name, String description, User owner, Address address, Set<String> pictures,
-                   Set<String> rulesOfConduct, double price, boolean isDeleted, Set<Action> actions) {
+                   Set<String> rulesOfConduct, double price, boolean isDeleted, Set<Action> actions, Set<Tag> additionalServices) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -54,6 +58,7 @@ public abstract class Service {
         this.price = price;
         this.isDeleted = isDeleted;
         this.actions = actions;
+        this.additionalServices = additionalServices;
     }
 
     public Integer getId() {
@@ -142,5 +147,17 @@ public abstract class Service {
 
     public void addRuleOfConduct(String ruleOfConduct) {
         this.rulesOfConduct.add(ruleOfConduct);
+    }
+
+    public Set<Tag> getAdditionalServices() {
+        return additionalServices;
+    }
+
+    public void setAdditionalServices(Set<Tag> additionalServices) {
+        this.additionalServices = additionalServices;
+    }
+
+    public void addAction(Action action) {
+        this.actions.add(action);
     }
 }

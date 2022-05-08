@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.util.List;
 
 @Service
 public class EmailService {
@@ -145,5 +146,17 @@ public class EmailService {
         mail.setText("Dear " + user.getName() + " " + user.getSurname() + " your account termination has been declined because of the following reason: " + declinedTerminationReason);
         //mails.add(mail);
         javaMailSender.send(mail);
+    }
+
+    @Async
+    public void sendSubscriptionEmails(List<String> emails) {
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(env.getProperty("spring.mail.username"));
+        mail.setFrom("isamrsprojekat@gmail.com");
+        mail.setSubject("Termination declined");
+        mail.setText("Fast reservation has been added for service that you have been subscribed. Go check it out.");
+        for (String email: emails) {
+            javaMailSender.send(mail);
+        }
     }
 }

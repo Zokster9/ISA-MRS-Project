@@ -15,14 +15,14 @@ public class TagService {
     @Autowired
     private TagRepository tagRepository;
 
-    public List<Tag> getTags() {
-        return tagRepository.findAll();
+    public List<Tag> getTags(String description) {
+        return tagRepository.findTagByDescription(description);
     }
 
-    public Set<Tag> findTags(List<String> tags) {
+    public Set<Tag> findTags(List<String> tags, String description) {
         Set<Tag> retVal = new HashSet<Tag>();
         for (String tag: tags) {
-            retVal.add(tagRepository.findTagByName(tag));
+            retVal.add(tagRepository.findTagByNameAndDescription(tag, description));
         }
         return retVal;
     }

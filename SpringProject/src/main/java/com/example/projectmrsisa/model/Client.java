@@ -72,4 +72,11 @@ public class Client extends User {
     public void setSubscriptions(Set<Service> subscriptions) {
         this.subscriptions = subscriptions;
     }
+
+    public boolean hasSubscription(Integer serviceId) {
+        for (Service service: this.subscriptions) {
+            if (service.getId() == serviceId) return true;
+        }
+        return false;
+    }
 }

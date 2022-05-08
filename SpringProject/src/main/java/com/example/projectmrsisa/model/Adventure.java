@@ -29,13 +29,12 @@ public class Adventure extends Service {
     public Adventure(Integer id, String name, String description, User owner, Address address, Set<String> pictures,
                      Set<String> rulesOfConduct, double price, boolean isDeleted, Set<Action> actions,
                      String instructorBiography, int maxNumOfPeople, Set<String> fishingEquipment,
-                     String reservationCancellationConditions /*,Set<Tag> additionalServices*/) {
-        super(id, name, description, owner, address, pictures, rulesOfConduct, price, isDeleted, actions);
+                     String reservationCancellationConditions, Set<Tag> additionalServices) {
+        super(id, name, description, owner, address, pictures, rulesOfConduct, price, isDeleted, actions, additionalServices);
         this.instructorBiography = instructorBiography;
         this.maxNumOfPeople = maxNumOfPeople;
         this.fishingEquipment = fishingEquipment;
         this.reservationCancellationConditions = reservationCancellationConditions;
-        //this.additionalServices = additionalServices;
     }
 
     public Adventure(AdventureDTO adventureDTO, Address address, User fishingInstructor){

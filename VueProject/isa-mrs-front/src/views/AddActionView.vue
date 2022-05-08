@@ -38,7 +38,7 @@
 
                             <div class="form-group required">
                                 <label>Max number of people</label>
-                                <input v.model.number="form.maxNumOfPeople" type="number" class="form-control form-control-lg"/>
+                                <input v-model.number="form.maxNumOfPeople" type="number" class="form-control form-control-lg"/>
                             </div>
                             
                             <div class="form-group required">
@@ -83,7 +83,7 @@
                     startTime: "",
                     endDate: "",
                     endTime: "",
-                    maxNumOfPeople: "",
+                    maxNumOfPeople: null,
                     price: "",
                     additionalServices: []
                 },
@@ -155,7 +155,7 @@
                 return typeof this.form.price === 'number' && !!this.form.price && this.form.price > 0;
             },
             maxNumOfPeopleIsValid(){
-                return typeof this.form.price === 'number' && !!this.form.price && this.form.price > 0;
+                return typeof this.form.maxNumOfPeople === 'number' && !!this.form.price && this.form.maxNumOfPeople > 0;
             },
             datesAreValid() {
                 let today = new Date();

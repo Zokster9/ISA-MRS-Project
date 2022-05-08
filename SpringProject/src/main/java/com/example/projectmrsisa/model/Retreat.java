@@ -13,10 +13,6 @@ public class Retreat extends Service {
     private int numOfRooms;
     @Column(name="numOfBeds", nullable = false)
     private int numOfBeds;
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "retreat_tags", joinColumns = @JoinColumn(name = "retreat_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
-    private Set<Tag> additionalServices = new HashSet<>();
 
     public Retreat() {
     }
@@ -24,10 +20,9 @@ public class Retreat extends Service {
     public Retreat(Integer id, String name, String description, User owner, Address address, Set<String> pictures,
                    Set<String> rulesOfConduct, double price, boolean isDeleted, Set<Action> actions, int numOfRooms,
                    int numOfBeds, Set<Tag> additionalServices) {
-        super(id, name, description, owner, address, pictures, rulesOfConduct, price, isDeleted, actions);
+        super(id, name, description, owner, address, pictures, rulesOfConduct, price, isDeleted, actions, additionalServices);
         this.numOfRooms = numOfRooms;
         this.numOfBeds = numOfBeds;
-        this.additionalServices = additionalServices;
     }
 
     public Retreat(RetreatDTO retreatDTO, Address address, Set<Tag> additionalServices, User owner) {
@@ -59,17 +54,5 @@ public class Retreat extends Service {
 
     public void setNumOfBeds(int numOfBeds) {
         this.numOfBeds = numOfBeds;
-    }
-
-    public Set<Tag> getAdditionalServices() {
-        return additionalServices;
-    }
-
-    public void setAdditionalServices(Set<Tag> additionalServices) {
-        this.additionalServices = additionalServices;
-    }
-
-    public void addAdditionalService(Tag additionalService) {
-        this.additionalServices.add(additionalService);
     }
 }

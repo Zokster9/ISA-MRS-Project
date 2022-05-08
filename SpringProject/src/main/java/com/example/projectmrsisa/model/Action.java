@@ -1,19 +1,38 @@
 package com.example.projectmrsisa.model;
 
+import com.example.projectmrsisa.dto.ActionDTO;
+
 import javax.persistence.*;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name="actions")
-public class Action extends Reservation {
+public class Action {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true, nullable = false)
+    private Integer id;
+
+    @Column(name="dateFrom", unique = true, nullable = false)
+    private Date dateFrom;
+
+    @Column(name="dateTo", unique = true, nullable = false)
+    private Date dateTo;
+
+    @Column(name="timeFrom", nullable = false)
+    private String timeFrom;
+
+    @Column(name="timeTo", nullable = false)
+    private String timeTo;
+
     @Column(name="maxNumOfPeople", nullable = false)
     private int maxNumOfPeople;
-    @Column(name="duration", nullable = false)
-    private String duration;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "eventPlace_id")
-    private Address eventPlace;
+
+    @Column(name = "price", nullable = false)
+    private double price;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "action_tags", joinColumns = @JoinColumn(name = "action_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
@@ -22,13 +41,65 @@ public class Action extends Reservation {
     public Action() {
     }
 
-    public Action(Integer id, Long fromDate, Long toDate, double price, ReservationStatus status, Rating rating,
-                  Service service, int maxNumOfPeople, String duration, Address eventPlace, Set<Tag> additionalServices) {
-        super(id, fromDate, toDate, price, status, rating, service);
+    public Action(Integer id, Date dateFrom, Date dateTo, String timeFrom, String timeTo, int maxNumOfPeople, double price, Set<Tag> additionalServices) {
+        this.id = id;
+        this.dateFrom = dateFrom;
+        this.dateTo = dateTo;
+        this.timeFrom = timeFrom;
+        this.timeTo = timeTo;
         this.maxNumOfPeople = maxNumOfPeople;
-        this.duration = duration;
-        this.eventPlace = eventPlace;
+        this.price = price;
         this.additionalServices = additionalServices;
+    }
+
+    public Action(ActionDTO actionDTO, Set<Tag> additionalServices) {
+        this.dateFrom = actionDTO.getDateFrom();
+        this.dateTo = actionDTO.getDateTo();
+        this.timeFrom = actionDTO.getTimeFrom();
+        this.timeTo = actionDTO.getTimeTo();
+        this.maxNumOfPeople = actionDTO.getMaxNumOfPeople();
+        this.price = actionDTO.getPrice();
+        this.additionalServices = additionalServices;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Date getDateFrom() {
+        return dateFrom;
+    }
+
+    public void setDateFrom(Date dateFrom) {
+        this.dateFrom = dateFrom;
+    }
+
+    public Date getDateTo() {
+        return dateTo;
+    }
+
+    public void setDateTo(Date dateTo) {
+        this.dateTo = dateTo;
+    }
+
+    public String getTimeFrom() {
+        return timeFrom;
+    }
+
+    public void setTimeFrom(String timeFrom) {
+        this.timeFrom = timeFrom;
+    }
+
+    public String getTimeTo() {
+        return timeTo;
+    }
+
+    public void setTimeTo(String timeTo) {
+        this.timeTo = timeTo;
     }
 
     public int getMaxNumOfPeople() {
@@ -39,20 +110,12 @@ public class Action extends Reservation {
         this.maxNumOfPeople = maxNumOfPeople;
     }
 
-    public String getDuration() {
-        return duration;
+    public double getPrice() {
+        return price;
     }
 
-    public void setDuration(String duration) {
-        this.duration = duration;
-    }
-
-    public Address getEventPlace() {
-        return eventPlace;
-    }
-
-    public void setEventPlace(Address eventPlace) {
-        this.eventPlace = eventPlace;
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public Set<Tag> getAdditionalServices() {
