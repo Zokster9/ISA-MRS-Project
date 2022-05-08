@@ -135,8 +135,7 @@
                         timeTo: this.form.endTime,
                         maxNumOfPeople: this.form.maxNumOfPeople,
                         price: this.form.price,
-                        /*
-                        tags: this.form.tags,*/
+                        additionalServices: this.form.additionalServices
                     },
                     {
                         headers:{
