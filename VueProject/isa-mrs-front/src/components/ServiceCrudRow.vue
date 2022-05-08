@@ -1,9 +1,9 @@
 <template>
-    <tr :key="service.id" :class="{activeDeleteButton: hoverDeleteButton, activeEditButton: hoverEditButton}">
+    <tr :key="service.id" :class="{activeDeleteButton: hoverDeleteButton, activeEditButton: hoverEditButton, activeAcceptButton: hoverNewActionButton}">
         <td class="align-middle text-center"> {{service.name}} </td>
         <td class="align-middle text-center"> <button type="button" @mouseover="hoverEditButton = true" @mouseleave="hoverEditButton = false" class="btn btn-warning" @click="editService(service.id)">Edit service info</button></td>
         <td class="align-middle text-center"> <button type="button" @mouseover="hoverDeleteButton = true" @mouseleave="hoverDeleteButton = false" class="btn btn-danger" @click="deleteService(service.id)">Delete service</button></td>
-        <td class="align-middle text-center"> <button type="button" class="btn btn-primary" @click="newAction(service.id)"> New action </button></td>
+        <td class="align-middle text-center"> <button type="button" @mouseover="hoverNewActionButton = true" @mouseleave ="hoverNewActionButton = false" class="btn btn-success" @click="newAction(service.id)"> New action </button></td>
     </tr>
 </template>
 
@@ -89,8 +89,7 @@
             return {
                 hoverEditButton: false,
                 hoverDeleteButton: false,
-                mid: "",
-                userService: ""
+                hoverNewActionButton: false,
             }
         },        
     }

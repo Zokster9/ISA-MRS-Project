@@ -118,7 +118,7 @@
                             Authorization: "Bearer " + window.localStorage.getItem("accessToken")
                         }
                 }).then(() => {
-                    alert("Successfully added new action for your retreat!")
+                    alert("Successfully added new action for your service!")
                 }).catch( error => {
                     if (error.response.status === 409) alert("Reservations for this period already exists.");
                     else if (error.response.status === 403) alert("You do not have access for this!");

@@ -93,6 +93,9 @@ insert into service_tags (service_id, tag_id) values (1, 6);
 insert into service_tags (service_id, tag_id) values (1, 4);
 insert into service_tags (service_id, tag_id) values (2, 9);
 insert into service_tags (service_id, tag_id) values (2, 12);
+insert into service_tags (service_id, tag_id) values (3, 13);
+insert into service_tags (service_id, tag_id) values (3, 14);
+insert into service_tags (service_id, tag_id) values (3, 15);
 
 insert into subscriptions (client_id, subscription_id) values (5, 1);
 insert into subscriptions (client_id, subscription_id) values (5, 2);

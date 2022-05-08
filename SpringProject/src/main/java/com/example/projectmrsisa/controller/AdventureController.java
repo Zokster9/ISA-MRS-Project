@@ -1,6 +1,7 @@
 package com.example.projectmrsisa.controller;
 
 
+import com.example.projectmrsisa.dto.ActionDTO;
 import com.example.projectmrsisa.dto.AdventureDTO;
 import com.example.projectmrsisa.dto.ServiceDTO;
 import com.example.projectmrsisa.model.*;
@@ -13,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -36,6 +39,15 @@ public class AdventureController {
 
     @Autowired
     private AddressService addressService;
+
+    @Autowired
+    private SubscriptionService subscriptionService;
+
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private ClientService clientService;
 
     @PostMapping(value="/create-adventure",consumes = "application/json")
     @PreAuthorize("hasRole('fishingInstructor')")
@@ -136,5 +148,49 @@ public class AdventureController {
         } catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+    @PostMapping(value="/add-action/{id}")
+    @PreAuthorize("hasRole('fishingInstructor')")
+    public ResponseEntity<ActionDTO> addAction(@PathVariable Integer id, @RequestBody ActionDTO actionDTO, Principal loggedUser){
+        if (!validAction(actionDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        try {
+            Adventure adventure = adventureService.findAdventureById(id);
+            if (adventure == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            if (!adventure.getOwner().getEmail().equals(loggedUser.getName())) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            if (!reservationService.checkIfReservationsExistForDate(id, actionDTO.getDateFrom(), actionDTO.getDateTo())) return new ResponseEntity<>(HttpStatus.CONFLICT);
+            if (!actionService.actionAlreadyExists(adventure.getActions(), actionDTO.getDateFrom(), actionDTO.getDateTo())) return new ResponseEntity<>(HttpStatus.CONFLICT);
+            Set<Tag> additionalServices = tagService.findTags(actionDTO.getAdditionalServices(), "adventure");
+            Action action = new Action(actionDTO, additionalServices);
+            action = actionService.addAction(action);
+            adventure = adventureService.addAction(adventure, action);
+            List<String> emails = subscriptionService.findClientsWithSubscription(clientService.findAll(), id);
+            emailService.sendSubscriptionEmails(emails);
+            return new ResponseEntity<>(new ActionDTO(action), HttpStatus.ACCEPTED);
+        } catch(Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private boolean validAction(ActionDTO actionDTO) {
+        if (!validDates(actionDTO.getDateFrom(), actionDTO.getDateTo(), actionDTO.getTimeFrom(), actionDTO.getTimeTo())) return false;
+        System.out.println(actionDTO.getMaxNumOfPeople());
+        if (actionDTO.getMaxNumOfPeople() <= 0) return false;
+        for (String as: actionDTO.getAdditionalServices()) {
+            if (as.equals("") || as.length() > 14) return false;
+        }
+        return !(actionDTO.getPrice() <= 0);
+    }
+
+    private boolean validDates(Date dateFrom, Date dateTo, String timeFrom, String timeTo) {
+        Date today = new Date();
+        if (dateFrom == null || dateTo == null || timeFrom == null || timeTo == null) return false;
+        if (dateFrom.compareTo(today) < 0) return false;
+        if (dateTo.compareTo(today) < 0 ) return false;
+        if (dateFrom.compareTo(dateTo) > 0) return false;
+        if (dateFrom.compareTo(dateTo) == 0) {
+            return Integer.parseInt(timeFrom) * 60 + Integer.parseInt(timeFrom)
+                    < Integer.parseInt(timeTo) * 60 + Integer.parseInt(timeTo);
+        }
+        return true;
     }
 }
