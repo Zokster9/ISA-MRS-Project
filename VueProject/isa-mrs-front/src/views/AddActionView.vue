@@ -120,14 +120,14 @@
                     })
                 }
                 else if (window.localStorage.getItem("role") === "ROLE_shipOwner"){
-                    // TODO
+                    this.sendData("ships");
                 }
                 else if (window.localStorage.getItem("role") === "ROLE_retreatOwner"){
-                    this.addRetreatAction();
+                    this.sendData("retreats");
                 }
             },
-            addRetreatAction() {
-                axios.post("http://localhost:8088/retreats/add-action/" + this.$route.params.id,
+            sendData(service) {
+                axios.post("http://localhost:8088/" + service + "/add-action/" + this.$route.params.id,
                     {
                         dateFrom: this.form.startDate,
                         timeFrom: this.form.startTime,
@@ -148,7 +148,7 @@
                     else if (error.response.status === 403) alert("You do not have access for this!");
                     else alert("Could not add service availability");
                 })
-            }
+            },
         },
         computed: {
             priceIsValid() {
@@ -196,7 +196,13 @@
                 })
             }
             else if (window.localStorage.getItem("role") === "ROLE_shipOwner"){
-                // TODO
+                axios.get('http://localhost:8088/ships/get/' + this.$route.params.id, {
+                    headers: {
+                        Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+                    }
+                }).then((response) => {
+                    this.tags = response.data.additionalServices;
+                });
             }
             else if (window.localStorage.getItem("role") === "ROLE_retreatOwner"){
                 axios.get('http://localhost:8088/retreats/get/' + this.$route.params.id, {

@@ -105,8 +105,7 @@
                     additionalServices: [],
                     pictures: []
                 },
-                tags: [],
-                retVal: null
+                tags: []
             }
         },
         computed: {
@@ -162,8 +161,7 @@
 					headers: {
 						Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
 					}
-				}).then((response) => {
-                    this.retVal = response.data;
+				}).then(() => {
                     alert("Added retreat");
                 }).catch(() => {
                     alert("ne valja brt");
@@ -179,7 +177,11 @@
         },
 
         mounted() {
-            axios.get("http://localhost:8088/tags/retreat").then((response) => {this.tags = response.data});
+            axios.get("http://localhost:8088/tags/retreat", {
+                headers: {
+                    Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+                }
+            }).then((response) => {this.tags = response.data});
         }
     }
 </script>

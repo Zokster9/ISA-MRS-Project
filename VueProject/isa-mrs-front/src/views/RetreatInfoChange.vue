@@ -197,7 +197,7 @@ import router from '@/router'
                 this.form.additionalServices = response.data.additionalServices;
                 this.form.pictures = response.data.pictures;
             });
-            axios.get("http://localhost:8088/tags", {
+            axios.get("http://localhost:8088/tags/retreat", {
                 headers: {
                     Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
                 }
