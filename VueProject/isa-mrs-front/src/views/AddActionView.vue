@@ -68,7 +68,7 @@
                             <!-- TODO: Checkboxovi za tagove servise. Potrebno je prethodno uopstiti u modelu da svi servisi imaju svoje Tagove. -->
                             
                             <div class="form-group">
-                                <button @click="addAction"  :disabled="isFormValid == false" type="submit" class="btn btn-dark btn-lg btn-block">Change info</button>
+                                <button @click="addAction"  :disabled="isFormValid == false" type="submit" class="btn btn-dark btn-lg btn-block">Add action</button>
                             </div>
                         </form>
                     </div>
@@ -127,16 +127,42 @@
                         }
                     }).then(() => {
                         alert("Successfully added new action!")
-                    }).error(() => {
+                    }).catch(() => {
                         alert("Something went wrong!")
                     })
                 }
                 else if (window.localStorage.getItem("role") === "ROLE_shipOwner"){
-                    //TODO
+                    // TODO
                 }
                 else if (window.localStorage.getItem("role") === "ROLE_retreatOwner"){
-                    //TODO
+                    this.addRetreatAction();
                 }
+            },
+            addRetreatAction() {
+                axios.post("http://localhost:8088/retreats/add-action/" + this.$route.params.id,
+                    {
+                        dateFrom: this.form.startDate,
+                        timeFrom: this.form.startTime,
+                        dateTo: this.form.endDate,
+                        timeTo: this.form.endTime,
+                        maxNumOfPeople: this.form.maxNumOfPeople,
+                        price: this.form.price,
+                        /*addressDTO: {
+                            country: this.form.country,
+                            city: this.form.city,
+                            street: this.form.address,
+                        },
+                        tags: this.form.tags,*/
+                    },
+                    {
+                        headers:{
+                            Authorization: "Bearer " + window.localStorage.getItem("accessToken")
+                        }
+                }).then(() => {
+                    alert("Successfully added new action for your retreat!")
+                }).catch( () => {
+                    alert("Something went wrong!")
+                })
             }
         },
         computed: {
@@ -146,14 +172,30 @@
             maxNumOfPeopleIsValid(){
                 return typeof this.form.price === 'number' && !!this.form.price && this.form.price > 0;
             },
-            isFormValid() {
+            datesAreValid() {
                 let today = new Date();
-                if (!this.form.startDate || !this.form.startTime || !this.form.price || !this.form.tags){
+                if (!this.form.startDate || !this.form.startTime || !this.form.endDate || !this.form.endTime){
                     return false;
                 }
                 if (new Date(this.form.startDate) < today) return false;
-                if (!this.priceIsValid) return false;
-                return true;
+                if (new Date(this.form.endDate) < today) return false;
+                if (new Date(this.form.startDate).getTime() > new Date(this.form.endDate).getTime()){
+                    return false;
+                }
+                else if (new Date(this.form.startDate).getTime() < new Date(this.form.endDate).getTime()){
+                    return true;
+                }
+                else{
+                    if (parseInt(this.form.startTime.split(":")[0]) * 60 + parseInt(this.form.startTime.split(":")[1]) <  parseInt(this.form.endTime.split(":")[0]) * 60 + parseInt(this.form.endTime.split(":")[1])){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+            },
+            isFormValid() {
+                return this.priceIsValid && this.maxNumOfPeopleIsValid && this.datesAreValid;
             }
         },
 		mounted() {
