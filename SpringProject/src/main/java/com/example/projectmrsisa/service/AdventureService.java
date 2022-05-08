@@ -2,6 +2,7 @@ package com.example.projectmrsisa.service;
 
 import com.example.projectmrsisa.dto.AdventureDTO;
 import com.example.projectmrsisa.model.Adventure;
+import com.example.projectmrsisa.model.Tag;
 import com.example.projectmrsisa.repository.AdventureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class AdventureService {
@@ -24,7 +26,7 @@ public class AdventureService {
 
     public void deleteAdventureById(Integer id) { adventureRepository.deleteAdventureById(id); }
 
-    public Adventure updateAdventure(Adventure adventure, AdventureDTO adventureDTO /*,Set<Tag> additionalServices*/) {
+    public Adventure updateAdventure(Adventure adventure, AdventureDTO adventureDTO, Set<Tag> additionalServices) {
         if (!adventure.getName().equals(adventureDTO.getName())) adventure.setName(adventureDTO.getName());
         if (!adventure.getDescription().equals(adventureDTO.getDescription()))
             adventure.setDescription(adventureDTO.getDescription());
@@ -38,7 +40,7 @@ public class AdventureService {
         adventure.setPictures(new HashSet<>(adventureDTO.getPictures()));
         adventure.setRulesOfConduct(new HashSet<>(adventureDTO.getRulesOfConduct()));
         adventure.setFishingEquipment(new HashSet<>(adventureDTO.getFishingEquipment()));
-        //TODO:additional services fali!
+        adventure.setAdditionalServices(additionalServices);
         return adventureRepository.save(adventure);
     }
 }

@@ -2,15 +2,9 @@ package com.example.projectmrsisa.controller;
 
 
 import com.example.projectmrsisa.dto.AdventureDTO;
-import com.example.projectmrsisa.dto.RetreatDTO;
 import com.example.projectmrsisa.dto.ServiceDTO;
-import com.example.projectmrsisa.model.Address;
-import com.example.projectmrsisa.model.Adventure;
-import com.example.projectmrsisa.model.Retreat;
-import com.example.projectmrsisa.model.User;
-import com.example.projectmrsisa.service.AddressService;
-import com.example.projectmrsisa.service.AdventureService;
-import com.example.projectmrsisa.service.UserService;
+import com.example.projectmrsisa.model.*;
+import com.example.projectmrsisa.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/adventures")
@@ -31,9 +26,18 @@ public class AdventureController {
     private UserService userService;
 
     @Autowired
+    private TagService tagService;
+
+    @Autowired
+    private ReservationService reservationService;
+
+    @Autowired
+    private ActionService actionService;
+
+    @Autowired
     private AddressService addressService;
 
-    @PostMapping(consumes = "application/json", produces = "application/json")
+    @PostMapping(value="/create-adventure",consumes = "application/json")
     @PreAuthorize("hasRole('fishingInstructor')")
     public ResponseEntity<AdventureDTO> createAdventure(@RequestBody AdventureDTO adventureDTO, Principal principal) {
         User fishingInstructor = userService.findUserByEmail(principal.getName());
@@ -61,7 +65,8 @@ public class AdventureController {
         }
 
         Address address = addressService.getAddress(new Address(adventureDTO.getCountry(), adventureDTO.getCity(), adventureDTO.getStreet()));
-        Adventure adventure = adventureService.addAdventure(new Adventure(adventureDTO, address, fishingInstructor));
+        Set<Tag> additionalServices = tagService.findTags(adventureDTO.getAdditionalServices(), "adventure");
+        Adventure adventure = adventureService.addAdventure(new Adventure(adventureDTO, address, fishingInstructor, additionalServices));
         return new ResponseEntity<>(new AdventureDTO(adventure), HttpStatus.CREATED);
     }
 
@@ -122,10 +127,11 @@ public class AdventureController {
         if (adventureDTO.getInstructorBiography().length() < 5 || adventureDTO.getInstructorBiography() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        //TODO: provera da li postoje rezervacije za avanturu
         try{
             Adventure adventure = adventureService.findAdventureById(id);
-            //todo:Tagovi
-            adventure = adventureService.updateAdventure(adventure, adventureDTO /*,tags*/);
+            Set<Tag> newAdditionalServices = tagService.findTags(adventureDTO.getAdditionalServices(), "adventure");
+            adventure = adventureService.updateAdventure(adventure, adventureDTO, newAdditionalServices);
             return new ResponseEntity<>(new AdventureDTO(adventure), HttpStatus.OK);
         } catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

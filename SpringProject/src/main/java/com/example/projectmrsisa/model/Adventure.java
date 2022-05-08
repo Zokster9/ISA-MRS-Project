@@ -19,9 +19,6 @@ public class Adventure extends Service {
     private Set<String> fishingEquipment = new HashSet<>();
     @Column(name = "reservationCancellationConditions", nullable = false)
     private String reservationCancellationConditions;
-    //@JoinTable(name = "adventure_tags", joinColumns = @JoinColumn(name = "adventure_id", referencedColumnName = "id"),
-           // inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
-    //private Set<Tag> additionalServices = new HashSet<>();
 
     public Adventure() {
     }
@@ -37,7 +34,7 @@ public class Adventure extends Service {
         this.reservationCancellationConditions = reservationCancellationConditions;
     }
 
-    public Adventure(AdventureDTO adventureDTO, Address address, User fishingInstructor){
+    public Adventure(AdventureDTO adventureDTO, Address address, User fishingInstructor, Set<Tag> additionalServices){
         this.setName(adventureDTO.getName());
         this.setDescription(adventureDTO.getDescription());
         this.setOwner(fishingInstructor);
@@ -51,6 +48,7 @@ public class Adventure extends Service {
         this.setMaxNumOfPeople(adventureDTO.getMaxNumOfPeople());
         this.setFishingEquipment(new HashSet<>(adventureDTO.getFishingEquipment()));
         this.setReservationCancellationConditions(adventureDTO.getReservationCancellationConditions());
+        this.setAdditionalServices(additionalServices);
     }
 
     public String getInstructorBiography() {
@@ -84,14 +82,6 @@ public class Adventure extends Service {
     public void setReservationCancellationConditions(String reservationCancellationConditions) {
         this.reservationCancellationConditions = reservationCancellationConditions;
     }
-
-   /* public Set<Tag> getAdditionalServices() {
-        return additionalServices;
-    }
-
-    public void setAdditionalServices(Set<Tag> additionalServices) {
-        this.additionalServices = additionalServices;
-    }*/
 
     public void addFishingEquipment(String fishingEquipment){
         this.fishingEquipment.add(fishingEquipment);

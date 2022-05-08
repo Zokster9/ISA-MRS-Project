@@ -10,6 +10,12 @@ insert into tags (name, description) values ('WiFi', 'ship');
 insert into tags (name, description) values ('Mini bar', 'ship');
 insert into tags (name, description) values ('TV', 'ship');
 insert into tags (name, description) values ('Jacuzzi', 'ship');
+insert into tags (name, description) values ('Additional boat', 'adventure');
+insert into tags (name, description) values ('Fish food', 'adventure');
+insert into tags (name, description) values ('Fish preparing','adventure');
+insert into tags (name, description) values ('Fish cleaning', 'adventure');
+insert into tags (name, description) values ('Fishing license', 'adventure');
+insert into tags (name, description) values ('Cabins', 'adventure');
 
 insert into addresses (country, city, street) values ('Srbija', 'Subotica', 'Brace Radica 21');
 insert into addresses (country, city, street) values ('Srbija', 'Novi Sad', 'Sekspirova 4');
