@@ -21,7 +21,6 @@
                                     </tr>
                                 </table>
                             </div>
-<!--                        TODO: Ja mislim da je trajanje akcije nama zapravo krajnji datum i vreme, a ne string. Pa bi i ovo trebalo dodati u formu.
                             <div class="form-group required">
                                 <table>
                                     <tr>
@@ -36,7 +35,6 @@
                                     </tr>
                                 </table>
                             </div>
--->
                             <div class="form-group required">
                                 <label>Address </label>
                                 <input v-model="form.address" id="address" type="text" readonly class="form-control form-control-lg">
@@ -55,6 +53,11 @@
                                         </td>
                                     </tr>
                                 </table>
+                            </div>
+
+                            <div class="form-group required">
+                                <label>Max number of people</label>
+                                <input v.model.number="form.maxNumOfPeople" type="number" class="form-control form-control-lg"/>
                             </div>
                             
                             <div class="form-group required">
@@ -88,8 +91,8 @@
                 form:{
                     startDate: "",
                     startTime: "",
-                    //endDate: "",
-                    //endTime: "",
+                    endDate: "",
+                    endTime: "",
                     maxNumOfPeople: "",
                     address: "",
                     city: "",
@@ -100,18 +103,15 @@
             }
         },
         methods: {
-            priceIsValid() {
-                return typeof this.form.price === 'number' && !!this.form.price && this.form.price > 0;
-            },
             //TODO: menjaj ovde parametre ako treba
             addAction() {
                 if (window.localStorage.getItem("role") === "ROLE_fishingInstructor"){
                     axios.post("http://localhost:8088/adventures/addAction/" + this.$route.params.id,
                     {
-                        startDate: this.form.startDate,
-                        startTime: this.form.startTime,
-                        //endDate: this.form.endDate,
-                        //endTime: this.form.endTime,
+                        dateFrom: this.form.startDate,
+                        timeFrom: this.form.startTime,
+                        dateTo: this.form.endDate,
+                        timeTo: this.form.endTime,
                         maxNumOfPeople: this.form.maxNumOfPeople,
                         price: this.form.price,
                         addressDTO: {
@@ -140,8 +140,13 @@
             }
         },
         computed: {
-            //TODO: Ako treba endDate i endTime, dodati proveru i za to.
-            isFormValid(){
+            priceIsValid() {
+                return typeof this.form.price === 'number' && !!this.form.price && this.form.price > 0;
+            },
+            maxNumOfPeopleIsValid(){
+                return typeof this.form.price === 'number' && !!this.form.price && this.form.price > 0;
+            },
+            isFormValid() {
                 let today = new Date();
                 if (!this.form.startDate || !this.form.startTime || !this.form.price || !this.form.tags){
                     return false;

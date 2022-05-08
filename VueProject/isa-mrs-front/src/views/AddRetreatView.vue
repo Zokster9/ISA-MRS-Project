@@ -179,7 +179,7 @@
         },
 
         mounted() {
-            axios.get("http://localhost:8088/tags").then((response) => {this.tags = response.data});
+            axios.get("http://localhost:8088/tags/retreat").then((response) => {this.tags = response.data});
         }
     }
 </script>
