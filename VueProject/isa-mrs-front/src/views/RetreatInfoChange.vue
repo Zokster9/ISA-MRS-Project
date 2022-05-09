@@ -165,7 +165,7 @@ import router from '@/router'
 					}
 				}).then(() => {
                     alert("Retreat updated!");
-                    router.back();
+                    router.push("/service-crud");
                 }).catch(() => {
                     alert("ne valja brt");
                 });

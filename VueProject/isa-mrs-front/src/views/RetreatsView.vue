@@ -35,7 +35,7 @@
             }
         },
         mounted () {
-            axios.get("http://localhost:8088/retreats/")
+            axios.get("http://localhost:8088/retreats/getAll")
             .then(response => {
                 this.searchResults = response.data;
             });

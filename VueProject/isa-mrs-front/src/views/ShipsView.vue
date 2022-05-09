@@ -35,7 +35,7 @@
             }
         },
         mounted () {
-            axios.get("http://localhost:8088/ships/")
+            axios.get("http://localhost:8088/ships/getAll")
             .then(response => {
                 this.searchResults = response.data;
             });

@@ -93,13 +93,13 @@ const routes = [{
             import ('../views/AddAdventureView.vue')
     },
     {
-        path: '/fishing-instructors',
+        path: '/fishing-instructors/',
         name: 'fishing-instructors',
         component: () =>
             import ('../views/FishingInstructorsView.vue')
     },
     {
-        path: '/retreats',
+        path: '/retreats/',
         name: 'retreats',
         component: () =>
             import ('../views/RetreatsView.vue')

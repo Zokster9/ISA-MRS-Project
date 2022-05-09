@@ -65,7 +65,7 @@ public class UserController {
                     privilegedUser = PrivilegedUser.SHIP_OWNER;
                     break;
             }
-            RegistrationReasoningDTO registrationReasoningDTO = new RegistrationReasoningDTO(userService.findRegistrationReasoningByUserId(iu));
+            RegistrationReasoningDTO registrationReasoningDTO = new RegistrationReasoningDTO(userService.findRegistrationReasoningByUserId(iu.getId()));
             if (!registrationReasoningDTO.isAnswered()){
                 inactiveUsersDTO.add(new UserDTO(iu, privilegedUser, registrationReasoningDTO));
             }
