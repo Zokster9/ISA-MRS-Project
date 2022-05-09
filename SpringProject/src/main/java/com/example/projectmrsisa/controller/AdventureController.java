@@ -2,10 +2,12 @@ package com.example.projectmrsisa.controller;
 
 
 import com.example.projectmrsisa.dto.AdventureDTO;
+import com.example.projectmrsisa.dto.ServiceAvailabilityDTO;
 import com.example.projectmrsisa.dto.ServiceDTO;
 import com.example.projectmrsisa.model.*;
 import com.example.projectmrsisa.service.AddressService;
 import com.example.projectmrsisa.service.AdventureService;
+import com.example.projectmrsisa.service.ServiceAvailabilityService;
 import com.example.projectmrsisa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 
 @RestController
 @RequestMapping(value = "/adventures")
@@ -30,6 +33,9 @@ public class AdventureController {
 
     @Autowired
     private AddressService addressService;
+
+    @Autowired
+    private ServiceAvailabilityService serviceAvailabilityService;
 
     @PostMapping(consumes = "application/json", produces = "application/json")
     @PreAuthorize("hasRole('fishingInstructor')")
@@ -140,8 +146,40 @@ public class AdventureController {
                 adventureDTOS.add(new AdventureDTO(adventure));
             }
             return new ResponseEntity<>(adventureDTOS, HttpStatus.OK);
+        }catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(value = "/add-availability/{id}")
+    @PreAuthorize("hasRole('fishingInstructor')")
+    public ResponseEntity<ServiceAvailabilityDTO> addAdventureAvailability(@PathVariable Integer id, @RequestBody ServiceAvailabilityDTO serviceAvailabilityDTO) {
+        if (!validServiceAvailability(serviceAvailabilityDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        try {
+            Adventure adventure = adventureService.findAdventureById(id);
+            if (adventure == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ServiceAvailability serviceAvailability = new ServiceAvailability(serviceAvailabilityDTO, adventure);
+            serviceAvailability = serviceAvailabilityService.addAvailability(id, serviceAvailability);
+            if (serviceAvailability == null) return new ResponseEntity<>(HttpStatus.CONFLICT);
+            return new ResponseEntity<>(new ServiceAvailabilityDTO(serviceAvailability), HttpStatus.ACCEPTED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    private boolean validServiceAvailability(ServiceAvailabilityDTO serviceAvailabilityDTO) {
+        Date today = new Date();
+        if (serviceAvailabilityDTO.getDateFrom() == null) return false;
+        if (serviceAvailabilityDTO.getDateTo() == null) return false;
+        Date dateFrom = serviceAvailabilityDTO.getDateFrom();
+        Date dateTo = serviceAvailabilityDTO.getDateTo();
+        if (dateFrom.compareTo(today) < 0) return false;
+        if (dateTo.compareTo(today) < 0 ) return false;
+        if (dateFrom.compareTo(dateTo) > 0) return false;
+        if (dateFrom.compareTo(dateTo) == 0) {
+            return Integer.parseInt(serviceAvailabilityDTO.getTimeFrom().split(":")[0]) * 60 + Integer.parseInt(serviceAvailabilityDTO.getTimeFrom().split(":")[1])
+                    < Integer.parseInt(serviceAvailabilityDTO.getTimeTo().split(":")[0]) * 60 + Integer.parseInt(serviceAvailabilityDTO.getTimeTo().split(":")[1]);
+        }
+        return true;
     }
 }

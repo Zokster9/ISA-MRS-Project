@@ -19,8 +19,15 @@
                         </tr>
                     </tbody>
                 </table>
-                    <!-- dopuni u zavisnosti od userType na koju stranicu da ide u zavisnosti od korisnika -->
-                    <router-link exact to="/add-adventure"> <button type="button" class="btn btn-success float-end"> Add a service </button> </router-link>
+                    <div v-if="userType == 'fishingInstructor'">
+                        <router-link exact to="/add-adventure"> <button type="button" class="btn btn-success float-end"> Add a service </button> </router-link>
+                    </div>
+                    <div v-if="userType == 'retreatOwner'">
+                        <router-link exact to="/add-retreat"> <button type="button" class="btn btn-success float-end"> Add a service </button> </router-link>
+                    </div>
+                    <div v-if="userType == 'shipOwner'">
+                        <router-link exact to="/add-ship"> <button type="button" class="btn btn-success float-end"> Add a service </button> </router-link>
+                    </div>                                        
             </div>
         </div>
     </div>    
@@ -61,6 +68,13 @@
 				}
 			}).then((response) =>{
                 this.services = response.data
+                if (window.localStorage.getItem("role") === "ROLE_fishingInstructor"){
+                    this.userType = "fishingInstructor";
+                } else if (window.localStorage.getItem("role") === "ROLE_retreatOwner"){
+                    this.userType = "retreatOwner"
+                } else if (window.localStorage.getItem("role") === "ROLE_shipOwner"){
+                    this.userType = "shipOwner"
+                }
             })
         },
     }

@@ -1,11 +1,9 @@
 package com.example.projectmrsisa.controller;
 
 import com.example.projectmrsisa.dto.RetreatDTO;
+import com.example.projectmrsisa.dto.ServiceAvailabilityDTO;
 import com.example.projectmrsisa.model.*;
-import com.example.projectmrsisa.service.AddressService;
-import com.example.projectmrsisa.service.RetreatService;
-import com.example.projectmrsisa.service.TagService;
-import com.example.projectmrsisa.service.UserService;
+import com.example.projectmrsisa.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -32,6 +31,9 @@ public class RetreatController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ServiceAvailabilityService serviceAvailabilityService;
 
     @GetMapping(value="/getAll", produces = "application/json")
     public ResponseEntity<List<RetreatDTO>> getRetreats() {
@@ -143,5 +145,37 @@ public class RetreatController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @PostMapping(value = "/add-availability/{id}")
+    @PreAuthorize("hasRole('retreatOwner')")
+    public ResponseEntity<ServiceAvailabilityDTO> addRetreatAvailability(@PathVariable Integer id, @RequestBody ServiceAvailabilityDTO serviceAvailabilityDTO) {
+        if (!validServiceAvailability(serviceAvailabilityDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        try {
+            Retreat retreat = retreatService.getRetreatById(id);
+            if (retreat == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            ServiceAvailability serviceAvailability = new ServiceAvailability(serviceAvailabilityDTO, retreat);
+            serviceAvailability = serviceAvailabilityService.addAvailability(id, serviceAvailability);
+            if (serviceAvailability == null) return new ResponseEntity<>(HttpStatus.CONFLICT);
+            return new ResponseEntity<>(new ServiceAvailabilityDTO(serviceAvailability), HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private boolean validServiceAvailability(ServiceAvailabilityDTO serviceAvailabilityDTO) {
+        Date today = new Date();
+        if (serviceAvailabilityDTO.getDateFrom() == null) return false;
+        if (serviceAvailabilityDTO.getDateTo() == null) return false;
+        Date dateFrom = serviceAvailabilityDTO.getDateFrom();
+        Date dateTo = serviceAvailabilityDTO.getDateTo();
+        if (dateFrom.compareTo(today) < 0) return false;
+        if (dateTo.compareTo(today) < 0 ) return false;
+        if (dateFrom.compareTo(dateTo) > 0) return false;
+        if (dateFrom.compareTo(dateTo) == 0) {
+            return Integer.parseInt(serviceAvailabilityDTO.getTimeFrom().split(":")[0]) * 60 + Integer.parseInt(serviceAvailabilityDTO.getTimeFrom().split(":")[1])
+                    < Integer.parseInt(serviceAvailabilityDTO.getTimeTo().split(":")[0]) * 60 + Integer.parseInt(serviceAvailabilityDTO.getTimeTo().split(":")[1]);
+        }
+        return true;
     }
 }
