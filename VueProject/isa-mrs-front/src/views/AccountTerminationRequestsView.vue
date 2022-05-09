@@ -12,6 +12,11 @@
                         <th colspan="100%" class="text-center h2"> Account Termination Requests </th>
                     </thead>
                     <tbody>
+                        <tr>
+                            <td class="text-center"> <b> Name and surname </b> </td>
+                            <td class="text-center"> <b> Termination reasoning </b> </td>
+                            <td class="text-center" colspan="2"> <b> OPTIONS </b> </td>  
+                        </tr>
                         <TerminationRequestRow v-for="terminationRequest in terminationRequests" :termination="terminationRequest" :key="terminationRequest.id"></TerminationRequestRow>
                     </tbody>
                 </table>
