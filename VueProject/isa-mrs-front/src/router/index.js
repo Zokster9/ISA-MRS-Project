@@ -181,6 +181,12 @@ const routes = [{
         name: 'admin-users-view',
         component: () =>
             import('../views/AdminUsersView.vue')
+    },
+    {
+        path:'/add-action/:id',
+        name:'add-action',
+        component: () =>
+            import ('../views/AddActionView.vue')
     }
 ]
 

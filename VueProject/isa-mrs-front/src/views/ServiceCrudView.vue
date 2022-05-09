@@ -16,23 +16,18 @@
                             <td class="text-center align-items"> <b> Service name </b> </td>
                             <td class="text-center align-items"> <b> EDIT </b> </td>
                             <td class="text-center align-items"> <b> DELETE </b> </td>
+                            <td class="text-center align-items"> <b> ADD ACTION </b> </td>
                         </tr>
                         <ServiceCrudRow v-for="service in services" :service="service" :key="service.id"></ServiceCrudRow>
                         <tr>
                             <td colspan="2"><input v-model="searchText" type="text" class="form-control" placeholder="Search by name, address, or conduct."></td>
-                            <td> <button type="button" class="btn btn-primary float-end" @onclick="search">Search services</button></td>
+                            <td class="text-center" colspan="2"> <button type="button float-center" class="btn btn-primary" @onclick="search">Search services</button></td>
                         </tr>
                     </tbody>
                 </table>
-                    <div v-if="userType == 'fishingInstructor'">
-                        <router-link exact to="/add-adventure"> <button type="button" class="btn btn-success float-end"> Add a service </button> </router-link>
-                    </div>
-                    <div v-if="userType == 'retreatOwner'">
-                        <router-link exact to="/add-retreat"> <button type="button" class="btn btn-success float-end"> Add a service </button> </router-link>
-                    </div>
-                    <div v-if="userType == 'shipOwner'">
-                        <router-link exact to="/add-ship"> <button type="button" class="btn btn-success float-end"> Add a service </button> </router-link>
-                    </div>                                        
+                    <div>
+                        <button type="button" @click="addService" class="btn btn-success float-end"> Add a service </button>
+                    </div>                                       
             </div>
         </div>
     </div>    
@@ -44,6 +39,7 @@
     import Vue from 'vue'
     import axios from 'axios'
     import VueAxios from 'vue-axios'
+import router from '@/router'
 
     Vue.use(VueAxios, axios)
 
@@ -65,6 +61,16 @@
                 search(){
                     //TODO
                 },
+
+                addService() {
+                    if (window.localStorage.getItem("role") === "ROLE_fishingInstructor"){
+                        router.push('/add-adventure');
+                    } else if (window.localStorage.getItem("role") === "ROLE_retreatOwner"){
+                        router.push('/add-retreat');
+                    } else if (window.localStorage.getItem("role") === "ROLE_shipOwner"){
+                        router.push('/add-ship');
+                    }
+                }
         },
         mounted(){
             axios.get("http://localhost:8088/users/findMyEntities", {

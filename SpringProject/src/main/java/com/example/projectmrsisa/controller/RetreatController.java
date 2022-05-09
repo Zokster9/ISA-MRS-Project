@@ -1,5 +1,6 @@
 package com.example.projectmrsisa.controller;
 
+import com.example.projectmrsisa.dto.ActionDTO;
 import com.example.projectmrsisa.dto.RetreatDTO;
 import com.example.projectmrsisa.dto.ServiceAvailabilityDTO;
 import com.example.projectmrsisa.model.*;
@@ -11,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,6 +37,21 @@ public class RetreatController {
     @Autowired
     private ServiceAvailabilityService serviceAvailabilityService;
 
+    @Autowired
+    private ClientService clientService;
+
+    @Autowired
+    private ReservationService reservationService;
+
+    @Autowired
+    private ActionService actionService;
+
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private SubscriptionService subscriptionService;
+
     @GetMapping(value="/getAll", produces = "application/json")
     public ResponseEntity<List<RetreatDTO>> getRetreats() {
         try {
@@ -51,12 +68,11 @@ public class RetreatController {
     }
 
     @PostMapping(value = "/create-retreat", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<RetreatDTO> createRetreat(@RequestBody RetreatDTO retreatDTO) {
-        //TODO: Dobaviti vlasnika broda uz pomoc JWT
-        //  privremeno
+    @PreAuthorize("hasRole('retreatOwner')")
+    public ResponseEntity<RetreatDTO> createRetreat(@RequestBody RetreatDTO retreatDTO, Principal loggedUser) {
         User retreatOwner;
         try {
-            retreatOwner = userService.findUserById(1);
+            retreatOwner = userService.findUserByEmail(loggedUser.getName());
         } catch (Exception e) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
         if (!validAddress(retreatDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         if (!validateRetreatData(retreatDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -64,7 +80,7 @@ public class RetreatController {
         Set<Tag> additionalServices;
         try {
             a = addressService.getAddress(new Address(retreatDTO.getCountry(), retreatDTO.getCity(), retreatDTO.getStreet()));
-            additionalServices = tagService.findTags(retreatDTO.getAdditionalServices());
+            additionalServices = tagService.findTags(retreatDTO.getAdditionalServices(), "retreat");
             Retreat retreat = retreatService.addRetreat(new Retreat(retreatDTO, a, additionalServices, retreatOwner));
             return new ResponseEntity<>(new RetreatDTO(retreat), HttpStatus.OK);
         }catch (Exception e) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
@@ -124,7 +140,7 @@ public class RetreatController {
         // TODO: provera da li postoje rezervacije za vikendicu
         try {
             Retreat retreat = retreatService.getRetreatById(id);
-            Set<Tag> newAdditionalServices = tagService.findTags(retreatDTO.getAdditionalServices());
+            Set<Tag> newAdditionalServices = tagService.findTags(retreatDTO.getAdditionalServices(), "retreat");
             retreat = retreatService.updateRetreat(retreat, retreatDTO, newAdditionalServices);
             return new ResponseEntity<>(new RetreatDTO(retreat), HttpStatus.OK);
         }catch (Exception e) {
@@ -162,19 +178,53 @@ public class RetreatController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+    
+    @PostMapping(value = "/add-action/{id}")
+    @PreAuthorize("hasRole('retreatOwner')")
+    public ResponseEntity<ActionDTO> addAction(@PathVariable Integer id, @RequestBody ActionDTO actionDTO, Principal loggedUser) {
+        if (!validAction(actionDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        try {
+            Retreat retreat = retreatService.getRetreatById(id);
+            if (retreat == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            if (!retreat.getOwner().getEmail().equals(loggedUser.getName())) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            if (!reservationService.checkIfReservationsExistForDate(id, actionDTO.getDateFrom(), actionDTO.getDateTo())) return new ResponseEntity<>(HttpStatus.CONFLICT);
+            if (!actionService.actionAlreadyExists(retreat.getActions(), actionDTO.getDateFrom(), actionDTO.getDateTo())) return new ResponseEntity<>(HttpStatus.CONFLICT);
+            Set<Tag> additionalServices = tagService.findTags(actionDTO.getAdditionalServices(), "retreat");
+            Action action = new Action(actionDTO, additionalServices);
+            action = actionService.addAction(action);
+            retreat = retreatService.addAction(retreat, action);
+            List<String> emails = subscriptionService.findClientsWithSubscription(clientService.findAll(), id);
+            emailService.sendSubscriptionEmails(emails);
+            return new ResponseEntity<>(new ActionDTO(action), HttpStatus.ACCEPTED);
+        }catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 
     private boolean validServiceAvailability(ServiceAvailabilityDTO serviceAvailabilityDTO) {
+        if (!validDates(serviceAvailabilityDTO.getDateFrom(), serviceAvailabilityDTO.getDateTo(), serviceAvailabilityDTO.getTimeFrom(), serviceAvailabilityDTO.getTimeTo())) return false;
+        return true;
+    }
+    
+    private boolean validAction(ActionDTO actionDTO) {
+        if (!validDates(actionDTO.getDateFrom(), actionDTO.getDateTo(), actionDTO.getTimeFrom(), actionDTO.getTimeTo())) return false;
+        System.out.println(actionDTO.getMaxNumOfPeople());
+        if (actionDTO.getMaxNumOfPeople() <= 0) return false;
+        for (String as: actionDTO.getAdditionalServices()) {
+            if (as.equals("") || as.length() > 14) return false;
+        }
+        return !(actionDTO.getPrice() <= 0);
+    }
+
+    private boolean validDates(Date dateFrom, Date dateTo, String timeFrom, String timeTo) {
         Date today = new Date();
-        if (serviceAvailabilityDTO.getDateFrom() == null) return false;
-        if (serviceAvailabilityDTO.getDateTo() == null) return false;
-        Date dateFrom = serviceAvailabilityDTO.getDateFrom();
-        Date dateTo = serviceAvailabilityDTO.getDateTo();
+        if (dateFrom == null || dateTo == null || timeFrom == null || timeTo == null) return false;
         if (dateFrom.compareTo(today) < 0) return false;
         if (dateTo.compareTo(today) < 0 ) return false;
         if (dateFrom.compareTo(dateTo) > 0) return false;
         if (dateFrom.compareTo(dateTo) == 0) {
-            return Integer.parseInt(serviceAvailabilityDTO.getTimeFrom().split(":")[0]) * 60 + Integer.parseInt(serviceAvailabilityDTO.getTimeFrom().split(":")[1])
-                    < Integer.parseInt(serviceAvailabilityDTO.getTimeTo().split(":")[0]) * 60 + Integer.parseInt(serviceAvailabilityDTO.getTimeTo().split(":")[1]);
+            return Integer.parseInt(timeFrom) * 60 + Integer.parseInt(timeFrom)
+                    < Integer.parseInt(timeTo) * 60 + Integer.parseInt(timeTo);
         }
         return true;
     }

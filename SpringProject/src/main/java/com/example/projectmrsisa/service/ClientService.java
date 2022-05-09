@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ClientService {
 
@@ -18,5 +20,9 @@ public class ClientService {
     public Client save(Client client) {
         client.setPassword(passwordEncoder.encode(client.getPassword()));
         return clientRepository.save(client);
+    }
+
+    public List<Client> findAll() {
+        return clientRepository.findAll();
     }
 }

@@ -1,11 +1,12 @@
 <template>
-    <tr :key="service.id" :class="{activeDeleteButton: hoverDeleteButton, activeEditButton: hoverEditButton}">
+    <tr :key="service.id" :class="{activeDeleteButton: hoverDeleteButton, activeEditButton: hoverEditButton, activeAcceptButton: hoverNewActionButton}">
         <td class="align-middle text-center">
             <figcaption class="mb-1"> {{service.name}} </figcaption>
             <img :src="require('@/assets/' + service.pictures[0])" style="width:200px; height:200px;" class="rounded">
         </td>
         <td class="align-middle text-center"> <button type="button" @mouseover="hoverEditButton = true" @mouseleave="hoverEditButton = false" class="btn btn-warning" @click="editService(service.id)">Edit service info</button></td>
         <td class="align-middle text-center"> <button type="button" @mouseover="hoverDeleteButton = true" @mouseleave="hoverDeleteButton = false" class="btn btn-danger" @click="deleteService(service.id)">Delete service</button></td>
+        <td class="align-middle text-center"> <button type="button" @mouseover="hoverNewActionButton = true" @mouseleave ="hoverNewActionButton = false" class="btn btn-success" @click="newAction(service.id)"> New action </button></td>
     </tr>
 </template>
 
@@ -20,6 +21,9 @@
     export default {
         props: ["service"],
         methods: {
+            newAction(id){
+                router.push('/add-action/' + id)
+            },
             //router link na stranicu sa servisom koji ima dati ID
             editService(id){
                 this.id = id;
@@ -82,8 +86,7 @@
             return {
                 hoverEditButton: false,
                 hoverDeleteButton: false,
-                mid: "",
-                userService: ""
+                hoverNewActionButton: false,
             }
         },        
     }

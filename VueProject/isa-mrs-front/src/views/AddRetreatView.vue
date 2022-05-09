@@ -85,6 +85,7 @@
     import Vue from 'vue'
     import axios from 'axios'
     import VueAxios from 'vue-axios'
+    import router from '@/router'
 
     Vue.use(VueAxios, axios)
 
@@ -105,8 +106,7 @@
                     additionalServices: [],
                     pictures: []
                 },
-                tags: [],
-                retVal: null
+                tags: []
             }
         },
         computed: {
@@ -162,11 +162,12 @@
 					headers: {
 						Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
 					}
-				}).then((response) => {
-                    this.retVal = response.data;
-                    alert("Added retreat");
-                }).catch(() => {
-                    alert("ne valja brt");
+				}).then(response => {
+                    alert('Added retreat: ' + response.data.name + '.');
+                    router.push('/service-crud');
+                }).catch(error => {
+                    if (error.response.status === 400) alert("Server error.");
+                    else alert("Error occurred while adding retreat!");
                 });
             },
 
@@ -179,7 +180,11 @@
         },
 
         mounted() {
-            axios.get("http://localhost:8088/tags").then((response) => {this.tags = response.data});
+            axios.get("http://localhost:8088/tags/retreat", {
+                headers: {
+                    Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+                }
+            }).then((response) => {this.tags = response.data});
         }
     }
 </script>
