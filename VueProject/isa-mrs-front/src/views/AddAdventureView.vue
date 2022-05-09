@@ -198,7 +198,7 @@
                 }
                 ).then(response => {
                     alert('Added adventure: ' + response.data.name + '.');
-                    router.push('/service-crud');
+                    router.push('/profile-page-fishing-instructor');
                 }).catch(error => {
                     if (error.response.status === 400) alert("Server error.");
                     else alert("Error occurred while adding adventure!");

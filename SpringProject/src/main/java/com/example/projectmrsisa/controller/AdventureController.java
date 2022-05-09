@@ -218,7 +218,7 @@ public class AdventureController {
         System.out.println(actionDTO.getMaxNumOfPeople());
         if (actionDTO.getMaxNumOfPeople() <= 0) return false;
         for (String as: actionDTO.getAdditionalServices()) {
-            if (as.equals("") || as.length() > 14) return false;
+            if (as.equals("")) return false;
         }
         return !(actionDTO.getPrice() <= 0);
     }
