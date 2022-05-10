@@ -1,9 +1,10 @@
 <template>
     <div id="fishing-instructors-screen">
-        <NavbarGuest></NavbarGuest>
+        <NavbarClient v-if="isClient"></NavbarClient>
+        <NavbarGuest v-else></NavbarGuest>
         <div class="d-flex">
             <SearchSidebar style="background-color: #ffffff;"></SearchSidebar>
-            <div style="width:50%;height:100%;margin:auto;margin-top:100px;">
+            <div style="width:50%;height:100%;margin:auto;margin-top:110px;">
                 <div v-if="searchResults" class="vertical-center">
                     <SearchResult v-for="searchResult in searchResults" :searchResult="searchResult" :key="searchResult.id"></SearchResult>
                 </div>
@@ -14,6 +15,7 @@
 
 <script>
     import NavbarGuest from '@/components/NavbarGuest.vue'
+    import NavbarClient from '@/components/NavbarClient.vue'
     import SearchResult from '@/components/SearchResult.vue'
     import SearchSidebar from '@/components/SearchSidebar.vue'
     import Vue from 'vue'
@@ -27,11 +29,17 @@
         components: {
             NavbarGuest,
             SearchResult,
-            SearchSidebar
+            SearchSidebar,
+            NavbarClient,
         },
         data () {
             return {
                 searchResults: null,
+            }
+        },
+        computed: {
+            isClient() {
+                return sessionStorage.getItem("role");
             }
         },
         mounted () {
