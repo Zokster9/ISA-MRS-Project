@@ -67,5 +67,10 @@
                 return _orderBy(this.results, this.sortBy)
             }
         },
+        methods: {
+            click() {
+                
+            }
+        }
 }
 </script>

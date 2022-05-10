@@ -199,6 +199,12 @@ const routes = [{
         name: 'penalty-points',
         component: () =>
             import('../views/PenaltyPointsView.vue')
+    },
+    {
+        path: '/client-subscriptions',
+        name: 'client-subscriptions',
+        component: () =>
+            import('../views/ClientSubscriptionsView.vue')
     }
 ]
 

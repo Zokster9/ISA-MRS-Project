@@ -31,7 +31,7 @@
                     <router-link exact to="/penalty-points" class="nav-link text-start">My penalty points</router-link>
                 </li>
                 <li class="nav-item">
-                    <router-link exact to="/" class="nav-link text-start">All subscriptions</router-link>
+                    <router-link exact to="/client-subscriptions" class="nav-link text-start">All subscriptions</router-link>
                 </li>
                 <li class="nav-item">
                     <router-link exact to="/" class="nav-link text-start">Write a complaint</router-link>
