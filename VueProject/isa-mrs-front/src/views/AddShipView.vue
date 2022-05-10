@@ -86,6 +86,16 @@
                     </div>
                 </div>
                 <div class="form-group mb-3">
+                    <label>Additional services:</label>
+                    <br>
+                    <template v-for="tag in tags">
+                        <div class="form-group mb-3" :key="tag.id">
+                            <input type="checkbox" v-model="form.additionalServices" :value="tag.name" :key="tag.id"/>
+                            <label :for="tag.key">{{tag.name}}</label>
+                        </div>
+                    </template>
+                </div>
+                <div class="form-group mb-3">
                     <label>Navigation equipment:</label>
                     <br>
                     <div class="form-group mb-3">
@@ -187,6 +197,7 @@
     import Vue from 'vue'
     import axios from 'axios'
     import VueAxios from 'vue-axios'
+    import router from '@/router'
 
     Vue.use(VueAxios, axios)
 
@@ -211,8 +222,10 @@
                     navigationEquipment: [],
                     fishingEquipment: [],
                     reservationCancellationConditions: null,
-                    pictures: []
-                }
+                    pictures: [],
+                    additionalServices: []
+                },
+                tags: []
             }
         },
         computed: {
@@ -285,12 +298,18 @@
                     fishingEquipment: this.form.fishingEquipment,
                     reservationCancellationConditions: this.form.reservationCancellationConditions,
                     pictures: this.form.pictures,
-                    price: this.form.price
-                }).then(() => {
-                    alert("Ship added");
-                    // TODO: preusmeriti na drugu stranu
-                }).catch(() => {
-                    alert("Error occurred while adding ship!");
+                    price: this.form.price,
+                    additionalServices: this.form.additionalServices
+                }, {
+                    headers: {
+                        Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+                    }
+                }).then(response => {
+                    alert('Added ship: ' + response.data.name + '.');
+                    router.push('/profile-page-ship-owner');
+                }).catch(error => {
+                    if (error.response.status === 400) alert("Server error.");
+                    else alert("Error occurred while adding ship!");
                 });
             },
             addPicture(e) {
@@ -299,6 +318,13 @@
                     return;
                 for (let file of files) this.form.pictures.push(file.name);
             }
+        },
+        mounted() {
+            axios.get("http://localhost:8088/tags/ship", {
+                headers: {
+                    Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+                }
+            }).then((response) => {this.tags = response.data});
         }
     }
 </script>

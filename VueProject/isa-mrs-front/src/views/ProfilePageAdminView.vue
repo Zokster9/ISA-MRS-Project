@@ -4,6 +4,7 @@
             <NavbarAdmin></NavbarAdmin>
         </div>
         <div class="mx-auto" v-if="!isFirstTimeAdmin">
+            <PersonalInfoUser v-if="data" :user="data"></PersonalInfoUser>
         </div>
         <div class="mx-auto" v-if="isFirstTimeAdmin"> 
             <div class="card mb-3 border-primary mt-5" style="max-width: 18rem;">
@@ -21,6 +22,7 @@
 
 <script>
     import NavbarAdmin from '@/components/NavbarAdmin.vue'
+    import PersonalInfoUser from '@/components/PersonalInfoUser.vue'
     import axios from 'axios'
     import VueAxios from 'vue-axios'
     import Vue from 'vue'
@@ -34,6 +36,7 @@
         name: 'ProfilePageAdmin',
         components: {
             NavbarAdmin,
+            PersonalInfoUser
         },
         data(){
             return {

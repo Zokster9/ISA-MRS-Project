@@ -109,15 +109,15 @@
 				}).then(() => {
                     alert("Successfully changed personal information!");
                     if (window.sessionStorage.getItem("role") === "ROLE_retreatOwner") {
-						// TODO: prebaciti na stranicu vlasnika vikendice
+						this.$router.push("/profile-page-retreat-owner")
 					}else if (window.sessionStorage.getItem("role") === "ROLE_shipOwner") {
-						// TODO: prebaciti na stranicu vlasnika broda
+						this.$router.push("/profile-page-ship-owner")
 					}else if (window.sessionStorage.getItem("role") === "ROLE_fishingInstructor") {
 						this.$router.push("/profile-page-fishing-instructor")
 					}else if (window.sessionStorage.getItem("role") === "ROLE_client") {
-						// TODO: prebaciti na stranicu klijenta
-					}else if (window.sessionStorage.getItem("role") === "ROLE_admin") {
-						// TODO: prebaciti na stranicu admina
+						this.$router.push("/profile-page-client")
+					}else if (window.sessionStorage.getItem("role") === "ROLE_admin" || window.localStorage.getItem("role") === "ROLE_mainAdmin") {
+						this.$router.push("/profile-page-admin")
 					}else {
 						alert("Some kind of error, dont know what.");
 					}

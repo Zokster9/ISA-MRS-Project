@@ -126,7 +126,7 @@
                 <label>Pictures:</label>
                 <input accept="image/*" type="file" class="form-control" @change="addPicture($event)" multiple/>
             </div>
-            <div class="form-group mb-3">
+            <div class="form-group- mb-3">
                 <button @click="changeAdventure" type="submit" class="btn btn-primary float-end">Update adventure</button>
             </div>
         </form>
@@ -216,7 +216,7 @@ import router from '@/router'
                     fishingEquipment: this.form.fishingEquipment,
                     reservationCancellationConditions: this.form.reservationCancellationConditions,
                     instructorBiography: this.form.instructorBiography,
-                    //additionalServices: this.form.additionalServices
+                    additionalServices: this.form.additionalServices
                 },
 				{
 					headers: {
@@ -256,8 +256,9 @@ import router from '@/router'
                 this.form.fishingEquipment = response.data.fishingEquipment;
                 this.form.reservationCancellationConditions = response.data.reservationCancellationConditions;
                 this.form.instructorBiography = response.data.instructorBiography;
+                this.form.additionalServices = response.data.additionalServices;
             });
-            axios.get("http://localhost:8088/tags", {
+            axios.get("http://localhost:8088/tags/adventure", {
                 headers: {
                     Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                 }

@@ -3,7 +3,7 @@
         <div>
             <NavbarAdmin></NavbarAdmin>
         </div>
-        <div class="row justify-content-center">
+        <div class="row justify-content-center mx-auto">
             <div class="col-auto">
                 <br>
                 <br>
@@ -12,6 +12,11 @@
                         <th colspan="100%" class="text-center h2"> Registration Requests </th>
                     </thead>
                     <tbody>
+                        <tr>
+                            <td> <b> Name </b> </td>
+                            <td> <b> Registration reasoning </b> </td>
+                            <td colspan="2" class="text-center"> <b> Options </b> </td>
+                        </tr>
                         <RegistrationRequestsRow v-for="user in unactivatedUsers" :user="user" :key="user.id"></RegistrationRequestsRow>
                     </tbody>
                 </table>

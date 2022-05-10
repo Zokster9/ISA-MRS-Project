@@ -51,6 +51,16 @@
             <small id="maxHelp" class="form-text text-muted"> Maximum number of people should at least be 1.</small>
         </div>
         <div class="form-group mb-3">
+            <label>Additional services:</label>
+            <br>
+            <template v-for="tag in tags">
+                <div class="form-group mb-3" :key="tag.id">
+                    <input type="checkbox" v-model="form.additionalServices" :value="tag.name" :key="tag.id"/>
+                    <label :for="tag.key">{{tag.name}}</label>
+                </div>
+            </template>
+        </div>
+        <div class="form-group mb-3">
             <label for="fishingEquipment">Fishing equipment: </label>
             <div class="form-group mb-3">
                 <input type="checkbox" v-model="form.fishingEquipment" value="hooks">
@@ -105,8 +115,8 @@
             <label for="instructorBiography">Instructor biography: </label>
             <textarea v-model="form.instructorBiography" class="form-control" id="instructorBiographyId" placeholder="This field is required!"></textarea>
         </div>
-        <label>Pictures:</label>
         <div class="form-group mb-3">
+            <label>Pictures:</label>
             <input accept="image/*" type="file" class="form-control" @change="addPicture" multiple/>
         </div>
         <div class="form-group- mb-3">
@@ -121,6 +131,7 @@
     import VueAxios from 'vue-axios'
     import Vuelidate from 'vuelidate'
     import { required, minLength, minValue } from 'vuelidate/lib/validators'
+    import router from '@/router'
 
     Vue.use(VueAxios, axios)
     Vue.use(Vuelidate)
@@ -141,8 +152,10 @@
                     pictures: [],
                     country: "",
                     city: "",
-                    street: ""
-                }
+                    street: "",
+                    additionalServices: []
+                },
+                tags:[]
             }
         },
         computed: {
@@ -175,17 +188,20 @@
                     pictures: this.form.pictures,
                     country: this.form.country,
                     city: this.form.city,
-                    street: this.form.street,   
+                    street: this.form.street,
+                    additionalServices: this.form.additionalServices
                 },
                 {
                     headers:{
                         Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }
                 }
-                ).then(() => {
-                    alert("uspeo sam");
-                }).catch(() => {
-                alert("ne valja brt");
+                ).then(response => {
+                    alert('Added adventure: ' + response.data.name + '.');
+                    router.push('/profile-page-fishing-instructor');
+                }).catch(error => {
+                    if (error.response.status === 400) alert("Server error.");
+                    else alert("Error occurred while adding adventure!");
                 });
             }
         },
@@ -225,6 +241,13 @@
                     required
                 }
             }
+        },
+        mounted(){
+            axios.get("http://localhost:8088/tags/adventure", {
+                headers: {
+                    Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+                }
+            }).then((response) => {this.tags = response.data});
         }
     }
 </script>

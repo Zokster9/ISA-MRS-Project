@@ -86,6 +86,16 @@
                     </div>
                 </div>
                 <div class="form-group mb-3">
+                    <label>Additional services:</label>
+                    <br>
+                    <template v-for="tag in tags">
+                        <div class="form-group mb-3" :key="tag.id">
+                            <input type="checkbox" v-model="form.additionalServices" :value="tag.name" :key="tag.id"/>
+                            <label :for="tag.key">{{tag.name}}</label>
+                        </div>
+                    </template>
+                </div>
+                <div class="form-group mb-3">
                     <label>Navigation equipment:</label>
                     <br>
                     <div class="form-group mb-3">
@@ -212,9 +222,11 @@ import router from '@/router'
                     navigationEquipment: [],
                     fishingEquipment: [],
                     reservationCancellationConditions: null,
-                    pictures: []
+                    pictures: [],
+                    additionalServices: []
                 },
-                ship: null
+                ship: null,
+                tags: []
             }
         },
         computed: {
@@ -287,7 +299,8 @@ import router from '@/router'
                     fishingEquipment: this.form.fishingEquipment,
                     reservationCancellationConditions: this.form.reservationCancellationConditions,
                     pictures: this.form.pictures,
-                    price: this.form.price
+                    price: this.form.price,
+                    additionalServices: this.form.additionalServices
                 }, {
                     headers: {
 						'Authorization': 'Bearer ' + window.sessionStorage.getItem("accessToken")
@@ -332,7 +345,13 @@ import router from '@/router'
                 this.form.enginePower = response.data.enginePower;
                 this.form.maxSpeed = response.data.maxSpeed;
                 this.form.navigationEquipment = response.data.navigationEquipment;
+                this.form.additionalServices = response.data.additionalServices;
             });
+            axios.get("http://localhost:8088/tags/ship", {
+                headers: {
+                    Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+                }
+            }).then((response) => {this.tags = response.data});
         }
     }
 </script>

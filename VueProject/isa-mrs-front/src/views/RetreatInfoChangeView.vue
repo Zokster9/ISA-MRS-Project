@@ -165,7 +165,7 @@ import router from '@/router'
 					}
 				}).then(() => {
                     alert("Retreat updated!");
-                    router.back();
+                    router.push("/service-crud");
                 }).catch(() => {
                     alert("ne valja brt");
                 });
@@ -197,7 +197,7 @@ import router from '@/router'
                 this.form.additionalServices = response.data.additionalServices;
                 this.form.pictures = response.data.pictures;
             });
-            axios.get("http://localhost:8088/tags", {
+            axios.get("http://localhost:8088/tags/retreat", {
                 headers: {
                     Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                 }

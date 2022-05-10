@@ -3,7 +3,7 @@
         <div>
             <NavbarAdmin></NavbarAdmin>
         </div>
-        <div class="row justify-content-center">
+        <div class="row justify-content-center mx-auto">
             <div class="signUp">
                 <div class="app">
                     <div class="vertical-center" style="margin-top: 85px">

@@ -35,7 +35,7 @@
             }
         },
         mounted () {
-            axios.get("http://localhost:8088/fishing-instructors/")
+            axios.get("http://localhost:8088/adventures/getAll")
             .then(response => {
                 this.searchResults = response.data;
             });

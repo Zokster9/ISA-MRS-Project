@@ -2,6 +2,7 @@ package com.example.projectmrsisa.dto;
 
 import com.example.projectmrsisa.model.Address;
 import com.example.projectmrsisa.model.Ship;
+import com.example.projectmrsisa.model.Tag;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -33,10 +34,11 @@ public class ShipDTO {
     private int capacity;
     private List<String> fishingEquipment;
     private String reservationCancellationConditions;
+    private List<String> additionalServices;
 
     public ShipDTO() {}
 
-    public ShipDTO(int id, int owner_id, String name, String description, String country, String city, String street, double price, List<String> pictures, List<String> rulesOfConduct, String type, double length, String engineNum, int enginePower, String maxSpeed, List<String> navigationEquipment, int capacity, List<String> fishingEquipment, String reservationCancellationConditions) {
+    public ShipDTO(int id, int owner_id, String name, String description, String country, String city, String street, double price, List<String> pictures, List<String> rulesOfConduct, String type, double length, String engineNum, int enginePower, String maxSpeed, List<String> navigationEquipment, int capacity, List<String> fishingEquipment, String reservationCancellationConditions, List<String> additionalServices) {
         this.id = id;
         this.owner_id = owner_id;
         this.name = name;
@@ -56,6 +58,7 @@ public class ShipDTO {
         this.capacity = capacity;
         this.fishingEquipment = fishingEquipment;
         this.reservationCancellationConditions = reservationCancellationConditions;
+        this.additionalServices = additionalServices;
     }
 
     public ShipDTO(Ship ship) {
@@ -78,6 +81,10 @@ public class ShipDTO {
         this.capacity = ship.getCapacity();
         this.fishingEquipment = new ArrayList<>(ship.getFishingEquipment());
         this.reservationCancellationConditions = ship.getReservationCancellationConditions();
+        this.additionalServices = new ArrayList<>();
+        for (Tag additionalService : ship.getAdditionalServices()) {
+            this.additionalServices.add(additionalService.getName());
+        }
     }
 
     public int getId() {
@@ -230,5 +237,13 @@ public class ShipDTO {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public List<String> getAdditionalServices() {
+        return additionalServices;
+    }
+
+    public void setAdditionalServices(List<String> additionalServices) {
+        this.additionalServices = additionalServices;
     }
 }

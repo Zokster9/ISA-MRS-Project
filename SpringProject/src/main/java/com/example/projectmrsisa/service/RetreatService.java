@@ -1,12 +1,14 @@
 package com.example.projectmrsisa.service;
 
 import com.example.projectmrsisa.dto.RetreatDTO;
+import com.example.projectmrsisa.model.Action;
 import com.example.projectmrsisa.model.Retreat;
 import com.example.projectmrsisa.model.Tag;
 import com.example.projectmrsisa.repository.RetreatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -34,25 +36,24 @@ public class RetreatService {
         if (retreat.getNumOfBeds() != retreatDTO.getNumOfBeds()) retreat.setNumOfBeds(retreatDTO.getNumOfBeds());
         if (retreat.getNumOfRooms() != retreatDTO.getNumOfRooms()) retreat.setNumOfRooms(retreatDTO.getNumOfRooms());
         if (retreat.getPrice() != retreatDTO.getPrice()) retreat.setPrice(retreatDTO.getPrice());
-        if (retreat.getPictures().size() < retreatDTO.getPictures().size()) {
-            for (String picture: retreatDTO.getPictures()) {
-                if (!retreat.getPictures().contains(picture)) retreat.addPicture(picture);
-            }
+        if (retreat.getPictures().size() != retreatDTO.getPictures().size()) {
+            retreat.setPictures(new HashSet<>(retreatDTO.getPictures()));
         }
-        if (retreat.getRulesOfConduct().size() < retreatDTO.getRulesOfConduct().size()) {
-            for (String ruleOfConduct: retreatDTO.getRulesOfConduct()) {
-                if (!retreat.getRulesOfConduct().contains(ruleOfConduct)) retreat.addRuleOfConduct(ruleOfConduct);
-            }
+        if (retreat.getRulesOfConduct().size() != retreatDTO.getRulesOfConduct().size()) {
+            retreat.setRulesOfConduct(new HashSet<>(retreatDTO.getRulesOfConduct()));
         }
-        if (retreat.getAdditionalServices().size() < additionalServices.size()) {
-            for (Tag additionalService: additionalServices) {
-                if (!retreat.getAdditionalServices().contains(additionalService)) retreat.addAdditionalService(additionalService);
-            }
+        if (retreat.getAdditionalServices().size() != additionalServices.size()) {
+            retreat.setAdditionalServices(additionalServices);
         }
         return retreatRepository.save(retreat);
     }
 
     public void deleteRetreat(Integer id) {
         retreatRepository.deleteRetreatById(id);
+    }
+
+    public Retreat addAction(Retreat retreat, Action action) {
+        retreat.addAction(action);
+        return retreatRepository.save(retreat);
     }
 }

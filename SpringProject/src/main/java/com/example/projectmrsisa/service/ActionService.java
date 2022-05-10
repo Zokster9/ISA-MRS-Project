@@ -1,0 +1,34 @@
+package com.example.projectmrsisa.service;
+
+import com.example.projectmrsisa.model.Action;
+import com.example.projectmrsisa.model.Retreat;
+import com.example.projectmrsisa.repository.ActionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.Set;
+
+@Service
+public class ActionService {
+
+    @Autowired
+    private ActionRepository actionRepository;
+
+    public Action addAction(Action action) {
+        return actionRepository.save(action);
+    }
+
+    public boolean actionAlreadyExists(Set<Action> actions, Date fromDate, Date toDate) {
+        for (Action action: actions) {
+            if (fromDate.compareTo(action.getDateFrom()) == 0) {
+                return false;
+            }else if (fromDate.compareTo(action.getDateFrom()) < 0) {
+                if (toDate.compareTo(action.getDateFrom()) > 0) return false;
+            }else {
+                if (fromDate.compareTo(action.getDateTo()) < 0) return false;
+            }
+        }
+        return true;
+    }
+}

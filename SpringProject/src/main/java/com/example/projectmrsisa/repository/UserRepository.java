@@ -27,8 +27,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("update User u set u.isDeleted = true where u.id = ?1")
     public void updateUserDeletedStatusById(Integer id);
 
-    @Query("select rr from RegistrationReasoning rr where rr.privilegedUser = ?1")
-    public RegistrationReasoning findRegistrationReasoningByUser(User user);
+    @Query("select rr from RegistrationReasoning rr where rr.privilegedUser.id = ?1")
+    public RegistrationReasoning findRegistrationReasoningByUserId(Integer id);
 
     @Query("select u from User u where u.email = ?1")
     public User findUserByEmail(String email);

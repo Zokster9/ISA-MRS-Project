@@ -16,4 +16,12 @@ public class ServiceService {
     public List<com.example.projectmrsisa.model.Service> findOwnersServices(User user){
         return serviceRepository.findOwnersServices(user);
     }
+
+    public void deleteServiceById(Integer id){
+        serviceRepository.deleteServiceById(id);
+    }
+
+    public void deleteServicesByOwner(User user){
+        serviceRepository.deleteServicesByOwner(user);
+    }
 }

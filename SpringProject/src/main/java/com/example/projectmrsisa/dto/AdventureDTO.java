@@ -1,6 +1,7 @@
 package com.example.projectmrsisa.dto;
 
 import com.example.projectmrsisa.model.Adventure;
+import com.example.projectmrsisa.model.Tag;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,13 +22,15 @@ public class AdventureDTO {
     private String country;
     private String street;
     private String city;
+    private List<String> additionalServices;
 
     public AdventureDTO(){
 
     }
 
     public AdventureDTO(String name, String description, List<String> pictures, List<String> rulesOfConduct, double price,
-                        String instructorBiography, List<String> fishingEquipment, int maxNumOfPeople, String reservationCancellationConditions, String country, String street, String city){
+                        String instructorBiography, List<String> fishingEquipment, int maxNumOfPeople, String reservationCancellationConditions,
+                        String country, String street, String city, List<String> additionalServices){
         this.name = name;
         this.description = description;
         this.pictures = pictures;
@@ -41,6 +44,7 @@ public class AdventureDTO {
         this.country = country;
         this.street = street;
         this.city = city;
+        this.additionalServices = additionalServices;
     }
 
     public AdventureDTO(Adventure adventure){
@@ -59,6 +63,10 @@ public class AdventureDTO {
         this.country = adventure.getAddress().getCountry();
         this.city = adventure.getAddress().getCity();
         this.street = adventure.getAddress().getStreet();
+        this.additionalServices = new ArrayList<>();
+        for (Tag additionalService : adventure.getAdditionalServices()) {
+            this.additionalServices.add(additionalService.getName());
+        }
     }
 
     public Integer getId() {
@@ -179,5 +187,13 @@ public class AdventureDTO {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public List<String> getAdditionalServices() {
+        return additionalServices;
+    }
+
+    public void setAdditionalServices(List<String> additionalServices) {
+        this.additionalServices = additionalServices;
     }
 }

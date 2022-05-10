@@ -3,7 +3,7 @@
         <div>
             <NavbarUser></NavbarUser>
         </div>
-        <div class="row justify-content-center">
+        <div class="row justify-content-center mx-auto">
             <div class="col-auto">
                 <br>
                 <br>

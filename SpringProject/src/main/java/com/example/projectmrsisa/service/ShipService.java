@@ -1,12 +1,16 @@
 package com.example.projectmrsisa.service;
 
 import com.example.projectmrsisa.dto.ShipDTO;
+import com.example.projectmrsisa.model.Action;
 import com.example.projectmrsisa.model.Ship;
+import com.example.projectmrsisa.model.Tag;
 import com.example.projectmrsisa.repository.ShipRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ShipService {
@@ -24,7 +28,7 @@ public class ShipService {
         return shipRepository.findShipById(id);
     }
 
-    public Ship updateRetreat(Ship ship, ShipDTO shipDTO) {
+    public Ship updateShip(Ship ship, ShipDTO shipDTO, Set<Tag> additionalServices) {
         if (!ship.getName().equals(shipDTO.getName())) ship.setName(shipDTO.getName());
         if (!ship.getDescription().equals(shipDTO.getDescription())) ship.setDescription(shipDTO.getDescription());
         if (ship.getCapacity() != shipDTO.getCapacity()) ship.setCapacity(shipDTO.getCapacity());
@@ -35,30 +39,30 @@ public class ShipService {
         if (!ship.getMaxSpeed().equals(shipDTO.getMaxSpeed())) ship.setMaxSpeed(shipDTO.getMaxSpeed());
         if (!ship.getReservationCancellationConditions().equals(shipDTO.getReservationCancellationConditions())) ship.setReservationCancellationConditions(shipDTO.getReservationCancellationConditions());
         if (!ship.getType().equals(shipDTO.getType())) ship.setType(shipDTO.getType());
-        if (ship.getPictures().size() < shipDTO.getPictures().size()) {
-            for (String picture: shipDTO.getPictures()) {
-                if (!ship.getPictures().contains(picture)) ship.addPicture(picture);
-            }
+        if (ship.getPictures().size() != shipDTO.getPictures().size()) {
+            ship.setPictures(new HashSet<>(shipDTO.getPictures()));
         }
-        if (ship.getFishingEquipment().size() < shipDTO.getFishingEquipment().size()) {
-            for (String fishEq: shipDTO.getFishingEquipment()) {
-                if (!ship.getFishingEquipment().contains(fishEq)) ship.addFishingEquipment(fishEq);
-            }
+        if (ship.getFishingEquipment().size() != shipDTO.getFishingEquipment().size()) {
+            ship.setFishingEquipment(new HashSet<>(shipDTO.getFishingEquipment()));
         }
-        if (ship.getRulesOfConduct().size() < shipDTO.getRulesOfConduct().size()) {
-            for (String ruleOfConduct: shipDTO.getRulesOfConduct()) {
-                if (!ship.getRulesOfConduct().contains(ruleOfConduct)) ship.addRuleOfConduct(ruleOfConduct);
-            }
+        if (ship.getRulesOfConduct().size() != shipDTO.getRulesOfConduct().size()) {
+            ship.setRulesOfConduct(new HashSet<>(shipDTO.getRulesOfConduct()));
         }
-        if (ship.getNavigationEquipment().size() < shipDTO.getNavigationEquipment().size()) {
-            for (String navEq: shipDTO.getNavigationEquipment()) {
-                if (!ship.getNavigationEquipment().contains(navEq)) ship.addNavigationEquipment(navEq);
-            }
+        if (ship.getNavigationEquipment().size() != shipDTO.getNavigationEquipment().size()) {
+            ship.setNavigationEquipment(new HashSet<>(shipDTO.getNavigationEquipment()));
+        }
+        if (ship.getAdditionalServices().size() != additionalServices.size()) {
+            ship.setAdditionalServices(additionalServices);
         }
         return shipRepository.save(ship);
     }
 
     public void deleteShipById(Integer id) {
         shipRepository.deleteShipById(id);
+    }
+
+    public Ship addAction(Ship ship, Action action) {
+        ship.addAction(action);
+        return shipRepository.save(ship);
     }
 }

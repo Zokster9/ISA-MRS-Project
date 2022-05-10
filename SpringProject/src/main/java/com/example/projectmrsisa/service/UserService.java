@@ -42,8 +42,8 @@ public class UserService {
         userRepository.updateUserDeletedStatusById(id);
     }
 
-    public RegistrationReasoning findRegistrationReasoningByUserId(User user) {
-        return userRepository.findRegistrationReasoningByUser(user);
+    public RegistrationReasoning findRegistrationReasoningByUserId(Integer id) {
+        return userRepository.findRegistrationReasoningByUserId(id);
     }
 
     public User findUserByEmail(String email){
@@ -79,5 +79,9 @@ public class UserService {
     }
     public void updateRegistrationReasoningStatus(User user){
         userRepository.updateRegistrationReasoningAnsweredStatus(user);
+    }
+
+    public List<User> findAll(){
+        return userRepository.findAll();
     }
 }

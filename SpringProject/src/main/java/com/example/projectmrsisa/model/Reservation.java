@@ -1,6 +1,7 @@
 package com.example.projectmrsisa.model;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name="reservations")
@@ -12,9 +13,9 @@ public class Reservation {
     @Column(name="id", unique = true, nullable = false)
     private Integer id;
     @Column(name="fromDate", unique = true, nullable = false)
-    private Long fromDate;
+    private Date fromDate;
     @Column(name="toDate", unique = true, nullable = false)
-    private Long toDate;
+    private Date toDate;
     @Column(name="price", unique = true, nullable = false)
     private double price;
     @Column(name="status", unique = true, nullable = false)
@@ -29,7 +30,7 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(Integer id, Long fromDate, Long toDate, double price, ReservationStatus status, Rating rating,
+    public Reservation(Integer id, Date fromDate, Date toDate, double price, ReservationStatus status, Rating rating,
                        Service service) {
         this.id = id;
         this.fromDate = fromDate;
@@ -48,19 +49,19 @@ public class Reservation {
         this.id = id;
     }
 
-    public Long getFromDate() {
+    public Date getFromDate() {
         return fromDate;
     }
 
-    public void setFromDate(Long fromDate) {
+    public void setFromDate(Date fromDate) {
         this.fromDate = fromDate;
     }
 
-    public Long getToDate() {
+    public Date getToDate() {
         return toDate;
     }
 
-    public void setToDate(Long toDate) {
+    public void setToDate(Date toDate) {
         this.toDate = toDate;
     }
 
