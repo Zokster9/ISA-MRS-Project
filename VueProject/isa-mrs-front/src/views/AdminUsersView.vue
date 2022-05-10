@@ -50,7 +50,7 @@
         mounted () {
             axios.get("http://localhost:8088/users/findAllUsers",{
                 headers:{
-                    Authorization: "Bearer " + window.localStorage.getItem("accessToken")
+                    Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
                 }
             }).then((response) =>{
                 this.users = response.data

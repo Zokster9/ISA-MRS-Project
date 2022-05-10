@@ -116,7 +116,7 @@
 						this.$router.push("/profile-page-fishing-instructor")
 					}else if (window.sessionStorage.getItem("role") === "ROLE_client") {
 						this.$router.push("/profile-page-client")
-					}else if (window.sessionStorage.getItem("role") === "ROLE_admin" || window.localStorage.getItem("role") === "ROLE_mainAdmin") {
+					}else if (window.sessionStorage.getItem("role") === "ROLE_admin" || window.sessionStorage.getItem("role") === "ROLE_mainAdmin") {
 						this.$router.push("/profile-page-admin")
 					}else {
 						alert("Some kind of error, dont know what.");

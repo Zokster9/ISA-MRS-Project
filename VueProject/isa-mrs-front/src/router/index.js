@@ -175,7 +175,6 @@ const routes = [{
         name: 'home-page-client',
         component: () =>
             import ('../views/HomepageClientView.vue')
-            import ('../views/UpdateAdventure.vue')
     },
     {
         path: '/admin-services-view',

@@ -93,13 +93,13 @@
         },
         methods: {
             addAction() {
-                if (window.localStorage.getItem("role") === "ROLE_fishingInstructor"){
+                if (window.sessionStorage.getItem("role") === "ROLE_fishingInstructor"){
                     this.sendData("adventures")
                 }
-                else if (window.localStorage.getItem("role") === "ROLE_shipOwner"){
+                else if (window.sessionStorage.getItem("role") === "ROLE_shipOwner"){
                     this.sendData("ships");
                 }
-                else if (window.localStorage.getItem("role") === "ROLE_retreatOwner"){
+                else if (window.sessionStorage.getItem("role") === "ROLE_retreatOwner"){
                     this.sendData("retreats");
                 }
             },
@@ -116,7 +116,7 @@
                     },
                     {
                         headers:{
-                            Authorization: "Bearer " + window.localStorage.getItem("accessToken")
+                            Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
                         }
                 }).then(() => {
                     alert("Successfully added new action for your service!");
@@ -162,28 +162,28 @@
             }
         },
 		mounted() {
-            if (window.localStorage.getItem("role") === "ROLE_fishingInstructor"){
+            if (window.sessionStorage.getItem("role") === "ROLE_fishingInstructor"){
                 axios.get('http://localhost:8088/adventures/getAdventure/' + this.$route.params.id, {
                     headers: {
-                        Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }
                 }).then((response) => {
                     this.tags = response.data.additionalServices;
                 });
             }
-            else if (window.localStorage.getItem("role") === "ROLE_shipOwner"){
+            else if (window.sessionStorage.getItem("role") === "ROLE_shipOwner"){
                 axios.get('http://localhost:8088/ships/get/' + this.$route.params.id, {
                     headers: {
-                        Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }
                 }).then((response) => {
                     this.tags = response.data.additionalServices;
                 });
             }
-            else if (window.localStorage.getItem("role") === "ROLE_retreatOwner"){
+            else if (window.sessionStorage.getItem("role") === "ROLE_retreatOwner"){
                 axios.get('http://localhost:8088/retreats/get/' + this.$route.params.id, {
                     headers: {
-                        Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }
                 }).then((response) => {
                     this.tags = response.data.additionalServices;

@@ -26,7 +26,7 @@
                 axios.get("http://localhost:8088/users/findOwnerOfService/" + id,
                 {
                     headers:{
-                        Authorization: "Bearer " + window.localStorage.getItem("accessToken")
+                        Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
                     }
                 }).then((response)=>{
                     if (response.data.privilegedUser === "FISHING_INSTRUCTOR") {
@@ -42,7 +42,7 @@
                 axios.delete("http://localhost:8088/services/delete/" + id,
                 {
                     headers:{
-                        Authorization: "Bearer " + window.localStorage.getItem("accessToken")
+                        Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
                     }
                 }).then(()=>{
                     alert("Service has been successfully deleted!")
