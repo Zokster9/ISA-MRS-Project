@@ -38,6 +38,9 @@
             axios.get("http://localhost:8088/adventures/getAll")
             .then(response => {
                 this.searchResults = response.data;
+            })
+            .catch(() => {
+                alert("Something went wrong!");
             });
         }
     }

@@ -68,8 +68,8 @@
             }
         },
         methods: {
-            click() {
-                
+            search() {
+
             }
         }
 }
