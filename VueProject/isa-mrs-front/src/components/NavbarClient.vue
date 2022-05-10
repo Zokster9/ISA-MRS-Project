@@ -7,13 +7,13 @@
                     <router-link exact to="/profile-page-client" class="nav-link text-start">Personal info</router-link>
                 </li>
                 <li class="nav-item">
-                    <router-link exact to="/" class="nav-link text-start">All retreats</router-link>
+                    <router-link exact to="/retreats" class="nav-link text-start">All retreats</router-link>
                 </li>
                 <li class="nav-item">
-                    <router-link exact to="/" class="nav-link text-start">All ships</router-link>
+                    <router-link exact to="/ships" class="nav-link text-start">All ships</router-link>
                 </li>
                 <li class="nav-item">
-                    <router-link exact to="/" class="nav-link text-start">All fishing instructors</router-link>
+                    <router-link exact to="/fishing-instructors" class="nav-link text-start">All fishing instructors</router-link>
                 </li>
                 <li class="nav-item">
                     <router-link exact to="/" class="nav-link text-start">All retreat reservations</router-link>
