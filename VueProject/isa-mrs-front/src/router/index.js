@@ -193,6 +193,12 @@ const routes = [{
         name:'add-action',
         component: () =>
             import ('../views/AddActionView.vue')
+    },
+    {
+        path: '/penalty-points',
+        name: 'penalty-points',
+        component: () =>
+            import('../views/PenaltyPointsView.vue')
     }
 ]
 

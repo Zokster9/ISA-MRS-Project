@@ -28,7 +28,7 @@
                     <router-link exact to="/" class="nav-link text-start">All upcoming reservations</router-link>
                 </li>
                 <li class="nav-item">
-                    <router-link exact to="/" class="nav-link text-start">My penalty points</router-link>
+                    <router-link exact to="/penalty-points" class="nav-link text-start">My penalty points</router-link>
                 </li>
                 <li class="nav-item">
                     <router-link exact to="/" class="nav-link text-start">All subscriptions</router-link>

@@ -246,3 +246,18 @@ body,
     opacity: 0.5;
     pointer-events: none;
 }
+
+.progress-bar {
+    font-size: 16px;
+}
+
+.progress-bar[aria-valuenow="0"] {
+    color: white;
+    min-width: 5%;
+    background: transparent;
+    box-shadow: none;
+}
+
+.penaltyMessage {
+    color: red;
+}
