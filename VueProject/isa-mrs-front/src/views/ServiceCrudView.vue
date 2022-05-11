@@ -13,16 +13,20 @@
                     </thead>
                     <tbody>
                         <tr>
+                            <td colspan="2"><input v-model="searchText" type="search" class="form-control rounded" aria-label="Search" aria-describedby="search-addon" placeholder="Search by name, address, or conduct."></td>
+                            <td class="text-center" colspan="1"> <button type="button float-center" class="btn btn-outline-primary" @click="search">Search services</button></td>
+                            <td class="text-center" colspan="1"> <button type="button float-center" class="btn btn-outline-primary" @click="showAll">Show all services</button></td>
+                        </tr>
+                        <tr>
+                            <td colspan="4"></td>
+                        </tr>
+                        <tr>
                             <td class="text-center align-items"> <b> Service name </b> </td>
                             <td class="text-center align-items"> <b> EDIT </b> </td>
                             <td class="text-center align-items"> <b> DELETE </b> </td>
                             <td class="text-center align-items"> <b> ADD ACTION </b> </td>
                         </tr>
                         <ServiceCrudRow v-for="service in services" :service="service" :key="service.id"></ServiceCrudRow>
-                        <tr>
-                            <td colspan="2"><input v-model="searchText" type="text" class="form-control" placeholder="Search by name, address, or conduct."></td>
-                            <td class="text-center" colspan="2"> <button type="button float-center" class="btn btn-primary" @onclick="search">Search services</button></td>
-                        </tr>
                     </tbody>
                 </table>
                     <div>
@@ -53,15 +57,70 @@ import router from '@/router'
             return{
                 services: [],
                 searchText: "",
-                userType: ""
+                userType: "",
+                servicesCopy: [],
+                activeIndexes: []
             }
         },
         methods: {
-                //searchText se salje na back
-                search(){
-                    //TODO
+                showAll(){
+                    while (this.services.length != 0){
+                        this.services.pop();
+                    }
+                    for (let i = 0; i < this.servicesCopy.length; i++){
+                        this.services.push(this.servicesCopy[i]);
+                    }
                 },
-
+                search(){
+                    while (this.services.length != 0){
+                        this.services.pop();
+                    }
+                    while (this.activeIndexes.length != 0){
+                        this.activeIndexes.pop();
+                    }
+                    if (this.searchText.length == 0){
+                        for (let i = 0; i < this.servicesCopy.length; i++){
+                            this.services.push(this.servicesCopy[i]);
+                        }
+                        return;
+                    }
+                    for (let i = 0; i < this.servicesCopy.length; i++){
+                        if (this.searchByName(this.servicesCopy[i].name) || this.searchByAddress(this.servicesCopy[i].country, this.servicesCopy[i].city, this.servicesCopy[i].street)
+                            || this.searchByRulesOfConduct(this.servicesCopy[i].rulesOfConduct)){
+                            this.activeIndexes.push(i);
+                        }
+                    }
+                    for (let i = 0; i < this.servicesCopy.length; i++){
+                        for (let j = 0; j < this.activeIndexes.length; j++){
+                            if (i == this.activeIndexes[j]){
+                                this.services.push(this.servicesCopy[i]);
+                                break;
+                            }
+                        }
+                    }
+                },
+                searchByName(name){
+                    if (name.includes(this.searchText)){
+                        return true;
+                    }
+                    return false;
+                },
+                //TODO: Vrati true ako servis sadrzi drzavu i/ili grad i/ili ulicu po kojoj je korisnik pretrazio servise, false ako ne sadrzi (moze .includes() sta vise)
+                //Obrisi dummy kod
+                searchByAddress(country, city, street){
+                    if (country && city && street){
+                        return false;
+                    }
+                    return false;
+                },
+                //TODO: Vrati true ako servis sadrzi pravilo ponasanja po kojem je korisnik pretrazio servise, false ako ne sadrzi
+                //Obrisi dummy kod
+                searchByRulesOfConduct(rulesOfConduct){
+                    if (rulesOfConduct){
+                        return false;
+                    }
+                    return false;
+                },
                 addService() {
                     if (window.localStorage.getItem("role") === "ROLE_fishingInstructor"){
                         router.push('/add-adventure');
@@ -70,7 +129,7 @@ import router from '@/router'
                     } else if (window.localStorage.getItem("role") === "ROLE_shipOwner"){
                         router.push('/add-ship');
                     }
-                }
+                },
         },
         mounted(){
             axios.get("http://localhost:8088/users/findMyEntities", {
@@ -79,6 +138,9 @@ import router from '@/router'
 				}
 			}).then((response) =>{
                 this.services = response.data
+                for (let i = 0; i < this.services.length; i++){
+                    this.servicesCopy = JSON.parse(JSON.stringify(response.data))
+                }
                 if (window.localStorage.getItem("role") === "ROLE_fishingInstructor"){
                     this.userType = "fishingInstructor";
                 } else if (window.localStorage.getItem("role") === "ROLE_retreatOwner"){

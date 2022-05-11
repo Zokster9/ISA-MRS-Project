@@ -9,6 +9,13 @@ public class ServiceDTO {
     private String name;
     private String description;
     private Set<String> pictures;
+    private Set<String> rulesOfConduct;
+    private double price;
+    private String ownerName;
+    private String ownerSurname;
+    private String city;
+    private String street;
+    private String country;
 
     public ServiceDTO(){
 
@@ -19,6 +26,13 @@ public class ServiceDTO {
         this.name = service.getName();
         this.description = service.getDescription();
         this.pictures = service.getPictures();
+        this.rulesOfConduct = service.getRulesOfConduct();
+        this.price = service.getPrice();
+        this.ownerName = service.getOwner().getName();
+        this.ownerSurname = service.getOwner().getSurname();
+        this.city = service.getAddress().getCity();
+        this.street = service.getAddress().getStreet();
+        this.country = service.getAddress().getCountry();
     }
 
     public int getId() {
@@ -51,5 +65,61 @@ public class ServiceDTO {
 
     public void setPictures(Set<String> pictures) {
         this.pictures = pictures;
+    }
+
+    public Set<String> getRulesOfConduct() {
+        return rulesOfConduct;
+    }
+
+    public void setRulesOfConduct(Set<String> rulesOfConduct) {
+        this.rulesOfConduct = rulesOfConduct;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public String getOwnerSurname() {
+        return ownerSurname;
+    }
+
+    public void setOwnerSurname(String ownerSurname) {
+        this.ownerSurname = ownerSurname;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 }
