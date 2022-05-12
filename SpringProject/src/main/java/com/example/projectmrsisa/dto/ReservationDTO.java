@@ -2,12 +2,16 @@ package com.example.projectmrsisa.dto;
 
 import com.example.projectmrsisa.model.Reservation;
 import com.example.projectmrsisa.model.ReservationStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
+import java.util.Set;
 
 public class ReservationDTO {
     private Integer id;
+    @JsonFormat(pattern="dd.MM.yyyy")
     private Date fromDate;
+    @JsonFormat(pattern="dd.MM.yyyy")
     private Date toDate;
     private String fromTime;
     private String toTime;
@@ -22,6 +26,8 @@ public class ReservationDTO {
     private String clientCountry;
     private String clientCity;
     private String clientStreet;
+    private String serviceName;
+    private Set<String> servicePictures;
 
     public ReservationDTO(){
 
@@ -44,6 +50,8 @@ public class ReservationDTO {
         this.clientCountry = reservation.getClient().getAddress().getCountry();
         this.clientCity = reservation.getClient().getAddress().getCity();
         this.clientStreet = reservation.getClient().getAddress().getStreet();
+        this.serviceName = reservation.getService().getName();
+        this.servicePictures = reservation.getService().getPictures();
     }
 
     public Integer getId() {
@@ -172,5 +180,21 @@ public class ReservationDTO {
 
     public void setClientStreet(String clientStreet) {
         this.clientStreet = clientStreet;
+    }
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
+    }
+
+    public Set<String> getServicePictures() {
+        return servicePictures;
+    }
+
+    public void setServicePictures(Set<String> servicePictures) {
+        this.servicePictures = servicePictures;
     }
 }
