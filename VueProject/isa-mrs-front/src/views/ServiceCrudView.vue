@@ -105,17 +105,15 @@ import router from '@/router'
                     }
                     return false;
                 },
-                //TODO: Vrati true ako servis sadrzi drzavu i/ili grad i/ili ulicu po kojoj je korisnik pretrazio servise, false ako ne sadrzi (moze .includes() sta vise)
-                //Obrisi dummy kod
                 searchByAddress(country, city, street){
-                    if (country && city && street){
-                        return false;
-                    }
+                    if (country.toLowerCase().includes(this.searchText.toLowerCase())) return true;
+                    if (city.toLowerCase().includes(this.searchText.toLowerCase())) return true;
+                    if (street.toLowerCase().includes(this.searchText.toLowerCase())) return true;
                     return false;
                 },
                 searchByRulesOfConduct(rulesOfConduct){
                     for (let rule of rulesOfConduct) {
-                        if (rule === this.searchText) return true;
+                        if (rule.toLowerCase() === this.searchText.toLowerCase()) return true;
                     }
                     return false;
                 },
