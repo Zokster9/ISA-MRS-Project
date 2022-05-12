@@ -113,11 +113,9 @@ import router from '@/router'
                     }
                     return false;
                 },
-                //TODO: Vrati true ako servis sadrzi pravilo ponasanja po kojem je korisnik pretrazio servise, false ako ne sadrzi
-                //Obrisi dummy kod
                 searchByRulesOfConduct(rulesOfConduct){
-                    if (rulesOfConduct){
-                        return false;
+                    for (let rule of rulesOfConduct) {
+                        if (rule === this.searchText) return true;
                     }
                     return false;
                 },
@@ -137,10 +135,8 @@ import router from '@/router'
 					Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
 				}
 			}).then((response) =>{
-                this.services = response.data
-                for (let i = 0; i < this.services.length; i++){
-                    this.servicesCopy = JSON.parse(JSON.stringify(response.data))
-                }
+                this.services = response.data;
+                this.servicesCopy = JSON.parse(JSON.stringify(response.data));
                 if (window.localStorage.getItem("role") === "ROLE_fishingInstructor"){
                     this.userType = "fishingInstructor";
                 } else if (window.localStorage.getItem("role") === "ROLE_retreatOwner"){
