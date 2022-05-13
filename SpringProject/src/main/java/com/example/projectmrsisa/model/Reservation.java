@@ -11,9 +11,9 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id", unique = true, nullable = false)
     private Integer id;
-    @Column(name="fromDate", unique = true, nullable = false)
+    @Column(name="fromDate", nullable = false)
     private Date fromDate;
-    @Column(name="toDate", unique = true, nullable = false)
+    @Column(name="toDate", nullable = false)
     private Date toDate;
     @Column(name="fromTime", nullable = false)
     private String fromTime;

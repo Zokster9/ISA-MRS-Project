@@ -37,17 +37,17 @@ public class ReservationController {
         User user;
         try{
             user = userService.findUserByEmail(principal.getName());
-        } catch( Exception e){
+            List<Service> services = serviceService.findOwnersServices(user);
+            List<ReservationDTO> reservationsDTO = new ArrayList<ReservationDTO>();
+            for (Service service: services){
+                List<Reservation> reservations = reservationService.findReservationByServiceId(service.getId());
+                for (Reservation r : reservations){
+                    reservationsDTO.add(new ReservationDTO(r));
+                }
+            }
+            return new ResponseEntity<>(reservationsDTO, HttpStatus.OK);
+        } catch( Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        List<Service> services = serviceService.findOwnersServices(user);
-        List<ReservationDTO> reservationsDTO = new ArrayList<ReservationDTO>();
-        for (Service service: services){
-            List<Reservation> reservations = reservationService.findReservationByServiceId(service.getId());
-            for (Reservation r : reservations){
-                reservationsDTO.add(new ReservationDTO(r));
-            }
-        }
-        return new ResponseEntity<>(reservationsDTO, HttpStatus.OK);
     }
 }

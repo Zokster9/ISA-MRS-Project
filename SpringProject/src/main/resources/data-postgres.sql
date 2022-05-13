@@ -107,3 +107,7 @@ insert into ratings (service_rating, user_rating) values (4, 5);
 insert into reservations (from_date, to_date, from_time, to_time, price, status, rating_id, service_id, client_id) values ('2022-05-13 02:00:00', '2022-05-15 02:00:00', '13:00', '13:00', 1500, 1, 1, 3, 5);
 insert into reservations (from_date, to_date, from_time, to_time, price, status, rating_id, service_id, client_id) values ('2022-05-16 02:00:00', '2022-05-17 02:00:00', '13:00', '13:00', 1500, 1, 1, 3, 5);
 insert into reservations (from_date, to_date, from_time, to_time, price, status, rating_id, service_id, client_id) values ('2022-05-20 02:00:00', '2022-05-23 02:00:00', '13:00', '13:00', 1500, 1, 1, 3, 5);
+
+insert into reservations (from_date, to_date, from_time, to_time, price, status, rating_id, service_id, client_id) values ('2022-05-13 02:00:00', '2022-05-15 02:00:00', '12:00', '10:00', 150, 1, null, 1, 5);
+insert into reservations (from_date, to_date, from_time, to_time, price, status, rating_id, service_id, client_id) values ('2022-05-16 02:00:00', '2022-05-17 02:00:00', '12:00', '10:00', 150, 1, null, 1, 5);
+insert into reservations (from_date, to_date, from_time, to_time, price, status, rating_id, service_id, client_id) values ('2022-05-20 02:00:00', '2022-05-23 02:00:00', '12:00', '10:00', 150, 1, null, 1, 5);

@@ -41,8 +41,10 @@ public class ReservationDTO {
         this.toTime = reservation.getToTime();
         this.price = reservation.getPrice();
         this.status = reservation.getStatus();
-        this.userRating = reservation.getRating().getUserRating();
-        this.serviceRating = reservation.getRating().getServiceRating();
+        if (reservation.getRating() != null) {
+            this.userRating = reservation.getRating().getUserRating();
+            this.serviceRating = reservation.getRating().getServiceRating();
+        }
         this.serviceId = reservation.getService().getId();
         this.clientName = reservation.getClient().getName();
         this.clientSurname = reservation.getClient().getSurname();
