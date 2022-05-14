@@ -3,7 +3,7 @@
         <div>
             <NavbarClient></NavbarClient>
         </div>
-        <div class="mx-auto" style="margin-top: 90px;">
+        <div class="mx-auto" style="margin-top: 50px;">
             <PersonalInfoUser v-if="user" :user="user"></PersonalInfoUser>
         </div>
     </div>
