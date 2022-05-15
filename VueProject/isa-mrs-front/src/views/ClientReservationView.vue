@@ -49,22 +49,30 @@
         methods: {
             search(reservationForm) {
                 this.type = reservationForm.serviceType;
-                console.log(reservationForm.startTime < reservationForm.endTime)
-                console.log(reservationForm)
+                axios.get("http://localhost:8088/reservations/" + this.type + "/getAvailableReservations", {
+                    headers: {
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
+                    },
+                    params: {
+                        serviceType: reservationForm.serviceType,
+                        fromDate: reservationForm.date,
+                        fromTime: reservationForm.startTime,
+                        toTime: reservationForm.endTime,
+                        numOfDays: reservationForm.numberOfDays,
+                        numOfPeople: reservationForm.numberOfPeople,
+                    }
+                })
+                .then(response => {
+                    this.availableReservations = response.data;
+                })
+                .catch(() => {
+                    alert("Something went wrong!")
+                })
             },
             sort(sort) {
                 this.sortBy = sort;
                 console.log(this.sortBy)
             }
-        },
-        mounted () {
-            axios.get("http://localhost:8088/ships/getAll")
-            .then(response => {
-                this.availableReservations = response.data;
-            })
-            .catch(() => {
-                alert("Something went wrong!");
-            });
         }
     }
 </script>
