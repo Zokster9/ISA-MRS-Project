@@ -187,6 +187,12 @@ const routes = [{
         name:'add-action',
         component: () =>
             import ('../views/AddActionView.vue')
+    },
+    {
+        path: '/service-calendar/:id',
+        name: 'service-calendar',
+        component: () =>
+            import ('../views/CalendarView.vue')
     }
 ]
 
