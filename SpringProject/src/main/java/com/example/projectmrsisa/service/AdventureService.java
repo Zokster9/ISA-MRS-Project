@@ -50,5 +50,9 @@ public class AdventureService {
         return adventureRepository.save(adventure);
     }
 
-    public List<Adventure> getAdventures() { return adventureRepository.findAll();}
+    public List<Adventure> getAdventures() { return adventureRepository.findAll(); }
+
+    public List<Adventure> findOwnersAdventures(Integer ownerId){
+        return adventureRepository.findOwnersAdventures(ownerId);
+    }
 }

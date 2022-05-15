@@ -111,8 +111,8 @@ const routes = [{
             import ('../views/ShipView.vue')
     },
     {
-        path: '/adventure-page/:id',
-        name: 'adventure-page',
+        path: '/adventure/:id',
+        name: 'adventure',
         component: () =>
             import ('../views/AdventurePageView.vue')
     },
@@ -205,7 +205,13 @@ const routes = [{
         name: 'client-subscriptions',
         component: () =>
             import('../views/ClientSubscriptionsView.vue')
-    }
+    },
+    {
+        path: '/make-a-reservation',
+        name: 'make-a-reservation',
+        component: () =>
+            import('../views/ClientReservationView.vue')
+    },
 ]
 
 const router = new VueRouter({
