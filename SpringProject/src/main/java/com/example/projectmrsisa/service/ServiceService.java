@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ServiceService {
@@ -23,5 +24,9 @@ public class ServiceService {
 
     public void deleteServicesByOwner(User user){
         serviceRepository.deleteServicesByOwner(user);
+    }
+
+    public Optional<com.example.projectmrsisa.model.Service> findServiceById(Integer id) {
+        return serviceRepository.findById(id);
     }
 }

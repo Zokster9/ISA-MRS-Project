@@ -228,4 +228,20 @@ public class RetreatController {
         }
         return true;
     }
+
+    @GetMapping(value = "/get-actions/{id}")
+    @PreAuthorize("hasRole('retreatOwner')")
+    public ResponseEntity<List<ActionDTO>> getActions(@PathVariable Integer id) {
+        try {
+            Retreat retreat = retreatService.getRetreatById(id);
+            if (retreat == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            List<ActionDTO> actionDTOS = new ArrayList<>();
+            for (Action action: retreat.getActions()) {
+                actionDTOS.add(new ActionDTO(action));
+            }
+            return new ResponseEntity<>(actionDTOS, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }
