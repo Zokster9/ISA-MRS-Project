@@ -235,4 +235,20 @@ public class AdventureController {
         }
         return true;
     }
+
+    @GetMapping(value = "/get-actions/{id}")
+    @PreAuthorize("hasRole('fishing-instructor')")
+    public ResponseEntity<List<ActionDTO>> getActions(@PathVariable Integer id) {
+        try {
+            Adventure adventure = adventureService.findAdventureById(id);
+            if (adventure == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            List<ActionDTO> actionDTOS = new ArrayList<>();
+            for (Action action: adventure.getActions()) {
+                actionDTOS.add(new ActionDTO(action));
+            }
+            return new ResponseEntity<>(actionDTOS, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }
