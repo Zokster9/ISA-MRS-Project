@@ -187,6 +187,12 @@ const routes = [{
         name:'add-action',
         component: () =>
             import ('../views/AddActionView.vue')
+    },
+    {
+        path:'/reservation-history-privileged-user',
+        name:'reservation-history-privileged-user',
+        component: () =>
+            import('../views/ReservationHistoryPrivilegedUserView.vue')
     }
 ]
 

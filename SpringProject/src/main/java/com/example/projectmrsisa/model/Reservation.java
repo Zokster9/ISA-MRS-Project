@@ -8,17 +8,20 @@ import java.util.Date;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Reservation {
     @Id
-    @SequenceGenerator(name = "myReservationSeqGen", sequenceName = "myReservationSeq", initialValue = 1, allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "myReservationSeqGen")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id", unique = true, nullable = false)
     private Integer id;
-    @Column(name="fromDate", unique = true, nullable = false)
+    @Column(name="fromDate", nullable = false)
     private Date fromDate;
-    @Column(name="toDate", unique = true, nullable = false)
+    @Column(name="toDate", nullable = false)
     private Date toDate;
-    @Column(name="price", unique = true, nullable = false)
+    @Column(name="fromTime", nullable = false)
+    private String fromTime;
+    @Column(name="toTime", nullable = false)
+    private String toTime;
+    @Column(name="price", nullable = false)
     private double price;
-    @Column(name="status", unique = true, nullable = false)
+    @Column(name="status", nullable = false)
     private ReservationStatus status;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rating_id")
@@ -26,19 +29,25 @@ public class Reservation {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "service_id", nullable = false)
     private Service service;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "client_id", nullable = false)
+    private Client client;
 
     public Reservation() {
     }
 
-    public Reservation(Integer id, Date fromDate, Date toDate, double price, ReservationStatus status, Rating rating,
-                       Service service) {
+    public Reservation(Integer id, Date fromDate, Date toDate, String fromTime, String toTime, double price, ReservationStatus status, Rating rating,
+                       Service service, Client client) {
         this.id = id;
         this.fromDate = fromDate;
         this.toDate = toDate;
+        this.fromTime = fromTime;
+        this.toTime = toTime;
         this.price = price;
         this.status = status;
         this.rating = rating;
         this.service = service;
+        this.client = client;
     }
 
     public Integer getId() {
@@ -95,5 +104,29 @@ public class Reservation {
 
     public void setService(Service service) {
         this.service = service;
+    }
+
+    public String getFromTime() {
+        return fromTime;
+    }
+
+    public void setFromTime(String fromTime) {
+        this.fromTime = fromTime;
+    }
+
+    public String getToTime() {
+        return toTime;
+    }
+
+    public void setToTime(String toTime) {
+        this.toTime = toTime;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 }
