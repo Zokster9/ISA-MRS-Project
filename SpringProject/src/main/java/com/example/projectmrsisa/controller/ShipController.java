@@ -252,4 +252,20 @@ public class ShipController {
         }
         return true;
     }
+
+    @GetMapping(value = "/get-actions/{id}")
+    @PreAuthorize("hasRole('shipOwner')")
+    public ResponseEntity<List<ActionDTO>> getActions(@PathVariable Integer id) {
+        try {
+            Ship ship = shipService.findShipById(id);
+            if (ship == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            List<ActionDTO> actionDTOS = new ArrayList<>();
+            for (Action action: ship.getActions()) {
+                actionDTOS.add(new ActionDTO(action));
+            }
+            return new ResponseEntity<>(actionDTOS, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }

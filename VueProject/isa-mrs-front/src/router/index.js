@@ -180,19 +180,25 @@ const routes = [{
         path: '/admin-users-view',
         name: 'admin-users-view',
         component: () =>
-            import('../views/AdminUsersView.vue')
+            import ('../views/AdminUsersView.vue')
     },
     {
-        path:'/add-action/:id',
-        name:'add-action',
+        path: '/add-action/:id',
+        name: 'add-action',
         component: () =>
             import ('../views/AddActionView.vue')
     },
     {
-        path:'/reservation-history-privileged-user',
-        name:'reservation-history-privileged-user',
+        path: '/reservation-history-privileged-user',
+        name: 'reservation-history-privileged-user',
         component: () =>
-            import('../views/ReservationHistoryPrivilegedUserView.vue')
+            import ('../views/ReservationHistoryPrivilegedUserView.vue')
+    },
+    {
+        path: '/service-calendar/:id',
+        name: 'service-calendar',
+        component: () =>
+            import ('../views/CalendarView.vue')
     }
 ]
 

@@ -35,4 +35,8 @@ public class ServiceAvailabilityService {
         }
         return true;
     }
+
+    public List<ServiceAvailability> getServiceAvailabilitiesForService(Integer id) {
+        return serviceAvailabilityRepository.findServiceAvailabilitiesByService(id);
+    }
 }
