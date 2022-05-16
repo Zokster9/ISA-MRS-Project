@@ -1,13 +1,13 @@
 package com.example.projectmrsisa.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class ReservationQueryDTO {
     private String serviceType;
-    @JsonFormat(pattern="dd.MM.yyyy")
-    private Date fromDate;
+    private String fromDate;
     private String fromTime;
     private String toTime;
     private int numOfDays;
@@ -15,13 +15,26 @@ public class ReservationQueryDTO {
 
     public ReservationQueryDTO() {}
 
-    public ReservationQueryDTO(String serviceType, Date fromDate, String fromTime, String toTime, int numOfDays, int numOfPeople) {
+    public ReservationQueryDTO(String serviceType, String fromDate, String fromTime, String toTime, int numOfDays, int numOfPeople) {
         this.serviceType = serviceType;
         this.fromDate = fromDate;
         this.fromTime = fromTime;
         this.toTime = toTime;
         this.numOfDays = numOfDays;
         this.numOfPeople = numOfPeople;
+    }
+
+    public Date getToDate() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String startDate = formatter.format(getFromDate());
+        Calendar cal = Calendar.getInstance();
+        try {
+            cal.setTime(formatter.parse(startDate));
+        } catch(ParseException e){
+            e.printStackTrace();
+        }
+        cal.add(Calendar.DAY_OF_MONTH, this.numOfDays - 1);
+        return cal.getTime();
     }
 
     public String getServiceType() {
@@ -33,10 +46,15 @@ public class ReservationQueryDTO {
     }
 
     public Date getFromDate() {
-        return fromDate;
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            return formatter.parse(this.fromDate);
+        } catch(ParseException e) {
+            return new Date();
+        }
     }
 
-    public void setFromDate(Date fromDate) {
+    public void setFromDate(String fromDate) {
         this.fromDate = fromDate;
     }
 

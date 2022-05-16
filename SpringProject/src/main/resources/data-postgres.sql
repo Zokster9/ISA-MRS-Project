@@ -104,16 +104,16 @@ insert into ratings (service_rating, user_rating) values (5, 5);
 insert into ratings (service_rating, user_rating) values (4, 4);
 insert into ratings (service_rating, user_rating) values (4, 5);
 
--- insert into reservations (from_date, to_date, from_time, to_time, price, status, rating_id, service_id, client_id) values ('2022-05-13 02:00:00', '2022-05-15 02:00:00', '13:00', '13:00', 60, 1, 1, 3, 5);
--- insert into reservations (from_date, to_date, from_time, to_time, price, status, rating_id, service_id, client_id) values ('2022-05-16 02:00:00', '2022-05-17 02:00:00', '13:00', '13:00', 30, 1, 1, 3, 5);
--- insert into reservations (from_date, to_date, from_time, to_time, price, status, rating_id, service_id, client_id) values ('2022-05-20 02:00:00', '2022-05-23 02:00:00', '13:00', '13:00', 90, 1, 1, 3, 5);
---
--- insert into reservations (from_date, to_date, from_time, to_time, price, status, rating_id, service_id, client_id) values ('2022-05-13 02:00:00', '2022-05-15 02:00:00', '12:00', '10:00', 100, 1, null, 1, 5);
--- insert into reservations (from_date, to_date, from_time, to_time, price, status, rating_id, service_id, client_id) values ('2022-05-16 02:00:00', '2022-05-17 02:00:00', '12:00', '10:00', 50, 1, null, 1, 5);
--- insert into reservations (from_date, to_date, from_time, to_time, price, status, rating_id, service_id, client_id) values ('2022-05-20 02:00:00', '2022-05-23 02:00:00', '12:00', '10:00', 150, 1, null, 1, 5);
---
--- insert into reservations (from_date, to_date, from_time, to_time, price, status, rating_id, service_id, client_id) values ('2022-05-13 02:00:00', '2022-05-15 02:00:00', '12:00', '10:00', 1000, 1, null, 2, 5);
--- insert into reservations (from_date, to_date, from_time, to_time, price, status, rating_id, service_id, client_id) values ('2022-05-16 02:00:00', '2022-05-17 02:00:00', '12:00', '10:00', 500, 1, null, 2, 5);
--- insert into reservations (from_date, to_date, from_time, to_time, price, status, rating_id, service_id, client_id) values ('2022-05-20 02:00:00', '2022-05-23 02:00:00', '12:00', '10:00', 1500, 1, null, 2, 5);
+insert into reservations (from_date, to_date, from_time, to_time, price, status, rating_id, service_id, client_id) values ('2022-05-13 02:00:00', '2022-05-15 02:00:00', '13:00', '13:00', 60, 2, 1, 3, 5);
+insert into reservations (from_date, to_date, from_time, to_time, price, status, rating_id, service_id, client_id) values ('2022-05-16 02:00:00', '2022-05-17 02:00:00', '13:00', '13:00', 30, 0, 1, 3, 5);
+insert into reservations (from_date, to_date, from_time, to_time, price, status, rating_id, service_id, client_id) values ('2022-05-20 02:00:00', '2022-05-23 02:00:00', '13:00', '13:00', 90, 0, 1, 3, 5);
+
+insert into reservations (from_date, to_date, from_time, to_time, price, status, rating_id, service_id, client_id) values ('2022-05-13 02:00:00', '2022-05-15 02:00:00', '12:00', '10:00', 100, 2, null, 1, 5);
+insert into reservations (from_date, to_date, from_time, to_time, price, status, rating_id, service_id, client_id) values ('2022-05-16 02:00:00', '2022-05-17 02:00:00', '12:00', '10:00', 50, 0, null, 1, 5);
+insert into reservations (from_date, to_date, from_time, to_time, price, status, rating_id, service_id, client_id) values ('2022-05-20 02:00:00', '2022-05-23 02:00:00', '12:00', '10:00', 150, 0, null, 1, 5);
+
+insert into reservations (from_date, to_date, from_time, to_time, price, status, rating_id, service_id, client_id) values ('2022-05-13 02:00:00', '2022-05-15 02:00:00', '12:00', '10:00', 1000, 2, null, 2, 5);
+insert into reservations (from_date, to_date, from_time, to_time, price, status, rating_id, service_id, client_id) values ('2022-05-16 02:00:00', '2022-05-17 02:00:00', '12:00', '10:00', 500, 0, null, 2, 5);
+insert into reservations (from_date, to_date, from_time, to_time, price, status, rating_id, service_id, client_id) values ('2022-05-20 02:00:00', '2022-05-23 02:00:00', '12:00', '10:00', 1500, 0, null, 2, 5);
 
 --insert into reservations (id, from_date, to_date, price, status, rating_id, service_id, client_id) values (1, 1623484800000, 1623657600000, 1500, 1, 1, 2, 2);

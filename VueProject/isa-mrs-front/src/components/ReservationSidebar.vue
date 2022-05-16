@@ -86,7 +86,10 @@
                 return date.getFullYear() + '-' + month + '-' + date.getDate()
             },
             invalidTime() {
-                return this.reservationForm.startTime >= this.reservationForm.endTime
+                if (this.reservationForm.numberOfDays === "1") {
+                    return this.reservationForm.startTime >= this.reservationForm.endTime
+                }
+                return false;
             },
             invalidDate() {
                 return this.reservationForm.date < this.currentDate

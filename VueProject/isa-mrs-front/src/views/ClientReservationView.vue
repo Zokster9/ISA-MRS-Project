@@ -5,7 +5,12 @@
             <ReservationSidebar @search="search" @sort="sort" style="background-color: #ffffff;"></ReservationSidebar>
             <div style="width:50%;height:100%;margin:auto;margin-top:110px;">
                 <div v-if="availableReservations" class="vertical-center">
-                    <SearchReservationResult v-for="reservationResult in orderedResults" :searchResult="reservationResult" :serviceType="type" :key="reservationResult.id"></SearchReservationResult>
+                    <div v-if="orderedResults.length != 0">
+                        <SearchReservationResult v-for="reservationResult in orderedResults" :searchResult="reservationResult" :serviceType="type" :key="reservationResult.id"></SearchReservationResult>
+                    </div>
+                    <div v-else>
+                        <h1>There are no services available for reservation with your desired parameters.</h1>
+                    </div>
                 </div>
                 <div v-else class="mx-auto" style="margin-top: 50px;">
                     <h1>Here you can see available services for reservations when you enter your desired parameters.</h1>

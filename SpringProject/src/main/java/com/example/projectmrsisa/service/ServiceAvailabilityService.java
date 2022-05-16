@@ -1,12 +1,10 @@
 package com.example.projectmrsisa.service;
 
-import com.example.projectmrsisa.dto.ServiceAvailabilityDTO;
 import com.example.projectmrsisa.model.ServiceAvailability;
 import com.example.projectmrsisa.repository.ServiceAvailabilityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -34,5 +32,22 @@ public class ServiceAvailabilityService {
             }
         }
         return true;
+    }
+
+
+    public boolean isAvailable(Integer serviceId, Date fromDate, Date toDate, String fromTime, String toTime) {
+        List<ServiceAvailability> availabilityList = serviceAvailabilityRepository.findServiceAvailabilitiesByService(serviceId);
+        for (ServiceAvailability serviceAvailability : availabilityList) {
+            if (serviceAvailability.getDateFrom().compareTo(fromDate) <= 0 && serviceAvailability.getDateTo().compareTo(toDate) >= 0) {
+                if (serviceAvailability.getDateFrom().compareTo(fromDate) == 0) {
+                    if (serviceAvailability.getTimeFrom().compareTo(fromTime) > 0) continue;
+                }
+                if (serviceAvailability.getDateTo().compareTo(toDate) == 0) {
+                    if (serviceAvailability.getTimeTo().compareTo(toTime) < 0) continue;
+                }
+                return true;
+            }
+        }
+        return false;
     }
 }

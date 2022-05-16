@@ -8,21 +8,20 @@ import java.util.Date;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Reservation {
     @Id
-    @SequenceGenerator(name = "myReservationSeqGen", sequenceName = "myReservationSeq", initialValue = 1, allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "myReservationSeqGen")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id", unique = true, nullable = false)
     private Integer id;
-    @Column(name="fromDate", unique = true, nullable = false)
+    @Column(name="fromDate", nullable = false)
     private Date fromDate;
-    @Column(name="toDate", unique = true, nullable = false)
+    @Column(name="toDate", nullable = false)
     private Date toDate;
     @Column(name="fromTime", nullable = false)
     private String fromTime;
     @Column(name="toTime", nullable = false)
     private String toTime;
-    @Column(name="price", unique = true, nullable = false)
+    @Column(name="price", nullable = false)
     private double price;
-    @Column(name="status", unique = true, nullable = false)
+    @Column(name="status", nullable = false)
     private ReservationStatus status;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rating_id")
@@ -37,8 +36,8 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(Integer id, Date fromDate, Date toDate, String fromTime, String toTime, double price,
-                       ReservationStatus status, Rating rating, Service service, Client client) {
+    public Reservation(Integer id, Date fromDate, Date toDate, String fromTime, String toTime, double price, ReservationStatus status, Rating rating,
+                       Service service, Client client) {
         this.id = id;
         this.fromDate = fromDate;
         this.toDate = toDate;
