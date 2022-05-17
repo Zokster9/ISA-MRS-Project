@@ -88,7 +88,7 @@ public class AdventureController {
     }
 
     @GetMapping(value = "/getAdventure/{id}", produces = "application/json")
-    @PreAuthorize("hasAnyRole('fishingInstructor', 'admin', 'mainAdmin')")
+    @PreAuthorize("hasAnyRole('fishingInstructor', 'admin', 'mainAdmin', 'client')")
     public ResponseEntity<AdventureDTO> getAdventureById(@PathVariable Integer id) {
         try {
             Adventure adventure = adventureService.findAdventureById(id);
