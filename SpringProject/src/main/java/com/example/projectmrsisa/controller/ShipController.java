@@ -144,7 +144,7 @@ public class ShipController {
     }
 
     @GetMapping(value = "/get/{id}", produces = "application/json")
-    @PreAuthorize("hasAnyRole('shipOwner', 'admin', 'mainAdmin')")
+    @PreAuthorize("hasAnyRole('shipOwner', 'admin', 'mainAdmin', 'client')")
     public ResponseEntity<ShipDTO> getShipById(@PathVariable Integer id) {
         try {
             Ship ship = shipService.findShipById(id);
