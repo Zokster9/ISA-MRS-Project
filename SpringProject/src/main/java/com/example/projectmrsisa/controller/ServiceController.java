@@ -37,6 +37,8 @@ public class ServiceController {
 
     @Autowired
     private ActionService actionService;
+
+    @Autowired
     private UserService userService;
 
     @Transactional

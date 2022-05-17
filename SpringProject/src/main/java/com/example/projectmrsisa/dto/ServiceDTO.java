@@ -16,15 +16,12 @@ public class ServiceDTO {
     private double price;
     private String ownerName;
     private String ownerSurname;
-    private String city;
-    private String street;
-    private String country;
 
-    public ServiceDTO(){
+    public ServiceDTO() {
 
     }
 
-    public ServiceDTO(Service service){
+    public ServiceDTO(Service service) {
         this.id = service.getId();
         this.name = service.getName();
         this.description = service.getDescription();
@@ -127,29 +124,5 @@ public class ServiceDTO {
 
     public void setOwnerSurname(String ownerSurname) {
         this.ownerSurname = ownerSurname;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
     }
 }

@@ -135,7 +135,7 @@ import router from '@/router'
 			}).then((response) =>{
                 this.services = response.data;
                 this.servicesCopy = JSON.parse(JSON.stringify(response.data));
-                if (window.localStorage.getItem("role") === "ROLE_fishingInstructor"){
+                if (window.sessionStorage.getItem("role") === "ROLE_fishingInstructor"){
                     this.userType = "fishingInstructor";
                 } else if (window.sessionStorage.getItem("role") === "ROLE_retreatOwner"){
                     this.userType = "retreatOwner"

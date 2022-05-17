@@ -36,7 +36,7 @@ export default {
     mounted() {
         axios.get('http://localhost:8088/services/get-service-availability/' + this.$route.params.id, {
             headers: {
-                Authorization: 'Bearer ' + window.localStorage.getItem('accessToken')
+                Authorization: 'Bearer ' + window.sessionStorage.getItem('accessToken')
             }
         })
         .then((response) => {
@@ -50,12 +50,12 @@ export default {
             }
         });
 		let path = "";
-		if (window.localStorage.getItem("role") === "ROLE_retreatOwner") path = "retreats";
-		else if (window.localStorage.getItem("role") === "ROLE_shipOwner") path = "ships";
-		else if (window.localStorage.getItem("role") === "ROLE_fishingInstructor") path = "adventures";
+		if (window.sessionStorage.getItem("role") === "ROLE_retreatOwner") path = "retreats";
+		else if (window.sessionStorage.getItem("role") === "ROLE_shipOwner") path = "ships";
+		else if (window.sessionStorage.getItem("role") === "ROLE_fishingInstructor") path = "adventures";
         axios.get('http://localhost:8088/' + path + '/get-actions/' + this.$route.params.id, {
             headers: {
-                Authorization: 'Bearer ' + window.localStorage.getItem('accessToken')
+                Authorization: 'Bearer ' + window.sessionStorage.getItem('accessToken')
             }
         })
         .then((response) => {
