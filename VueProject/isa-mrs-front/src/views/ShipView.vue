@@ -80,6 +80,10 @@
 					<div>
 						<iframe :src="mapSrc" style="margin: 15px; border-radius: 25px; border: 1px solid #323539"></iframe>
 					</div>
+                    <div>
+                        <button @click="subscribe" v-if="isClient && !isSubscribed" class="btn btn-primary" value="Subscribe">Subscribe</button>
+                        <button @click="unsubscribe" v-if="isClient && isSubscribed" class="btn btn-primary" value="Unsubscribe">Unsubscribe</button>
+                    </div>
                 </div>
                 <div class="d-flex flex-row" style="height: 10%; margin: 5px; border: 1px solid #323539">
                     <div class="d-flex flex-row" style="margin: 5px; width: 66%">
@@ -114,7 +118,19 @@
             return {
                 ship: null,
 				currentPicture: 0,
-				mapSrc: ""
+				mapSrc: "",
+                client: null,
+            }
+        },
+        computed: {
+            isClient() {
+                return window.sessionStorage.getItem("role") === "ROLE_client"
+            },
+            isSubscribed() {
+                if (this.client != null) {
+                    return this.client.subscriptions.includes(parseInt(this.$route.params.id));
+                }
+                return false;
             }
         },
         methods: {
@@ -126,9 +142,33 @@
 				}else {
 					this.currentPicture += n;
 				}
-			}
+			},
+            subscribe() {
+                axios.put("http://localhost:8088/clients/subscribe/" + this.$route.params.id, {
+                },
+                {
+                    headers:{
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
+                    }
+                }).then((response) => {
+                    alert("You have subscribed.")
+                    this.client = response.data
+                })
+            },
+            unsubscribe() {
+                axios.put("http://localhost:8088/clients/unsubscribe/" + this.$route.params.id, {
+                },
+                {
+                    headers:{
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
+                    }
+                }).then((response) => {
+                    alert("You have unsubscribed.")
+                    this.client = response.data
+                })
+            },
         },
-        mounted(){
+        mounted() {
             axios.get("http://localhost:8088/ships/get/" + this.$route.params.id, 
 				{
 					headers: {
@@ -138,7 +178,16 @@
 					this.ship = response.data;
 					this.mapSrc = "https://maps.google.com/maps?q=" + response.data.country + "," + response.data.city + "," + response.data.street + "&t=&z=13&ie=UTF8&iwloc=&output=embed"
 				}
-			)
+			);
+            if (window.sessionStorage.getItem("role") === "ROLE_client") {
+                axios.get("http://localhost:8088/clients/getLoggedClient", {
+                    headers:{
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
+                    }
+                }).then((response) => {
+                    this.client = response.data
+                })
+            }
         },
     }
 </script>
