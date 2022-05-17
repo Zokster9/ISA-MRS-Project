@@ -4,14 +4,16 @@ import com.example.projectmrsisa.model.Client;
 import com.example.projectmrsisa.model.Reservation;
 import com.example.projectmrsisa.model.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class ClientDTO extends UserDTO {
     private int penaltyPoints;
     private boolean isPenalized;
     private Set<Reservation> reservations = new HashSet<>();
-    private Set<Service> subscriptions = new HashSet<>();
+    private List<Integer> subscriptions = new ArrayList<>();
 
     public ClientDTO() {
 
@@ -21,6 +23,9 @@ public class ClientDTO extends UserDTO {
         super(client);
         this.penaltyPoints = client.getPenaltyPoints();
         this.isPenalized = client.isPenalized();
+        for (Service service : client.getSubscriptions()) {
+            this.subscriptions.add(service.getId());
+        }
     }
 
     public int getPenaltyPoints() {
@@ -47,11 +52,11 @@ public class ClientDTO extends UserDTO {
         this.reservations = reservations;
     }
 
-    public Set<Service> getSubscriptions() {
+    public List<Integer> getSubscriptions() {
         return subscriptions;
     }
 
-    public void setSubscriptions(Set<Service> subscriptions) {
+    public void setSubscriptions(List<Integer> subscriptions) {
         this.subscriptions = subscriptions;
     }
 }
