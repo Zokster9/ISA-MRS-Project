@@ -30,8 +30,8 @@ export default ({
     methods: {
         reserve(event) {
             event.stopPropagation();
-            alert("HEHE")
-        }
+            this.$emit("reserve", this.searchResult);
+        },
     },
 })
 </script>
