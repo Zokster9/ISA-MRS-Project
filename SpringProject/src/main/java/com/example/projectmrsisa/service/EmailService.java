@@ -1,5 +1,7 @@
 package com.example.projectmrsisa.service;
 
+import com.example.projectmrsisa.dto.ReservationDTO;
+import com.example.projectmrsisa.dto.RetreatDTO;
 import com.example.projectmrsisa.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -23,6 +25,19 @@ public class EmailService {
     private Environment env;
 
     //private Queue<SimpleMailMessage> mails = new ArrayDeque<SimpleMailMessage>();
+
+    @Async
+    public void sendReservationConfirmation(ReservationDTO reservationDTO) throws MessagingException {
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(env.getProperty("spring.mail.username"));
+        mail.setFrom("isamrsprojekat@gmail.com");
+        mail.setSubject("Reservation approved");
+        mail.setText("Dear " + reservationDTO.getClientName() + " " + reservationDTO.getClientSurname() +
+                " your reservation for " + reservationDTO.getServiceName() + ", from " + reservationDTO.getFromDate() +
+                "to " + reservationDTO.getToDate() + ", has been approved.");
+        //mails.add(mail);
+        javaMailSender.send(mail);
+    }
 
     @Async
     public void sendActivationEmail(UserDTO user) throws MessagingException {

@@ -38,6 +38,9 @@ public class ReservationController {
     @Autowired
     private ServiceAvailabilityService serviceAvailabilityService;
 
+    @Autowired
+    private EmailService emailService;
+
     @GetMapping(value="/getPrivilegedUserReservations")
     @PreAuthorize("hasAnyRole('fishingInstructor', 'shipOwner', 'retreatOwner')")
     public ResponseEntity<List<ReservationDTO>> getPrivilegedUserReservations(Principal principal){
@@ -123,6 +126,23 @@ public class ReservationController {
             }
             return new ResponseEntity<>(adventureDTOs, HttpStatus.OK);
         } catch( Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(value="/makeAReservation")
+    @PreAuthorize("hasRole('client')")
+    public ResponseEntity<ReservationDTO> makeAReservation(Principal principal, @RequestBody ReservationDTO reservationDTO) {
+        Client client;
+        Service service;
+        try {
+            client = (Client) userService.findUserByEmail(principal.getName());
+            service = serviceService.findById(reservationDTO.getServiceId());
+            Reservation reservation = reservationService.addReservation(new Reservation(reservationDTO, service, client));
+            ReservationDTO resDTO = new ReservationDTO(reservation);
+            emailService.sendReservationConfirmation(resDTO);
+            return new ResponseEntity<>(resDTO, HttpStatus.CREATED);
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

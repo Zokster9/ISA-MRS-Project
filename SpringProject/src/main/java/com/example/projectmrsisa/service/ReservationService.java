@@ -16,6 +16,8 @@ public class ReservationService {
     @Autowired
     private ReservationRepository reservationRepository;
 
+    public Reservation addReservation(Reservation reservation) { return reservationRepository.save(reservation); }
+
     public boolean checkIfReservationsExistForDate(Integer serviceId, Date fromDate, Date toDate) {
         List<Reservation> reservations = reservationRepository.findReservationByServiceId(serviceId);
         for (Reservation reservation: reservations) {
