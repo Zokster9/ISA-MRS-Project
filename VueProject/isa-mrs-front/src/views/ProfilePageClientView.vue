@@ -1,6 +1,9 @@
 <template>
     <div class="d-flex flex-row">
-        <div class="mx-auto">
+        <div>
+            <NavbarClient></NavbarClient>
+        </div>
+        <div class="mx-auto" style="margin-top: 50px;">
             <PersonalInfoUser v-if="user" :user="user"></PersonalInfoUser>
         </div>
     </div>
@@ -8,6 +11,7 @@
 
 <script>
     import PersonalInfoUser from '@/components/PersonalInfoUser.vue'
+    import NavbarClient from '@/components/NavbarClient.vue'
     import Vue from 'vue'
     import axios from 'axios'
     import VueAxios from 'vue-axios'
@@ -18,6 +22,7 @@
         name: "ProfilePageClient",
         components: {
             PersonalInfoUser,
+            NavbarClient,
         },
         data() {
             return {
@@ -27,7 +32,7 @@
         mounted(){
             axios.get("http://localhost:8088/users/getLoggedUser",{
                 headers:{
-                    Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+                    Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                 }
             }).then((response) =>{
                 this.user = response.data

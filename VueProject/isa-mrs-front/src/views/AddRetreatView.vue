@@ -160,7 +160,7 @@
                 },
 				{
 					headers: {
-						Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+						Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
 					}
 				}).then(response => {
                     alert('Added retreat: ' + response.data.name + '.');
@@ -182,7 +182,7 @@
         mounted() {
             axios.get("http://localhost:8088/tags/retreat", {
                 headers: {
-                    Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+                    Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                 }
             }).then((response) => {this.tags = response.data});
         }

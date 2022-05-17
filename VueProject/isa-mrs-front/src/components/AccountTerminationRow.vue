@@ -64,7 +64,7 @@
                 },
                 {
                     headers: {
-                        Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }
                 })
                 .then(() => {
@@ -79,7 +79,7 @@
                 },
                 {
                     headers: {
-                        Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }
                 })
                 .then(() => {

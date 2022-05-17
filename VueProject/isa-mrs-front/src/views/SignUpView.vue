@@ -87,7 +87,7 @@
                             </div>
                             
                             <div class="form-group">
-                                <button @click="register"  :disabled="$v.form.$invalid || isExplanationRequired" type="submit" class="btn btn-dark btn-lg btn-block">Sign Up</button>
+                                <button @click="register" :disabled="$v.form.$invalid || isExplanationRequired" type="submit" class="btn btn-dark btn-lg btn-block">Sign Up</button>
                             </div>
                         </form>
                     </div>

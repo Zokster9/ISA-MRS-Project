@@ -1,8 +1,8 @@
 package com.example.projectmrsisa.dto;
 
+import com.example.projectmrsisa.model.Client;
 import com.example.projectmrsisa.model.Reservation;
 import com.example.projectmrsisa.model.Service;
-import com.example.projectmrsisa.model.User;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,10 +13,14 @@ public class ClientDTO extends UserDTO {
     private Set<Reservation> reservations = new HashSet<>();
     private Set<Service> subscriptions = new HashSet<>();
 
-    public ClientDTO(User user) {
-        super(user);
-        this.penaltyPoints = 0;
-        this.isPenalized = false;
+    public ClientDTO() {
+
+    }
+
+    public ClientDTO(Client client) {
+        super(client);
+        this.penaltyPoints = client.getPenaltyPoints();
+        this.isPenalized = client.isPenalized();
     }
 
     public int getPenaltyPoints() {

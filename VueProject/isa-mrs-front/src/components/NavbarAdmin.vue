@@ -18,7 +18,7 @@
             }
         },
         mounted(){
-            if (window.localStorage.getItem("role") === "ROLE_admin"){
+            if (window.sessionStorage.getItem("role") === "ROLE_admin"){
                 this.admin = true;
             }
             else{

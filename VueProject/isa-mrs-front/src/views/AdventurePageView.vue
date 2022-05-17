@@ -112,7 +112,7 @@
         mounted () {
             axios.get("http://localhost:8088/adventures/getAdventure/" + this.$route.params.id,{
                 headers:{
-                    Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+                    Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                 }
             }).then((response) => {
                 this.adventure = response.data;

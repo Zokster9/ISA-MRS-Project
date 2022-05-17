@@ -27,11 +27,11 @@
             //router link na stranicu sa servisom koji ima dati ID
             editService(id){
                 this.id = id;
-                if (window.localStorage.getItem("role") === "ROLE_retreatOwner") {
+                if (window.sessionStorage.getItem("role") === "ROLE_retreatOwner") {
                     router.push('/retreat-info/' + id);
-				}else if (window.localStorage.getItem("role") === "ROLE_shipOwner") {
+				}else if (window.sessionStorage.getItem("role") === "ROLE_shipOwner") {
                     router.push('/ship-info/' + id);
-				}else if (window.localStorage.getItem("role") === "ROLE_fishingInstructor") {
+				}else if (window.sessionStorage.getItem("role") === "ROLE_fishingInstructor") {
                     router.push('/update-adventure/' + id);
 				}else {
                     alert('Some kind of error happened!');
@@ -40,11 +40,11 @@
             //poziv na back da izbrise servis
             deleteService(id){
                 this.id = id;
-                if (window.localStorage.getItem("role") === "ROLE_retreatOwner") {
+                if (window.sessionStorage.getItem("role") === "ROLE_retreatOwner") {
                     this.deleteRetreat(id);
-				}else if (window.localStorage.getItem("role") === "ROLE_shipOwner") {
+				}else if (window.sessionStorage.getItem("role") === "ROLE_shipOwner") {
                     this.deleteShip(id);
-				}else if (window.localStorage.getItem("role") === "ROLE_fishingInstructor") {
+				}else if (window.sessionStorage.getItem("role") === "ROLE_fishingInstructor") {
                     this.deleteAdventure(id);
 				}else {
                     alert('Some kind of error happened!');
@@ -53,7 +53,7 @@
             deleteRetreat(id) {
                 axios.delete('http://localhost:8088/retreats/delete-retreat/' + id, {
                     headers: {
-                        Authorization: 'Bearer ' + window.localStorage.getItem('accessToken')
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem('accessToken')
                     }
                 }).then(() => {
                     alert("Retreat successfully deleted.");
@@ -63,7 +63,7 @@
             deleteShip(id) {
                 axios.delete('http://localhost:8088/ships/delete-ship/' + id, {
                     headers: {
-                        Authorization: 'Bearer ' + window.localStorage.getItem('accessToken')
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem('accessToken')
                     }
                 }).then(() => {
                     alert("Ship successfully deleted.");
@@ -74,7 +74,7 @@
                 axios.delete('http://localhost:8088/adventures/delete-adventure/' + id,
                 {
                     headers: {
-                        Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }
                 }).then(() =>{
                     alert("Adventure successfully deleted.")

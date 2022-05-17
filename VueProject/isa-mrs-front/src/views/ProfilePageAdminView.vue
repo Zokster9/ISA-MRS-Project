@@ -57,7 +57,7 @@
                 },
                 {
                     headers:{
-                        Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }
                 }).then(()=>{
                     window.location.reload();
@@ -80,11 +80,11 @@
             axios.get("http://localhost:8088/users/getLoggedAdmin",
             {
                 headers: {
-                    Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+                    Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                 }
             }).then((response)=>{
                 this.data = response.data;
-                if (this.data.passwordChanged === false && window.localStorage.getItem("role") === "ROLE_admin"){
+                if (this.data.passwordChanged === false && window.sessionStorage.getItem("role") === "ROLE_admin"){
                     this.isFirstTimeAdmin = true;
                 }
                 else{

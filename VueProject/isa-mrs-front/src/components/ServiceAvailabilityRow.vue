@@ -40,11 +40,11 @@
         },
         methods: {
             addAvailability(id){
-                if (window.localStorage.getItem("role") === "ROLE_retreatOwner") {
+                if (window.sessionStorage.getItem("role") === "ROLE_retreatOwner") {
                     this.addRetreatAvailability(id);
-				}else if (window.localStorage.getItem("role") === "ROLE_shipOwner") {
+				}else if (window.sessionStorage.getItem("role") === "ROLE_shipOwner") {
                     this.addShipAvailability(id);
-				}else if (window.localStorage.getItem("role") === "ROLE_fishingInstructor") {
+				}else if (window.sessionStorage.getItem("role") === "ROLE_fishingInstructor") {
                     this.addAdventureAvailability(id);
 				}else {
                     alert('Some kind of error happened!');
@@ -58,7 +58,7 @@
                     timeTo: this.endTime
                 }, {
                     headers: {
-                        Authorization: 'Bearer ' + window.localStorage.getItem('accessToken')
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem('accessToken')
                     }
                 }).then(() => {
                     alert('Service availability added!');
@@ -75,7 +75,7 @@
                     timeTo: this.endTime
                 }, {
                     headers: {
-                        Authorization: 'Bearer ' + window.localStorage.getItem('accessToken')
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem('accessToken')
                     }
                 }).then(() => {
                     alert('Service availability added!');
@@ -92,7 +92,7 @@
                     timeTo: this.endTime
                 },{
                     headers: {
-                        Authorization: 'Bearer ' + window.localStorage.getItem('accessToken')
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem('accessToken')
                     }
                 }).then(() => {
                     alert('Service availability added!');

@@ -32,7 +32,7 @@
         mounted(){
             axios.get("http://localhost:8088/users/getLoggedUser", {
 				headers: {
-					Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+					Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
 				}
 			}).then((response) =>{
                 this.user = response.data

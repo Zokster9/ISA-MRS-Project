@@ -84,7 +84,7 @@
 				},
 				{
 					headers: {
-						Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+						Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
 					}
 				})
                 .then(() => {
@@ -98,7 +98,7 @@
                     confirmPassword: this.passwordChange.confirmNewPassword
                 }, {
                     headers: {
-                        Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }
                 })
                 .then(()=>{

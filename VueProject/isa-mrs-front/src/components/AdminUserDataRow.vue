@@ -22,7 +22,7 @@
             deleteUser(id){
                 axios.delete("http://localhost:8088/users/delete/" + id,{
                     headers:{
-                        Authorization: "Bearer " + window.localStorage.getItem("accessToken")
+                        Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
                     }
                 }).then(() =>{
                     alert("Successfully deleted user")

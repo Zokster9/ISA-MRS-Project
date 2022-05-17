@@ -93,13 +93,13 @@ const routes = [{
             import ('../views/AddAdventureView.vue')
     },
     {
-        path: '/fishing-instructors/',
+        path: '/fishing-instructors',
         name: 'fishing-instructors',
         component: () =>
             import ('../views/FishingInstructorsView.vue')
     },
     {
-        path: '/retreats/',
+        path: '/retreats',
         name: 'retreats',
         component: () =>
             import ('../views/RetreatsView.vue')
@@ -111,8 +111,8 @@ const routes = [{
             import ('../views/ShipView.vue')
     },
     {
-        path: '/adventure-page/:id',
-        name: 'adventure-page',
+        path: '/adventure/:id',
+        name: 'adventure',
         component: () =>
             import ('../views/AdventurePageView.vue')
     },
@@ -150,7 +150,7 @@ const routes = [{
         path: '/retreat-info/:id',
         name: 'retreat-info',
         component: () =>
-            import ('../views/RetreatInfoChange.vue')
+            import ('../views/RetreatInfoChangeView.vue')
     },
     {
         path: '/ship-info/:id',
@@ -162,13 +162,19 @@ const routes = [{
         path: '/admin-sign-up',
         name: 'admin-sign-up',
         component: () =>
-            import ('../views/AdminSignUp.vue')
+            import ('../views/AdminSignUpView.vue')
     },
     {
         path: '/update-adventure/:id',
         name: 'update-adventure',
         component: () =>
-            import ('../views/UpdateAdventure.vue')
+            import ('../views/UpdateAdventureView.vue')
+    },
+    {
+        path: '/home-page-client',
+        name: 'home-page-client',
+        component: () =>
+            import ('../views/HomepageClientView.vue')
     },
     {
         path: '/admin-services-view',
@@ -199,7 +205,25 @@ const routes = [{
         name: 'service-calendar',
         component: () =>
             import ('../views/CalendarView.vue')
-    }
+    },
+    {
+        path: '/penalty-points',
+        name: 'penalty-points',
+        component: () =>
+            import('../views/PenaltyPointsView.vue')
+    },
+    {
+        path: '/client-subscriptions',
+        name: 'client-subscriptions',
+        component: () =>
+            import('../views/ClientSubscriptionsView.vue')
+    },
+    {
+        path: '/make-a-reservation',
+        name: 'make-a-reservation',
+        component: () =>
+            import('../views/ClientReservationView.vue')
+    },
 ]
 
 const router = new VueRouter({

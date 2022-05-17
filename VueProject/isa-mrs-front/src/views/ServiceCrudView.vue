@@ -118,11 +118,11 @@ import router from '@/router'
                     return false;
                 },
                 addService() {
-                    if (window.localStorage.getItem("role") === "ROLE_fishingInstructor"){
+                    if (window.sessionStorage.getItem("role") === "ROLE_fishingInstructor"){
                         router.push('/add-adventure');
-                    } else if (window.localStorage.getItem("role") === "ROLE_retreatOwner"){
+                    } else if (window.sessionStorage.getItem("role") === "ROLE_retreatOwner"){
                         router.push('/add-retreat');
-                    } else if (window.localStorage.getItem("role") === "ROLE_shipOwner"){
+                    } else if (window.sessionStorage.getItem("role") === "ROLE_shipOwner"){
                         router.push('/add-ship');
                     }
                 },
@@ -130,16 +130,16 @@ import router from '@/router'
         mounted(){
             axios.get("http://localhost:8088/users/findMyEntities", {
 				headers: {
-					Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+					Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
 				}
 			}).then((response) =>{
                 this.services = response.data;
                 this.servicesCopy = JSON.parse(JSON.stringify(response.data));
                 if (window.localStorage.getItem("role") === "ROLE_fishingInstructor"){
                     this.userType = "fishingInstructor";
-                } else if (window.localStorage.getItem("role") === "ROLE_retreatOwner"){
+                } else if (window.sessionStorage.getItem("role") === "ROLE_retreatOwner"){
                     this.userType = "retreatOwner"
-                } else if (window.localStorage.getItem("role") === "ROLE_shipOwner"){
+                } else if (window.sessionStorage.getItem("role") === "ROLE_shipOwner"){
                     this.userType = "shipOwner"
                 }
             })

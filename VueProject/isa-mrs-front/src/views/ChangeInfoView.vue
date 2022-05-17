@@ -104,19 +104,19 @@
                     phoneNumber: this.form.phoneNumber,
                 }, {
 					headers: {
-						Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+						Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
 					}
 				}).then(() => {
                     alert("Successfully changed personal information!");
-                    if (window.localStorage.getItem("role") === "ROLE_retreatOwner") {
+                    if (window.sessionStorage.getItem("role") === "ROLE_retreatOwner") {
 						this.$router.push("/profile-page-retreat-owner")
-					}else if (window.localStorage.getItem("role") === "ROLE_shipOwner") {
+					}else if (window.sessionStorage.getItem("role") === "ROLE_shipOwner") {
 						this.$router.push("/profile-page-ship-owner")
-					}else if (window.localStorage.getItem("role") === "ROLE_fishingInstructor") {
+					}else if (window.sessionStorage.getItem("role") === "ROLE_fishingInstructor") {
 						this.$router.push("/profile-page-fishing-instructor")
-					}else if (window.localStorage.getItem("role") === "ROLE_client") {
+					}else if (window.sessionStorage.getItem("role") === "ROLE_client") {
 						this.$router.push("/profile-page-client")
-					}else if (window.localStorage.getItem("role") === "ROLE_admin" || window.localStorage.getItem("role") === "ROLE_mainAdmin") {
+					}else if (window.sessionStorage.getItem("role") === "ROLE_admin" || window.sessionStorage.getItem("role") === "ROLE_mainAdmin") {
 						this.$router.push("/profile-page-admin")
 					}else {
 						alert("Some kind of error, dont know what.");
@@ -170,7 +170,7 @@
 		mounted() {
 			axios.get("http://localhost:8088/users/getLoggedUser", {
 				headers: {
-					Authorization: 'Bearer ' + window.localStorage.getItem("accessToken")
+					Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
 				}
 			}).then((response) =>{
                 this.user = response.data;

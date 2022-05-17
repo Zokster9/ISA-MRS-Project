@@ -25,4 +25,8 @@ public class ClientService {
     public List<Client> findAll() {
         return clientRepository.findAll();
     }
+
+    public Client findClientById(Integer id) {
+        return clientRepository.findById(id).orElse(null);
+    }
 }

@@ -8,6 +8,9 @@ public class ServiceDTO {
     private int id;
     private String name;
     private String description;
+    private String country;
+    private String city;
+    private String street;
     private Set<String> pictures;
     private Set<String> rulesOfConduct;
     private double price;
@@ -25,6 +28,9 @@ public class ServiceDTO {
         this.id = service.getId();
         this.name = service.getName();
         this.description = service.getDescription();
+        this.country = service.getAddress().getCountry();
+        this.city = service.getAddress().getCity();
+        this.street = service.getAddress().getStreet();
         this.pictures = service.getPictures();
         this.rulesOfConduct = service.getRulesOfConduct();
         this.price = service.getPrice();
@@ -61,6 +67,30 @@ public class ServiceDTO {
 
     public Set<String> getPictures() {
         return pictures;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
     }
 
     public void setPictures(Set<String> pictures) {

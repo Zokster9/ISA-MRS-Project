@@ -1,5 +1,7 @@
 package com.example.projectmrsisa.model;
 
+import com.example.projectmrsisa.dto.ReservationDTO;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -46,6 +48,17 @@ public class Reservation {
         this.price = price;
         this.status = status;
         this.rating = rating;
+        this.service = service;
+        this.client = client;
+    }
+
+    public Reservation(ReservationDTO reservationDTO, Service service, Client client) {
+        this.fromDate = reservationDTO.getFromDate();
+        this.toDate = reservationDTO.getToDate();
+        this.fromTime = reservationDTO.getFromTime();
+        this.toTime = reservationDTO.getToTime();
+        this.price = reservationDTO.getPrice();
+        this.status = ReservationStatus.Pending;
         this.service = service;
         this.client = client;
     }
