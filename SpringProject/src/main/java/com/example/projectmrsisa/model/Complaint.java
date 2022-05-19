@@ -16,7 +16,7 @@ public class Complaint {
     @Column(name="isAnswered")
     private boolean isAnswered;
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reservation", nullable = false)
+    @JoinColumn(name = "reservation_id", nullable = false)
     private Reservation reservation;
 
     public Complaint() {

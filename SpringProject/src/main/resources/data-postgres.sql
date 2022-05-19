@@ -115,3 +115,7 @@ insert into reservations (from_date, to_date, from_time, to_time, price, status,
 insert into reservations (from_date, to_date, from_time, to_time, price, status, service_id, client_id) values ('2022-05-13 02:00:00', '2022-05-15 02:00:00', '12:00', '10:00', 1000, 1, 2, 5);
 insert into reservations (from_date, to_date, from_time, to_time, price, status, service_id, client_id) values ('2022-05-16 02:00:00', '2022-05-17 02:00:00', '12:00', '10:00', 500, 1, 2, 5);
 insert into reservations (from_date, to_date, from_time, to_time, price, status, service_id, client_id) values ('2022-05-20 02:00:00', '2022-05-23 02:00:00', '12:00', '10:00', 1500, 1, 2, 5);
+
+insert into complaints (complaint, response, is_answered, reservation_id) values ('Unstable boat Unstable boat Unstable boat Unstable boat Unstable boat', '', False, 9);
+insert into complaints (complaint, response, is_answered, reservation_id) values ('Stinky bathroom', '', False, 6);
+insert into complaints (complaint, response, is_answered, reservation_id) values ('No fish?', '', False, 3);

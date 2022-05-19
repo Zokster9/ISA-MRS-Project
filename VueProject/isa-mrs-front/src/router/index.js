@@ -224,6 +224,12 @@ const routes = [{
         component: () =>
             import('../views/ClientReservationView.vue')
     },
+    {
+        path: '/admin-complaints',
+        name: 'admin-complaints',
+        component: () =>
+            import('../views/AdminComplaintsView.vue')
+    }
 ]
 
 const router = new VueRouter({
