@@ -14,6 +14,18 @@ public class ComplaintService {
     private ComplaintRepository complaintRepository;
 
     public List<Complaint> findUnansweredComplaints(){
-        return complaintRepository.findUnansweredComplaint();
+        return complaintRepository.findUnansweredComplaints();
+    }
+
+    public void updateComplaintStatus(Integer id){
+        complaintRepository.updateComplaintStatus(id);
+    }
+
+    public void updateComplaintResponse(String response, Integer id){
+        complaintRepository.updateComplaintResponse(response, id);
+    }
+
+    public Complaint findComplaintById(Integer id){
+        return complaintRepository.findComplaintById(id);
     }
 }

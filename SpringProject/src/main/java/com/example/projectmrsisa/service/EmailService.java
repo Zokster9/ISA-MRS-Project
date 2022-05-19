@@ -3,6 +3,8 @@ package com.example.projectmrsisa.service;
 import com.example.projectmrsisa.dto.ReservationDTO;
 import com.example.projectmrsisa.dto.RetreatDTO;
 import com.example.projectmrsisa.dto.UserDTO;
+import com.example.projectmrsisa.model.Client;
+import com.example.projectmrsisa.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
@@ -173,5 +175,26 @@ public class EmailService {
         for (String email: emails) {
             javaMailSender.send(mail);
         }
+    }
+
+    @Async
+    public void sendComplaintEmailClient(String complaint, Client client){
+        SimpleMailMessage mailClient = new SimpleMailMessage();
+        mailClient.setTo(env.getProperty("spring.mail.username"));
+        mailClient.setFrom("isamrsprojekat@gmail.com");
+        mailClient.setSubject("Complaint answer");
+        mailClient.setText("Dear " + client.getName() + " " + client.getSurname() + ", this is admin's response to your complaint: " + complaint);
+        javaMailSender.send(mailClient);
+    }
+
+    @Async
+    public void sendComplaintEmailPrivilegedUser(String complaint, User privilegedUser){
+        SimpleMailMessage mailPrivilegedUser = new SimpleMailMessage();
+        mailPrivilegedUser.setTo(env.getProperty("spring.mail.username"));
+        mailPrivilegedUser.setFrom("isamrsprojekat@gmail.com");
+        mailPrivilegedUser.setSubject("Complaint answer");
+        mailPrivilegedUser.setText("Dear " + privilegedUser.getName() + " " + privilegedUser.getSurname() +
+                ", this is admin's response to a complaint that was written about your service: " + complaint);
+        javaMailSender.send(mailPrivilegedUser);
     }
 }
