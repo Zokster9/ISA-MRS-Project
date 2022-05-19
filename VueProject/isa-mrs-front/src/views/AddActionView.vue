@@ -133,7 +133,7 @@
                 return typeof this.form.price === 'number' && !!this.form.price && this.form.price > 0;
             },
             maxNumOfPeopleIsValid(){
-                return typeof this.form.maxNumOfPeople === 'number' && !!this.form.price && this.form.maxNumOfPeople > 0;
+                return typeof this.form.maxNumOfPeople === 'number' && !!this.form.maxNumOfPeople && this.form.maxNumOfPeople > 0;
             },
             datesAreValid() {
                 let today = new Date();
