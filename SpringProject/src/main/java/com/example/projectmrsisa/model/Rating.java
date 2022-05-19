@@ -9,8 +9,8 @@ public class Rating {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
-    @Column(name = "userRating", nullable = false)
-    private double userRating;
+    @Column(name = "privilegedUserRating", nullable = false)
+    private double privilegedUserRating;
     @Column(name = "serviceRating", nullable = false)
     private double serviceRating;
 
@@ -19,7 +19,7 @@ public class Rating {
 
     public Rating(Integer id, double userRating, double serviceRating) {
         this.id = id;
-        this.userRating = userRating;
+        this.privilegedUserRating = userRating;
         this.serviceRating = serviceRating;
     }
 
@@ -32,11 +32,11 @@ public class Rating {
     }
 
     public double getUserRating() {
-        return userRating;
+        return privilegedUserRating;
     }
 
     public void setUserRating(double userRating) {
-        this.userRating = userRating;
+        this.privilegedUserRating = userRating;
     }
 
     public double getServiceRating() {

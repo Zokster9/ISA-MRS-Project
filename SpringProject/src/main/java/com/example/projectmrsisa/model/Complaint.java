@@ -13,31 +13,23 @@ public class Complaint {
     private String complaint;
     @Column(name="response")
     private String response;
-    @Column(name="isApproved")
-    private boolean isApproved;
     @Column(name="isAnswered")
     private boolean isAnswered;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "privilegedUser", nullable = false)
-    private User privilegedUser;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "client", nullable = false)
-    private Client client;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reservation", nullable = false)
+    private Reservation reservation;
 
     public Complaint() {
-        this.isApproved = false;
         this.isAnswered = false;
     }
 
-    public Complaint(Integer id, String complaint, String response, boolean isApproved, boolean isAnswered,
-                     User privilegedUser, Client client) {
+    public Complaint(Integer id, String complaint, String response, boolean isAnswered,
+                     Reservation reservation) {
         this.id = id;
         this.complaint = complaint;
         this.response = response;
-        this.isApproved = isApproved;
         this.isAnswered = isAnswered;
-        this.privilegedUser = privilegedUser;
-        this.client = client;
+        this.reservation = reservation;
     }
 
     public Integer getId() {
@@ -64,14 +56,6 @@ public class Complaint {
         this.response = response;
     }
 
-    public boolean isApproved() {
-        return isApproved;
-    }
-
-    public void setApproved(boolean approved) {
-        isApproved = approved;
-    }
-
     public boolean isAnswered() {
         return isAnswered;
     }
@@ -80,19 +64,7 @@ public class Complaint {
         isAnswered = answered;
     }
 
-    public User getPrivilegedUser() {
-        return privilegedUser;
-    }
+    public Reservation getReservation() {return reservation;}
 
-    public void setPrivilegedUser(User privilegedUser) {
-        this.privilegedUser = privilegedUser;
-    }
-
-    public Client getClient() {
-        return client;
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
-    }
+    public void setReservation(Reservation reservation) { this.reservation = reservation;}
 }

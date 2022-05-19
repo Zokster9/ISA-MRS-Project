@@ -20,23 +20,19 @@ public class Revision {
     @JoinColumn(name = "rating", nullable = false)
     private Rating rating;
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "privilegedUser", nullable = false)
-    private User privilegedUser;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "client", nullable = false)
-    private Client client;
+    @JoinColumn(name = "reservation", nullable = false)
+    private Reservation reservation;
 
     public Revision() {
     }
 
-    public Revision(Integer id, String revision, boolean isApproved, boolean isAnswered, Rating rating, User privilegedUser, Client client) {
+    public Revision(Integer id, String revision, boolean isApproved, boolean isAnswered, Rating rating, User privilegedUser, Client client, Reservation reservation) {
         this.id = id;
         this.revision = revision;
         this.isApproved = isApproved;
         this.isAnswered = isAnswered;
         this.rating = rating;
-        this.privilegedUser = privilegedUser;
-        this.client = client;
+        this.reservation = reservation;
     }
 
     public Integer getId() {
@@ -79,19 +75,11 @@ public class Revision {
         this.rating = rating;
     }
 
-    public User getPrivilegedUser() {
-        return privilegedUser;
+    public Reservation getReservation() {
+        return reservation;
     }
 
-    public void setPrivilegedUser(User privilegedUser) {
-        this.privilegedUser = privilegedUser;
-    }
-
-    public Client getClient() {
-        return client;
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
+    public void setReservation(Reservation reservation) {
+        this.reservation = reservation;
     }
 }

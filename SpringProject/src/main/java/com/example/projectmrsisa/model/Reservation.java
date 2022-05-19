@@ -25,9 +25,6 @@ public class Reservation {
     private double price;
     @Column(name="status", nullable = false)
     private ReservationStatus status;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "rating_id")
-    private Rating rating;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "service_id", nullable = false)
     private Service service;
@@ -38,7 +35,7 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(Integer id, Date fromDate, Date toDate, String fromTime, String toTime, double price, ReservationStatus status, Rating rating,
+    public Reservation(Integer id, Date fromDate, Date toDate, String fromTime, String toTime, double price, ReservationStatus status,
                        Service service, Client client) {
         this.id = id;
         this.fromDate = fromDate;
@@ -47,7 +44,6 @@ public class Reservation {
         this.toTime = toTime;
         this.price = price;
         this.status = status;
-        this.rating = rating;
         this.service = service;
         this.client = client;
     }
@@ -101,14 +97,6 @@ public class Reservation {
 
     public void setStatus(ReservationStatus status) {
         this.status = status;
-    }
-
-    public Rating getRating() {
-        return rating;
-    }
-
-    public void setRating(Rating rating) {
-        this.rating = rating;
     }
 
     public Service getService() {
