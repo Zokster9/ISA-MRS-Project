@@ -12,7 +12,9 @@
         </td>
         <td class="align-middle text-center">
             <button type="button" class="btn btn-success" @mouseover="hoverAcceptButton = true" 
-            @mouseleave="hoverAcceptButton = false" @click="sendResponse()">Send response</button>
+            @mouseleave="hoverAcceptButton = false" @click="sendResponse(complaint.id, complaint.clientName, complaint.clientSurname, complaint.privilegedUserName,
+             complaint.privilegedUserSurname, complaint.serviceName, complaint.servicePictures, complaint.complaint)" 
+            @ :disabled="$v.response.$invalid">Send response</button>
         </td>
 
     </tr>
@@ -22,15 +24,35 @@
     import Vue from 'vue' 
     import axios from 'axios'
     import VueAxios from 'vue-axios'
+    import Vuelidate from 'vuelidate'
     //import router from '@/router'
+    import { required, minLength } from 'vuelidate/lib/validators'
 
     Vue.use(VueAxios, axios)
+    Vue.use(Vuelidate)
 
     export default {
         props: ["complaint"],
         methods: {
-            sendResponse(){
-
+            sendResponse(id, clientName, clientSurname, privilegedUserName, privilegedUserSurname, serviceName, servicePictures, complaint){
+                axios.post("http://localhost:8088/complaints/response", {
+                    id: id,
+                    complaint: complaint,
+                    response: this.response,
+                    isAnswered: true,
+                    clientName: clientName,
+                    clientSurname: clientSurname,
+                    privilegedUserName: privilegedUserName,
+                    privilegedUserSurname: privilegedUserSurname,
+                    serviceName: serviceName,
+                    servicePictures: servicePictures,
+                },{
+                    headers:{
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
+                    }
+                }).then(() => {
+                    window.location.reload();
+                })
             }
         },
         data(){
@@ -38,6 +60,12 @@
                 hoverAcceptButton: false,
                 response: ""
             }
-        },  
+        },
+        validations:{
+            response: {
+                required,
+                minLength: minLength(10)
+            },
+        }
     }
 </script>
