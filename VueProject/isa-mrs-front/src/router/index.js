@@ -229,6 +229,12 @@ const routes = [{
         name: 'admin-complaints',
         component: () =>
             import('../views/AdminComplaintsView.vue')
+    },
+    {
+        path: '/admin-revisions',
+        name: 'admin-revisions',
+        component: () =>
+            import('../views/AdminRevisionsView.vue')
     }
 ]
 

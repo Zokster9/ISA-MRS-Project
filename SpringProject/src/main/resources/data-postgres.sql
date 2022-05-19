@@ -101,8 +101,8 @@ insert into subscriptions (client_id, subscription_id) values (5, 1);
 insert into subscriptions (client_id, subscription_id) values (5, 2);
 
 insert into ratings (service_rating, privileged_user_rating) values (5, 5);
-insert into ratings (service_rating, privileged_user_rating) values (4, 4);
-insert into ratings (service_rating, privileged_user_rating) values (4, 5);
+insert into ratings (service_rating, privileged_user_rating) values (1, 3);
+insert into ratings (service_rating, privileged_user_rating) values (2, 2);
 
 insert into reservations (from_date, to_date, from_time, to_time, price, status, service_id, client_id) values ('2022-05-13 02:00:00', '2022-05-15 02:00:00', '13:00', '13:00', 60, 1, 3, 5);
 insert into reservations (from_date, to_date, from_time, to_time, price, status, service_id, client_id) values ('2022-05-16 02:00:00', '2022-05-17 02:00:00', '13:00', '13:00', 30, 1, 3, 5);
@@ -119,3 +119,7 @@ insert into reservations (from_date, to_date, from_time, to_time, price, status,
 insert into complaints (complaint, response, is_answered, reservation_id) values ('Unstable boat Unstable boat Unstable boat Unstable boat Unstable boat', '', False, 9);
 insert into complaints (complaint, response, is_answered, reservation_id) values ('Stinky bathroom', '', False, 6);
 insert into complaints (complaint, response, is_answered, reservation_id) values ('No fish?', '', False, 3);
+
+insert into revisions (revision, is_approved, is_answered, rating_id, reservation_id) values ('It was fine, liked it a lot.', False, False, 1, 3);
+insert into revisions (revision, is_approved, is_answered, rating_id, reservation_id) values ('It stinks, it was really bad.', False, False, 2, 6);
+insert into revisions (revision, is_approved, is_answered, rating_id, reservation_id) values ('We almost fell out of the boat. Fix it!', False, False, 3, 9);

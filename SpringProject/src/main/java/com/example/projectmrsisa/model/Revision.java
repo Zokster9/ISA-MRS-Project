@@ -6,8 +6,7 @@ import javax.persistence.*;
 @Table(name="revisions")
 public class Revision {
     @Id
-    @SequenceGenerator(name = "myRevisionSeqGen", sequenceName = "myRevisionSeq", initialValue = 1, allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "myRevisionSeqGen")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id", unique = true, nullable = false)
     private Integer id;
     @Column(name="revision", nullable = false)
@@ -17,13 +16,15 @@ public class Revision {
     @Column(name="isAnswered")
     private boolean isAnswered;
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "rating", nullable = false)
+    @JoinColumn(name = "rating_id", nullable = false)
     private Rating rating;
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reservation", nullable = false)
+    @JoinColumn(name = "reservation_id", nullable = false)
     private Reservation reservation;
 
     public Revision() {
+        this.isApproved = false;
+        this.isAnswered = false;
     }
 
     public Revision(Integer id, String revision, boolean isApproved, boolean isAnswered, Rating rating, User privilegedUser, Client client, Reservation reservation) {
