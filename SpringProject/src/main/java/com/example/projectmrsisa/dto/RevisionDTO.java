@@ -26,8 +26,8 @@ public class RevisionDTO {
     public RevisionDTO(Revision revision){
         this.id = revision.getId();
         this.revision = revision.getRevision();
-        this.isApproved = false;
-        this.isAnswered = false;
+        this.isApproved = revision.isApproved();
+        this.isAnswered = revision.isAnswered();
         this.serviceRating = revision.getRating().getServiceRating();
         this.ownerRating = revision.getRating().getUserRating();
         this.clientName = revision.getReservation().getClient().getName();
@@ -58,7 +58,7 @@ public class RevisionDTO {
         return isApproved;
     }
 
-    public void setApproved(boolean approved) {
+    public void setIsApproved(boolean approved) {
         isApproved = approved;
     }
 
@@ -66,7 +66,7 @@ public class RevisionDTO {
         return isAnswered;
     }
 
-    public void setAnswered(boolean answered) {
+    public void setIsAnswered(boolean answered) {
         isAnswered = answered;
     }
 

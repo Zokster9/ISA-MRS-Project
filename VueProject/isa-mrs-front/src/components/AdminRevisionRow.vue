@@ -17,7 +17,7 @@
         </td>
         <td class="align-middle text-center">
             <button type="button" class="btn btn-danger" @mouseover="hoverDeclineButton = true" 
-            @mouseleave="hoverDeclineButton = false" @click="delcineRevision(revision.id, revision.clientName, revision.clientSurname, revision.ownerName,
+            @mouseleave="hoverDeclineButton = false" @click="declineRevision(revision.id, revision.clientName, revision.clientSurname, revision.ownerName,
              revision.ownerSurname, revision.serviceName, revision.servicePictures, revision.revision, revision.ownerRating, revision.serviceRating)" >
              Decline revision</button>
         </td>
@@ -47,7 +47,7 @@
                     revision: revision,
                     ownerRating: ownerRating,
                     serviceRating: serviceRating,
-                    isAccepted: true
+                    isApproved: true
                 },{
                     headers:{
                         Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
@@ -69,7 +69,7 @@
                     revision: revision,
                     ownerRating: ownerRating,
                     serviceRating: serviceRating,
-                    isAccepted: false
+                    isApproved: false
                 },{
                     headers:{
                         Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")

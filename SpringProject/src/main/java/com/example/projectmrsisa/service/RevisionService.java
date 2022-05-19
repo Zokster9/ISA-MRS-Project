@@ -16,4 +16,16 @@ public class RevisionService {
     public List<Revision> findUnansweredRevisions(){
         return revisionRepository.findUnansweredRevisions();
     }
+
+    public Revision findRevisionById(Integer id){
+        return revisionRepository.findRevisionById(id);
+    }
+
+    public void updateRevisionAnsweredStatus(Integer id){
+        revisionRepository.updateRevisionAnsweredStatus(id);
+    }
+
+    public void updateRevisionApprovedStatus(Integer id){
+        revisionRepository.updateRevisionApprovedStatus(id);
+    }
 }
