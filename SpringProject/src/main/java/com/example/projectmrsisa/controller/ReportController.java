@@ -12,10 +12,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping(value="/reports")
@@ -89,5 +89,21 @@ public class ReportController {
         }
         ReportDTO reportDTO = new ReportDTO(report);
         return new ResponseEntity<>(reportDTO, HttpStatus.OK);
+    }
+
+    @GetMapping(value="/findAll")
+    @PreAuthorize("hasAnyRole('admin','mainAdmin')")
+    public ResponseEntity<List<ReportDTO>> findAll(){
+        List<Report> reports;
+        try{
+            reports = reportService.findNegativeUnansweredReports();
+        } catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        List<ReportDTO> reportDTOS = new ArrayList<>();
+        for (Report report : reports){
+            reportDTOS.add(new ReportDTO(report));
+        }
+        return new ResponseEntity<>(reportDTOS, HttpStatus.OK);
     }
 }

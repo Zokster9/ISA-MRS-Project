@@ -5,6 +5,8 @@ import com.example.projectmrsisa.repository.ReportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ReportService {
 
@@ -13,5 +15,9 @@ public class ReportService {
 
     public Report save(Report report) {
         return reportRepository.save(report);
+    }
+
+    public List<Report> findNegativeUnansweredReports(){
+        return reportRepository.findNegativeUnansweredReports();
     }
 }

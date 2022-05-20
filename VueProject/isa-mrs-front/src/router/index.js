@@ -229,6 +229,12 @@ const routes = [{
         name: 'write-report',
         component: () =>
             import('../views/WriteReportView.vue')
+    },
+    {
+        path: '/admin-reports',
+        name: 'admin-reports',
+        component: () =>
+            import('../views/AdminReportsView.vue')
     }
 ]
 
