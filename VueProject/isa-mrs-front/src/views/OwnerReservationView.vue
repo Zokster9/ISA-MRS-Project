@@ -25,11 +25,11 @@
                         </div>
                         <div class="form-group required">
                             <label class="control-label">Duration of the reservation (in days) </label>
-                            <input v-model="form.numberOfDays" id="name" type="number" min="1" class="form-control form-control-lg"/>
+                            <input v-model.number="form.numberOfDays" id="name" type="number" min="1" class="form-control form-control-lg"/>
                         </div>
                         <div class="form-group required">
                             <label class="control-label">Number of people </label>
-                            <input v-model="form.numberOfPeople" id="name" type="number" min="1" class="form-control form-control-lg"/>
+                            <input v-model.number="form.numberOfPeople" id="name" type="number" min="1" class="form-control form-control-lg"/>
                         </div>
                         <div class="form-group required">
                             <label class="control-label">Client email </label>
@@ -46,7 +46,7 @@
                             </template>
                         </div>
                         <div class="form-group">
-                                <button @click="makeReservation"  :disabled="isFormValid == false" type="submit" class="btn btn-dark btn-lg btn-block">Make reservation</button>
+                                <button @click="makeReservation" :disabled="$v.form.$invalid || isFormValid == false" type="submit" class="btn btn-dark btn-lg btn-block">Make reservation</button>
                         </div>
                     </form>
                 </div>
@@ -56,13 +56,14 @@
 </template>
 
 <script>
-//    import Vuelidate from 'vuelidate'
     import Vue from 'vue'
+    import Vuelidate from 'vuelidate'
     import axios from 'axios'
-//    import router from '@/router'
+    import {required, email} from 'vuelidate/lib/validators'
     import VueAxios from 'vue-axios'
 
     Vue.use(VueAxios, axios)
+    Vue.use(Vuelidate)
 
     export default {
         name: "OwnerReserve",
@@ -75,7 +76,8 @@
                     clientEmail: null,
                     numberOfDays: null,
                     numberOfPeople: null,
-                    additionalServices: []
+                    additionalServices: [],
+                    serviceName: null
                 },
                 tags: []
             }
@@ -87,20 +89,72 @@
             numberOfDaysIsValid(){
                 return typeof this.form.numberOfDays === 'number' && !!this.form.numberOfDays && this.form.numberOfDays > 0;
             },
+            areDatesValid() {
+                let today = new Date();
+                if (!this.form.date || !this.form.startTime || !this.form.endTime) return false;
+                let startDate = new Date(this.form.date);
+                let endDate = new Date(this.form.date);
+                endDate.setDate(endDate.getDate() + parseInt(this.form.numberOfDays));
+                if (startDate.getTime() < today.getTime()) return false;
+                if (endDate.getTime() < today.getTime()) return false;
+                if (startDate.getTime() > endDate.getTime()){
+                    return false;
+                }
+                else if (startDate.getTime() < endDate.getTime()){
+                    return true;
+                }
+                else{
+                    if (parseInt(this.form.startTime.split(":")[0]) * 60 + parseInt(this.form.startTime.split(":")[1]) <  parseInt(this.form.endTime.split(":")[0]) * 60 + parseInt(this.form.endTime.split(":")[1])){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+            },
             isFormValid() {
-                return true;
+                return this.numberOfDaysIsValid && this.maxNumOfPeopleIsValid && this.areDatesValid;
             }
         },
         methods: {
             makeReservation() {
-
+                if (this.isFormValid) {
+                    let endDate = new Date(this.form.date);
+                    endDate.setDate(endDate.getDate() + parseInt(this.form.numberOfDays));
+                    axios.post('http://localhost:8088/reservations/make-for-client/' + this.$route.params.id, {
+                        fromDate: this.form.date,
+                        toDate: endDate,
+                        fromTime: this.form.startTime,
+                        toTime: this.form.endTime,
+                        clientEmail: this.form.clientEmail,
+                        numOfDays: this.form.numberOfDays,
+                        numOfPeople: this.form.numberOfPeople,
+                        additionalServices: this.form.additionalServices,
+                        serviceName: this.form.serviceName
+                    }, {
+                        headers: {
+                            Authorization: 'Bearer ' + window.sessionStorage.getItem('accessToken')
+                        }
+                    }).then(() => {
+                        alert("Sended successfully");
+                    });
+                }
             }
         },
         mounted() {
             let path = "";
-            if (window.sessionStorage.getItem("role") === "ROLE_retreatOwner") path = 'retreats';
-            else if (window.sessionStorage.getItem("role") === "ROLE_shipOwner") path = 'ships';
-            else if (window.sessionStorage.getItem("role") === "ROLE_fishingInstructor") path = 'adventures';
+            if (window.sessionStorage.getItem("role") === "ROLE_retreatOwner") {
+                path = 'retreats';
+                this.form.serviceName = 'retreat';
+            }
+            else if (window.sessionStorage.getItem("role") === "ROLE_shipOwner") { 
+                path = 'ships';
+                this.form.serviceName = 'ship';
+            }
+            else if (window.sessionStorage.getItem("role") === "ROLE_fishingInstructor") {
+                path = 'adventures';
+                this.form.serviceName = 'adventure';
+            }
             axios.get('http://localhost:8088/' + path + '/get/' + this.$route.params.id, {
                 headers: {
                     Authorization: 'Bearer ' + window.sessionStorage.getItem('accessToken')
@@ -108,6 +162,14 @@
             }).then((response) => {
                 this.tags = response.data.additionalServices;
             });
+        },
+        validations: {
+            form: {
+                clientEmail: {
+                    required,
+                    email
+                }
+            }
         }
     }
 
