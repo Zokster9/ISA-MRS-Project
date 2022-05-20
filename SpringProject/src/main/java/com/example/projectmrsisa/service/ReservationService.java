@@ -1,5 +1,7 @@
 package com.example.projectmrsisa.service;
 
+import com.example.projectmrsisa.dto.ReservationDTO;
+import com.example.projectmrsisa.model.Client;
 import com.example.projectmrsisa.model.Reservation;
 import com.example.projectmrsisa.model.ReservationStatus;
 import com.example.projectmrsisa.repository.ReservationRepository;
@@ -64,6 +66,17 @@ public class ReservationService {
                     }
                 }
             }
+        }
+        return false;
+    }
+
+    public boolean currentReservationForClientAndService(Integer serviceId, Client client) {
+        List<Reservation> reservations = reservationRepository.findReservationsForClientAndService(client.getId(), serviceId);
+        Date today = new Date();
+        for (Reservation reservation: reservations) {
+            if (reservation.getFromDate().compareTo(today) < 0 && reservation.getToDate().compareTo(today) > 0) return true;
+            else if (reservation.getFromDate().compareTo(today) == 0) return true;
+            else if (reservation.getToDate().compareTo(today) == 0) return true;
         }
         return false;
     }

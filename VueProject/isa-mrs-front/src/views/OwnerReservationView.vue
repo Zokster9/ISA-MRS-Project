@@ -136,7 +136,12 @@
                             Authorization: 'Bearer ' + window.sessionStorage.getItem('accessToken')
                         }
                     }).then(() => {
-                        alert("Sended successfully");
+                        alert("Reservation added successfully!");
+                    }).catch((error) => {
+                        if (error.response.status === 409) alert("Reservations for this period already exists!");
+                        else if (error.response.status === 403) alert("There is no current reservation for this client!");
+                        else if (error.response.status === 406) alert("Your service is not available at specificated period!");
+                        else alert("Could not add reservation");
                     });
                 }
             }
