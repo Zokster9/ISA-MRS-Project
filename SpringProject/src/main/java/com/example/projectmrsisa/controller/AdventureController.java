@@ -1,10 +1,7 @@
 package com.example.projectmrsisa.controller;
 
 
-import com.example.projectmrsisa.dto.ActionDTO;
-import com.example.projectmrsisa.dto.AdventureDTO;
-import com.example.projectmrsisa.dto.ServiceAvailabilityDTO;
-import com.example.projectmrsisa.dto.ServiceDTO;
+import com.example.projectmrsisa.dto.*;
 import com.example.projectmrsisa.model.*;
 import com.example.projectmrsisa.service.*;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -6,8 +6,7 @@ import javax.persistence.*;
 @Table(name="reports")
 public class Report {
     @Id
-    @SequenceGenerator(name = "myReportSeqGen", sequenceName = "myReportSeq", initialValue = 1, allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "myReportSeqGen")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id", unique = true, nullable = false)
     private Integer id;
     @Column(name="report", nullable = false)
@@ -30,6 +29,16 @@ public class Report {
     public Report(Integer id, String report, boolean isNegative, boolean hasShowedUp, boolean isPenalized,
                   boolean isAnswered, Reservation reservation) {
         this.id = id;
+        this.report = report;
+        this.isNegative = isNegative;
+        this.hasShowedUp = hasShowedUp;
+        this.isPenalized = isPenalized;
+        this.isAnswered = isAnswered;
+        this.reservation = reservation;
+    }
+
+    public Report(String report, boolean isNegative, boolean hasShowedUp, boolean isPenalized,
+                  boolean isAnswered, Reservation reservation){
         this.report = report;
         this.isNegative = isNegative;
         this.hasShowedUp = hasShowedUp;

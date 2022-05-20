@@ -79,4 +79,8 @@ public class Client extends User {
         }
         return false;
     }
+
+    public void penalize(){
+        this.penaltyPoints += 1;
+    }
 }

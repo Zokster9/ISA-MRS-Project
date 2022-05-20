@@ -16,4 +16,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     @Modifying
     @Query("update Reservation r set r.status=?1 where r.id=?2")
     public void changeReservationStatus(ReservationStatus reservationStatus, Integer id);
+
+    @Query("select r from Reservation r where r.id = ?1")
+    public Reservation findReservationById(Integer id);
 }
