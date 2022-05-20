@@ -5,6 +5,7 @@ import com.example.projectmrsisa.dto.ReportDTO;
 import com.example.projectmrsisa.model.Report;
 import com.example.projectmrsisa.model.Reservation;
 import com.example.projectmrsisa.model.ReservationStatus;
+import com.example.projectmrsisa.service.EmailService;
 import com.example.projectmrsisa.service.ReportService;
 import com.example.projectmrsisa.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class ReportController {
 
     @Autowired
     private ReportService reportService;
+
+    @Autowired
+    private EmailService emailService;
 
     @Transactional
     @PostMapping(value="/penalizeClient")
@@ -105,5 +109,34 @@ public class ReportController {
             reportDTOS.add(new ReportDTO(report));
         }
         return new ResponseEntity<>(reportDTOS, HttpStatus.OK);
+    }
+
+    @Transactional
+    @PutMapping(value="/updateReport")
+    @PreAuthorize("hasAnyRole('admin','mainAdmin')")
+    public ResponseEntity<ReportDTO> updateReport(@RequestBody ReportDTO reportDTO){
+        Report report;
+        Reservation reservation;
+        try{
+            report = reportService.findReportById(reportDTO.getId());
+            reportService.setReportAnswered(reportDTO.getId());
+            reservation = reservationService.findReservationById(reportDTO.getReservationId());
+            reservationService.changeReservationStatus(ReservationStatus.Finished_Reported, reportDTO.getReservationId());
+        } catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        if (reportDTO.isPenalized()){
+            try{
+                reportService.setReportPenalized(reportDTO.getId());
+                report.getReservation().getClient().penalize();
+            }catch (Exception e){
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            emailService.confirmReport(reportDTO);
+        } else {
+            emailService.declineReport(reportDTO);
+        }
+        ReportDTO reportDTO1 = new ReportDTO(report);
+        return new ResponseEntity<>(reportDTO1, HttpStatus.OK);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.projectmrsisa.service;
 
+import com.example.projectmrsisa.dto.ReportDTO;
 import com.example.projectmrsisa.dto.ReservationDTO;
 import com.example.projectmrsisa.dto.RetreatDTO;
 import com.example.projectmrsisa.dto.UserDTO;
@@ -173,5 +174,29 @@ public class EmailService {
         for (String email: emails) {
             javaMailSender.send(mail);
         }
+    }
+
+    @Async
+    public void confirmReport(ReportDTO report){
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(env.getProperty("spring.mail.username"));
+        mail.setFrom("isamrsprojekat@gmail.com");
+        mail.setSubject("Report status update- Accepted");
+        mail.setText("Report from " + report.getOwnerName() + " " + report.getOwnerSurname() + " about client " + report.getClientName() + " " + report.getClientSurname()
+        + " has been accepted. Text of report: " + report.getReport());
+        javaMailSender.send(mail); //privilegovanom korisniku
+        javaMailSender.send(mail); //klijentu
+    }
+
+    @Async
+    public void declineReport(ReportDTO report){
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(env.getProperty("spring.mail.username"));
+        mail.setFrom("isamrsprojekat@gmail.com");
+        mail.setSubject("Report status update- Declined");
+        mail.setText("Report from " + report.getOwnerName() + " " + report.getOwnerSurname() + " about client " + report.getClientName() + " " + report.getClientSurname()
+                + " has been declined. Text of report: " + report.getReport());
+        javaMailSender.send(mail); //privilegovanom korisniku
+        javaMailSender.send(mail); //klijentu
     }
 }

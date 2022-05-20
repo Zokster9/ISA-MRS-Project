@@ -20,4 +20,16 @@ public class ReportService {
     public List<Report> findNegativeUnansweredReports(){
         return reportRepository.findNegativeUnansweredReports();
     }
+
+    public Report findReportById(Integer id){
+        return reportRepository.findReportById(id);
+    }
+
+    public void setReportAnswered(Integer id){
+        reportRepository.setReportAnswered(id);
+    }
+
+    public void setReportPenalized(Integer id){
+        reportRepository.setReportPenalized(id);
+    }
 }
