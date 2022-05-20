@@ -19,6 +19,12 @@
         <td class="align-middle text-center">
             <p> {{reservation.status}} </p>
         </td>
+        <td class="align-middle text-center" v-if="reservationData.status == 'Finished'">
+            <button type="button" class="btn btn-primary" @click="writeReport"> Write a report </button>
+        </td>
+        <td class="align-middle text-center" v-if="reservationData.status == 'Pending'">
+            <button type="button" class="btn btn-primary" @click="endReservation"> End reservation </button>
+        </td>
     </tr>
 </template>
 
@@ -26,16 +32,49 @@
     import Vue from 'vue' 
     import axios from 'axios'
     import VueAxios from 'vue-axios'
+    import router from '@/router'
 
     Vue.use(VueAxios, axios)
 
     export default {
         props: ["reservation"],
         methods: {
-
+            endReservation(){
+                axios.put("http://localhost:8088/reservations/changeStatus",{
+                    id: this.reservationData.id,
+                    fromDate: this.reservationData.fromDate,
+                    toDate: this.reservationData.toDate,
+                    fromTime: this.reservationData.fromTime,
+                    toTime: this.reservationData.toTime,
+                    price: this.reservationData.price,
+                    status: this.reservationData.status,
+                    userRating: this.reservationData.userRating,
+                    serviceRating: this.reservationData.serviceRating,
+                    serviceId: this.reservationData.serviceId,
+                    clientName: this.reservationData.clientName,
+                    clientSurname: this.reservationData.clientSurname,
+                    clientEmail: this.reservationData.clientEmail,
+                    clientCountry: this.reservationData.clientCountry,
+                    clientCity: this.reservationData.clientCity,
+                    clientStreet: this.reservationData.clientStreet,
+                    serviceName: this.reservationData.serviceName,
+                    servicePictures: this.reservationData.servicePictures
+                },
+                {
+                    headers: {
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
+                    }
+                }).then(() => {
+                    window.location.reload();
+                })
+            },
+            writeReport(){
+                router.push('/write-report/' + this.reservationData.id);
+            }
         },
-        data(){
+        data: function(){
             return {
+                reservationData: this.reservation
             }
         },        
     }

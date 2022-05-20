@@ -2,13 +2,16 @@ package com.example.projectmrsisa.dto;
 
 import com.example.projectmrsisa.model.Reservation;
 import com.example.projectmrsisa.model.ReservationStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
 import java.util.Set;
 
 public class ReservationDTO {
     private Integer id;
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private Date fromDate;
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private Date toDate;
     private String fromTime;
     private String toTime;

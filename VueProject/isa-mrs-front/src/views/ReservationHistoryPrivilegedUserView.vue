@@ -18,6 +18,7 @@
                             <td> <b> Reservation length </b> </td>
                             <td> <b> Price </b> </td>
                             <td> <b> Reservation status </b> </td>
+                            <td> <b> Action </b> </td>
                         </tr>
                         <ReservationHistoryPrivilegedUserRow v-for="reservation in reservations" :reservation="reservation" :key="reservation.id"></ReservationHistoryPrivilegedUserRow>
                     </tbody>

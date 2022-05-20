@@ -67,4 +67,8 @@ public class ReservationService {
         }
         return false;
     }
+
+    public void changeReservationStatus(ReservationStatus reservationStatus, Integer id) {
+        reservationRepository.changeReservationStatus(reservationStatus, id);
+    }
 }

@@ -224,6 +224,12 @@ const routes = [{
         component: () =>
             import('../views/ClientReservationView.vue')
     },
+    {
+        path: '/write-report/:id',
+        name: 'write-report',
+        component: () =>
+            import('../views/WriteReportView.vue')
+    }
 ]
 
 const router = new VueRouter({

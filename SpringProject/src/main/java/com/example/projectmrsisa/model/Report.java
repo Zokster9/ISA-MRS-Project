@@ -21,25 +21,21 @@ public class Report {
     @Column(name="isAnswered")
     private boolean isAnswered;
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "client", nullable = false)
-    private Client client;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "privilegedUser", nullable = false)
-    private User privilegedUser;
+    @JoinColumn(name = "reservation_id", nullable = false)
+    private Reservation reservation;
 
     public Report() {
     }
 
     public Report(Integer id, String report, boolean isNegative, boolean hasShowedUp, boolean isPenalized,
-                  boolean isAnswered, Client client, User privilegedUser) {
+                  boolean isAnswered, Reservation reservation) {
         this.id = id;
         this.report = report;
         this.isNegative = isNegative;
         this.hasShowedUp = hasShowedUp;
         this.isPenalized = isPenalized;
         this.isAnswered = isAnswered;
-        this.client = client;
-        this.privilegedUser = privilegedUser;
+        this.reservation = reservation;
     }
 
     public Integer getId() {
@@ -90,19 +86,11 @@ public class Report {
         isAnswered = answered;
     }
 
-    public Client getClient() {
-        return client;
+    public Reservation getReservation() {
+        return reservation;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
-    }
-
-    public User getPrivilegedUser() {
-        return privilegedUser;
-    }
-
-    public void setPrivilegedUser(User privilegedUser) {
-        this.privilegedUser = privilegedUser;
+    public void setReservation(Reservation reservation) {
+        this.reservation = reservation;
     }
 }

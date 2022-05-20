@@ -7,11 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -145,5 +145,18 @@ public class ReservationController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @Transactional
+    @PutMapping(value="/changeStatus")
+    @PreAuthorize("hasAnyRole('fishingInstructor', 'shipOwner', 'retreatOwner')")
+    public ResponseEntity<ReservationDTO> changeReservationStatus(@RequestBody ReservationDTO reservationDTO){
+        try{
+            reservationService.changeReservationStatus(ReservationStatus.Finished, reservationDTO.getId());
+            reservationDTO.setStatus(ReservationStatus.Finished);
+        } catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(reservationDTO, HttpStatus.OK);
     }
 }
