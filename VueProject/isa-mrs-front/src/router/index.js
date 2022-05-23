@@ -241,7 +241,7 @@ const routes = [{
         name: 'owner-reserve',
         component: () =>
             import ('../views/OwnerReservationView.vue')
-    }
+    },
     {
         path: '/admin-complaints',
         name: 'admin-complaints',

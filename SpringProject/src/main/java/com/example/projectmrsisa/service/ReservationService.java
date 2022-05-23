@@ -85,10 +85,6 @@ public class ReservationService {
     public void changeReservationStatus(ReservationStatus reservationStatus, Integer id) {
         reservationRepository.changeReservationStatus(reservationStatus, id);
     }
-
-    public Reservation findReservationById(Integer id){
-        return reservationRepository.findReservationById(id);
-    }
     
     public boolean currentReservationForClientAndService(Integer serviceId, Client client) {
         List<Reservation> reservations = reservationRepository.findReservationsForClientAndService(client.getId(), serviceId);
