@@ -17,10 +17,10 @@ public class Revision {
     @Column(name="isAnswered")
     private boolean isAnswered;
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "rating", nullable = false)
+    @JoinColumn(name = "rating_id", nullable = false)
     private Rating rating;
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reservation", nullable = false)
+    @JoinColumn(name = "reservation_id", nullable = false)
     private Reservation reservation;
 
     public Revision() {

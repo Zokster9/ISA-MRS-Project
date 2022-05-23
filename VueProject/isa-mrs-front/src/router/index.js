@@ -235,7 +235,25 @@ const routes = [{
         name: 'write-a-complaint',
         component: () =>
             import('../views/ClientComplaintsView.vue')
-    }
+    },
+    {
+        path: '/client-ship-reservation-history',
+        name: 'client-ship-reservation-history',
+        component: () =>
+            import('../views/ClientShipReservationHistoryView.vue')
+    },
+    {
+        path: '/client-retreat-reservation-history',
+        name: 'client-retreat-reservation-history',
+        component: () =>
+            import('../views/ClientRetreatReservationHistoryView.vue')
+    },
+    {
+        path: '/client-adventure-reservation-history',
+        name: 'client-adventure-reservation-history',
+        component: () =>
+            import('../views/ClientAdventureReservationHistoryView.vue')
+    },
 ]
 
 const router = new VueRouter({

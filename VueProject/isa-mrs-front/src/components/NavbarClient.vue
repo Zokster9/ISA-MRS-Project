@@ -32,9 +32,9 @@
                         Reservation History
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="reservationHistoryDropdownMenuLink">
-                        <li><router-link exact to="/" class="dropdown-item">All retreat reservations</router-link></li>
-                        <li><router-link exact to="/" class="dropdown-item">All ship reservations</router-link></li>
-                        <li><router-link exact to="/" class="dropdown-item">All adventure reservations</router-link></li>
+                        <li><router-link exact to="/client-retreat-reservation-history" class="dropdown-item">All retreat reservations</router-link></li>
+                        <li><router-link exact to="/client-ship-reservation-history" class="dropdown-item">All ship reservations</router-link></li>
+                        <li><router-link exact to="/client-adventure-reservation-history" class="dropdown-item">All adventure reservations</router-link></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
