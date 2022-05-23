@@ -210,19 +210,19 @@ const routes = [{
         path: '/penalty-points',
         name: 'penalty-points',
         component: () =>
-            import('../views/PenaltyPointsView.vue')
+            import ('../views/PenaltyPointsView.vue')
     },
     {
         path: '/client-subscriptions',
         name: 'client-subscriptions',
         component: () =>
-            import('../views/ClientSubscriptionsView.vue')
+            import ('../views/ClientSubscriptionsView.vue')
     },
     {
         path: '/make-a-reservation',
         name: 'make-a-reservation',
         component: () =>
-            import('../views/ClientReservationView.vue')
+            import ('../views/ClientReservationView.vue')
     },
     {
         path: '/write-report/:id',
@@ -235,6 +235,12 @@ const routes = [{
         name: 'admin-reports',
         component: () =>
             import('../views/AdminReportsView.vue')
+    },
+    {
+        path: '/owner-reserve/:id',
+        name: 'owner-reserve',
+        component: () =>
+            import ('../views/OwnerReservationView.vue')
     }
 ]
 

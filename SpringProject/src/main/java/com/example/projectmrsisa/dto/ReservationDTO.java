@@ -3,19 +3,20 @@ package com.example.projectmrsisa.dto;
 import com.example.projectmrsisa.model.Reservation;
 import com.example.projectmrsisa.model.ReservationStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.example.projectmrsisa.model.Tag;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 public class ReservationDTO {
     private Integer id;
-    @JsonFormat(pattern = "dd-MM-yyyy")
     private Date fromDate;
-    @JsonFormat(pattern = "dd-MM-yyyy")
     private Date toDate;
     private String fromTime;
     private String toTime;
     private double price;
+    private Integer numOfPeople;
     private ReservationStatus status;
     private double userRating;
     private double serviceRating;
@@ -28,6 +29,7 @@ public class ReservationDTO {
     private String clientStreet;
     private String serviceName;
     private Set<String> servicePictures;
+    private Set<String> additionalServices;
 
     public ReservationDTO(){
 
@@ -50,6 +52,10 @@ public class ReservationDTO {
         this.clientStreet = reservation.getClient().getAddress().getStreet();
         this.serviceName = reservation.getService().getName();
         this.servicePictures = reservation.getService().getPictures();
+        this.additionalServices = new HashSet<>();
+        for (Tag additionalService: reservation.getService().getAdditionalServices()) {
+            this.additionalServices.add(additionalService.getName());
+        }
     }
 
     public Integer getId() {
@@ -194,5 +200,21 @@ public class ReservationDTO {
 
     public void setServicePictures(Set<String> servicePictures) {
         this.servicePictures = servicePictures;
+    }
+
+    public Set<String> getAdditionalServices() {
+        return additionalServices;
+    }
+
+    public void setAdditionalServices(Set<String> additionalServices) {
+        this.additionalServices = additionalServices;
+    }
+
+    public Integer getNumOfPeople() {
+        return numOfPeople;
+    }
+
+    public void setNumOfPeople(Integer numOfPeople) {
+        this.numOfPeople = numOfPeople;
     }
 }

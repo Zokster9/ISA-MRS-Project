@@ -11,8 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping(value="/reservations")
@@ -40,6 +39,9 @@ public class ReservationController {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private TagService tagService;
 
     @GetMapping(value="/getPrivilegedUserReservations")
     @PreAuthorize("hasAnyRole('fishingInstructor', 'shipOwner', 'retreatOwner')")
@@ -138,7 +140,9 @@ public class ReservationController {
         try {
             client = (Client) userService.findUserByEmail(principal.getName());
             service = serviceService.findById(reservationDTO.getServiceId());
-            Reservation reservation = reservationService.addReservation(new Reservation(reservationDTO, service, client));
+            // TODO: dodaj dodatne usluge kod sebe u reservacije i posalji broj ljudi za rezervaciju (posalji da l dobavljas tagove za retreat, ship ili adventure(pogledaj kod mene gde sam to drzao))
+            Set<Tag> additionalServices = tagService.findTags(new ArrayList<>(reservationDTO.getAdditionalServices()), "retreat");
+            Reservation reservation = reservationService.addReservation(new Reservation(reservationDTO, service, client, additionalServices));
             ReservationDTO resDTO = new ReservationDTO(reservation);
             emailService.sendReservationConfirmation(resDTO);
             return new ResponseEntity<>(resDTO, HttpStatus.CREATED);
@@ -158,5 +162,51 @@ public class ReservationController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(reservationDTO, HttpStatus.OK);
+    }
+    
+    @PostMapping(value = "/make-for-client/{serviceId}", produces = "application/json")
+    @PreAuthorize("hasAnyRole('retreatOwner', 'shipOwner', 'fishingInstructor')")
+    public ResponseEntity<ReservationDTO> makeReservationForClient(@RequestBody ReservationDTO reservationDTO, @PathVariable Integer serviceId) {
+        if (!validReservationDTO(reservationDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        try {
+            Client client = (Client) userService.findUserByEmail(reservationDTO.getClientEmail());
+            Service service = serviceService.findById(serviceId);
+            if (!reservationService.currentReservationForClientAndService(serviceId, client)) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            if (!serviceAvailabilityService.isAvailable(serviceId, reservationDTO.getFromDate(), reservationDTO.getToDate(), reservationDTO.getFromTime(), reservationDTO.getToTime())) return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+            if (!reservationService.checkIfReservationsExistForDate(serviceId, reservationDTO.getFromDate(), reservationDTO.getToDate())) return new ResponseEntity<>(HttpStatus.CONFLICT);
+            Set<Tag> additionalServices = tagService.findTags(new ArrayList<>(reservationDTO.getAdditionalServices()), reservationDTO.getServiceName());
+            reservationDTO.setPrice((int)((reservationDTO.getToDate().getTime() - reservationDTO.getFromDate().getTime())/(1000 * 60 * 60* 24)) * service.getPrice());
+            Reservation reservation = new Reservation(reservationDTO, service, client, additionalServices);
+            reservation = reservationService.addReservation(reservation);
+            reservationDTO = new ReservationDTO(reservation);
+            emailService.sendReservationConfirmation(reservationDTO);
+            return new ResponseEntity<>(reservationDTO, HttpStatus.OK);
+        }catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private boolean validReservationDTO(ReservationDTO reservationDTO) {
+        if (reservationDTO.getClientEmail() == null || !reservationDTO.getClientEmail().matches("^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$")) {
+            return false;
+        }
+        if (!validDates(reservationDTO.getFromDate(), reservationDTO.getToDate(), reservationDTO.getFromTime(), reservationDTO.getToTime())) return false;
+        for (String as: reservationDTO.getAdditionalServices()) {
+            if (as.equals("") || as.length() > 14) return false;
+        }
+        return reservationDTO.getNumOfPeople() > 0;
+    }
+
+    private boolean validDates(Date dateFrom, Date dateTo, String timeFrom, String timeTo) {
+        Date today = new Date();
+        if (dateFrom == null || dateTo == null || timeFrom == null || timeTo == null) return false;
+        if (dateFrom.compareTo(today) < 0) return false;
+        if (dateTo.compareTo(today) < 0 ) return false;
+        if (dateFrom.compareTo(dateTo) > 0) return false;
+        if (dateFrom.compareTo(dateTo) == 0) {
+            return Integer.parseInt(timeFrom) * 60 + Integer.parseInt(timeFrom)
+                    < Integer.parseInt(timeTo) * 60 + Integer.parseInt(timeTo);
+        }
+        return true;
     }
 }
