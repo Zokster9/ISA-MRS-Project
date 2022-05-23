@@ -67,7 +67,22 @@
         },
         methods: {
             complain() {
-                
+                axios.post("http://localhost:8088/complaints/makeAComplaint", {
+                    reservationId: this.selected,
+                    complaint: this.complaint,
+                },
+                {
+                    headers: {
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem('accessToken')
+                    }
+                })
+                .then(() => {
+                    alert("Complaint successfully sent!");
+                    this.$router.push("/home-page-client")
+                })
+                .catch(() => {
+                    alert("Complaint couldn't be sent!");
+                })
             },
             getDate (date) {
                 let origin_date = new Date(date)
@@ -75,7 +90,7 @@
                 if (month < 10) {
                     month = '0' + month
                 }
-                return origin_date.getFullYear() + '-' + month + '-' + origin_date.getDate()
+                return origin_date.getFullYear() + '/' + month + '/' + origin_date.getDate()
             }
         },
         validations: {
