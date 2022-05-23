@@ -47,7 +47,7 @@
                 return origin_date.getFullYear() + '/' + month + '/' + origin_date.getDate()
             },
             review() {
-                this.$emit("review");
+                this.$emit("review", this.reservation.id);
             }
         }
     }

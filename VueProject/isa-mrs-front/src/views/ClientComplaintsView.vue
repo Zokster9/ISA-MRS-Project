@@ -96,6 +96,9 @@
         validations: {
             complaint: {
                 required
+            },
+            selected: {
+                required
             }
         },
         mounted () {

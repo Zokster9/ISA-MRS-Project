@@ -254,6 +254,12 @@ const routes = [{
         component: () =>
             import('../views/ClientAdventureReservationHistoryView.vue')
     },
+    {
+        path: '/review-reservation/:id',
+        name: 'review-reservation',
+        component: () =>
+            import('../views/ClientRevisionView.vue')
+    },
 ]
 
 const router = new VueRouter({

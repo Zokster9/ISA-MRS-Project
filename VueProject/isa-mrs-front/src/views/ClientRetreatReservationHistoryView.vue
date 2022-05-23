@@ -47,8 +47,8 @@
             },
         },
         methods: {
-            review() {
-
+            review(id) {
+                this.$router.push("/review-reservation/" + id);
             },
             sort(sort) {
                 this.sortBy = sort;
