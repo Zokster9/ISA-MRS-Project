@@ -40,6 +40,10 @@ public class ReservationService {
         return reservationRepository.findReservationByServiceId(serviceId);
     }
 
+    public Reservation findReservationById(Integer reservationId) {
+        return reservationRepository.findReservationById(reservationId);
+    }
+
     public boolean isReserved(Integer serviceId, Date fromDate, Date toDate, String fromTime, String toTime, Integer clientId) {
         List<Reservation> reservations = reservationRepository.findReservationByServiceId(serviceId);
         if (reservations.isEmpty()) return false;

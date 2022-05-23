@@ -16,6 +16,7 @@ public class ComplaintDTO {
     private String privilegedUserSurname;
     private String serviceName;
     private Set<String> servicePictures;
+    private Integer reservationId;
 
     public ComplaintDTO(){
 
@@ -32,6 +33,7 @@ public class ComplaintDTO {
         privilegedUserSurname = complaint.getReservation().getService().getOwner().getSurname();
         serviceName = complaint.getReservation().getService().getName();
         servicePictures = complaint.getReservation().getService().getPictures();
+        reservationId = complaint.getReservation().getId();
     }
 
     public Integer getId() {
@@ -112,5 +114,13 @@ public class ComplaintDTO {
 
     public void setServicePictures(Set<String> servicePictures) {
         this.servicePictures = servicePictures;
+    }
+
+    public Integer getReservationId() {
+        return reservationId;
+    }
+
+    public void setReservationId(Integer reservationId) {
+        this.reservationId = reservationId;
     }
 }

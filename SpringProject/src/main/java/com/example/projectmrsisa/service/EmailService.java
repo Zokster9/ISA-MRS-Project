@@ -36,7 +36,7 @@ public class EmailService {
         mail.setSubject("Reservation approved");
         mail.setText("Dear " + reservationDTO.getClientName() + " " + reservationDTO.getClientSurname() +
                 " your reservation for " + reservationDTO.getServiceName() + ", from " + reservationDTO.getFromDate() +
-                "to " + reservationDTO.getToDate() + ", has been approved.");
+                " to " + reservationDTO.getToDate() + ", has been approved.");
         //mails.add(mail);
         javaMailSender.send(mail);
     }

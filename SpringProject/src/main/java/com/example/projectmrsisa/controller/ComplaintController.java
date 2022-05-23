@@ -2,8 +2,10 @@ package com.example.projectmrsisa.controller;
 
 import com.example.projectmrsisa.dto.ComplaintDTO;
 import com.example.projectmrsisa.model.Complaint;
+import com.example.projectmrsisa.model.Reservation;
 import com.example.projectmrsisa.service.ComplaintService;
 import com.example.projectmrsisa.service.EmailService;
+import com.example.projectmrsisa.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,9 @@ public class ComplaintController {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private ReservationService reservationService;
 
     @GetMapping(value="/findAll")
     @PreAuthorize("hasAnyRole('mainAdmin','admin')")
@@ -54,5 +59,18 @@ public class ComplaintController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(complaintDTO, HttpStatus.OK);
+    }
+
+    @PostMapping(value="/makeAComplaint")
+    @PreAuthorize("hasRole('client')")
+    @Transactional
+    public ResponseEntity<ComplaintDTO> makeAComplaint(@RequestBody ComplaintDTO complaintDTO) {
+        try {
+            Reservation reservation = reservationService.findReservationById(complaintDTO.getReservationId());
+            Complaint complaint = complaintService.save(new Complaint(complaintDTO, reservation));
+            return new ResponseEntity<>(new ComplaintDTO(complaint), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

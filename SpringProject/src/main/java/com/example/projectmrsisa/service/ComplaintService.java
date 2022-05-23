@@ -13,6 +13,10 @@ public class ComplaintService {
     @Autowired
     private ComplaintRepository complaintRepository;
 
+    public Complaint save(Complaint complaint) {
+        return complaintRepository.save(complaint);
+    }
+
     public List<Complaint> findUnansweredComplaints(){
         return complaintRepository.findUnansweredComplaints();
     }
