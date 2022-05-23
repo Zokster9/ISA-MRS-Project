@@ -32,6 +32,10 @@ public class ReservationService {
         return true;
     }
 
+    public List<Reservation> findClientsFinishedReservations(Integer clientId) {
+        return reservationRepository.findClientsFinishedReservations(clientId);
+    }
+
     public List<Reservation> findReservationByServiceId(Integer serviceId) {
         return reservationRepository.findReservationByServiceId(serviceId);
     }

@@ -44,7 +44,7 @@
                     <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="personalDropdownMenuLink">
                         <li><router-link exact to="/penalty-points" class="dropdown-item">My penalty points</router-link></li>
                         <li><router-link exact to="/client-subscriptions" class="dropdown-item">My subscriptions</router-link></li>
-                        <li><router-link exact to="/" class="dropdown-item">Write a complaint</router-link></li>
+                        <li><router-link exact to="/write-a-complaint" class="dropdown-item">Write a complaint</router-link></li>
                     </ul>
                 </li>
                 <li class="nav-item">

@@ -39,6 +39,9 @@ public class ReservationController {
     private ServiceAvailabilityService serviceAvailabilityService;
 
     @Autowired
+    private ComplaintService complaintService;
+
+    @Autowired
     private EmailService emailService;
 
     @GetMapping(value="/getPrivilegedUserReservations")
@@ -142,6 +145,25 @@ public class ReservationController {
             ReservationDTO resDTO = new ReservationDTO(reservation);
             emailService.sendReservationConfirmation(resDTO);
             return new ResponseEntity<>(resDTO, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value="/getNonComplainedReservations")
+    @PreAuthorize("hasRole('client')")
+    public ResponseEntity<List<ReservationDTO>> getNonComplainedReservations(Principal principal) {
+        Client client;
+        try {
+            client = (Client) userService.findUserByEmail(principal.getName());
+            List<Reservation> reservations = reservationService.findClientsFinishedReservations(client.getId());
+            List<ReservationDTO> reservationDTOS = new ArrayList<>();
+            for (Reservation reservation : reservations) {
+                if (complaintService.findComplaintByReservationId(reservation.getId()) == null) {
+                    reservationDTOS.add(new ReservationDTO(reservation));
+                }
+            }
+            return new ResponseEntity<>(reservationDTOS, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

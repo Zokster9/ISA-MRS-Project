@@ -28,4 +28,8 @@ public class ComplaintService {
     public Complaint findComplaintById(Integer id){
         return complaintRepository.findComplaintById(id);
     }
+
+    public Complaint findComplaintByReservationId(Integer id) {
+        return complaintRepository.findComplaintByReservationId(id);
+    }
 }

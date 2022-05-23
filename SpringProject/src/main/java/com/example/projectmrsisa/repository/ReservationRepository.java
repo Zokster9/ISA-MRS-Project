@@ -10,4 +10,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
 
     @Query("select r from Reservation r where r.service.id = ?1")
     public List<Reservation> findReservationByServiceId(Integer serviceId);
+
+    @Query("select r from Reservation r where r.client.id = ?1 and r.status = 1")
+    List<Reservation> findClientsFinishedReservations(Integer clientId);
 }

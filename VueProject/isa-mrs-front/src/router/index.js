@@ -229,6 +229,12 @@ const routes = [{
         name: 'admin-complaints',
         component: () =>
             import('../views/AdminComplaintsView.vue')
+    },
+    {
+        path: '/write-a-complaint',
+        name: 'write-a-complaint',
+        component: () =>
+            import('../views/ClientComplaintsView.vue')
     }
 ]
 
