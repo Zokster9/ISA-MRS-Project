@@ -6,8 +6,12 @@
                         <div class="revisions">
                             <form @submit.prevent>
                                 <div class="form-group required">
-                                    <label class="control-label">Enter your rating: </label>
-                                    <input v-model="form.rating" type="number" min="1" max="5" class="form-control form-control-lg"/>
+                                    <label class="control-label">Enter your service rating: </label>
+                                    <input v-model="form.serviceRating" type="number" min="1" max="5" class="form-control form-control-lg"/>
+                                </div>
+                                <div class="form-group required">
+                                    <label class="control-label">Enter your service owner rating: </label>
+                                    <input v-model="form.ownerRating" type="number" min="1" max="5" class="form-control form-control-lg"/>
                                 </div>
                                 <div class="form-group required">
                                     <label class="control-label">Write your revision: </label>
@@ -41,19 +45,41 @@
         data() {
             return {
                 form: {
-                    rating: 1,
+                    serviceRating: 1,
+                    ownerRating: 1,
                     revision: '',
                 }
             }
         },
         methods: {
             review() {
-                axios.post()
+                axios.post("http://localhost:8088/revisions/makeARevision", {
+                    reservationId: parseInt(this.$route.params.id),
+                    revision: this.form.revision,
+                    serviceRating: this.form.serviceRating,
+                    ownerRating: this.form.ownerRating,
+                },
+                {
+                    headers: {
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
+                    }
+                })
+                .then(() => {
+                    alert("You have successfully reviewed a reservation!");
+                    this.$router.push("/home-page-client");
+                })
+                .catch(() => {
+                    alert("Try again later!");
+                })
             }
         },
         validations: {
             form: {
-                rating: {
+                serviceRating: {
+                    required,
+                    isRating
+                },
+                ownerRating: {
                     required,
                     isRating
                 },
