@@ -210,19 +210,19 @@ const routes = [{
         path: '/penalty-points',
         name: 'penalty-points',
         component: () =>
-            import ('../views/PenaltyPointsView.vue')
+            import('../views/PenaltyPointsView.vue')
     },
     {
         path: '/client-subscriptions',
         name: 'client-subscriptions',
         component: () =>
-            import ('../views/ClientSubscriptionsView.vue')
+            import('../views/ClientSubscriptionsView.vue')
     },
     {
         path: '/make-a-reservation',
         name: 'make-a-reservation',
         component: () =>
-            import ('../views/ClientReservationView.vue')
+            import('../views/ClientReservationView.vue')
     },
     {
         path: '/write-report/:id',
@@ -242,6 +242,48 @@ const routes = [{
         component: () =>
             import ('../views/OwnerReservationView.vue')
     }
+    {
+        path: '/admin-complaints',
+        name: 'admin-complaints',
+        component: () =>
+            import('../views/AdminComplaintsView.vue')
+    },
+    {
+        path: '/write-a-complaint',
+        name: 'write-a-complaint',
+        component: () =>
+            import('../views/ClientComplaintsView.vue')
+    },
+    {
+        path: '/client-ship-reservation-history',
+        name: 'client-ship-reservation-history',
+        component: () =>
+            import('../views/ClientShipReservationHistoryView.vue')
+    },
+    {
+        path: '/client-retreat-reservation-history',
+        name: 'client-retreat-reservation-history',
+        component: () =>
+            import('../views/ClientRetreatReservationHistoryView.vue')
+    },
+    {
+        path: '/client-adventure-reservation-history',
+        name: 'client-adventure-reservation-history',
+        component: () =>
+            import('../views/ClientAdventureReservationHistoryView.vue')
+    },
+    {
+        path: '/review-reservation/:id',
+        name: 'review-reservation',
+        component: () =>
+            import('../views/ClientRevisionView.vue')
+    },
+    {
+        path: '/pending-reservations',
+        name: 'pending-reservations',
+        component: () =>
+            import('../views/ClientPendingReservationsView.vue')
+    },
 ]
 
 const router = new VueRouter({

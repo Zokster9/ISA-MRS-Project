@@ -38,6 +38,9 @@ public class ReservationController {
     private ServiceAvailabilityService serviceAvailabilityService;
 
     @Autowired
+    private ComplaintService complaintService;
+
+    @Autowired
     private EmailService emailService;
 
     @Autowired
@@ -163,7 +166,7 @@ public class ReservationController {
         }
         return new ResponseEntity<>(reservationDTO, HttpStatus.OK);
     }
-    
+
     @PostMapping(value = "/make-for-client/{serviceId}", produces = "application/json")
     @PreAuthorize("hasAnyRole('retreatOwner', 'shipOwner', 'fishingInstructor')")
     public ResponseEntity<ReservationDTO> makeReservationForClient(@RequestBody ReservationDTO reservationDTO, @PathVariable Integer serviceId) {
@@ -208,5 +211,98 @@ public class ReservationController {
                     < Integer.parseInt(timeTo) * 60 + Integer.parseInt(timeTo);
         }
         return true;
+    }
+
+    @GetMapping(value="/getNonComplainedReservations")
+    @PreAuthorize("hasRole('client')")
+    public ResponseEntity<List<ReservationDTO>> getNonComplainedReservations(Principal principal) {
+        Client client;
+        try {
+            client = (Client) userService.findUserByEmail(principal.getName());
+            List<Reservation> reservations = reservationService.findClientsFinishedReservations(client.getId());
+            List<ReservationDTO> reservationDTOS = new ArrayList<>();
+            for (Reservation reservation : reservations) {
+                if (complaintService.findComplaintByReservationId(reservation.getId()) == null) {
+                    reservationDTOS.add(new ReservationDTO(reservation));
+                }
+            }
+            return new ResponseEntity<>(reservationDTOS, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value="/shipReservationHistory")
+    @PreAuthorize("hasRole('client')")
+    public ResponseEntity<List<ReservationDTO>> getShipReservationHistory(Principal principal) {
+        Client client;
+        try {
+            client = (Client) userService.findUserByEmail(principal.getName());
+            List<Reservation> reservations = reservationService.findClientsFinishedReservations(client.getId());
+            List<ReservationDTO> reservationDTOS = new ArrayList<>();
+            for (Reservation reservation : reservations) {
+                if (shipService.findShipById(reservation.getService().getId()) != null) {
+                    reservationDTOS.add(new ReservationDTO(reservation));
+                }
+            }
+            return new ResponseEntity<>(reservationDTOS, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value="/retreatReservationHistory")
+    @PreAuthorize("hasRole('client')")
+    public ResponseEntity<List<ReservationDTO>> getRetreatReservationHistory(Principal principal) {
+        Client client;
+        try {
+            client = (Client) userService.findUserByEmail(principal.getName());
+            List<Reservation> reservations = reservationService.findClientsFinishedReservations(client.getId());
+            List<ReservationDTO> reservationDTOS = new ArrayList<>();
+            for (Reservation reservation : reservations) {
+                if (retreatService.getRetreatById(reservation.getService().getId()) != null) {
+                    reservationDTOS.add(new ReservationDTO(reservation));
+                }
+            }
+            return new ResponseEntity<>(reservationDTOS, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value="/adventureReservationHistory")
+    @PreAuthorize("hasRole('client')")
+    public ResponseEntity<List<ReservationDTO>> getAdventureReservationHistory(Principal principal) {
+        Client client;
+        try {
+            client = (Client) userService.findUserByEmail(principal.getName());
+            List<Reservation> reservations = reservationService.findClientsFinishedReservations(client.getId());
+            List<ReservationDTO> reservationDTOS = new ArrayList<>();
+            for (Reservation reservation : reservations) {
+                if (adventureService.findAdventureById(reservation.getService().getId()) != null) {
+                    reservationDTOS.add(new ReservationDTO(reservation));
+                }
+            }
+            return new ResponseEntity<>(reservationDTOS, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value="/getPendingReservations")
+    @PreAuthorize("hasRole('client')")
+    public ResponseEntity<List<ReservationDTO>> getPendingReservations(Principal principal) {
+        Client client;
+        try {
+            client = (Client) userService.findUserByEmail(principal.getName());
+            List<Reservation> reservations = reservationService.findClientsPendingReservations(client.getId());
+            List<ReservationDTO> reservationDTOS = new ArrayList<>();
+            for (Reservation reservation : reservations) {
+                reservationDTOS.add(new ReservationDTO(reservation));
+            }
+            return new ResponseEntity<>(reservationDTOS, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

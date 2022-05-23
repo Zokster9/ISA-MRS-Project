@@ -1,5 +1,7 @@
 package com.example.projectmrsisa.model;
 
+import com.example.projectmrsisa.dto.ComplaintDTO;
+
 import javax.persistence.*;
 
 @Entity
@@ -16,7 +18,7 @@ public class Complaint {
     @Column(name="isAnswered")
     private boolean isAnswered;
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reservation", nullable = false)
+    @JoinColumn(name = "reservation_id", nullable = false)
     private Reservation reservation;
 
     public Complaint() {
@@ -29,6 +31,13 @@ public class Complaint {
         this.complaint = complaint;
         this.response = response;
         this.isAnswered = isAnswered;
+        this.reservation = reservation;
+    }
+
+    public Complaint(ComplaintDTO complaintDTO, Reservation reservation) {
+        this.complaint = complaintDTO.getComplaint();
+        this.response = "";
+        this.isAnswered = false;
         this.reservation = reservation;
     }
 

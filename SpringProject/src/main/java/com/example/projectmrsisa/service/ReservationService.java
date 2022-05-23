@@ -34,8 +34,20 @@ public class ReservationService {
         return true;
     }
 
+    public List<Reservation> findClientsFinishedReservations(Integer clientId) {
+        return reservationRepository.findClientsFinishedReservations(clientId);
+    }
+
+    public List<Reservation> findClientsPendingReservations(Integer clientId) {
+        return reservationRepository.findClientsPendingReservations(clientId);
+    }
+
     public List<Reservation> findReservationByServiceId(Integer serviceId) {
         return reservationRepository.findReservationByServiceId(serviceId);
+    }
+
+    public Reservation findReservationById(Integer reservationId) {
+        return reservationRepository.findReservationById(reservationId);
     }
 
     public boolean isReserved(Integer serviceId, Date fromDate, Date toDate, String fromTime, String toTime, Integer clientId) {

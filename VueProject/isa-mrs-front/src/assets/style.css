@@ -65,6 +65,8 @@ body,
 .app,
 .signIn,
 .signUp,
+.complaints,
+.revisions,
 .vertical-center,
 #app {
     width: 100%;

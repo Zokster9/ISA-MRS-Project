@@ -4,6 +4,8 @@ import com.example.projectmrsisa.dto.ReportDTO;
 import com.example.projectmrsisa.dto.ReservationDTO;
 import com.example.projectmrsisa.dto.RetreatDTO;
 import com.example.projectmrsisa.dto.UserDTO;
+import com.example.projectmrsisa.model.Client;
+import com.example.projectmrsisa.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
@@ -28,6 +30,18 @@ public class EmailService {
     //private Queue<SimpleMailMessage> mails = new ArrayDeque<SimpleMailMessage>();
 
     @Async
+    public void sendApprovedRevisionEmail(String revision, double serviceRating, double ownerRating, User privilegedUser, Client client){
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(env.getProperty("spring.mail.username"));
+        mail.setFrom("isamrsprojekat@gmail.com");
+        mail.setSubject("Approved revision confirmation");
+        mail.setText("Dear " + privilegedUser.getName() + " " + privilegedUser.getSurname() +
+                ", revision from client " + client.getName() + " " + client.getSurname() + " has been accepted. In the revision, client gave you a rating of "
+                + Double.toString(serviceRating) + ", your service received a rating of " + Double.toString(ownerRating) + ", while revision text is: " + revision);
+        javaMailSender.send(mail);
+    }
+
+    @Async
     public void sendReservationConfirmation(ReservationDTO reservationDTO) throws MessagingException {
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(env.getProperty("spring.mail.username"));
@@ -35,7 +49,7 @@ public class EmailService {
         mail.setSubject("Reservation approved");
         mail.setText("Dear " + reservationDTO.getClientName() + " " + reservationDTO.getClientSurname() +
                 " your reservation for " + reservationDTO.getServiceName() + ", from " + reservationDTO.getFromDate() +
-                "to " + reservationDTO.getToDate() + ", has been approved.");
+                " to " + reservationDTO.getToDate() + ", has been approved.");
         //mails.add(mail);
         javaMailSender.send(mail);
     }
@@ -198,5 +212,26 @@ public class EmailService {
                 + " has been declined. Text of report: " + report.getReport());
         javaMailSender.send(mail); //privilegovanom korisniku
         javaMailSender.send(mail); //klijentu
+    }
+
+    @Async
+    public void sendComplaintEmailClient(String complaint, Client client){
+        SimpleMailMessage mailClient = new SimpleMailMessage();
+        mailClient.setTo(env.getProperty("spring.mail.username"));
+        mailClient.setFrom("isamrsprojekat@gmail.com");
+        mailClient.setSubject("Complaint answer");
+        mailClient.setText("Dear " + client.getName() + " " + client.getSurname() + ", this is admin's response to your complaint: " + complaint);
+        javaMailSender.send(mailClient);
+    }
+
+    @Async
+    public void sendComplaintEmailPrivilegedUser(String complaint, User privilegedUser){
+        SimpleMailMessage mailPrivilegedUser = new SimpleMailMessage();
+        mailPrivilegedUser.setTo(env.getProperty("spring.mail.username"));
+        mailPrivilegedUser.setFrom("isamrsprojekat@gmail.com");
+        mailPrivilegedUser.setSubject("Complaint answer");
+        mailPrivilegedUser.setText("Dear " + privilegedUser.getName() + " " + privilegedUser.getSurname() +
+                ", this is admin's response to a complaint that was written about your service: " + complaint);
+        javaMailSender.send(mailPrivilegedUser);
     }
 }

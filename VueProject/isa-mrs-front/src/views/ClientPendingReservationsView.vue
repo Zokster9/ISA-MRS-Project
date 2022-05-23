@@ -1,0 +1,56 @@
+<template>
+    <div class="d-flex flex-row">
+        <div>
+            <NavbarClient></NavbarClient>
+        </div>
+        <div class="mx-auto" style="margin-top: 80px; width:50%">
+            <div v-if="pendingReservations">
+                <div v-if="pendingReservations.length != 0">
+                    <ReservationCard v-for="reservation in pendingReservations" :reservation="reservation" :key="reservation.id"></ReservationCard>
+                </div>
+                <div v-else>
+                    <h1>There are no pending reservations for you.</h1>
+                </div>
+            </div>
+            <div v-else>
+                <h1>There are no pending reservations for you.</h1>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    import NavbarClient from '@/components/NavbarClient.vue'
+    import ReservationCard from '@/components/ReservationCard.vue'
+    import Vue from 'vue'
+    import axios from 'axios'
+    import VueAxios from 'vue-axios'
+
+    Vue.use(VueAxios, axios)
+
+    export default {
+        name: "ClientPendingReservations",
+        components: {
+            NavbarClient,
+            ReservationCard,
+        },
+        data () {
+            return {
+                pendingReservations: null,
+            }
+        },
+        mounted () {
+            axios.get("http://localhost:8088/reservations/getPendingReservations", {
+                headers: {
+                    Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
+                }
+            })
+            .then(response => {
+                this.pendingReservations = response.data;
+            })
+            .catch(() => {
+                alert("Something went wrong!");
+            })
+        }
+    }
+</script>

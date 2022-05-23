@@ -5,7 +5,7 @@
         <router-link exact to="/account-termination-requests" tag="button" class="nav-link text-start">Account termination requests</router-link>
         <router-link :class="{ disabledNavbarOption: admin }" exact to="/admin-sign-up" tag="button" class="nav-link text-start">Add administrators</router-link>
         <router-link exact to="/admin-services-view" tag="button" class="nav-link text-start">System entities</router-link>
-        <router-link exact to= "/admin-users-view" tag="button" class="nav-link text-start"> System users </router-link>
+        <router-link exact to="/admin-users-view" tag="button" class="nav-link text-start"> System users </router-link>
         <router-link exact to="/admin-complaints" tag="button" class="nav-link text-start"> Complaints </router-link>
         <router-link exact to="/admin-revisions" tag="button" class="nav-link text-start"> Revisions </router-link>
         <router-link exact to="/admin-reports" tag="button" class="nav-link text-start"> Reports </router-link>

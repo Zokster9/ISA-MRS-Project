@@ -24,7 +24,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="reservationsDropdownMenuLink">
                         <li><router-link exact to="/make-a-reservation" class="dropdown-item">Make a reservation</router-link></li>
-                        <li><router-link exact to="/" class="dropdown-item">Upcoming reservations</router-link></li>
+                        <li><router-link exact to="/pending-reservations" class="dropdown-item">Upcoming reservations</router-link></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -32,9 +32,9 @@
                         Reservation History
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="reservationHistoryDropdownMenuLink">
-                        <li><router-link exact to="/" class="dropdown-item">All retreat reservations</router-link></li>
-                        <li><router-link exact to="/" class="dropdown-item">All ship reservations</router-link></li>
-                        <li><router-link exact to="/" class="dropdown-item">All adventure reservations</router-link></li>
+                        <li><router-link exact to="/client-retreat-reservation-history" class="dropdown-item">All retreat reservations</router-link></li>
+                        <li><router-link exact to="/client-ship-reservation-history" class="dropdown-item">All ship reservations</router-link></li>
+                        <li><router-link exact to="/client-adventure-reservation-history" class="dropdown-item">All adventure reservations</router-link></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -44,7 +44,7 @@
                     <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="personalDropdownMenuLink">
                         <li><router-link exact to="/penalty-points" class="dropdown-item">My penalty points</router-link></li>
                         <li><router-link exact to="/client-subscriptions" class="dropdown-item">My subscriptions</router-link></li>
-                        <li><router-link exact to="/" class="dropdown-item">Write a complaint</router-link></li>
+                        <li><router-link exact to="/write-a-complaint" class="dropdown-item">Write a complaint</router-link></li>
                     </ul>
                 </li>
                 <li class="nav-item">
