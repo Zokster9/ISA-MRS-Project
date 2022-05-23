@@ -29,6 +29,18 @@ public class EmailService {
     //private Queue<SimpleMailMessage> mails = new ArrayDeque<SimpleMailMessage>();
 
     @Async
+    public void sendApprovedRevisionEmail(String revision, double serviceRating, double ownerRating, User privilegedUser, Client client){
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(env.getProperty("spring.mail.username"));
+        mail.setFrom("isamrsprojekat@gmail.com");
+        mail.setSubject("Approved revision confirmation");
+        mail.setText("Dear " + privilegedUser.getName() + " " + privilegedUser.getSurname() +
+                ", revision from client " + client.getName() + " " + client.getSurname() + " has been accepted. In the revision, client gave you a rating of "
+                + Double.toString(serviceRating) + ", your service received a rating of " + Double.toString(ownerRating) + ", while revision text is: " + revision);
+        javaMailSender.send(mail);
+    }
+
+    @Async
     public void sendReservationConfirmation(ReservationDTO reservationDTO) throws MessagingException {
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(env.getProperty("spring.mail.username"));

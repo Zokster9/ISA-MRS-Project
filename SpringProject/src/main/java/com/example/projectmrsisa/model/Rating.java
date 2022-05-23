@@ -23,6 +23,11 @@ public class Rating {
         this.serviceRating = serviceRating;
     }
 
+    public Rating(double userRating, double serviceRating) {
+        this.privilegedUserRating = userRating;
+        this.serviceRating = serviceRating;
+    }
+
     public Integer getId() {
         return id;
     }

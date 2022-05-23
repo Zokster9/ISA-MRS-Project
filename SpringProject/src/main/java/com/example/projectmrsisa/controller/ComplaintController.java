@@ -63,7 +63,6 @@ public class ComplaintController {
 
     @PostMapping(value="/makeAComplaint")
     @PreAuthorize("hasRole('client')")
-    @Transactional
     public ResponseEntity<ComplaintDTO> makeAComplaint(@RequestBody ComplaintDTO complaintDTO) {
         try {
             Reservation reservation = reservationService.findReservationById(complaintDTO.getReservationId());

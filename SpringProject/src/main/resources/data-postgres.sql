@@ -119,3 +119,7 @@ insert into reservations (from_date, to_date, from_time, to_time, price, status,
 insert into complaints (complaint, response, is_answered, reservation_id) values ('Unstable boat Unstable boat Unstable boat Unstable boat Unstable boat', '', False, 9);
 insert into complaints (complaint, response, is_answered, reservation_id) values ('Stinky bathroom', '', False, 6);
 insert into complaints (complaint, response, is_answered, reservation_id) values ('No fish?', '', False, 3);
+
+insert into revisions (revision, is_approved, is_answered, rating_id, reservation_id) values ('It was fine, liked it a lot.', False, False, 1, 3);
+insert into revisions (revision, is_approved, is_answered, rating_id, reservation_id) values ('It stinks, it was really bad.', False, False, 2, 6);
+insert into revisions (revision, is_approved, is_answered, rating_id, reservation_id) values ('We almost fell out of the boat. Fix it!', False, False, 3, 9);

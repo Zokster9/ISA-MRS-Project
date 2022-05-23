@@ -1,13 +1,14 @@
 package com.example.projectmrsisa.model;
 
+import com.example.projectmrsisa.dto.RevisionDTO;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name="revisions")
 public class Revision {
     @Id
-    @SequenceGenerator(name = "myRevisionSeqGen", sequenceName = "myRevisionSeq", initialValue = 1, allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "myRevisionSeqGen")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id", unique = true, nullable = false)
     private Integer id;
     @Column(name="revision", nullable = false)
@@ -31,6 +32,14 @@ public class Revision {
         this.revision = revision;
         this.isApproved = isApproved;
         this.isAnswered = isAnswered;
+        this.rating = rating;
+        this.reservation = reservation;
+    }
+
+    public Revision(RevisionDTO revisionDTO, Rating rating, Reservation reservation) {
+        this.revision = revisionDTO.getRevision();
+        this.isApproved = false;
+        this.isAnswered = false;
         this.rating = rating;
         this.reservation = reservation;
     }
