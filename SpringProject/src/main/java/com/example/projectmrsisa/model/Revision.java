@@ -25,6 +25,8 @@ public class Revision {
     private Reservation reservation;
 
     public Revision() {
+        this.isApproved = false;
+        this.isAnswered = false;
     }
 
     public Revision(Integer id, String revision, boolean isApproved, boolean isAnswered, Rating rating, User privilegedUser, Client client, Reservation reservation) {

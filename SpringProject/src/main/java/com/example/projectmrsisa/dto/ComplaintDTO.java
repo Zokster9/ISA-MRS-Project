@@ -64,7 +64,7 @@ public class ComplaintDTO {
         return isAnswered;
     }
 
-    public void setAnswered(boolean answered) {
+    public void setIsAnswered(boolean answered) {
         isAnswered = answered;
     }
 

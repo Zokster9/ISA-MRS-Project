@@ -101,8 +101,8 @@ insert into subscriptions (client_id, subscription_id) values (5, 1);
 insert into subscriptions (client_id, subscription_id) values (5, 2);
 
 insert into ratings (service_rating, privileged_user_rating) values (5, 5);
-insert into ratings (service_rating, privileged_user_rating) values (4, 4);
-insert into ratings (service_rating, privileged_user_rating) values (4, 5);
+insert into ratings (service_rating, privileged_user_rating) values (1, 3);
+insert into ratings (service_rating, privileged_user_rating) values (2, 2);
 
 insert into reservations (from_date, to_date, from_time, to_time, price, status, service_id, client_id, num_of_people) values ('2022-05-13 02:00:00', '2022-05-15 02:00:00', '13:00', '13:00', 60, 1, 3, 5, 3);
 insert into reservations (from_date, to_date, from_time, to_time, price, status, service_id, client_id, num_of_people) values ('2022-05-16 02:00:00', '2022-05-17 02:00:00', '13:00', '13:00', 30, 1, 3, 5, 3);

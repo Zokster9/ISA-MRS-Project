@@ -9,19 +9,21 @@
                 <br>
                 <table class="table table-striped table-responsive table-bordered mb-5">
                     <thead>
-                        <th colspan="100%" class="text-center h2"> Complaints </th>
+                        <th colspan="100%" class="text-center h2"> Revisions </th>
                         
                     </thead>
                     <tbody>
                         <tr>
                             <td class="text-center align-middle"> <b> Client </b></td>
                             <td class="text-center align-middle"> <b> Owner </b></td>
+                            <td class="text-center align-middle"> <b> Owner rating </b></td>
                             <td class="text-center align-middle"> <b> Service </b></td>
-                            <td class="text-center align-middle"> <b> Complaint </b></td>
-                            <td class="text-center align-middle"> <b> Response </b></td>
-                            <td class="text-center align-middle"> <b> Send response </b></td>
+                            <td class="text-center align-middle"> <b> Service rating </b></td>
+                            <td class="text-center align-middle"> <b> Revision </b></td>
+                            <td class="text-center align-middle"> <b> Accept revision </b></td>
+                            <td class="text-center align-middle"> <b> Decline revision </b></td>
                         </tr>
-                        <AdminComplaintRow v-for="complaint in this.complaints" :complaint="complaint" :key="complaint.id"> </AdminComplaintRow>
+                        <AdminRevisionRow v-for="revision in this.revisions" :revision="revision" :key="revision.id"> </AdminRevisionRow>
                     </tbody>
                 </table>
             </div>
@@ -31,7 +33,7 @@
 
 <script>
     import NavbarAdmin from '@/components/NavbarAdmin.vue'
-    import AdminComplaintRow from '@/components/AdminComplaintRow.vue'
+    import AdminRevisionRow from '@/components/AdminRevisionRow.vue'
     import axios from 'axios'
     import VueAxios from 'vue-axios'
     import Vue from 'vue'
@@ -39,23 +41,23 @@
     Vue.use(VueAxios, axios)
 
     export default {
-        name: 'AdminComplaintsView',
+        name: 'AdminRevisionsView',
         components: {
             NavbarAdmin,
-            AdminComplaintRow
+            AdminRevisionRow
         },
         data(){
             return {
-                complaints: []
+                revisions: []
             }
         },
         mounted () {
-            axios.get("http://localhost:8088/complaints/findAll",{
+            axios.get("http://localhost:8088/revisions/findAll",{
                 headers:{
                     Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
                 }
             }).then((response) =>{
-                this.complaints = response.data
+                this.revisions = response.data
             })
         }
     }

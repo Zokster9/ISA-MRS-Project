@@ -58,7 +58,8 @@ public class ComplaintController {
         } catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(complaintDTO, HttpStatus.OK);
+        ComplaintDTO complaintDTO1 = new ComplaintDTO(complaint);
+        return new ResponseEntity<>(complaintDTO1, HttpStatus.OK);
     }
 
     @PostMapping(value="/makeAComplaint")
