@@ -23,12 +23,14 @@
                 <span class="card-text">Price</span>
                 <span class="float-end">{{ reservation.price }}<span>&#8364;</span></span>
             </div>
-            <div v-if="reservation.userRating">
-                <span class="card-text">Rating</span>
-                <span class="float-end">{{ reservation.userRating }}</span>
-            </div>
-            <div v-else>
-                <button @click="review" class="btn btn-primary my-3">Make a revision</button>
+            <div v-if="reservation.status != 'Pending'">
+                <div v-if="reservation.userRating">
+                    <span class="card-text">Rating</span>
+                    <span class="float-end">{{ reservation.userRating }}</span>
+                </div>
+                <div v-else>
+                    <button @click="review" class="btn btn-primary my-3">Make a revision</button>
+                </div>
             </div>
         </div>
     </div>

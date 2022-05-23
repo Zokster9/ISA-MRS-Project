@@ -24,7 +24,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="reservationsDropdownMenuLink">
                         <li><router-link exact to="/make-a-reservation" class="dropdown-item">Make a reservation</router-link></li>
-                        <li><router-link exact to="/" class="dropdown-item">Upcoming reservations</router-link></li>
+                        <li><router-link exact to="/pending-reservations" class="dropdown-item">Upcoming reservations</router-link></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">

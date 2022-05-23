@@ -260,6 +260,12 @@ const routes = [{
         component: () =>
             import('../views/ClientRevisionView.vue')
     },
+    {
+        path: '/pending-reservations',
+        name: 'pending-reservations',
+        component: () =>
+            import('../views/ClientPendingReservationsView.vue')
+    },
 ]
 
 const router = new VueRouter({

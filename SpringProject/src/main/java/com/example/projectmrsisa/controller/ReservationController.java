@@ -225,4 +225,21 @@ public class ReservationController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping(value="/getPendingReservations")
+    @PreAuthorize("hasRole('client')")
+    public ResponseEntity<List<ReservationDTO>> getPendingReservations(Principal principal) {
+        Client client;
+        try {
+            client = (Client) userService.findUserByEmail(principal.getName());
+            List<Reservation> reservations = reservationService.findClientsPendingReservations(client.getId());
+            List<ReservationDTO> reservationDTOS = new ArrayList<>();
+            for (Reservation reservation : reservations) {
+                reservationDTOS.add(new ReservationDTO(reservation));
+            }
+            return new ResponseEntity<>(reservationDTOS, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }
