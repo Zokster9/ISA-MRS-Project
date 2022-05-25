@@ -96,4 +96,12 @@ public class ReservationService {
         }
         return false;
     }
+
+    public List<Reservation> getAllReservations(){
+        return reservationRepository.findAll();
+    }
+
+    public List<Reservation> findNonCancelledReservations(){
+        return reservationRepository.findNonCancelledReservations();
+    }
 }

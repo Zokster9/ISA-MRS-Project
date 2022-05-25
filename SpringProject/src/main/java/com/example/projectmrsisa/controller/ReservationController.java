@@ -305,4 +305,20 @@ public class ReservationController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping(value="/findAllNotCancelled")
+    @PreAuthorize("hasAnyRole('admin', 'mainAdmin')")
+    public ResponseEntity<List<ReservationDTO>> getAllReservations(){
+        List<Reservation> reservations;
+        List<ReservationDTO> reservationDTOS = new ArrayList<>();
+        try{
+            reservations = reservationService.findNonCancelledReservations();
+        } catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        for (Reservation reservation : reservations){
+            reservationDTOS.add(new ReservationDTO(reservation));
+        }
+        return new ResponseEntity<>(reservationDTOS, HttpStatus.OK);
+    }
 }

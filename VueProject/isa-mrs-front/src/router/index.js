@@ -290,6 +290,12 @@ const routes = [{
         component: () =>
             import('../views/AdminRevisionsView.vue')
     },
+    {
+        path: '/admin-business-income',
+        name: 'admin-business-income',
+        component: () =>
+            import('../views/AdminBusinessIncome.vue')
+    }
 ]
 
 const router = new VueRouter({
