@@ -48,6 +48,9 @@ public class ReservationController {
     @Autowired
     private TagService tagService;
 
+    @Autowired
+    private DiscountService discountService;
+
     @GetMapping(value="/getPrivilegedUserReservations")
     @PreAuthorize("hasAnyRole('fishingInstructor', 'shipOwner', 'retreatOwner')")
     public ResponseEntity<List<ReservationDTO>> getPrivilegedUserReservations(Principal principal){
@@ -349,10 +352,23 @@ public class ReservationController {
         }
     }
 
-    @GetMapping(value="/calculateSystemIncome")
+    @PostMapping(value="/calculateSystemIncome")
     @PreAuthorize("hasAnyRole('admin','mainAdmin')")
-    public ResponseEntity<Double> getSystemIncome(@RequestParam List<ReservationDTO> reservationDTOS){
-        System.out.println("tu sam");
-        return null;
+    public ResponseEntity<Double> getSystemIncome(@RequestBody ReservationsDTO reservationsDTO){
+        List<Discount> discounts;
+        double systemIncome = 0;
+        try{
+            discounts = discountService.findAll();
+        } catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        for (Discount discount : discounts){
+            for (ReservationDTO reservationDTO : reservationsDTO.getReservationsDTO()){
+                if (reservationDTO.getFromDate().after(discount.getFromDate()) && reservationDTO.getFromDate().before(discount.getToDate())){
+                    systemIncome += reservationDTO.getPrice() * discount.getDiscount();
+                }
+            }
+        }
+        return new ResponseEntity<>(systemIncome, HttpStatus.OK);
     }
 }

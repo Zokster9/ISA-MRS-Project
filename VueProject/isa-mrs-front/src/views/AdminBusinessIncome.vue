@@ -75,7 +75,7 @@
                 reservations: [],
                 fromDate: null,
                 toDate: null,
-                totalIncome: 50,
+                totalIncome: 0,
                 newPercentage: ""
             }
         },
@@ -101,15 +101,16 @@
                     },
                 }).then((response) => {
                     this.reservations = response.data;
+                    axios.post("http://localhost:8088/reservations/calculateSystemIncome", {
+                        reservationsDTO: this.reservations,
+                    },{
+                        headers:{
+                            Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
+                        }
+                    }).then((response) => {
+                        this.totalIncome = response.data;
+                    })
                 })
-                //axios.get("http://localhost:8088/reservations/calculateSystemIncome", {
-                //    reservationsDTO: this.reservations,
-                //},{
-                //    headers:{
-                //        Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
-                //    }
-                //})
-
             },
             showAll(){
                 axios.get("http://localhost:8088/reservations/findAllNotCancelled",{
@@ -118,6 +119,15 @@
                     }
                 }).then((response) =>{
                     this.reservations = response.data;
+                    axios.post("http://localhost:8088/reservations/calculateSystemIncome", {
+                        reservationsDTO: this.reservations,
+                    },{
+                        headers:{
+                            Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
+                        }
+                    }).then((response) => {
+                        this.totalIncome = response.data;
+                    })
                 })
             },
             getDate (date) {
@@ -136,6 +146,15 @@
                 }
             }).then((response) =>{
                 this.reservations = response.data;
+                axios.post("http://localhost:8088/reservations/calculateSystemIncome", {
+                    reservationsDTO: this.reservations,
+                },{
+                    headers:{
+                        Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
+                    }
+                }).then((response) => {
+                    this.totalIncome = response.data;
+                })
             })
         }
     }
