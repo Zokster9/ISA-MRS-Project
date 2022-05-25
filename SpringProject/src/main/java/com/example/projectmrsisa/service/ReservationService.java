@@ -104,4 +104,8 @@ public class ReservationService {
     public List<Reservation> findNonCancelledReservations(){
         return reservationRepository.findNonCancelledReservations();
     }
+
+    public List<Reservation> findReservationsInDateSpan(Date fromDate, Date toDate){
+        return reservationRepository.findReservationsInDateSpan(fromDate, toDate);
+    }
 }

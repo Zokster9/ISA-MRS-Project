@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
@@ -320,5 +322,37 @@ public class ReservationController {
             reservationDTOS.add(new ReservationDTO(reservation));
         }
         return new ResponseEntity<>(reservationDTOS, HttpStatus.OK);
+    }
+
+    @GetMapping(value="/findInDateSpan")
+    @PreAuthorize("hasAnyRole('admin','mainAdmin')")
+    public ResponseEntity<List<ReservationDTO>> getReservationsInDateSpan(@RequestParam(name="fromDate") String fromDate, @RequestParam(name="toDate") String toDate){
+        List<Reservation> reservations;
+        List<ReservationDTO> reservationDTOS = new ArrayList<>();
+        try{
+            reservations = reservationService.findReservationsInDateSpan(getDate(fromDate), getDate(toDate));
+        } catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        for (Reservation reservation : reservations){
+            reservationDTOS.add(new ReservationDTO(reservation));
+        }
+        return new ResponseEntity<>(reservationDTOS, HttpStatus.OK);
+    }
+
+    public Date getDate(String date) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            return formatter.parse(date);
+        } catch(ParseException e) {
+            return new Date();
+        }
+    }
+
+    @GetMapping(value="/calculateSystemIncome")
+    @PreAuthorize("hasAnyRole('admin','mainAdmin')")
+    public ResponseEntity<Double> getSystemIncome(@RequestParam List<ReservationDTO> reservationDTOS){
+        System.out.println("tu sam");
+        return null;
     }
 }

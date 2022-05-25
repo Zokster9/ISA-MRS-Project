@@ -14,10 +14,10 @@
                     <tbody>
                         <tr>
                             <td class="text-center align-middle"> Income from:<br>
-                                <input type="date" v-model="this.fromDate">
+                                <input type="date" v-model="fromDate">
                             </td>
                             <td class="text-center align-middle">Income till:<br>
-                                <input type="date" v-model="this.toDate">
+                                <input type="date" v-model="toDate">
                             </td>
                             <td class="text-center align-middle">
                                 <button type="button" class="btn btn-primary" @click="search">Search</button>
@@ -34,13 +34,22 @@
                         </tr>
                         <tr v-for="reservation in this.reservations" :key="reservation.id">
                             <td class="align-middle text-center"> {{reservation.id}} </td>
-                            <td class="align-middle text-center"> {{ reservation.fromDate}} </td>
-                            <td class="align-middle text-center"> {{ reservation.toDate}} </td>
+                            <td class="align-middle text-center"> {{ getDate(reservation.fromDate)}} </td>
+                            <td class="align-middle text-center"> {{ getDate(reservation.toDate)}} </td>
                             <td class="align-middle text-center"> {{ reservation.price}} </td>
                         </tr>
                         <tr>
                             <td class="align-middle text-center" colspan="3"><b> Total system income: </b></td>
                             <td class="align-middle text-center"><b> {{this.totalIncome}} </b></td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle text-center" colspan="2"> Income percentage from reservations: </td>
+                            <td class="align-middle text-center">
+                                <input type="number" placeholder="Value between 0 and 100" v-model="newPercentage">
+                            </td>
+                            <td class="align-middle text-center">
+                                <button type="button" class="btn btn-primary" @click="updatePercentage"> Confirm</button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -66,12 +75,41 @@
                 reservations: [],
                 fromDate: null,
                 toDate: null,
-                totalIncome: 50
+                totalIncome: 50,
+                newPercentage: ""
             }
         },
         methods:{
+            updatePercentage(){
+                axios.post("http://localhost:8088/discounts/updatePercentage",{
+                    discount: this.newPercentage,
+                    fromDate: new Date(),
+                    toDate: new Date('2100-01-01 02:00:00')
+                },{
+                    headers:{
+                        Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
+                    },
+                }).then(() => {
+                    alert("Successfully changed percentage taken of system reservations!")
+                    window.location.reload();
+                })
+            },
             search(){
-                
+                axios.get("http://localhost:8088/reservations/findInDateSpan?fromDate=" + this.fromDate + "&toDate=" + this.toDate,{
+                    headers:{
+                        Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
+                    },
+                }).then((response) => {
+                    this.reservations = response.data;
+                })
+                //axios.get("http://localhost:8088/reservations/calculateSystemIncome", {
+                //    reservationsDTO: this.reservations,
+                //},{
+                //    headers:{
+                //        Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
+                //    }
+                //})
+
             },
             showAll(){
                 axios.get("http://localhost:8088/reservations/findAllNotCancelled",{
@@ -81,6 +119,14 @@
                 }).then((response) =>{
                     this.reservations = response.data;
                 })
+            },
+            getDate (date) {
+                let origin_date = new Date(date)
+                let month = origin_date.getMonth() + 1
+                if (month < 10) {
+                    month = '0' + month
+                }
+                return origin_date.getFullYear() + '/' + month + '/' + origin_date.getDate()
             }
         },
         mounted () {

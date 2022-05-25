@@ -1,5 +1,7 @@
 package com.example.projectmrsisa.model;
 
+import com.example.projectmrsisa.dto.DiscountDTO;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -26,6 +28,13 @@ public class Discount {
         this.discount = discount;
         this.toDate = toDate;
         this.fromDate = fromDate;
+    }
+
+    public Discount(DiscountDTO discountDTO){
+        this.id = discountDTO.getId();
+        this.discount = discountDTO.getDiscount();
+        this.toDate = discountDTO.getToDate();
+        this.fromDate = discountDTO.getFromDate();
     }
 
     public Integer getId() {

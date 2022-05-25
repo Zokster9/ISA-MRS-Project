@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Date;
 import java.util.List;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Integer> {
@@ -31,4 +32,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
 
     @Query("select r from Reservation r where r.status <> 2")
     List<Reservation> findNonCancelledReservations();
+
+    @Query("select r from Reservation r where r.fromDate >= ?1 and r.toDate <= ?2")
+    List<Reservation> findReservationsInDateSpan(Date fromDate, Date toDate);
 }
