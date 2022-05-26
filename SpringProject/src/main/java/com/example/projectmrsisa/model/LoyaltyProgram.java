@@ -8,35 +8,43 @@ import java.util.Map;
 @Table(name="loyalty_programs")
 public class LoyaltyProgram {
     @Id
-    @SequenceGenerator(name = "myLoyProgSeqGen", sequenceName = "myLoyProgSeq", initialValue = 1, allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "myLoyProgSeqGen")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id", unique = true, nullable = false)
     private Integer id;
     @Column(name="clientPointsPerReservation", nullable = false)
     private int clientPointsPerReservation;
     @Column(name="privilegedPointsPerReservation", nullable = false)
     private int privilegedPointsPerReservation;
-    @ElementCollection
-    @JoinTable(name="requiredPoints", joinColumns=@JoinColumn(name="id"))
-    @MapKeyColumn (name="points_id")
-    @Column(name="value")
-    private Map<LoyaltyStatus, Integer> requiredPoints = new HashMap<>();
-    @Column(name="silverBonus", nullable = false)
-    private double silverBonus;
-    @Column(name="goldBonus", nullable = false)
-    private double goldBonus;
+    @Column(name="silverPointsRequired", nullable = false)
+    private int silverPointsRequired;
+    @Column(name="goldPointsRequired", nullable = false)
+    private int goldPointsRequired;
+    @Column(name="silverClientBonus", nullable = false)
+    private double silverClientBonus;
+    @Column(name="goldClientBonus", nullable = false)
+    private double goldClientBonus;
+    @Column(name="silverPrivilegedUserBonus", nullable = false)
+    private double silverPrivilegedBonus;
+    @Column(name="goldPrivilegedUserBonus", nullable = false)
+    private double goldPrivilegedUserBonus;
+    @Column(name="isActive", nullable = false)
+    private boolean isActive;
 
     public LoyaltyProgram() {
     }
 
-    public LoyaltyProgram(Integer id, int clientPointsPerReservation, int privilegedPointsPerReservation,
-                          Map<LoyaltyStatus, Integer> requiredPoints, double silverBonus, double goldBonus) {
+    public LoyaltyProgram(Integer id, int clientPointsPerReservation, int privilegedPointsPerReservation, int silverPointsRequired, int goldPointsRequired,
+                          double silverClientBonus, double goldClientBonus, double silverPrivilegedBonus, double goldPrivilegedUserBonus, boolean isActive) {
         this.id = id;
         this.clientPointsPerReservation = clientPointsPerReservation;
         this.privilegedPointsPerReservation = privilegedPointsPerReservation;
-        this.requiredPoints = requiredPoints;
-        this.silverBonus = silverBonus;
-        this.goldBonus = goldBonus;
+        this.silverPointsRequired = silverPointsRequired;
+        this.goldPointsRequired = goldPointsRequired;
+        this.silverClientBonus = silverClientBonus;
+        this.goldClientBonus = goldClientBonus;
+        this.silverPrivilegedBonus = silverPrivilegedBonus;
+        this.goldPrivilegedUserBonus = goldPrivilegedUserBonus;
+        this.isActive = isActive;
     }
 
     public Integer getId() {
@@ -63,27 +71,59 @@ public class LoyaltyProgram {
         this.privilegedPointsPerReservation = privilegedPointsPerReservation;
     }
 
-    public Map<LoyaltyStatus, Integer> getRequiredPoints() {
-        return requiredPoints;
+    public int getSilverPointsRequired() {
+        return silverPointsRequired;
     }
 
-    public void setRequiredPoints(Map<LoyaltyStatus, Integer> requiredPoints) {
-        this.requiredPoints = requiredPoints;
+    public void setSilverPointsRequired(int silverPointsRequired) {
+        this.silverPointsRequired = silverPointsRequired;
     }
 
-    public double getSilverBonus() {
-        return silverBonus;
+    public int getGoldPointsRequired() {
+        return goldPointsRequired;
     }
 
-    public void setSilverBonus(double silverBonus) {
-        this.silverBonus = silverBonus;
+    public void setGoldPointsRequired(int goldPointsRequired) {
+        this.goldPointsRequired = goldPointsRequired;
     }
 
-    public double getGoldBonus() {
-        return goldBonus;
+    public double getSilverClientBonus() {
+        return silverClientBonus;
     }
 
-    public void setGoldBonus(double goldBonus) {
-        this.goldBonus = goldBonus;
+    public void setSilverClientBonus(double silverClientBonus) {
+        this.silverClientBonus = silverClientBonus;
+    }
+
+    public double getGoldClientBonus() {
+        return goldClientBonus;
+    }
+
+    public void setGoldClientBonus(double goldClientBonus) {
+        this.goldClientBonus = goldClientBonus;
+    }
+
+    public double getSilverPrivilegedBonus() {
+        return silverPrivilegedBonus;
+    }
+
+    public void setSilverPrivilegedBonus(double silverPrivilegedBonus) {
+        this.silverPrivilegedBonus = silverPrivilegedBonus;
+    }
+
+    public double getGoldPrivilegedUserBonus() {
+        return goldPrivilegedUserBonus;
+    }
+
+    public void setGoldPrivilegedUserBonus(double goldPrivilegedUserBonus) {
+        this.goldPrivilegedUserBonus = goldPrivilegedUserBonus;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }

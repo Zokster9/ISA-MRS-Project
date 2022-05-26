@@ -294,7 +294,13 @@ const routes = [{
         path: '/admin-business-income',
         name: 'admin-business-income',
         component: () =>
-            import('../views/AdminBusinessIncome.vue')
+            import('../views/AdminBusinessIncomeView.vue')
+    },
+    {
+        path: '/admin-loyalty-program',
+        name: 'admin-loyalty-program',
+        component: () =>
+            import('../views/AdminLoyaltyProgramView.vue')
     }
 ]
 
