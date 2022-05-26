@@ -48,7 +48,7 @@
                                 <input type="number" placeholder="Value between 0 and 100" v-model="newPercentage">
                             </td>
                             <td class="align-middle text-center">
-                                <button type="button" class="btn btn-primary" @click="updatePercentage"> Confirm</button>
+                                <button type="button" class="btn btn-primary" @click="updatePercentage" :disabled="$v.newPercentage.$invalid"> Confirm</button>
                             </td>
                         </tr>
                     </tbody>
@@ -62,8 +62,11 @@
     import axios from 'axios'
     import VueAxios from 'vue-axios'
     import Vue from 'vue'
+    import Vuelidate from 'vuelidate'
+    import { required, minValue, maxValue } from 'vuelidate/lib/validators'
 
     Vue.use(VueAxios, axios)
+    Vue.use(Vuelidate)
 
     export default {
         name: 'AdminBusinessIncome',
@@ -156,6 +159,13 @@
                     this.totalIncome = response.data;
                 })
             })
+        },
+        validations: {
+            newPercentage: {
+                required,
+                minValue: minValue(0),
+                maxValue: maxValue(100)
+            }
         }
     }
 </script>
