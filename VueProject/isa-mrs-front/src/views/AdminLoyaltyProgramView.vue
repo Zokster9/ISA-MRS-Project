@@ -13,43 +13,43 @@
                                     <h3>Add a new loyalty program</h3>
                                     
                                     <div class="form-group required">
-                                        <label class="control-label"> Client points per reservation </label>
+                                        <label class="control-label"> Client points per reservation: </label>
                                         <input v-model="form.clientPointsPerReservation" type="number" class="form-control form-control-lg">
                                     </div>
 
                                     <div class="form-group required">
-                                        <label class="control-label"> Privileged user points per reservation </label>
+                                        <label class="control-label"> Privileged user points per reservation: </label>
                                         <input v-model="form.privilegedUserPointsPerReservation" type="number" class="form-control form-control-lg">
                                     </div>
                                     
                                     <div class="form-group required">
-                                        <label class="control-label"> Required points for silver status </label>
+                                        <label class="control-label"> Required points for silver status: </label>
                                         <input v-model="form.requiredPointsSilver" type="number" class="form-control form-control-lg">
                                     </div>
 
                                     <div class="form-group required">
-                                        <label class="control-label"> Required points for gold status </label>
+                                        <label class="control-label"> Required points for gold status: </label>
                                         <input v-model="form.requiredPointsGold" type="number" class="form-control form-control-lg">
                                     </div>     
 
                                     <div class="form-group required">
-                                        <label class="control-label"> Client silver discount </label>
-                                        <input v-model="form.clientBonusSilver" type="number" class="form-control form-control-lg">
+                                        <label class="control-label"> Client silver discount: </label>
+                                        <input v-model="form.clientBonusSilver" type="number" placeholder="Number between 1 and 100" class="form-control form-control-lg">
                                     </div>    
                                     
                                     <div class="form-group required">
-                                        <label class="control-label"> Privileged user silver discount </label>
-                                        <input v-model="form.privilegedUserBonusSilver" type="number" class="form-control form-control-lg">
+                                        <label class="control-label"> Privileged user silver discount: </label>
+                                        <input v-model="form.privilegedUserBonusSilver" type="number" placeholder="Number between 1 and 100" class="form-control form-control-lg">
                                     </div>
                                     
                                     <div class="form-group required">
-                                        <label class="control-label"> Client gold discount </label>
-                                        <input v-model="form.clientBonusGold" type="number" class="form-control form-control-lg">
+                                        <label class="control-label"> Client gold discount: </label>
+                                        <input v-model="form.clientBonusGold" type="number" placeholder="Number between 1 and 100" class="form-control form-control-lg">
                                     </div>
 
                                     <div class="form-group required">
-                                        <label class="control-label"> Privileged user gold discount </label>
-                                        <input v-model="form.privilegedUserBonusGold" type="number" class="form-control form-control-lg">
+                                        <label class="control-label"> Privileged user gold discount: </label>
+                                        <input v-model="form.privilegedUserBonusGold" type="number" placeholder="Number between 1 and 100" class="form-control form-control-lg">
                                     </div>                                                                                                                                                                                                                      
                                     
                                     <div class="form-group">
@@ -97,7 +97,25 @@
         },
         methods: {
             createNewLoyaltyProgram(){
-
+                axios.post("http://localhost:8088/loyaltyPrograms/add",
+                {
+                    clientPointsPerReservation: this.clientPointsPerReservation,
+                    privilegedUserPointsPerReservation: this.privilegedUserPointsPerReservation,
+                    requiredPointsSilver: this.requiredPointsSilver,
+                    requiredPointsGold: this.requiredPointsGold,
+                    clientBonusSilver: this.clientBonusSilver,
+                    privilegedUserBonusSilver: this.privilegedUserBonusSilver,
+                    clientBonusGold: this.clientBonusGold,
+                    privilegedUserBonusGold: this.privilegedUserBonusGold
+                },
+                {
+                    headers:{
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
+                    }
+                }).then(() => {
+                    alert("Successfully changed loyalty program!")
+                    window.location.reload();
+                })
             }
         },
         validations: {
