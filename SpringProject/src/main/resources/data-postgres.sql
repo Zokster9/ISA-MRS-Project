@@ -125,8 +125,8 @@ insert into revisions (revision, is_approved, is_answered, rating_id, reservatio
 insert into revisions (revision, is_approved, is_answered, rating_id, reservation_id) values ('It stinks, it was really bad.', False, False, 2, 6);
 insert into revisions (revision, is_approved, is_answered, rating_id, reservation_id) values ('We almost fell out of the boat. Fix it!', False, False, 3, 9);
 
-insert into discounts(discount, from_date, to_date) values (0.15, '2022-05-12 02:00:00', '2100-01-01 02:00:00')
+insert into discounts(discount, from_date, to_date) values (0.15, '2022-05-12 02:00:00', '2100-01-01 02:00:00');
 
-insert into loyalty_points(client_points_per_reservation, privileged_points_per_reservation, silver_points_required, gold_points_required,
+insert into loyalty_programs(client_points_per_reservation, privileged_points_per_reservation, silver_points_required, gold_points_required,
                            silver_client_bonus, gold_client_bonus, silver_privileged_user_bonus, gold_privileged_user_bonus, is_active)
                            values (1, 1, 10, 40, 0.1, 0.15, 0.05, 0.1, True);

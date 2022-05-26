@@ -84,4 +84,12 @@ public class UserService {
     public List<User> findAll(){
         return userRepository.findAll();
     }
+
+    public void resetLoyaltyPoints(){
+        userRepository.resetLoyaltyPoints();
+    }
+
+    public void resetLoyaltyStatus(LoyaltyStatus status){
+        userRepository.resetLoyaltyStatus(status);
+    }
 }

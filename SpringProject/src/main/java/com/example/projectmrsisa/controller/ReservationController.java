@@ -51,6 +51,9 @@ public class ReservationController {
     @Autowired
     private DiscountService discountService;
 
+    @Autowired
+    private LoyaltyProgramService loyaltyProgramService;
+
     @GetMapping(value="/getPrivilegedUserReservations")
     @PreAuthorize("hasAnyRole('fishingInstructor', 'shipOwner', 'retreatOwner')")
     public ResponseEntity<List<ReservationDTO>> getPrivilegedUserReservations(Principal principal){
@@ -143,6 +146,7 @@ public class ReservationController {
     @PostMapping(value="/makeAReservation")
     @PreAuthorize("hasRole('client')")
     public ResponseEntity<ReservationDTO> makeAReservation(Principal principal, @RequestBody ReservationDTO reservationDTO) {
+        System.out.println("tu sma");
         Client client;
         Service service;
         try {
@@ -150,6 +154,15 @@ public class ReservationController {
             service = serviceService.findById(reservationDTO.getServiceId());
             // TODO: dodaj dodatne usluge kod sebe u reservacije i posalji broj ljudi za rezervaciju (posalji da l dobavljas tagove za retreat, ship ili adventure(pogledaj kod mene gde sam to drzao))
             Set<Tag> additionalServices = tagService.findTags(new ArrayList<>(reservationDTO.getAdditionalServices()), "retreat");
+            LoyaltyProgram loyaltyProgram = loyaltyProgramService.findActiveLoyaltyProgram();
+            double discount = 0;
+            if (client.getLoyaltyStatus() == LoyaltyStatus.Silver){
+                discount = loyaltyProgram.getSilverClientBonus();
+            }
+            else if (client.getLoyaltyStatus() == LoyaltyStatus.Gold){
+                discount = loyaltyProgram.getGoldClientBonus();
+            }
+            reservationDTO.setPrice(reservationDTO.getPrice() * (1-discount));
             Reservation reservation = reservationService.addReservation(new Reservation(reservationDTO, service, client, additionalServices));
             ReservationDTO resDTO = new ReservationDTO(reservation);
             emailService.sendReservationConfirmation(resDTO);
@@ -163,7 +176,30 @@ public class ReservationController {
     @PutMapping(value="/changeStatus")
     @PreAuthorize("hasAnyRole('fishingInstructor', 'shipOwner', 'retreatOwner')")
     public ResponseEntity<ReservationDTO> changeReservationStatus(@RequestBody ReservationDTO reservationDTO){
+        User client;
+        User privilegedUser;
+        LoyaltyProgram loyaltyProgram;
         try{
+            client = userService.findUserById(reservationDTO.getClientId());
+            privilegedUser = userService.findUserById(reservationDTO.getPrivilegedUserId());
+            loyaltyProgram = loyaltyProgramService.findActiveLoyaltyProgram();
+
+            client.addPoints(loyaltyProgram.getClientPointsPerReservation());
+            privilegedUser.addPoints(loyaltyProgram.getPrivilegedPointsPerReservation());
+
+            if (client.getLoyaltyStatus() == LoyaltyStatus.Regular && client.getLoyaltyPoints() >= loyaltyProgram.getSilverPointsRequired()){
+                client.setLoyaltyStatus(LoyaltyStatus.Silver);
+            }
+            else if (client.getLoyaltyStatus() == LoyaltyStatus.Silver && client.getLoyaltyPoints() >= loyaltyProgram.getGoldPointsRequired()){
+                client.setLoyaltyStatus(LoyaltyStatus.Gold);
+            }
+
+            if (privilegedUser.getLoyaltyStatus() == LoyaltyStatus.Silver && privilegedUser.getLoyaltyPoints() >= loyaltyProgram.getSilverPointsRequired()){
+                privilegedUser.setLoyaltyStatus(LoyaltyStatus.Silver);
+            }
+            else if (privilegedUser.getLoyaltyStatus() == LoyaltyStatus.Gold && privilegedUser.getLoyaltyPoints() >= loyaltyProgram.getGoldPointsRequired()){
+                privilegedUser.setLoyaltyStatus(LoyaltyStatus.Gold);
+            }
             reservationService.changeReservationStatus(ReservationStatus.Finished, reservationDTO.getId());
             reservationDTO.setStatus(ReservationStatus.Finished);
         } catch (Exception e){
@@ -183,7 +219,15 @@ public class ReservationController {
             if (!serviceAvailabilityService.isAvailable(serviceId, reservationDTO.getFromDate(), reservationDTO.getToDate(), reservationDTO.getFromTime(), reservationDTO.getToTime())) return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
             if (!reservationService.checkIfReservationsExistForDate(serviceId, reservationDTO.getFromDate(), reservationDTO.getToDate())) return new ResponseEntity<>(HttpStatus.CONFLICT);
             Set<Tag> additionalServices = tagService.findTags(new ArrayList<>(reservationDTO.getAdditionalServices()), reservationDTO.getServiceName());
-            reservationDTO.setPrice((int)((reservationDTO.getToDate().getTime() - reservationDTO.getFromDate().getTime())/(1000 * 60 * 60* 24)) * service.getPrice());
+            LoyaltyProgram loyaltyProgram = loyaltyProgramService.findActiveLoyaltyProgram();
+            double discount = 0;
+            if (client.getLoyaltyStatus() == LoyaltyStatus.Silver){
+                discount = loyaltyProgram.getSilverClientBonus();
+            }
+            else if (client.getLoyaltyStatus() == LoyaltyStatus.Gold){
+                discount = loyaltyProgram.getGoldClientBonus();
+            }
+            reservationDTO.setPrice((int)((reservationDTO.getToDate().getTime() - reservationDTO.getFromDate().getTime())/(1000 * 60 * 60* 24)) * service.getPrice() * (1-discount));
             Reservation reservation = new Reservation(reservationDTO, service, client, additionalServices);
             reservation = reservationService.addReservation(reservation);
             reservationDTO = new ReservationDTO(reservation);

@@ -99,14 +99,14 @@
             createNewLoyaltyProgram(){
                 axios.post("http://localhost:8088/loyaltyPrograms/add",
                 {
-                    clientPointsPerReservation: this.clientPointsPerReservation,
-                    privilegedUserPointsPerReservation: this.privilegedUserPointsPerReservation,
-                    requiredPointsSilver: this.requiredPointsSilver,
-                    requiredPointsGold: this.requiredPointsGold,
-                    clientBonusSilver: this.clientBonusSilver,
-                    privilegedUserBonusSilver: this.privilegedUserBonusSilver,
-                    clientBonusGold: this.clientBonusGold,
-                    privilegedUserBonusGold: this.privilegedUserBonusGold
+                    clientPointsPerReservation: this.form.clientPointsPerReservation,
+                    privilegedUserPointsPerReservation: this.form.privilegedUserPointsPerReservation,
+                    requiredPointsSilver: this.form.requiredPointsSilver,
+                    requiredPointsGold: this.form.requiredPointsGold,
+                    clientBonusSilver: this.form.clientBonusSilver,
+                    privilegedUserBonusSilver: this.form.privilegedUserBonusSilver,
+                    clientBonusGold: this.form.clientBonusGold,
+                    privilegedUserBonusGold: this.form.privilegedUserBonusGold
                 },
                 {
                     headers:{

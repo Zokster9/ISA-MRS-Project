@@ -58,7 +58,9 @@
                     clientCity: this.reservationData.clientCity,
                     clientStreet: this.reservationData.clientStreet,
                     serviceName: this.reservationData.serviceName,
-                    servicePictures: this.reservationData.servicePictures
+                    servicePictures: this.reservationData.servicePictures,
+                    clientId: this.reservationData.clientId,
+                    privilegedUserId: this.reservationData.privilegedUserId
                 },
                 {
                     headers: {

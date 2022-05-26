@@ -1,5 +1,7 @@
 package com.example.projectmrsisa.model;
 
+import com.example.projectmrsisa.dto.LoyaltyProgramDTO;
+
 import javax.persistence.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,6 +47,19 @@ public class LoyaltyProgram {
         this.silverPrivilegedBonus = silverPrivilegedBonus;
         this.goldPrivilegedUserBonus = goldPrivilegedUserBonus;
         this.isActive = isActive;
+    }
+
+    public LoyaltyProgram(LoyaltyProgramDTO loyaltyProgramDTO){
+        this.id = loyaltyProgramDTO.getId();
+        this.clientPointsPerReservation = loyaltyProgramDTO.getClientPointsPerReservation();
+        this.privilegedPointsPerReservation = loyaltyProgramDTO.getClientPointsPerReservation();
+        this.silverPointsRequired = loyaltyProgramDTO.getRequiredPointsSilver();
+        this.goldPointsRequired = loyaltyProgramDTO.getRequiredPointsGold();
+        this.silverClientBonus = loyaltyProgramDTO.getClientBonusSilver();
+        this.goldClientBonus = loyaltyProgramDTO.getClientBonusGold();
+        this.silverPrivilegedBonus = loyaltyProgramDTO.getPrivilegedUserBonusSilver();
+        this.goldPrivilegedUserBonus = loyaltyProgramDTO.getPrivilegedUserBonusGold();
+        this.isActive = true;
     }
 
     public Integer getId() {

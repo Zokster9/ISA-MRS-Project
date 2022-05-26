@@ -30,6 +30,8 @@ public class ReservationDTO {
     private String serviceName;
     private Set<String> servicePictures;
     private Set<String> additionalServices;
+    private Integer clientId;
+    private Integer privilegedUserId;
 
     public ReservationDTO(){
 
@@ -56,6 +58,8 @@ public class ReservationDTO {
         for (Tag additionalService: reservation.getService().getAdditionalServices()) {
             this.additionalServices.add(additionalService.getName());
         }
+        this.clientId = reservation.getClient().getId();
+        this.privilegedUserId = reservation.getService().getOwner().getId();
     }
 
     public Integer getId() {
@@ -216,5 +220,21 @@ public class ReservationDTO {
 
     public void setNumOfPeople(Integer numOfPeople) {
         this.numOfPeople = numOfPeople;
+    }
+
+    public Integer getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(Integer clientId) {
+        this.clientId = clientId;
+    }
+
+    public Integer getPrivilegedUserId() {
+        return privilegedUserId;
+    }
+
+    public void setPrivilegedUserId(Integer privilegedUserId) {
+        this.privilegedUserId = privilegedUserId;
     }
 }

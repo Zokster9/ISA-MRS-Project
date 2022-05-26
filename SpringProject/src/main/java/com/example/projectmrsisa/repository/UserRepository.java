@@ -60,4 +60,12 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Modifying
     @Query("update RegistrationReasoning  r set r.isAnswered = true where r.privilegedUser = ?1")
     public void updateRegistrationReasoningAnsweredStatus(User user);
+
+    @Modifying
+    @Query("update User u set u.loyaltyPoints = 0")
+    public void resetLoyaltyPoints();
+
+    @Modifying
+    @Query("update User u set u.loyaltyStatus=?1")
+    public void resetLoyaltyStatus(LoyaltyStatus status);
 }
