@@ -108,4 +108,8 @@ public class ReservationService {
     public List<Reservation> findReservationsInDateSpan(Date fromDate, Date toDate){
         return reservationRepository.findReservationsInDateSpan(fromDate, toDate);
     }
+
+    public List<Reservation> findPrivilegedUsersReservations(Integer id){
+        return reservationRepository.findPrivilegedUsersReservations(id);
+    }
 }

@@ -301,6 +301,12 @@ const routes = [{
         name: 'admin-loyalty-program',
         component: () =>
             import('../views/AdminLoyaltyProgramView.vue')
+    },
+    {
+        path: '/privileged-user-business-income',
+        name: 'privileged-user-business-income',
+        component: () =>
+            import('../views/PrivilegedUserBusinessReportView.vue')
     }
 ]
 

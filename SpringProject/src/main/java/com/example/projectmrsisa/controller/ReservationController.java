@@ -415,4 +415,52 @@ public class ReservationController {
         }
         return new ResponseEntity<>(systemIncome, HttpStatus.OK);
     }
+
+    @GetMapping(value="/findUsersNonCancelledReservations")
+    @PreAuthorize("hasAnyRole('fishingInstructor','retreatOwner','shipOwner')")
+    public ResponseEntity<List<ReservationDTO>> findPrivilegedUsersReservations(Principal principal){
+        User owner;
+        List<Reservation> reservations;
+        try {
+            owner = userService.findUserByEmail(principal.getName());
+            reservations = reservationService.findPrivilegedUsersReservations(owner.getId());
+        } catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        List<ReservationDTO> reservationDTOS = new ArrayList<>();
+        for (Reservation reservation : reservations){
+            reservationDTOS.add(new ReservationDTO(reservation));
+        }
+        return new ResponseEntity<>(reservationDTOS, HttpStatus.OK);
+    }
+
+    @PostMapping(value="/calculateMyIncome")
+    @PreAuthorize("hasAnyRole('fishingInstructor','retreatOwner','shipOwner')")
+    public ResponseEntity<Double> calculateMyIncome(@RequestBody ReservationsDTO reservationsDTO, Principal principal) {
+        User owner;
+        LoyaltyProgram loyaltyProgram;
+        List<Discount> discounts;
+        try {
+            owner = userService.findUserByEmail(principal.getName());
+            loyaltyProgram = loyaltyProgramService.findActiveLoyaltyProgram();
+            discounts = discountService.findAll();
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        double income = 0;
+        for (Discount discount : discounts) {
+            for (ReservationDTO reservationDTO : reservationsDTO.getReservationsDTO()) {
+                if (reservationDTO.getFromDate().after(discount.getFromDate()) && reservationDTO.getFromDate().before(discount.getToDate())) {
+                    if (owner.getLoyaltyStatus() == LoyaltyStatus.Silver) {
+                        income += reservationDTO.getPrice() * (1 - discount.getDiscount() + loyaltyProgram.getSilverPrivilegedBonus());
+                    } else if (owner.getLoyaltyStatus() == LoyaltyStatus.Gold) {
+                        income += reservationDTO.getPrice() * (1 - discount.getDiscount() + loyaltyProgram.getGoldPrivilegedUserBonus());
+                    } else {
+                        income += reservationDTO.getPrice() * (1 - discount.getDiscount());
+                    }
+                }
+            }
+        }
+        return new ResponseEntity<>(income, HttpStatus.OK);
+    }
 }
