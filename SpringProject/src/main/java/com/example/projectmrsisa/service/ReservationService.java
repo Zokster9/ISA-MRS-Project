@@ -112,4 +112,8 @@ public class ReservationService {
     public List<Reservation> findPrivilegedUsersReservations(Integer id){
         return reservationRepository.findPrivilegedUsersReservations(id);
     }
+
+    public List<Reservation> findReservationsInDateSpanForPrivilegedUser(Date fromDate, Date toDate, Integer id){
+        return reservationRepository.findReservationsInDateSpanForPrivilegedUser(fromDate, toDate, id);
+    }
 }

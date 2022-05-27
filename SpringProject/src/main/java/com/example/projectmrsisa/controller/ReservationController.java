@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
-@RequestMapping(value="/reservations")
+@RequestMapping(value = "/reservations")
 public class ReservationController {
     @Autowired
     private ServiceService serviceService;
@@ -54,27 +54,27 @@ public class ReservationController {
     @Autowired
     private LoyaltyProgramService loyaltyProgramService;
 
-    @GetMapping(value="/getPrivilegedUserReservations")
+    @GetMapping(value = "/getPrivilegedUserReservations")
     @PreAuthorize("hasAnyRole('fishingInstructor', 'shipOwner', 'retreatOwner')")
-    public ResponseEntity<List<ReservationDTO>> getPrivilegedUserReservations(Principal principal){
+    public ResponseEntity<List<ReservationDTO>> getPrivilegedUserReservations(Principal principal) {
         User user;
-        try{
+        try {
             user = userService.findUserByEmail(principal.getName());
             List<Service> services = serviceService.findOwnersServices(user);
             List<ReservationDTO> reservationsDTO = new ArrayList<>();
-            for (Service service: services){
+            for (Service service : services) {
                 List<Reservation> reservations = reservationService.findReservationByServiceId(service.getId());
-                for (Reservation r : reservations){
+                for (Reservation r : reservations) {
                     reservationsDTO.add(new ReservationDTO(r));
                 }
             }
             return new ResponseEntity<>(reservationsDTO, HttpStatus.OK);
-        } catch( Exception e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
-    @GetMapping(value="/retreat/getAvailableReservations")
+    @GetMapping(value = "/retreat/getAvailableReservations")
     @PreAuthorize("hasRole('client')")
     public ResponseEntity<List<RetreatDTO>> getAvailableRetreats(Principal principal, ReservationQueryDTO reservationQueryDTO) {
         User user;
@@ -92,12 +92,12 @@ public class ReservationController {
                 }
             }
             return new ResponseEntity<>(retreatDTOs, HttpStatus.OK);
-        } catch( Exception e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
-    @GetMapping(value="/ship/getAvailableReservations")
+    @GetMapping(value = "/ship/getAvailableReservations")
     @PreAuthorize("hasRole('client')")
     public ResponseEntity<List<ShipDTO>> getAvailableShips(Principal principal, ReservationQueryDTO reservationQueryDTO) {
         User user;
@@ -115,12 +115,12 @@ public class ReservationController {
                 }
             }
             return new ResponseEntity<>(shipDTOs, HttpStatus.OK);
-        } catch( Exception e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
-    @GetMapping(value="/adventure/getAvailableReservations")
+    @GetMapping(value = "/adventure/getAvailableReservations")
     @PreAuthorize("hasRole('client')")
     public ResponseEntity<List<AdventureDTO>> getAvailableAdventures(Principal principal, ReservationQueryDTO reservationQueryDTO) {
         User user;
@@ -138,12 +138,12 @@ public class ReservationController {
                 }
             }
             return new ResponseEntity<>(adventureDTOs, HttpStatus.OK);
-        } catch( Exception e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
-    @PostMapping(value="/makeAReservation")
+    @PostMapping(value = "/makeAReservation")
     @PreAuthorize("hasRole('client')")
     public ResponseEntity<ReservationDTO> makeAReservation(Principal principal, @RequestBody ReservationDTO reservationDTO) {
         System.out.println("tu sma");
@@ -156,13 +156,12 @@ public class ReservationController {
             Set<Tag> additionalServices = tagService.findTags(new ArrayList<>(reservationDTO.getAdditionalServices()), "retreat");
             LoyaltyProgram loyaltyProgram = loyaltyProgramService.findActiveLoyaltyProgram();
             double discount = 0;
-            if (client.getLoyaltyStatus() == LoyaltyStatus.Silver){
+            if (client.getLoyaltyStatus() == LoyaltyStatus.Silver) {
                 discount = loyaltyProgram.getSilverClientBonus();
-            }
-            else if (client.getLoyaltyStatus() == LoyaltyStatus.Gold){
+            } else if (client.getLoyaltyStatus() == LoyaltyStatus.Gold) {
                 discount = loyaltyProgram.getGoldClientBonus();
             }
-            reservationDTO.setPrice(reservationDTO.getPrice() * (1-discount));
+            reservationDTO.setPrice(reservationDTO.getPrice() * (1 - discount));
             Reservation reservation = reservationService.addReservation(new Reservation(reservationDTO, service, client, additionalServices));
             ReservationDTO resDTO = new ReservationDTO(reservation);
             emailService.sendReservationConfirmation(resDTO);
@@ -173,13 +172,13 @@ public class ReservationController {
     }
 
     @Transactional
-    @PutMapping(value="/changeStatus")
+    @PutMapping(value = "/changeStatus")
     @PreAuthorize("hasAnyRole('fishingInstructor', 'shipOwner', 'retreatOwner')")
-    public ResponseEntity<ReservationDTO> changeReservationStatus(@RequestBody ReservationDTO reservationDTO){
+    public ResponseEntity<ReservationDTO> changeReservationStatus(@RequestBody ReservationDTO reservationDTO) {
         User client;
         User privilegedUser;
         LoyaltyProgram loyaltyProgram;
-        try{
+        try {
             client = userService.findUserById(reservationDTO.getClientId());
             privilegedUser = userService.findUserById(reservationDTO.getPrivilegedUserId());
             loyaltyProgram = loyaltyProgramService.findActiveLoyaltyProgram();
@@ -187,22 +186,20 @@ public class ReservationController {
             client.addPoints(loyaltyProgram.getClientPointsPerReservation());
             privilegedUser.addPoints(loyaltyProgram.getPrivilegedPointsPerReservation());
 
-            if (client.getLoyaltyStatus() == LoyaltyStatus.Regular && client.getLoyaltyPoints() >= loyaltyProgram.getSilverPointsRequired()){
+            if (client.getLoyaltyStatus() == LoyaltyStatus.Regular && client.getLoyaltyPoints() >= loyaltyProgram.getSilverPointsRequired()) {
                 client.setLoyaltyStatus(LoyaltyStatus.Silver);
-            }
-            else if (client.getLoyaltyStatus() == LoyaltyStatus.Silver && client.getLoyaltyPoints() >= loyaltyProgram.getGoldPointsRequired()){
+            } else if (client.getLoyaltyStatus() == LoyaltyStatus.Silver && client.getLoyaltyPoints() >= loyaltyProgram.getGoldPointsRequired()) {
                 client.setLoyaltyStatus(LoyaltyStatus.Gold);
             }
 
-            if (privilegedUser.getLoyaltyStatus() == LoyaltyStatus.Silver && privilegedUser.getLoyaltyPoints() >= loyaltyProgram.getSilverPointsRequired()){
+            if (privilegedUser.getLoyaltyStatus() == LoyaltyStatus.Silver && privilegedUser.getLoyaltyPoints() >= loyaltyProgram.getSilverPointsRequired()) {
                 privilegedUser.setLoyaltyStatus(LoyaltyStatus.Silver);
-            }
-            else if (privilegedUser.getLoyaltyStatus() == LoyaltyStatus.Gold && privilegedUser.getLoyaltyPoints() >= loyaltyProgram.getGoldPointsRequired()){
+            } else if (privilegedUser.getLoyaltyStatus() == LoyaltyStatus.Gold && privilegedUser.getLoyaltyPoints() >= loyaltyProgram.getGoldPointsRequired()) {
                 privilegedUser.setLoyaltyStatus(LoyaltyStatus.Gold);
             }
             reservationService.changeReservationStatus(ReservationStatus.Finished, reservationDTO.getId());
             reservationDTO.setStatus(ReservationStatus.Finished);
-        } catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(reservationDTO, HttpStatus.OK);
@@ -215,25 +212,27 @@ public class ReservationController {
         try {
             Client client = (Client) userService.findUserByEmail(reservationDTO.getClientEmail());
             Service service = serviceService.findById(serviceId);
-            if (!reservationService.currentReservationForClientAndService(serviceId, client)) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-            if (!serviceAvailabilityService.isAvailable(serviceId, reservationDTO.getFromDate(), reservationDTO.getToDate(), reservationDTO.getFromTime(), reservationDTO.getToTime())) return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-            if (!reservationService.checkIfReservationsExistForDate(serviceId, reservationDTO.getFromDate(), reservationDTO.getToDate())) return new ResponseEntity<>(HttpStatus.CONFLICT);
+            if (!reservationService.currentReservationForClientAndService(serviceId, client))
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            if (!serviceAvailabilityService.isAvailable(serviceId, reservationDTO.getFromDate(), reservationDTO.getToDate(), reservationDTO.getFromTime(), reservationDTO.getToTime()))
+                return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+            if (!reservationService.checkIfReservationsExistForDate(serviceId, reservationDTO.getFromDate(), reservationDTO.getToDate()))
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
             Set<Tag> additionalServices = tagService.findTags(new ArrayList<>(reservationDTO.getAdditionalServices()), reservationDTO.getServiceName());
             LoyaltyProgram loyaltyProgram = loyaltyProgramService.findActiveLoyaltyProgram();
             double discount = 0;
-            if (client.getLoyaltyStatus() == LoyaltyStatus.Silver){
+            if (client.getLoyaltyStatus() == LoyaltyStatus.Silver) {
                 discount = loyaltyProgram.getSilverClientBonus();
-            }
-            else if (client.getLoyaltyStatus() == LoyaltyStatus.Gold){
+            } else if (client.getLoyaltyStatus() == LoyaltyStatus.Gold) {
                 discount = loyaltyProgram.getGoldClientBonus();
             }
-            reservationDTO.setPrice((int)((reservationDTO.getToDate().getTime() - reservationDTO.getFromDate().getTime())/(1000 * 60 * 60* 24)) * service.getPrice() * (1-discount));
+            reservationDTO.setPrice((int) ((reservationDTO.getToDate().getTime() - reservationDTO.getFromDate().getTime()) / (1000 * 60 * 60 * 24)) * service.getPrice() * (1 - discount));
             Reservation reservation = new Reservation(reservationDTO, service, client, additionalServices);
             reservation = reservationService.addReservation(reservation);
             reservationDTO = new ReservationDTO(reservation);
             emailService.sendReservationConfirmation(reservationDTO);
             return new ResponseEntity<>(reservationDTO, HttpStatus.OK);
-        }catch (Exception e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -242,8 +241,9 @@ public class ReservationController {
         if (reservationDTO.getClientEmail() == null || !reservationDTO.getClientEmail().matches("^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$")) {
             return false;
         }
-        if (!validDates(reservationDTO.getFromDate(), reservationDTO.getToDate(), reservationDTO.getFromTime(), reservationDTO.getToTime())) return false;
-        for (String as: reservationDTO.getAdditionalServices()) {
+        if (!validDates(reservationDTO.getFromDate(), reservationDTO.getToDate(), reservationDTO.getFromTime(), reservationDTO.getToTime()))
+            return false;
+        for (String as : reservationDTO.getAdditionalServices()) {
             if (as.equals("") || as.length() > 14) return false;
         }
         return reservationDTO.getNumOfPeople() > 0;
@@ -253,7 +253,7 @@ public class ReservationController {
         Date today = new Date();
         if (dateFrom == null || dateTo == null || timeFrom == null || timeTo == null) return false;
         if (dateFrom.compareTo(today) < 0) return false;
-        if (dateTo.compareTo(today) < 0 ) return false;
+        if (dateTo.compareTo(today) < 0) return false;
         if (dateFrom.compareTo(dateTo) > 0) return false;
         if (dateFrom.compareTo(dateTo) == 0) {
             return Integer.parseInt(timeFrom) * 60 + Integer.parseInt(timeFrom)
@@ -262,7 +262,7 @@ public class ReservationController {
         return true;
     }
 
-    @GetMapping(value="/getNonComplainedReservations")
+    @GetMapping(value = "/getNonComplainedReservations")
     @PreAuthorize("hasRole('client')")
     public ResponseEntity<List<ReservationDTO>> getNonComplainedReservations(Principal principal) {
         Client client;
@@ -281,7 +281,7 @@ public class ReservationController {
         }
     }
 
-    @GetMapping(value="/shipReservationHistory")
+    @GetMapping(value = "/shipReservationHistory")
     @PreAuthorize("hasRole('client')")
     public ResponseEntity<List<ReservationDTO>> getShipReservationHistory(Principal principal) {
         Client client;
@@ -300,7 +300,7 @@ public class ReservationController {
         }
     }
 
-    @GetMapping(value="/retreatReservationHistory")
+    @GetMapping(value = "/retreatReservationHistory")
     @PreAuthorize("hasRole('client')")
     public ResponseEntity<List<ReservationDTO>> getRetreatReservationHistory(Principal principal) {
         Client client;
@@ -319,7 +319,7 @@ public class ReservationController {
         }
     }
 
-    @GetMapping(value="/adventureReservationHistory")
+    @GetMapping(value = "/adventureReservationHistory")
     @PreAuthorize("hasRole('client')")
     public ResponseEntity<List<ReservationDTO>> getAdventureReservationHistory(Principal principal) {
         Client client;
@@ -338,7 +338,7 @@ public class ReservationController {
         }
     }
 
-    @GetMapping(value="/getPendingReservations")
+    @GetMapping(value = "/getPendingReservations")
     @PreAuthorize("hasRole('client')")
     public ResponseEntity<List<ReservationDTO>> getPendingReservations(Principal principal) {
         Client client;
@@ -355,33 +355,33 @@ public class ReservationController {
         }
     }
 
-    @GetMapping(value="/findAllNotCancelled")
+    @GetMapping(value = "/findAllNotCancelled")
     @PreAuthorize("hasAnyRole('admin', 'mainAdmin')")
-    public ResponseEntity<List<ReservationDTO>> getAllReservations(){
+    public ResponseEntity<List<ReservationDTO>> getAllReservations() {
         List<Reservation> reservations;
         List<ReservationDTO> reservationDTOS = new ArrayList<>();
-        try{
+        try {
             reservations = reservationService.findNonCancelledReservations();
-        } catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        for (Reservation reservation : reservations){
+        for (Reservation reservation : reservations) {
             reservationDTOS.add(new ReservationDTO(reservation));
         }
         return new ResponseEntity<>(reservationDTOS, HttpStatus.OK);
     }
 
-    @GetMapping(value="/findInDateSpan")
+    @GetMapping(value = "/findInDateSpan")
     @PreAuthorize("hasAnyRole('admin','mainAdmin')")
-    public ResponseEntity<List<ReservationDTO>> getReservationsInDateSpan(@RequestParam(name="fromDate") String fromDate, @RequestParam(name="toDate") String toDate){
+    public ResponseEntity<List<ReservationDTO>> getReservationsInDateSpan(@RequestParam(name = "fromDate") String fromDate, @RequestParam(name = "toDate") String toDate) {
         List<Reservation> reservations;
         List<ReservationDTO> reservationDTOS = new ArrayList<>();
-        try{
+        try {
             reservations = reservationService.findReservationsInDateSpan(getDate(fromDate), getDate(toDate));
-        } catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        for (Reservation reservation : reservations){
+        for (Reservation reservation : reservations) {
             reservationDTOS.add(new ReservationDTO(reservation));
         }
         return new ResponseEntity<>(reservationDTOS, HttpStatus.OK);
@@ -391,24 +391,24 @@ public class ReservationController {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         try {
             return formatter.parse(date);
-        } catch(ParseException e) {
+        } catch (ParseException e) {
             return new Date();
         }
     }
 
-    @PostMapping(value="/calculateSystemIncome")
+    @PostMapping(value = "/calculateSystemIncome")
     @PreAuthorize("hasAnyRole('admin','mainAdmin')")
-    public ResponseEntity<Double> getSystemIncome(@RequestBody ReservationsDTO reservationsDTO){
+    public ResponseEntity<Double> getSystemIncome(@RequestBody ReservationsDTO reservationsDTO) {
         List<Discount> discounts;
         double systemIncome = 0;
-        try{
+        try {
             discounts = discountService.findAll();
-        } catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        for (Discount discount : discounts){
-            for (ReservationDTO reservationDTO : reservationsDTO.getReservationsDTO()){
-                if (reservationDTO.getFromDate().after(discount.getFromDate()) && reservationDTO.getFromDate().before(discount.getToDate())){
+        for (Discount discount : discounts) {
+            for (ReservationDTO reservationDTO : reservationsDTO.getReservationsDTO()) {
+                if (reservationDTO.getFromDate().after(discount.getFromDate()) && reservationDTO.getFromDate().before(discount.getToDate())) {
                     systemIncome += reservationDTO.getPrice() * discount.getDiscount();
                 }
             }
@@ -416,25 +416,25 @@ public class ReservationController {
         return new ResponseEntity<>(systemIncome, HttpStatus.OK);
     }
 
-    @GetMapping(value="/findUsersNonCancelledReservations")
+    @GetMapping(value = "/findUsersNonCancelledReservations")
     @PreAuthorize("hasAnyRole('fishingInstructor','retreatOwner','shipOwner')")
-    public ResponseEntity<List<ReservationDTO>> findPrivilegedUsersReservations(Principal principal){
+    public ResponseEntity<List<ReservationDTO>> findPrivilegedUsersReservations(Principal principal) {
         User owner;
         List<Reservation> reservations;
         try {
             owner = userService.findUserByEmail(principal.getName());
             reservations = reservationService.findPrivilegedUsersReservations(owner.getId());
-        } catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         List<ReservationDTO> reservationDTOS = new ArrayList<>();
-        for (Reservation reservation : reservations){
+        for (Reservation reservation : reservations) {
             reservationDTOS.add(new ReservationDTO(reservation));
         }
         return new ResponseEntity<>(reservationDTOS, HttpStatus.OK);
     }
 
-    @PostMapping(value="/calculateMyIncome")
+    @PostMapping(value = "/calculateMyIncome")
     @PreAuthorize("hasAnyRole('fishingInstructor','retreatOwner','shipOwner')")
     public ResponseEntity<Double> calculateMyIncome(@RequestBody ReservationsDTO reservationsDTO, Principal principal) {
         User owner;
@@ -464,17 +464,19 @@ public class ReservationController {
         return new ResponseEntity<>(income, HttpStatus.OK);
     }
 
-    @GetMapping(value="/findInDateSpanPrivilegedUser")
-    @PreAuthorize("hasAnyRole('admin','mainAdmin')")
-    public ResponseEntity<List<ReservationDTO>> getReservationsInDateSpanForPrivilegedUser(@RequestParam(name="fromDate") String fromDate, @RequestParam(name="toDate") String toDate){
+    @GetMapping(value = "/findInDateSpanPrivilegedUser")
+    @PreAuthorize("hasAnyRole('fishingInstructor','retreatOwner','shipOwner')")
+    public ResponseEntity<List<ReservationDTO>> getReservationsInDateSpanForPrivilegedUser(@RequestParam(name = "fromDate") String fromDate, @RequestParam(name = "toDate") String toDate, Principal principal) {
         List<Reservation> reservations;
         List<ReservationDTO> reservationDTOS = new ArrayList<>();
-        try{
-            reservations = reservationService.findReservationsInDateSpan(getDate(fromDate), getDate(toDate));
-        } catch (Exception e){
+        User owner;
+        try {
+            owner = userService.findUserByEmail(principal.getName());
+            reservations = reservationService.findReservationsInDateSpanForPrivilegedUser(getDate(fromDate), getDate(toDate), owner.getId());
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        for (Reservation reservation : reservations){
+        for (Reservation reservation : reservations) {
             reservationDTOS.add(new ReservationDTO(reservation));
         }
         return new ResponseEntity<>(reservationDTOS, HttpStatus.OK);

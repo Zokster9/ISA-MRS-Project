@@ -33,9 +33,12 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     @Query("select r from Reservation r where r.status <> 2")
     List<Reservation> findNonCancelledReservations();
 
-    @Query("select r from Reservation r where r.fromDate >= ?1 and r.toDate <= ?2")
+    @Query("select r from Reservation r where r.fromDate >= ?1 and r.fromDate <= ?2 and r.status <> 2")
     List<Reservation> findReservationsInDateSpan(Date fromDate, Date toDate);
 
     @Query("select r from Reservation r where r.service.owner.id =?1 and r.status <> 2")
     List<Reservation> findPrivilegedUsersReservations(Integer id);
+
+    @Query("select r from Reservation r where r.fromDate >= ?1 and r.fromDate <= ?2 and r.service.owner.id = ?3 and r.status <> 2")
+    List<Reservation> findReservationsInDateSpanForPrivilegedUser(Date fromDate, Date toDate, Integer id);
 }

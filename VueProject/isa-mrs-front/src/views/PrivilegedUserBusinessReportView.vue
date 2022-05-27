@@ -39,7 +39,7 @@
                             <td class="align-middle text-center"> {{ reservation.price}} </td>
                         </tr>
                         <tr>
-                            <td class="align-middle text-center" colspan="3"><b> Total system income: </b></td>
+                            <td class="align-middle text-center" colspan="3"><b> My income: </b></td>
                             <td class="align-middle text-center"><b> {{this.totalIncome}} </b></td>
                         </tr>
                     </tbody>
