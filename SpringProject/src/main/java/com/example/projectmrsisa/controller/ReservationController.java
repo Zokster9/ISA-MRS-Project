@@ -463,4 +463,20 @@ public class ReservationController {
         }
         return new ResponseEntity<>(income, HttpStatus.OK);
     }
+
+    @GetMapping(value="/findInDateSpanPrivilegedUser")
+    @PreAuthorize("hasAnyRole('admin','mainAdmin')")
+    public ResponseEntity<List<ReservationDTO>> getReservationsInDateSpanForPrivilegedUser(@RequestParam(name="fromDate") String fromDate, @RequestParam(name="toDate") String toDate){
+        List<Reservation> reservations;
+        List<ReservationDTO> reservationDTOS = new ArrayList<>();
+        try{
+            reservations = reservationService.findReservationsInDateSpan(getDate(fromDate), getDate(toDate));
+        } catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        for (Reservation reservation : reservations){
+            reservationDTOS.add(new ReservationDTO(reservation));
+        }
+        return new ResponseEntity<>(reservationDTOS, HttpStatus.OK);
+    }
 }

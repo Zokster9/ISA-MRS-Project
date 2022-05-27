@@ -74,13 +74,13 @@
         },
         methods:{
             search(){
-                axios.get("http://localhost:8088/reservations/findInDateSpan?fromDate=" + this.fromDate + "&toDate=" + this.toDate,{
+                axios.get("http://localhost:8088/reservations/findInDateSpanPrivilegedUser?fromDate=" + this.fromDate + "&toDate=" + this.toDate,{
                     headers:{
                         Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
                     },
                 }).then((response) => {
                     this.reservations = response.data;
-                    axios.post("http://localhost:8088/reservations/calculateSystemIncome", {
+                    axios.post("http://localhost:8088/reservations/calculateMyIncome", {
                         reservationsDTO: this.reservations,
                     },{
                         headers:{
@@ -92,13 +92,13 @@
                 })
             },
             showAll(){
-                axios.get("http://localhost:8088/reservations/findAllNotCancelled",{
+                axios.get("http://localhost:8088/reservations/findUsersNonCancelledReservations",{
                     headers:{
                         Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
                     }
                 }).then((response) =>{
                     this.reservations = response.data;
-                    axios.post("http://localhost:8088/reservations/calculateSystemIncome", {
+                    axios.post("http://localhost:8088/reservations/calculateMyIncome", {
                         reservationsDTO: this.reservations,
                     },{
                         headers:{
