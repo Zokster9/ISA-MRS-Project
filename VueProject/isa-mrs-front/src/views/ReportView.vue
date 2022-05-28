@@ -17,6 +17,7 @@
                 <div v-if="averageRating">
                     <AverageServiceRating></AverageServiceRating>
                 </div>
+				
             </div>
         </div>
     </div>
@@ -34,7 +35,7 @@
         data() {
             return {
                 selected: "",
-                averageRating: true,
+                averageRating: false,
                 graphAttendance: false,
                 incomeReport: false
             }

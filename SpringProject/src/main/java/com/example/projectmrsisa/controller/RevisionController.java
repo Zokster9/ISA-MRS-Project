@@ -1,13 +1,12 @@
 package com.example.projectmrsisa.controller;
 
 import com.example.projectmrsisa.dto.RevisionDTO;
+import com.example.projectmrsisa.dto.ServiceAverageRatingDTO;
 import com.example.projectmrsisa.model.Rating;
 import com.example.projectmrsisa.model.Reservation;
 import com.example.projectmrsisa.model.Revision;
-import com.example.projectmrsisa.service.EmailService;
-import com.example.projectmrsisa.service.RatingService;
-import com.example.projectmrsisa.service.ReservationService;
-import com.example.projectmrsisa.service.RevisionService;
+import com.example.projectmrsisa.model.User;
+import com.example.projectmrsisa.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +33,9 @@ public class RevisionController {
 
     @Autowired
     private RatingService ratingService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping(value="/findAll")
     @PreAuthorize("hasAnyRole('admin','mainAdmin')")
@@ -83,6 +86,18 @@ public class RevisionController {
             Revision revision = revisionService.save(new Revision(revisionDTO, rating, reservation));
             return new ResponseEntity<>(new RevisionDTO(revision), HttpStatus.CREATED);
         } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value = "/user-service-ratings")
+    @PreAuthorize("hasAnyRole('retreatOwner', 'shipOwner', 'fishingInstructor')")
+    public ResponseEntity<List<ServiceAverageRatingDTO>> getAverageRatingForUserServices(Principal principal) {
+        try {
+            User user = userService.findUserByEmail(principal.getName());
+            if (user == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(revisionService.getAverageRatingForUserServices(user), HttpStatus.OK);
+        }catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
