@@ -290,6 +290,12 @@ const routes = [{
         component: () =>
             import('../views/AdminRevisionsView.vue')
     },
+    {
+        path: '/reports',
+        name: 'reports',
+        component: () => 
+            import('../views/ReportView.vue')
+    }
 ]
 
 const router = new VueRouter({
