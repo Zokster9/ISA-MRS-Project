@@ -104,18 +104,18 @@ insert into ratings (service_rating, privileged_user_rating) values (5, 5);
 insert into ratings (service_rating, privileged_user_rating) values (1, 3);
 insert into ratings (service_rating, privileged_user_rating) values (2, 2);
 
-insert into reservations (from_date, to_date, from_time, to_time, price, status, service_id, client_id, num_of_people) values ('2022-05-13 02:00:00', '2022-05-15 02:00:00', '13:00', '13:00', 60, 1, 3, 5, 3);
-insert into reservations (from_date, to_date, from_time, to_time, price, status, service_id, client_id, num_of_people) values ('2022-05-16 02:00:00', '2022-05-17 02:00:00', '13:00', '13:00', 30, 1, 3, 5, 3);
-insert into reservations (from_date, to_date, from_time, to_time, price, status, service_id, client_id, num_of_people) values ('2022-05-20 02:00:00', '2022-05-23 02:00:00', '13:00', '13:00', 90, 1, 3, 5, 3);
-insert into reservations (from_date, to_date, from_time, to_time, price, status, service_id, client_id, num_of_people) values ('2022-06-05 02:00:00', '2022-06-10 02:00:00', '13:00', '13:00', 90, 0, 3, 5, 3);
+insert into reservations (from_date, to_date, from_time, to_time, price, status, service_id, client_id, num_of_people) values ('2022-05-13 00:00:00', '2022-05-15 00:00:00', '13:00', '13:00', 60, 1, 3, 5, 3);
+insert into reservations (from_date, to_date, from_time, to_time, price, status, service_id, client_id, num_of_people) values ('2022-05-16 00:00:00', '2022-05-17 00:00:00', '13:00', '13:00', 30, 1, 3, 5, 3);
+insert into reservations (from_date, to_date, from_time, to_time, price, status, service_id, client_id, num_of_people) values ('2022-05-20 00:00:00', '2022-05-23 00:00:00', '13:00', '13:00', 90, 1, 3, 5, 3);
+insert into reservations (from_date, to_date, from_time, to_time, price, status, service_id, client_id, num_of_people) values ('2022-06-05 00:00:00', '2022-06-10 00:00:00', '13:00', '13:00', 90, 0, 3, 5, 3);
 
-insert into reservations (from_date, to_date, from_time, to_time, price, status, service_id, client_id, num_of_people) values ('2022-05-13 02:00:00', '2022-05-15 02:00:00', '12:00', '10:00', 100, 1, 1, 5, 5);
-insert into reservations (from_date, to_date, from_time, to_time, price, status, service_id, client_id, num_of_people) values ('2022-05-16 02:00:00', '2022-05-17 02:00:00', '12:00', '10:00', 50, 1, 1, 5, 8);
-insert into reservations (from_date, to_date, from_time, to_time, price, status, service_id, client_id, num_of_people) values ('2022-05-19 02:00:00', '2022-05-24 02:00:00', '12:00', '10:00', 150, 1, 1, 5, 9);
+insert into reservations (from_date, to_date, from_time, to_time, price, status, service_id, client_id, num_of_people) values ('2022-05-13 00:00:00', '2022-05-15 00:00:00', '12:00', '10:00', 100, 1, 1, 5, 5);
+insert into reservations (from_date, to_date, from_time, to_time, price, status, service_id, client_id, num_of_people) values ('2022-05-16 00:00:00', '2022-05-17 00:00:00', '12:00', '10:00', 50, 1, 1, 5, 8);
+insert into reservations (from_date, to_date, from_time, to_time, price, status, service_id, client_id, num_of_people) values ('2022-05-19 00:00:00', '2022-05-24 00:00:00', '12:00', '10:00', 150, 1, 1, 5, 9);
 
-insert into reservations (from_date, to_date, from_time, to_time, price, status, service_id, client_id, num_of_people) values ('2022-05-13 02:00:00', '2022-05-15 02:00:00', '12:00', '10:00', 1000, 1, 2, 5, 20);
-insert into reservations (from_date, to_date, from_time, to_time, price, status, service_id, client_id, num_of_people) values ('2022-05-16 02:00:00', '2022-05-17 02:00:00', '12:00', '10:00', 500, 1, 2, 5, 22);
-insert into reservations (from_date, to_date, from_time, to_time, price, status, service_id, client_id, num_of_people) values ('2022-05-20 02:00:00', '2022-05-23 02:00:00', '12:00', '10:00', 1500, 1, 2, 5, 23);
+insert into reservations (from_date, to_date, from_time, to_time, price, status, service_id, client_id, num_of_people) values ('2022-05-13 00:00:00', '2022-05-15 00:00:00', '12:00', '10:00', 1000, 1, 2, 5, 20);
+insert into reservations (from_date, to_date, from_time, to_time, price, status, service_id, client_id, num_of_people) values ('2022-05-16 00:00:00', '2022-05-17 00:00:00', '12:00', '10:00', 500, 1, 2, 5, 22);
+insert into reservations (from_date, to_date, from_time, to_time, price, status, service_id, client_id, num_of_people) values ('2022-05-20 00:00:00', '2022-05-23 00:00:00', '12:00', '10:00', 1500, 1, 2, 5, 23);
 
 insert into complaints (complaint, response, is_answered, reservation_id) values ('Unstable boat Unstable boat Unstable boat Unstable boat Unstable boat', '', False, 9);
 insert into complaints (complaint, response, is_answered, reservation_id) values ('Stinky bathroom', '', False, 6);
@@ -125,7 +125,7 @@ insert into revisions (revision, is_approved, is_answered, rating_id, reservatio
 insert into revisions (revision, is_approved, is_answered, rating_id, reservation_id) values ('It stinks, it was really bad.', False, False, 2, 6);
 insert into revisions (revision, is_approved, is_answered, rating_id, reservation_id) values ('We almost fell out of the boat. Fix it!', False, False, 3, 9);
 
-insert into discounts(discount, from_date, to_date) values (0.15, '2022-05-12 02:00:00', '2100-01-01 02:00:00');
+insert into discounts(discount, from_date, to_date) values (0.15, '2022-05-12 00:00:00', '2100-01-01 00:00:00');
 
 insert into loyalty_programs(client_points_per_reservation, privileged_points_per_reservation, silver_points_required, gold_points_required,
                            silver_client_bonus, gold_client_bonus, silver_privileged_user_bonus, gold_privileged_user_bonus, is_active)
