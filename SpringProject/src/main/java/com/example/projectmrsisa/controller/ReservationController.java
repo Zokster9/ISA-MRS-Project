@@ -481,4 +481,29 @@ public class ReservationController {
         }
         return new ResponseEntity<>(reservationDTOS, HttpStatus.OK);
     }
+
+    private boolean isCancellationValid(Date fromDate) {
+        Date today = new Date();
+        long differenceInTime = fromDate.getTime() - today.getTime();
+        long differenceInDays = (differenceInTime / (1000 * 60 * 60 * 24)) % 365;
+        return differenceInDays >= 3;
+    }
+
+    @Transactional
+    @PutMapping(value = "/cancelReservation/{reservationId}")
+    @PreAuthorize("hasRole('client')")
+    public ResponseEntity<ReservationDTO> cancelReservation(@PathVariable Integer reservationId) {
+        try {
+            Reservation reservation = reservationService.findReservationById(reservationId);
+            if (isCancellationValid(reservation.getFromDate())) {
+                reservationService.changeReservationStatus(ReservationStatus.Cancelled, reservationId);
+                reservation.setStatus(ReservationStatus.Cancelled);
+                return new ResponseEntity<>(new ReservationDTO(reservation), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }
