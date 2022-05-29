@@ -33,7 +33,7 @@
                 </div>
             </div>
             <div v-else>
-                <button @click="cancelReservation" :disabled="!isAvailableForCancelation" class="btn btn-primary my-3">Cancel reservation</button>
+                <button @click="cancelReservation" :disabled="!isAvailableForCancellation" class="btn btn-primary my-3">Cancel reservation</button>
             </div>
         </div>
     </div>
@@ -55,14 +55,14 @@
                 this.$emit("review", this.reservation.id);
             },
             cancelReservation() {
-
+                this.$emit("cancel", this.reservation.id)
             }
         },
         computed: {
-            isAvailableForCancelation() {
+            isAvailableForCancellation() {
                 const date1 = new Date(this.reservation.fromDate)
                 const date2 = new Date()
-                const diffTime = Math.abs(date2 - date1);
+                const diffTime = Math.abs(date1 - date2);
                 const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                 return diffDays >= 3
             }

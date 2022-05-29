@@ -6,7 +6,7 @@
         <div class="mx-auto" style="margin-top: 80px; width:50%">
             <div v-if="pendingReservations">
                 <div v-if="pendingReservations.length != 0">
-                    <ReservationCard v-for="reservation in pendingReservations" :reservation="reservation" :key="reservation.id"></ReservationCard>
+                    <ReservationCard v-for="reservation in pendingReservations" @cancel="cancelReservation" :reservation="reservation" :key="reservation.id"></ReservationCard>
                 </div>
                 <div v-else>
                     <h1>There are no pending reservations for you.</h1>
@@ -39,18 +39,38 @@
                 pendingReservations: null,
             }
         },
+        methods: {
+            cancelReservation(reservationId) {
+                axios.put("http://localhost:8088/reservations/cancelReservation/" + reservationId, {},
+                {
+                    headers: {
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
+                    }
+                })
+                .then(() => {
+                    alert("Reservation successfully cancelled");
+                    this.getPendingReservations();
+                })
+                .catch(() => {
+                    alert("This reservation cannot be cancelled.")
+                })
+            },
+            getPendingReservations() {
+                axios.get("http://localhost:8088/reservations/getPendingReservations", {
+                    headers: {
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
+                    }
+                })
+                .then(response => {
+                    this.pendingReservations = response.data;
+                })
+                .catch(() => {
+                    alert("Something went wrong!");
+                })
+            }
+        },
         mounted () {
-            axios.get("http://localhost:8088/reservations/getPendingReservations", {
-                headers: {
-                    Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
-                }
-            })
-            .then(response => {
-                this.pendingReservations = response.data;
-            })
-            .catch(() => {
-                alert("Something went wrong!");
-            })
+            this.getPendingReservations();
         }
     }
 </script>
