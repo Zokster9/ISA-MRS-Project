@@ -146,14 +146,12 @@ public class ReservationController {
     @PostMapping(value = "/makeAReservation")
     @PreAuthorize("hasRole('client')")
     public ResponseEntity<ReservationDTO> makeAReservation(Principal principal, @RequestBody ReservationDTO reservationDTO) {
-        System.out.println("tu sma");
         Client client;
         Service service;
         try {
             client = (Client) userService.findUserByEmail(principal.getName());
             service = serviceService.findById(reservationDTO.getServiceId());
-            // TODO: dodaj dodatne usluge kod sebe u reservacije i posalji broj ljudi za rezervaciju (posalji da l dobavljas tagove za retreat, ship ili adventure(pogledaj kod mene gde sam to drzao))
-            Set<Tag> additionalServices = tagService.findTags(new ArrayList<>(reservationDTO.getAdditionalServices()), "retreat");
+            Set<Tag> additionalServices = tagService.findTags(new ArrayList<>(reservationDTO.getAdditionalServices()), reservationDTO.getServiceType());
             LoyaltyProgram loyaltyProgram = loyaltyProgramService.findActiveLoyaltyProgram();
             double discount = 0;
             if (client.getLoyaltyStatus() == LoyaltyStatus.Silver) {

@@ -2,7 +2,6 @@ package com.example.projectmrsisa.dto;
 
 import com.example.projectmrsisa.model.Reservation;
 import com.example.projectmrsisa.model.ReservationStatus;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.example.projectmrsisa.model.Tag;
 
 import java.util.Date;
@@ -32,6 +31,7 @@ public class ReservationDTO {
     private Set<String> additionalServices;
     private Integer clientId;
     private Integer privilegedUserId;
+    private String serviceType;
 
     public ReservationDTO(){
 
@@ -236,5 +236,13 @@ public class ReservationDTO {
 
     public void setPrivilegedUserId(Integer privilegedUserId) {
         this.privilegedUserId = privilegedUserId;
+    }
+
+    public String getServiceType() {
+        return serviceType;
+    }
+
+    public void setServiceType(String serviceType) {
+        this.serviceType = serviceType;
     }
 }
