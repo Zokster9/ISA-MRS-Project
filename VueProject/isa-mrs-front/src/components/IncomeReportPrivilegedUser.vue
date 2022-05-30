@@ -1,8 +1,5 @@
 <template>
     <div class="d-flex flex-row">
-        <div>
-            <NavbarUser></NavbarUser>
-        </div>
         <div class="row justify-content-center mx-auto">
             <div class="col-auto">
                 <br>
@@ -49,7 +46,6 @@
     </div>
 </template>
 <script>
-    import NavbarUser from '@/components/NavbarUser.vue'
     import axios from 'axios'
     import VueAxios from 'vue-axios'
     import Vue from 'vue'
@@ -60,11 +56,7 @@
     Vue.use(Vuelidate)
 
     export default {
-        name: 'PrivilegedUserBusinessIncome',
-        components: {
-            NavbarUser
-        },
-        data(){
+        data() {
             return {
                 reservations: [],
                 fromDate: null,

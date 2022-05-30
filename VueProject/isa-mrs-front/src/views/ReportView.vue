@@ -17,12 +17,15 @@
                 <div v-if="averageRating">
                     <AverageServiceRating></AverageServiceRating>
                 </div>
-				
+				<div v-if="incomeReport">
+                    <IncomeReportPrivilegedUser></IncomeReportPrivilegedUser>
+                </div>
             </div>
         </div>
     </div>
 </template>
 <script>
+    import IncomeReportPrivilegedUser from '@/components/IncomeReportPrivilegedUser.vue'
     import NavbarUser from '@/components/NavbarUser.vue'
     import AverageServiceRating from '@/components/AverageServiceRating.vue'
 
@@ -30,7 +33,8 @@
         name: 'ReportView',
         components: {
             NavbarUser,
-            AverageServiceRating
+            AverageServiceRating,
+            IncomeReportPrivilegedUser,
         },
         data() {
             return {
