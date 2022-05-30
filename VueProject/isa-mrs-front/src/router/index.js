@@ -303,11 +303,11 @@ const routes = [{
             import('../views/AdminLoyaltyProgramView.vue')
     },
     {
-        path: '/privileged-user-business-income',
-        name: 'privileged-user-business-income',
-        component: () =>
-            import('../views/PrivilegedUserBusinessReportView.vue')
-    }
+        path: '/reports',
+        name: 'reports',
+        component: () => 
+            import('../views/ReportView.vue')
+    },
 ]
 
 const router = new VueRouter({

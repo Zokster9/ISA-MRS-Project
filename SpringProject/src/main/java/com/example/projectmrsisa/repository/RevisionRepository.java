@@ -23,4 +23,7 @@ public interface RevisionRepository extends JpaRepository<Revision, Integer> {
     @Query("update Revision r set r.isApproved=true where r.id=?1")
     public void updateRevisionApprovedStatus(Integer id);
 
+    @Query("select r from Revision r where r.reservation.service.owner.id = ?1")
+    public List<Revision> findRevisionForUser(Integer userId);
+
 }
