@@ -65,7 +65,8 @@ public class ReservationService {
                         && reservation.getFromDate().compareTo(toDate) <= 0 && reservation.getToDate().compareTo(fromDate) >= 0)) {
                     if (reservation.getFromDate().compareTo(fromDate) == 0 && reservation.getToDate().compareTo(toDate) == 0
                             && reservation.getFromTime().compareTo(fromTime) == 0 && reservation.getToTime().compareTo(toTime) == 0) {
-                        return reservation.getStatus() == ReservationStatus.Cancelled && Objects.equals(reservation.getClient().getId(), clientId);
+                        return (reservation.getStatus() == ReservationStatus.Cancelled || reservation.getStatus() == ReservationStatus.Pending)
+                                && Objects.equals(reservation.getClient().getId(), clientId);
                     }
                     return true;
                 }
@@ -95,5 +96,25 @@ public class ReservationService {
             else if (reservation.getToDate().compareTo(today) == 0) return true;
         }
         return false;
+    }
+
+    public List<Reservation> getAllReservations(){
+        return reservationRepository.findAll();
+    }
+
+    public List<Reservation> findNonCancelledReservations(){
+        return reservationRepository.findNonCancelledReservations();
+    }
+
+    public List<Reservation> findReservationsInDateSpan(Date fromDate, Date toDate){
+        return reservationRepository.findReservationsInDateSpan(fromDate, toDate);
+    }
+
+    public List<Reservation> findPrivilegedUsersReservations(Integer id){
+        return reservationRepository.findPrivilegedUsersReservations(id);
+    }
+
+    public List<Reservation> findReservationsInDateSpanForPrivilegedUser(Date fromDate, Date toDate, Integer id){
+        return reservationRepository.findReservationsInDateSpanForPrivilegedUser(fromDate, toDate, id);
     }
 }

@@ -1,12 +1,15 @@
 <template>
     <div class="d-flex flex-row">
+        <div>
+            <NavbarAdmin></NavbarAdmin>
+        </div>
         <div class="row justify-content-center mx-auto">
             <div class="col-auto">
                 <br>
                 <br>
                 <table class="table table-striped table-responsive table-bordered mb-5">
                     <thead>
-                        <th colspan="100%" class="text-center h2">Business reports</th> 
+                        <th colspan="100%" class="text-center h2">Income change and business reports</th> 
                     </thead>
                     <tbody>
                         <tr>
@@ -36,8 +39,17 @@
                             <td class="align-middle text-center"> {{ reservation.price}} </td>
                         </tr>
                         <tr>
-                            <td class="align-middle text-center" colspan="3"><b> My income: </b></td>
+                            <td class="align-middle text-center" colspan="3"><b> Total system income: </b></td>
                             <td class="align-middle text-center"><b> {{this.totalIncome}} </b></td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle text-center" colspan="2"> Income percentage from reservations: </td>
+                            <td class="align-middle text-center">
+                                <input type="number" placeholder="Value between 0 and 100" v-model="newPercentage">
+                            </td>
+                            <td class="align-middle text-center">
+                                <button type="button" class="btn btn-primary" @click="updatePercentage" :disabled="$v.newPercentage.$invalid"> Confirm</button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -46,40 +58,53 @@
     </div>
 </template>
 <script>
+    import NavbarAdmin from '@/components/NavbarAdmin.vue'
     import axios from 'axios'
     import VueAxios from 'vue-axios'
     import Vue from 'vue'
     import Vuelidate from 'vuelidate'
     import { required, minValue, maxValue } from 'vuelidate/lib/validators'
-<<<<<<< HEAD
+
     Vue.use(VueAxios, axios)
     Vue.use(Vuelidate)
+
     export default {
+        name: 'AdminBusinessIncome',
+        components: {
+            NavbarAdmin
+        },
         data(){
-=======
-
-    Vue.use(VueAxios, axios)
-    Vue.use(Vuelidate)
-
-    export default {
-        data() {
->>>>>>> 70b74f8c87fb9c7a21b3e11502df49d5aa24c423
             return {
                 reservations: [],
                 fromDate: null,
                 toDate: null,
                 totalIncome: 0,
+                newPercentage: ""
             }
         },
         methods:{
+            updatePercentage(){
+                axios.post("http://localhost:8088/discounts/updatePercentage",{
+                    discount: this.newPercentage,
+                    fromDate: new Date(),
+                    toDate: new Date('2100-01-01 02:00:00')
+                },{
+                    headers:{
+                        Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
+                    },
+                }).then(() => {
+                    alert("Successfully changed percentage taken of system reservations!")
+                    window.location.reload();
+                })
+            },
             search(){
-                axios.get("http://localhost:8088/reservations/findInDateSpanPrivilegedUser?fromDate=" + this.fromDate + "&toDate=" + this.toDate,{
+                axios.get("http://localhost:8088/reservations/findInDateSpan?fromDate=" + this.fromDate + "&toDate=" + this.toDate,{
                     headers:{
                         Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
                     },
                 }).then((response) => {
                     this.reservations = response.data;
-                    axios.post("http://localhost:8088/reservations/calculateMyIncome", {
+                    axios.post("http://localhost:8088/reservations/calculateSystemIncome", {
                         reservationsDTO: this.reservations,
                     },{
                         headers:{
@@ -91,13 +116,13 @@
                 })
             },
             showAll(){
-                axios.get("http://localhost:8088/reservations/findUsersNonCancelledReservations",{
+                axios.get("http://localhost:8088/reservations/findAllNotCancelled",{
                     headers:{
                         Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
                     }
                 }).then((response) =>{
                     this.reservations = response.data;
-                    axios.post("http://localhost:8088/reservations/calculateMyIncome", {
+                    axios.post("http://localhost:8088/reservations/calculateSystemIncome", {
                         reservationsDTO: this.reservations,
                     },{
                         headers:{
@@ -118,13 +143,13 @@
             }
         },
         mounted () {
-            axios.get("http://localhost:8088/reservations/findUsersNonCancelledReservations",{
+            axios.get("http://localhost:8088/reservations/findAllNotCancelled",{
                 headers:{
                     Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
                 }
             }).then((response) =>{
                 this.reservations = response.data;
-                axios.post("http://localhost:8088/reservations/calculateMyIncome", {
+                axios.post("http://localhost:8088/reservations/calculateSystemIncome", {
                     reservationsDTO: this.reservations,
                 },{
                     headers:{

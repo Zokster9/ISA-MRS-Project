@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Date;
 import java.util.List;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Integer> {
@@ -28,4 +29,16 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
 
     @Query("select r from Reservation r where r.client.id = ?1 and r.status = 0")
     List<Reservation> findClientsPendingReservations(Integer clientId);
+
+    @Query("select r from Reservation r where r.status <> 2")
+    List<Reservation> findNonCancelledReservations();
+
+    @Query("select r from Reservation r where r.fromDate >= ?1 and r.fromDate <= ?2 and r.status <> 2")
+    List<Reservation> findReservationsInDateSpan(Date fromDate, Date toDate);
+
+    @Query("select r from Reservation r where r.service.owner.id =?1 and r.status <> 2")
+    List<Reservation> findPrivilegedUsersReservations(Integer id);
+
+    @Query("select r from Reservation r where r.fromDate >= ?1 and r.fromDate <= ?2 and r.service.owner.id = ?3 and r.status <> 2")
+    List<Reservation> findReservationsInDateSpanForPrivilegedUser(Date fromDate, Date toDate, Integer id);
 }

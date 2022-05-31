@@ -290,6 +290,24 @@ const routes = [{
         component: () =>
             import('../views/AdminRevisionsView.vue')
     },
+    {
+        path: '/admin-business-income',
+        name: 'admin-business-income',
+        component: () =>
+            import('../views/AdminBusinessIncomeView.vue')
+    },
+    {
+        path: '/admin-loyalty-program',
+        name: 'admin-loyalty-program',
+        component: () =>
+            import('../views/AdminLoyaltyProgramView.vue')
+    },
+    {
+        path: '/reports',
+        name: 'reports',
+        component: () => 
+            import('../views/ReportView.vue')
+    },
 ]
 
 const router = new VueRouter({

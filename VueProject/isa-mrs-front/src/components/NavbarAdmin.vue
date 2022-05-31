@@ -9,8 +9,8 @@
         <router-link exact to="/admin-complaints" tag="button" class="nav-link text-start"> Complaints </router-link>
         <router-link exact to="/admin-revisions" tag="button" class="nav-link text-start"> Revisions </router-link>
         <router-link exact to="/admin-reports" tag="button" class="nav-link text-start"> Reports </router-link>
-        <router-link exact to="/" tag="button" class="nav-link text-start">Income information</router-link>
-        <router-link exact to="/" tag="button" class="nav-link text-start">Business reports</router-link>
+        <router-link exact to="/admin-business-income" tag="button" class="nav-link text-start">Income change and business reports</router-link>
+        <router-link exact to="/admin-loyalty-program" tag="button" class="nav-link text-start">Loyalty program</router-link>
     </nav>
 </template>
 <script>

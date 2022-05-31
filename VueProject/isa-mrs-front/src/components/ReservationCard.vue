@@ -32,6 +32,9 @@
                     <button @click="review" class="btn btn-primary my-3">Make a revision</button>
                 </div>
             </div>
+            <div v-else>
+                <button @click="cancelReservation" :disabled="!isAvailableForCancellation" class="btn btn-primary my-3">Cancel reservation</button>
+            </div>
         </div>
     </div>
 </template>
@@ -40,7 +43,7 @@
     export default {
         props: ['reservation'],
         methods: {
-            getDate (date) {
+            getDate(date) {
                 let origin_date = new Date(date)
                 let month = origin_date.getMonth() + 1
                 if (month < 10) {
@@ -50,6 +53,18 @@
             },
             review() {
                 this.$emit("review", this.reservation.id);
+            },
+            cancelReservation() {
+                this.$emit("cancel", this.reservation.id)
+            }
+        },
+        computed: {
+            isAvailableForCancellation() {
+                const date1 = new Date(this.reservation.fromDate)
+                const date2 = new Date()
+                const diffTime = Math.abs(date1 - date2);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                return diffDays >= 3
             }
         }
     }

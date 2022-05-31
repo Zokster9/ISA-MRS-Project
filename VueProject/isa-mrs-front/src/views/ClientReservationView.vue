@@ -133,6 +133,9 @@
                     toTime: this.reservationForm.endTime,
                     price: this.reservationForm.numberOfDays * this.selectedService.price,
                     serviceId: this.selectedService.id,
+                    numOfPeople: this.reservationForm.numberOfPeople,
+                    additionalServices: this.additionalServices,
+                    serviceType: this.reservationForm.serviceType,
                 },
                 {
                     headers: {
@@ -142,6 +145,7 @@
                 .then(() => {
                     alert("Reservation is successful. Check your email.")
                     this.modal = false
+                    this.search(this.reservationForm);
                 })
                 .catch(() => {
                     alert("Something went wrong!")
