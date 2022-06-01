@@ -51,12 +51,10 @@
     import Vue from 'vue'
     import Vuelidate from 'vuelidate'
     import { required, minValue, maxValue } from 'vuelidate/lib/validators'
-
     Vue.use(VueAxios, axios)
     Vue.use(Vuelidate)
-
     export default {
-        data() {
+        data(){
             return {
                 reservations: [],
                 fromDate: null,

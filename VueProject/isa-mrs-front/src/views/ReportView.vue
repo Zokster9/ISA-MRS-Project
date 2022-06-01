@@ -8,7 +8,7 @@
                 <label style="margin:10px;">Choose report type: </label>
                 <select v-model="selected" name="reportType">
                     <option value="averageRating">Average service rating</option>
-                    <option value="grapghAttendance">Service graph of attendance</option>
+                    <option value="graphAttendance">Service graph of attendance</option>
                     <option value="incomeReport">Income report</option>
                 </select>
                 <button class="btn btn-primary" @click="showReport" style="margin: 10px">Show report</button>
@@ -20,6 +20,9 @@
 				<div v-if="incomeReport">
                     <IncomeReportPrivilegedUser></IncomeReportPrivilegedUser>
                 </div>
+                <div v-if="graphAttendance">
+                    <GraphAttendance></GraphAttendance>
+                </div>
             </div>
         </div>
     </div>
@@ -28,6 +31,7 @@
     import IncomeReportPrivilegedUser from '@/components/IncomeReportPrivilegedUser.vue'
     import NavbarUser from '@/components/NavbarUser.vue'
     import AverageServiceRating from '@/components/AverageServiceRating.vue'
+    import GraphAttendance from '@/components/GraphAttendance.vue'
 
     export default {
         name: 'ReportView',
@@ -35,6 +39,7 @@
             NavbarUser,
             AverageServiceRating,
             IncomeReportPrivilegedUser,
+            GraphAttendance
         },
         data() {
             return {
@@ -50,7 +55,7 @@
                     this.incomeReport = false;
                     this.graphAttendance = false;
                     this.averageRating = true;
-                }else if (this.selected === 'grapghAttendance') {
+                }else if (this.selected === 'graphAttendance') {
                     this.averageRating = false;
                     this.incomeReport = false;
                     this.graphAttendance = true;
