@@ -151,7 +151,16 @@ public class ReservationController {
         try {
             client = (Client) userService.findUserByEmail(principal.getName());
             service = serviceService.findById(reservationDTO.getServiceId());
-            Set<Tag> additionalServices = tagService.findTags(new ArrayList<>(reservationDTO.getAdditionalServices()), reservationDTO.getServiceType());
+            Set<Tag> additionalServices = new HashSet<>();
+            if (reservationDTO.getServiceType() != null) {
+                additionalServices = tagService.findTags(new ArrayList<>(reservationDTO.getAdditionalServices()), reservationDTO.getServiceType());
+            } else {
+                for (Tag tag : service.getAdditionalServices()) {
+                    if (reservationDTO.getAdditionalServices().contains(tag.getName())) {
+                        additionalServices.add(tag);
+                    }
+                }
+            }
             LoyaltyProgram loyaltyProgram = loyaltyProgramService.findActiveLoyaltyProgram();
             double discount = 0;
             if (client.getLoyaltyStatus() == LoyaltyStatus.Silver) {
