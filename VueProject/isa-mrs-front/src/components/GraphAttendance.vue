@@ -19,6 +19,10 @@
 <script>
 
 import Chart from 'chart.js/auto'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+import Vue from 'vue'
+Vue.use(VueAxios, axios)
 
 export default {
     data(){
@@ -26,7 +30,13 @@ export default {
             selected: "",
             weekly: false,
             monthly: false,
-            yearly: false
+            yearly: false,
+            yearlyLabels: [],
+            yearlyValues: [],
+            monthlyLabels: [],
+            monthlyValues: [],
+            weeklyLabels: [],
+            weeklyValues: []
         }
     },
     methods: {
@@ -47,122 +57,150 @@ export default {
         }
     },
     mounted(){
-
-
-
-
-
-
-
-        const ctxWeekly = document.getElementById('weekly');
-        const ctxMonthly = document.getElementById('monthly');
-        const ctxYearly = document.getElementById('yearly');
-
-        const weeklyChart = new Chart(ctxWeekly, {
-            type: 'bar',
-            data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
+        axios.get("http://localhost:8088/reservations/yearlyReport", {
+            headers: {
+                Authorization: 'Bearer ' + window.sessionStorage.getItem('accessToken')               
+            }
+        }).then((response) =>{
+            this.yearlyLabels = response.data.dates;
+            this.yearlyValues = response.data.values;
+            const ctxYearly = document.getElementById('yearly');
+            const yearlyChart = new Chart(ctxYearly, {
+                type: 'bar',
+                data: {
+                    labels: this.yearlyLabels,
+                    datasets: [{
+                        label: 'Reservations per year',
+                        data: this.yearlyValues,
+                        backgroundColor: [
+                            'rgba(242, 145, 120, 2)',
+                            'rgba(255, 0, 0, 2)',
+                            'rgba(0, 0, 255, 2)',
+                            'rgba(60, 179, 113, 2)',
+                            'rgba(238, 130, 238, 2)',
+                            'rgba(255, 165, 0, 2)',
+                            'rgba(227, 255, 71, 2)',
+                            'rgba(227, 59, 255, 2)'
+                        ],
+                        borderColor: [
+                            'rgba(242, 145, 120, 1)',
+                            'rgba(255, 0, 0, 1)',
+                            'rgba(0, 0, 255, 1)',
+                            'rgba(60, 179, 113, 1)',
+                            'rgba(238, 130, 238, 1)',
+                            'rgba(255, 165, 0, 1)',
+                            'rgba(227, 255, 71, 1)',
+                            'rgba(227, 59, 255, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
                     }
                 }
+            });
+            yearlyChart;
+        }),
+        axios.get("http://localhost:8088/reservations/monthlyReport",{
+            headers:{
+                Authorization: 'Bearer ' + window.sessionStorage.getItem('accessToken')
             }
-        });
-        const monthlyChart = new Chart(ctxMonthly, {
-            type: 'bar',
-            data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 2)',
-                        'rgba(54, 162, 235, 2)',
-                        'rgba(255, 206, 86, 2)',
-                        'rgba(75, 192, 192, 2)',
-                        'rgba(153, 102, 255, 2)',
-                        'rgba(255, 159, 64, 2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
+        }).then((response) => {
+            this.monthlyLabels = response.data.dates;
+            this.monthlyValues = response.data.values;
+            const ctxMonthly = document.getElementById('monthly');
+            const monthlyChart = new Chart(ctxMonthly, {
+                type: 'bar',
+                data: {
+                    labels: this.monthlyLabels,
+                    datasets: [{
+                        label: 'Reservations per month',
+                        data: this.monthlyValues,
+                        backgroundColor: [
+                            'rgba(242, 145, 120, 2)',
+                            'rgba(255, 0, 0, 2)',
+                            'rgba(0, 0, 255, 2)',
+                            'rgba(60, 179, 113, 2)',
+                            'rgba(238, 130, 238, 2)',
+                            'rgba(255, 165, 0, 2)',
+                            'rgba(227, 255, 71, 2)',
+                            'rgba(227, 59, 255, 2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 71, 1)',
+                            'rgba(255, 0, 0, 1)',
+                            'rgba(0, 0, 255, 1)',
+                            'rgba(60, 179, 113, 1)',
+                            'rgba(238, 130, 238, 1)',
+                            'rgba(255, 165, 0, 1)',
+                            'rgba(227, 255, 71, 1)',
+                            'rgba(227, 59, 255, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
                     }
                 }
+            });
+            monthlyChart;
+        }),
+        axios.get("http://localhost:8088/reservations/weeklyReport",{
+            headers:{
+                Authorization: 'Bearer ' + window.sessionStorage.getItem('accessToken')
             }
-        });
-        const yearlyChart = new Chart(ctxYearly, {
-            type: 'bar',
-            data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
+        }).then((response) => {
+            this.weeklyLabels = response.data.dates;
+            this.weeklyValues = response.data.values;
+            const ctxWeekly = document.getElementById('weekly');
+            const weeklyChart = new Chart(ctxWeekly, {
+                type: 'bar',
+                data: {
+                    labels: this.weeklyLabels,
+                    datasets: [{
+                        label: 'Reservations per week',
+                        data: this.weeklyValues,
+                        backgroundColor: [
+                            'rgba(242, 145, 120, 2)',
+                            'rgba(255, 0, 0, 2)',
+                            'rgba(0, 0, 255, 2)',
+                            'rgba(60, 179, 113, 2)',
+                            'rgba(238, 130, 238, 2)',
+                            'rgba(255, 165, 0, 2)',
+                            'rgba(227, 255, 71, 2)',
+                            'rgba(227, 59, 255, 2)'
+                        ],
+                        borderColor: [
+                            'rgba(242, 145, 120, 1)',
+                            'rgba(255, 0, 0, 1)',
+                            'rgba(0, 0, 255, 1)',
+                            'rgba(60, 179, 113, 1)',
+                            'rgba(238, 130, 238, 1)',
+                            'rgba(255, 165, 0, 1)',
+                            'rgba(227, 255, 71, 1)',
+                            'rgba(227, 59, 255, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
                     }
                 }
-            }
-        });
-        weeklyChart;
-        monthlyChart;
-        yearlyChart;
+            });
+            weeklyChart;
+        })       
     }
 }
 </script>

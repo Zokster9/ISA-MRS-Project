@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -503,5 +504,159 @@ public class ReservationController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping(value="/yearlyReport")
+    @PreAuthorize("hasAnyRole('fishingInstructor','retreatOwner','shipOwner')")
+    public ResponseEntity<GraphDTO> yearlyReport(Principal principal){
+        User owner;
+        List<Reservation> reservations;
+        try{
+            owner = userService.findUserByEmail(principal.getName());
+            reservations = reservationService.findPrivilegedUsersReservations(owner.getId());
+        } catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        List<Integer> values = new ArrayList<>();
+        List<String> dates = new ArrayList<>();
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        for (Reservation reservation : reservations){
+            if (reservation.getStatus() != ReservationStatus.Cancelled){
+                String year = df.format(reservation.getFromDate()).substring(0, 4);
+                if (dates.contains(year)){
+                    for (int i = 0; i < dates.size(); i++){
+                        if (year.equals(dates.get(i))){
+                            int currVal = values.get(i);
+                            values.set(i, currVal + 1);
+                        }
+                    }
+                }
+                else
+                {
+                    dates.add(year);
+                    values.add(1);
+                }
+            }
+        }
+        GraphDTO graphDTO = new GraphDTO(dates, values);
+        return new ResponseEntity<>(graphDTO, HttpStatus.OK);
+    }
+
+    @GetMapping(value="/monthlyReport")
+    @PreAuthorize("hasAnyRole('fishingInstructor','retreatOwner','shipOwner')")
+    public ResponseEntity<GraphDTO> monthlyReport(Principal principal){
+        User owner;
+        List<Reservation> reservations;
+        try{
+            owner = userService.findUserByEmail(principal.getName());
+            reservations = reservationService.findPrivilegedUsersReservations(owner.getId());
+        } catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        List<Integer> values = new ArrayList<>();
+        List<String> dates = new ArrayList<>();
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        for (Reservation reservation : reservations){
+            if (reservation.getStatus() != ReservationStatus.Cancelled){
+                String yearMonth = df.format(reservation.getFromDate()).substring(0, 7);
+                if (dates.contains(yearMonth)){
+                    for (int i = 0; i < dates.size(); i++){
+                        if (yearMonth.equals(dates.get(i))){
+                            int currVal = values.get(i);
+                            values.set(i, currVal + 1);
+                        }
+                    }
+                }
+                else
+                {
+                    dates.add(yearMonth);
+                    values.add(1);
+                }
+            }
+        }
+        GraphDTO graphDTO = new GraphDTO(dates, values);
+        return new ResponseEntity<>(graphDTO, HttpStatus.OK);
+    }
+
+    @GetMapping(value="/weeklyReport")
+    @PreAuthorize("hasAnyRole('fishingInstructor','retreatOwner','shipOwner')")
+    public ResponseEntity<GraphDTO> weeklyReport(Principal principal) throws ParseException {
+        User owner;
+        List<Reservation> reservations;
+        try{
+            owner = userService.findUserByEmail(principal.getName());
+            reservations = reservationService.findPrivilegedUsersReservations(owner.getId());
+        } catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        List<Integer> values = new ArrayList<>();
+        List<String> dates;
+        dates = getDates();
+        for (int i = 0; i< 8; i++){
+            values.add(0);
+        }
+
+        for (Reservation reservation : reservations){
+            if (reservation.getStatus() != ReservationStatus.Cancelled){
+                for (int i = 0; i < dates.size(); i++){
+                    Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(dates.get(i).substring(0, 10));
+                    Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse(dates.get(i).substring(12));
+                    if (reservation.getFromDate().after(startDate) && reservation.getFromDate().before(endDate)){
+                        int currVal = values.get(i);
+                        values.set(i, currVal + 1);
+                    }
+                }
+            }
+        }
+        GraphDTO graphDTO = new GraphDTO(dates, values);
+        return new ResponseEntity<>(graphDTO, HttpStatus.OK);
+    }
+
+    public List<String> getDates(){
+        List<String> dates = new ArrayList<>();
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        Date today = new Date();
+
+        Calendar cal1 = Calendar.getInstance();
+        cal1.add(Calendar.DATE, -28);
+        Date date_minus_28 = cal1.getTime();
+
+        Calendar cal2 = Calendar.getInstance();
+        cal2.add(Calendar.DATE, -21);
+        Date date_minus_21 = cal2.getTime();
+        dates.add(df.format(date_minus_28) + " - " + df.format(date_minus_21));
+
+        Calendar cal3 = Calendar.getInstance();
+        cal3.add(Calendar.DATE, -14);
+        Date date_minus_14 = cal3.getTime();
+        dates.add(df.format(date_minus_21) + " - " + df.format(date_minus_14));
+
+        Calendar cal4 = Calendar.getInstance();
+        cal4.add(Calendar.DATE, -7);
+        Date date_minus_7 = cal4.getTime();
+        dates.add(df.format(date_minus_14) + " - " + df.format(date_minus_7));
+        dates.add(df.format(date_minus_7) + " - " + df.format(today));
+
+        Calendar cal5 = Calendar.getInstance();
+        cal5.add(Calendar.DATE, +7);
+        Date date_plus_7 = cal5.getTime();
+        dates.add(df.format(today) + " - " + df.format(date_plus_7));
+
+        Calendar cal6 = Calendar.getInstance();
+        cal6.add(Calendar.DATE, +14);
+        Date date_plus_14 = cal6.getTime();
+        dates.add(df.format(date_plus_7) + " - " + df.format(date_plus_14));
+
+        Calendar cal7 = Calendar.getInstance();
+        cal7.add(Calendar.DATE, +21);
+        Date date_plus_21 = cal7.getTime();
+        dates.add(df.format(date_plus_14) + " - " + df.format(date_plus_21));
+
+        Calendar cal8 = Calendar.getInstance();
+        cal8.add(Calendar.DATE, +28);
+        Date date_plus_28 = cal8.getTime();
+        dates.add(df.format(date_plus_21) + " - " + df.format(date_plus_28));
+
+        return dates;
     }
 }
