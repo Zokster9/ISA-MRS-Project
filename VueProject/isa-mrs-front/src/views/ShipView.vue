@@ -80,9 +80,12 @@
 					<div>
 						<iframe :src="mapSrc" style="margin: 15px; border-radius: 25px; border: 1px solid #323539"></iframe>
 					</div>
-                    <div>
+                    <div class="mx-2 my-2">
                         <button @click="subscribe" v-if="isClient && !isSubscribed" class="btn btn-primary" value="Subscribe">Subscribe</button>
                         <button @click="unsubscribe" v-if="isClient && isSubscribed" class="btn btn-primary" value="Unsubscribe">Unsubscribe</button>
+                    </div>
+                    <div class="mx-2 my-2" v-if="isClient">
+                        <button @click="goToActions" class="btn btn-primary" value="Actions">See actions</button>
                     </div>
                 </div>
                 <div class="d-flex flex-row" style="height: 10%; margin: 5px; border: 1px solid #323539">
@@ -96,7 +99,7 @@
                             <input type="date" />
                         </div>    
                     </div>
-                    <div style="margin: 5px; width: 33%">
+                    <div style="margin: 10px; width: 33%">
                         <button class="btn btn-primary" value="Reserve">Make reservation</button>
                     </div>
                 </div>
@@ -166,6 +169,9 @@
                     alert("You have unsubscribed.")
                     this.client = response.data
                 })
+            },
+            goToActions() {
+                this.$router.push("/fast-reservations/" + this.$route.params.id)
             },
         },
         mounted() {

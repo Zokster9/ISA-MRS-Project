@@ -308,6 +308,12 @@ const routes = [{
         component: () => 
             import('../views/ReportView.vue')
     },
+    {
+        path: '/fast-reservations/:id',
+        name: 'fast-reservations',
+        component: () =>
+            import('../views/ClientFastReservationView.vue')
+    },
 ]
 
 const router = new VueRouter({
