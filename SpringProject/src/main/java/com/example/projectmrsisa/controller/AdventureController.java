@@ -194,7 +194,7 @@ public class AdventureController {
             if (!reservationService.checkIfReservationsExistForDate(id, actionDTO.getDateFrom(), actionDTO.getDateTo())) return new ResponseEntity<>(HttpStatus.CONFLICT);
             if (!actionService.actionAlreadyExists(adventure.getActions(), actionDTO.getDateFrom(), actionDTO.getDateTo())) return new ResponseEntity<>(HttpStatus.CONFLICT);
             Set<Tag> additionalServices = tagService.findTags(actionDTO.getAdditionalServices(), "adventure");
-            Action action = new Action(actionDTO, additionalServices);
+            Action action = new Action(actionDTO, additionalServices, adventure);
             action = actionService.addAction(action);
             adventure = adventureService.addAction(adventure, action);
             List<String> emails = subscriptionService.findClientsWithSubscription(clientService.findAll(), id);

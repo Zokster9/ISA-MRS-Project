@@ -35,7 +35,7 @@ public abstract class Service {
     @Column(name="isDeleted", nullable = false)
     private boolean isDeleted;
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "service")
+    @JoinColumn(name = "service_id")
     private Set<Action> actions = new HashSet<>();
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "service_tags", joinColumns = @JoinColumn(name = "service_id", referencedColumnName = "id"),

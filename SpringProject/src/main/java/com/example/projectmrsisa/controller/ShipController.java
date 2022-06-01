@@ -214,7 +214,7 @@ public class ShipController {
             if (!reservationService.checkIfReservationsExistForDate(id, actionDTO.getDateFrom(), actionDTO.getDateTo())) return new ResponseEntity<>(HttpStatus.CONFLICT);
             if (!actionService.actionAlreadyExists(ship.getActions(), actionDTO.getDateFrom(), actionDTO.getDateTo())) return new ResponseEntity<>(HttpStatus.CONFLICT);
             Set<Tag> additionalServices = tagService.findTags(actionDTO.getAdditionalServices(), "ship");
-            Action action = new Action(actionDTO, additionalServices);
+            Action action = new Action(actionDTO, additionalServices, ship);
             action = actionService.addAction(action);
             ship = shipService.addAction(ship, action);
             List<String> emails = subscriptionService.findClientsWithSubscription(clientService.findAll(), id);

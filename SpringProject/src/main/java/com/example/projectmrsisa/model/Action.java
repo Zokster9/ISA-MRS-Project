@@ -15,10 +15,10 @@ public class Action {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
-    @Column(name="dateFrom", unique = true, nullable = false)
+    @Column(name="dateFrom", nullable = false)
     private Date dateFrom;
 
-    @Column(name="dateTo", unique = true, nullable = false)
+    @Column(name="dateTo", nullable = false)
     private Date dateTo;
 
     @Column(name="timeFrom", nullable = false)
@@ -38,10 +38,14 @@ public class Action {
             inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
     private Set<Tag> additionalServices = new HashSet<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "service_id", nullable = false)
+    private Service service;
+
     public Action() {
     }
 
-    public Action(Integer id, Date dateFrom, Date dateTo, String timeFrom, String timeTo, int maxNumOfPeople, double price, Set<Tag> additionalServices) {
+    public Action(Integer id, Date dateFrom, Date dateTo, String timeFrom, String timeTo, int maxNumOfPeople, double price, Set<Tag> additionalServices, Service service) {
         this.id = id;
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
@@ -50,9 +54,10 @@ public class Action {
         this.maxNumOfPeople = maxNumOfPeople;
         this.price = price;
         this.additionalServices = additionalServices;
+        this.service = service;
     }
 
-    public Action(ActionDTO actionDTO, Set<Tag> additionalServices) {
+    public Action(ActionDTO actionDTO, Set<Tag> additionalServices, Service service) {
         this.dateFrom = actionDTO.getDateFrom();
         this.dateTo = actionDTO.getDateTo();
         this.timeFrom = actionDTO.getTimeFrom();
@@ -60,6 +65,7 @@ public class Action {
         this.maxNumOfPeople = actionDTO.getMaxNumOfPeople();
         this.price = actionDTO.getPrice();
         this.additionalServices = additionalServices;
+        this.service = service;
     }
 
     public Integer getId() {
@@ -124,5 +130,13 @@ public class Action {
 
     public void setAdditionalServices(Set<Tag> additionalServices) {
         this.additionalServices = additionalServices;
+    }
+
+    public Service getService() {
+        return service;
+    }
+
+    public void setService(Service service) {
+        this.service = service;
     }
 }

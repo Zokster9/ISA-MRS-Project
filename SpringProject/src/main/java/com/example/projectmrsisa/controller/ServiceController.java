@@ -1,18 +1,16 @@
 package com.example.projectmrsisa.controller;
 
 import com.example.projectmrsisa.dto.ActionDTO;
+import com.example.projectmrsisa.dto.AdventureDTO;
 import com.example.projectmrsisa.dto.ServiceAvailabilityDTO;
 import com.example.projectmrsisa.model.Action;
 import com.example.projectmrsisa.model.Service;
 import com.example.projectmrsisa.model.ServiceAvailability;
-import com.example.projectmrsisa.service.ActionService;
-import com.example.projectmrsisa.service.ServiceAvailabilityService;
+import com.example.projectmrsisa.service.*;
 import com.example.projectmrsisa.dto.ServiceDTO;
 import com.example.projectmrsisa.model.Client;
 import com.example.projectmrsisa.model.Service;
 import com.example.projectmrsisa.model.User;
-import com.example.projectmrsisa.service.ServiceService;
-import com.example.projectmrsisa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +38,9 @@ public class ServiceController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ReservationService reservationService;
 
     @Transactional
     @DeleteMapping(value="/delete/{id}")
@@ -78,5 +79,25 @@ public class ServiceController {
         for (Service service: client.getSubscriptions())
             serviceDTOs.add(new ServiceDTO(service));
         return new ResponseEntity<>(serviceDTOs, HttpStatus.OK);
+    }
+
+    @GetMapping(value="/getAvailableFastReservations/{serviceId}")
+    @PreAuthorize("hasRole('client')")
+    public ResponseEntity<List<ActionDTO>> getAvailableFastReservations(Principal principal, @PathVariable Integer serviceId) {
+        Client client;
+        try {
+            client = (Client) userService.findUserByEmail(principal.getName());
+            List<Action> actions = actionService.getActionsByServiceAndCurrentDate(serviceId);
+            List<ActionDTO> actionDTOs = new ArrayList<>();
+            for (Action action: actions) {
+                if (!reservationService.isReserved(serviceId, action.getDateFrom(),
+                        action.getDateTo(), action.getTimeFrom(), action.getTimeTo(), client.getId())) {
+                    actionDTOs.add(new ActionDTO(action));
+                }
+            }
+            return new ResponseEntity<>(actionDTOs, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

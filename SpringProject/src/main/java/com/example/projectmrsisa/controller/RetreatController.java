@@ -190,7 +190,7 @@ public class RetreatController {
             if (!reservationService.checkIfReservationsExistForDate(id, actionDTO.getDateFrom(), actionDTO.getDateTo())) return new ResponseEntity<>(HttpStatus.CONFLICT);
             if (!actionService.actionAlreadyExists(retreat.getActions(), actionDTO.getDateFrom(), actionDTO.getDateTo())) return new ResponseEntity<>(HttpStatus.CONFLICT);
             Set<Tag> additionalServices = tagService.findTags(actionDTO.getAdditionalServices(), "retreat");
-            Action action = new Action(actionDTO, additionalServices);
+            Action action = new Action(actionDTO, additionalServices, retreat);
             action = actionService.addAction(action);
             retreat = retreatService.addAction(retreat, action);
             List<String> emails = subscriptionService.findClientsWithSubscription(clientService.findAll(), id);

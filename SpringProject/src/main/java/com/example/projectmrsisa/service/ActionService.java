@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -17,6 +18,10 @@ public class ActionService {
 
     public Action addAction(Action action) {
         return actionRepository.save(action);
+    }
+
+    public List<Action> getActionsByServiceAndCurrentDate(int serviceId) {
+        return actionRepository.getActionsByServiceAndCurrentDate(serviceId, new Date());
     }
 
     public boolean actionAlreadyExists(Set<Action> actions, Date fromDate, Date toDate) {
