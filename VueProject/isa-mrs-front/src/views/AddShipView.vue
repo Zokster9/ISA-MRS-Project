@@ -3,63 +3,51 @@
             <h2> New ship </h2>
                 <div class="form-group mb-3">
                     <label>Name</label>
-                    <input v-model="form.name" type="text" class="form-control"/>
-                    <p v-if="!nameIsValid" class="alert alert-danger">Name is required.</p>
+                    <input v-model="form.name" type="text" class="form-control" placeholder="Name is required."/>
                 </div>
                 <div class="form-group mb-3">
                     <label>Description</label>
-                    <textarea v-model="form.description" type="text" class="form-control"/>
-                    <p v-if="!descriptionIsValid" class="alert alert-danger">Description is required.</p>
+                    <textarea v-model="form.description" type="text" class="form-control" placeholder="Description is required."/>
                 </div>
                 <div class="form-group mb-3">
                     <label>Country</label>
-                    <input v-model="form.country" type="text" class="form-control"/>
-                    <p v-if="!countryIsValid" class="alert alert-danger">Country is required, and it starts with first capital letter.</p>
+                    <input v-model="form.country" type="text" class="form-control" placeholder="Country is required, and it starts with first capital letter."/>
                 </div>
                 <div class="form-group mb-3">
                     <label>City</label>
-                    <input v-model="form.city" type="text" class="form-control"/>
-                    <p v-if="!cityIsValid" class="alert alert-danger">City is required, and it starts with first capital letter.</p>
+                    <input v-model="form.city" type="text" class="form-control" placeholder="City is required, and it starts with first capital letter."/>
                 </div>
                 <div class="form-group mb-3">
                     <label>Address</label>
-                    <input v-model="form.address" type="text" class="form-control"/>
-                    <p v-if="!addressIsValid" class="alert alert-danger">Address is required.</p>
+                    <input v-model="form.address" type="text" class="form-control" placeholder="Address is required."/>
                 </div>
                 <div class="form-group mb-3">
                     <label>Ship type</label>
-                    <input v-model="form.shipType" type="text" class="form-control"/>
-                    <p v-if="!typeIsValid" class="alert alert-danger">Ship type is required.</p>
+                    <input v-model="form.shipType" type="text" class="form-control" placeholder="Ship type is required."/>
                 </div>
                 <div class="form-group mb-3">
                     <label>Ship length</label>
-                    <input v-model.number="form.shipLength" type="number" class="form-control"/>
-                    <p v-if="!lengthIsValid" class="alert alert-danger">Ship length is required, and it must be number greater than 5.</p>
+                    <input v-model.number="form.shipLength" type="number" class="form-control" placeholder="Ship length is required, and it must be number greater than 5."/>
                 </div>
                 <div class="form-group mb-3">
                     <label>Engine number</label>
-                    <input v-model="form.engineNumber" type="text" class="form-control"/>
-                    <p v-if="!engineNumberIsValid" class="alert alert-danger">Engine number is required.</p>
+                    <input v-model="form.engineNumber" type="text" class="form-control" placeholder="Engine number is required."/>
                 </div>
                 <div class="form-group mb-3">
                     <label>Engine power</label>
-                    <input v-model.number="form.enginePower" type="number" class="form-control"/>
-                    <p v-if="!enginePowerIsValid" class="alert alert-danger">Engine power is required, and it must be number greater than 40.</p>
+                    <input v-model.number="form.enginePower" type="number" class="form-control" placeholder="Engine power is required, and it must be number greater than 40."/>
                 </div>
                 <div class="form-group mb-3">
                     <label>Maximal speed</label>
-                    <input v-model="form.maxSpeed" type="text" class="form-control"/>
-                    <p v-if="!maxSpeedIsValid" class="alert alert-danger">Maximal speed is required, and it must be in format: number km/h.</p>
+                    <input v-model="form.maxSpeed" type="text" class="form-control" placeholder="Maximal speed is required, and it must be in format: number km/h."/>
                 </div>
                 <div class="form-group mb-3">
                     <label>Capacity</label>
-                    <input v-model.number="form.capacity" type="number" class="form-control"/>
-                    <p v-if="!capacityIsValid" class="alert alert-danger">Capacity is required, and it must be number greater than 0.</p>
+                    <input v-model.number="form.capacity" type="number" class="form-control" placeholder="Capacity is required, and it must be number greater than 0."/>
                 </div>
                 <div class="form-group mb-3">
                     <label>Price</label>
-                    <input v-model.number="form.price" type="number" class="form-control"/>
-                    <p v-if="!priceIsValid" class="alert alert-danger">Price is required, and it must be number greater than 0.</p>
+                    <input v-model.number="form.price" type="number" class="form-control" placeholder="Price is required, and it must be number greater than 0."/>
                 </div>
                 <div class="form-group mb-3">
                     <label>Rules of conduction:</label>

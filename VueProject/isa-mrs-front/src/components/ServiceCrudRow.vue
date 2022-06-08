@@ -2,7 +2,7 @@
     <tr :key="service.id" :class="{activeDeleteButton: hoverDeleteButton, activeEditButton: hoverEditButton, activeAcceptButton: hoverNewActionButton}">
         <td class="align-middle text-center">
             <figcaption class="mb-1"> {{service.name}} </figcaption>
-            <img :src="require('@/assets/' + service.pictures[0])" style="width:200px; height:200px;" class="rounded">
+            <img :src="require('@/assets/' + service.pictures[0])" @click="showService(service.id)" style="width:200px; height:200px;" class="rounded" >
         </td>
         <td class="align-middle text-center"> <button type="button" @mouseover="hoverEditButton = true" @mouseleave="hoverEditButton = false" class="btn btn-warning" @click="editService(service.id)">Edit service info</button></td>
         <td class="align-middle text-center"> <button type="button" @mouseover="hoverDeleteButton = true" @mouseleave="hoverDeleteButton = false" class="btn btn-danger" @click="deleteService(service.id)">Delete service</button></td>
@@ -80,13 +80,18 @@
                     alert("Adventure successfully deleted.")
                     window.location.reload()
                 })
+            },
+            showService(id) {
+                if (window.sessionStorage.getItem('role') === "ROLE_retreatOwner") router.push("/retreat/" + id);
+                else if (window.sessionStorage.getItem('role') === "ROLE_shipOwner") router.push("/ship/" + id);
+                else if (window.sessionStorage.getItem('role') === "ROLE_fishingInstructor") router.push("/adventure/" + id);
             }
         },
         data(){
             return {
                 hoverEditButton: false,
                 hoverDeleteButton: false,
-                hoverNewActionButton: false,
+                hoverNewActionButton: false
             }
         },        
     }

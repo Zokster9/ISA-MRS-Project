@@ -163,7 +163,7 @@
         },
 		mounted() {
             if (window.sessionStorage.getItem("role") === "ROLE_fishingInstructor"){
-                axios.get('http://localhost:8088/adventures/getAdventure/' + this.$route.params.id, {
+                axios.get('http://localhost:8088/adventures/get/' + this.$route.params.id, {
                     headers: {
                         Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }

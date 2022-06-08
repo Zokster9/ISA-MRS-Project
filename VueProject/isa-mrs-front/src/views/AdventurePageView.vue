@@ -11,6 +11,14 @@
 					<a class="next" @click="changePicture(1)">&#10095;</a>
                 </div>
 				<div class="d-flex flex-column" style="border-radius: 25px; margin: 5px; border: 1px solid #323539">
+                    <div>
+                        <h5 style="margin: 5px">Additional services</h5>
+                        <ul>
+                            <template v-for="service in adventure.additionalServices">
+                                <li style="margin: 5px" :key="service">{{service}}</li>
+                            </template>
+                        </ul>
+                    </div>
 					<div>
                         <h5 style="margin: 5px">Rules of conduct</h5>
                         <ul>
@@ -63,27 +71,20 @@
 					<div>
 						<iframe :src="mapSrc" style="margin: 15px; border-radius: 25px; border: 1px solid #323539"></iframe>
 					</div>
-                    <div class="mx-2 my-2">
+                </div>
+                <div class="d-flex flex-row" style="height: 10%; margin: 5px; border: 1px solid #323539">
+                    <div v-if="isClient" class="d-flex flex-column" style="margin: 10px; align-self: left;">
                         <button @click="subscribe" v-if="isClient && !isSubscribed" class="btn btn-primary" value="Subscribe">Subscribe</button>
                         <button @click="unsubscribe" v-if="isClient && isSubscribed" class="btn btn-primary" value="Unsubscribe">Unsubscribe</button>
                     </div>
-                    <div class="mx-2 my-2" v-if="isClient">
+                    <div v-if="isClient" class="d-flex flex-column" style="margin: 10px; align-self: right;">
                         <button @click="goToActions" class="btn btn-primary" value="Actions">See actions</button>
                     </div>
-                </div>
-                <div class="d-flex flex-row" style="height: 10%; margin: 5px; border: 1px solid #323539">
-                    <div class="d-flex flex-row" style="margin: 5px; width: 66%">
-                        <div class="d-flex flex-row" style="margin: 5px; width: 50%">
-                            <label style="margin: 5px">Date from: </label>
-                            <input type="date" />
-                        </div> 
-                        <div class="d-flex flex-row" style="margin: 5px; width: 50%">
-                            <label style="margin: 5px">Date to: </label>
-                            <input type="date" />
-                        </div>    
+                    <div style="margin: 10px; align-self: center;" v-if="isOwner">
+                        <button class="btn btn-primary" @click="reserveForClient" value="Reserve">Reserve for client</button>
                     </div>
-                    <div style="margin: 10px; width: 33%">
-                        <button class="btn btn-primary" value="Reserve">Make reservation</button>
+                    <div style="margin: 10px; align-self: center;" v-if="isOwner">
+                        <button class="btn btn-primary" @click="showCalendar" value="Show calendar">Show calendar for ship</button>
                     </div>
                 </div>
             </div>
@@ -109,6 +110,9 @@
         computed: {
             isClient() {
                 return window.sessionStorage.getItem("role") === "ROLE_client"
+            },
+            isOwner() {
+                return window.sessionStorage.getItem('role') === "ROLE_fishingInstructor";
             },
             isSubscribed() {
                 if (this.client != null) {
@@ -154,9 +158,15 @@
             goToActions() {
                 this.$router.push("/fast-reservations/" + this.$route.params.id)
             },
+            reserveForClient() {
+                this.$router.push("/owner-reserve/" + this.$route.params.id);
+            },
+            showCalendar() {
+                this.$router.push("/service-calendar/" + this.$route.params.id);
+            }
         },
         mounted () {
-            axios.get("http://localhost:8088/adventures/getAdventure/" + this.$route.params.id,{
+            axios.get("http://localhost:8088/adventures/get/" + this.$route.params.id,{
                 headers:{
                     Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                 }

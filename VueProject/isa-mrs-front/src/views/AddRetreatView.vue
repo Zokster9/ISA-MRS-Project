@@ -3,43 +3,35 @@
             <h2> New retreat </h2>
                 <div class="form-group mb-3">
                     <label>Name</label>
-                    <input v-model="form.name" type="text" class="form-control"/>
-                    <p v-if="!nameIsValid" class="alert alert-danger">Name is required.</p>
+                    <input v-model="form.name" type="text" class="form-control" placeholder="Name is required."/>
                 </div>
                 <div class="form-group mb-3">
                     <label>Description</label>
-                    <textarea v-model="form.description" type="text" class="form-control"/>
-                    <p v-if="!descriptionIsValid" class="alert alert-danger">Description is required.</p>
+                    <textarea v-model="form.description" type="text" class="form-control" placeholder="Description is required."/>
                 </div>
                 <div class="form-group mb-3">
                     <label>Country</label>
-                    <input v-model="form.country" type="text" class="form-control"/>
-                    <p v-if="!countryIsValid" class="alert alert-danger">Country is required, and it starts with first capital letter.</p>
+                    <input v-model="form.country" type="text" class="form-control" placeholder="Country is required, and it starts with first capital letter."/>
                 </div>
                 <div class="form-group mb-3">
                     <label>City</label>
-                    <input v-model="form.city" type="text" class="form-control"/>
-                    <p v-if="!cityIsValid" class="alert alert-danger">City is required, and it starts with first capital letter.</p>
+                    <input v-model="form.city" type="text" class="form-control" placeholder="City is required, and it starts with first capital letter."/>
                 </div>
                 <div class="form-group mb-3">
                     <label>Address</label>
-                    <input v-model="form.address" type="text" class="form-control"/>
-                    <p v-if="!addressIsValid" class="alert alert-danger">Address is required.</p>
+                    <input v-model="form.address" type="text" class="form-control" placeholder="Address is required."/>
                 </div>
                 <div class="form-group mb-3">
                     <label>Number of rooms</label>
-                    <input v-model.number="form.numOfRooms" type="number" class="form-control"/>
-                    <p v-if="!roomsIsValid" class="alert alert-danger">Number of rooms is required, and it must be number greater than 0.</p>
+                    <input v-model.number="form.numOfRooms" type="number" class="form-control" placeholder="Number of rooms is required, and it must be number greater than 0."/>
                 </div>
                 <div class="form-group mb-3">
                     <label>Number of beds</label>
-                    <input v-model.number="form.numOfBeds" type="number" class="form-control"/>
-                    <p v-if="!bedsIsValid" class="alert alert-danger">Number of beds is required, and it must be number greater than 0.</p>
+                    <input v-model.number="form.numOfBeds" type="number" class="form-control" placeholder="Number of beds is required, and it must be number greater than 0."/>
                 </div>
                 <div class="form-group mb-3">
                     <label>Price</label>
-                    <input v-model.number="form.price" type="number" class="form-control"/>
-                    <p v-if="!priceIsValid" class="alert alert-danger">Price is required, and it must be number greater than 0.</p>
+                    <input v-model.number="form.price" type="number" class="form-control" placeholder="Price is required, and it must be number greater than 0."/>
                 </div>
                 <div class="form-group mb-3">
                     <label>Rules of conduction:</label>
