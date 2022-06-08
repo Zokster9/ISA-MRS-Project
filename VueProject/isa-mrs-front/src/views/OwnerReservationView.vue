@@ -3,7 +3,7 @@
         <div class="app">
             <div class="vertical-center" style="margin-top: 85px">
                 <div class="inner-block">
-                    <form @submit.prevent style="padding:10px;padding-top:100px">
+                    <form @submit.prevent style="padding:10px">
                         <h3>Make reservation for client:</h3> 
                         <div class="form-group required">
                             <label class="control-label">Starting date </label>

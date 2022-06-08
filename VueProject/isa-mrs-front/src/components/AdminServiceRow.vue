@@ -30,7 +30,7 @@
                     }
                 }).then((response)=>{
                     if (response.data.privilegedUser === "FISHING_INSTRUCTOR") {
-                        router.push('/adventure-page/' + id);
+                        router.push('/adventure/' + id);
                     } else if (response.data.privilegedUser === "RETREAT_OWNER") {
                         router.push('/retreat/' + id);
                     } else if (response.data.privilegedUser === "SHIP_OWNER") {

@@ -6,7 +6,7 @@
                 <br>
                 <table class="table table-striped table-responsive table-bordered mb-5">
                     <thead>
-                        <th colspan="100%" class="text-center h2">Business reports</th> 
+                        <th colspan="100%" class="text-center h2">My income</th> 
                     </thead>
                     <tbody>
                         <tr>

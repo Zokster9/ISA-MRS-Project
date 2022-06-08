@@ -2,7 +2,9 @@
     <tr :key="service.id" :class="{activeDeleteButton: hoverDeleteButton, activeEditButton: hoverEditButton, activeAcceptButton: hoverNewActionButton}">
         <td class="align-middle text-center">
             <figcaption class="mb-1"> {{service.name}} </figcaption>
-            <img :src="require('@/assets/' + service.pictures[0])" style="width:200px; height:200px;" class="rounded">
+            <router-link exact :to="linkToService">
+                <img :src="require('@/assets/' + service.pictures[0])" style="width:200px; height:200px;" class="rounded">
+            </router-link>
         </td>
         <td class="align-middle text-center"> <button type="button" @mouseover="hoverEditButton = true" @mouseleave="hoverEditButton = false" class="btn btn-warning" @click="editService(service.id)">Edit service info</button></td>
         <td class="align-middle text-center"> <button type="button" @mouseover="hoverDeleteButton = true" @mouseleave="hoverDeleteButton = false" class="btn btn-danger" @click="deleteService(service.id)">Delete service</button></td>
@@ -87,7 +89,19 @@
                 hoverEditButton: false,
                 hoverDeleteButton: false,
                 hoverNewActionButton: false,
+                linkToService: ""
             }
-        },        
+        },
+        mounted(){
+            if (window.sessionStorage.getItem("role") === "ROLE_retreatOwner") {
+                this.linkToService = "/retreat/" + this.service.id;
+            }else if (window.sessionStorage.getItem("role") === "ROLE_shipOwner") {
+                this.linkToService = "/ship/" + this.service.id;
+            }else if (window.sessionStorage.getItem("role") === "ROLE_fishingInstructor") {
+                this.linkToService = "/adventure/" + this.service.id;
+            }else {
+                alert('Some kind of error happened!');
+            }
+        }        
     }
 </script>

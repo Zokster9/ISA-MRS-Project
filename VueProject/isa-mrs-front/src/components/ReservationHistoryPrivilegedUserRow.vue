@@ -2,7 +2,9 @@
     <tr :key="reservation.id">
         <td class="align-middle text-center">
             <figcaption class="mb-1"> {{reservation.serviceName}} </figcaption>
-            <img :src="require('@/assets/' + reservation.servicePictures[0])" style="width:200px; height:200px;" class="rounded">
+            <router-link exact :to="linkToService">
+                <img :src="require('@/assets/' + reservation.servicePictures[0])" style="width:200px; height:200px;" class="rounded">
+            </router-link>
         </td>
         <td class="align-middle text-center">
             <p> Name and surname: {{reservation.clientName}}  {{reservation.clientSurname}} </p>
@@ -74,10 +76,22 @@
                 router.push('/write-report/' + this.reservationData.id);
             }
         },
-        data: function(){
+        data(){
             return {
-                reservationData: this.reservation
+                reservationData: this.reservation,
+                linkToService: ""
             }
-        },        
+        },
+        mounted(){
+            if (window.sessionStorage.getItem("role") === "ROLE_retreatOwner") {
+                this.linkToService = "/retreat/" + this.reservation.serviceId;
+            }else if (window.sessionStorage.getItem("role") === "ROLE_shipOwner") {
+                this.linkToService = "/ship/" + this.reservation.serviceId;
+            }else if (window.sessionStorage.getItem("role") === "ROLE_fishingInstructor") {
+                this.linkToService = "/adventure/"+ this.reservation.serviceId;
+            }else {
+                alert('Some kind of error happened!');
+            }
+        }  
     }
 </script>
