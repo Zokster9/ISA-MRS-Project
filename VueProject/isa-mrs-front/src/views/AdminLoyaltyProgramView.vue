@@ -1,9 +1,7 @@
 <template>
-    <div class="d-flex flex-row">
-        <div>
-            <NavbarAdmin></NavbarAdmin>
-        </div>
-        <div class="row justify-content-center mx-auto">
+    <div>
+        <NavbarAdmin></NavbarAdmin>
+        <div class="ustify-content-center mx-auto">
             <div class="signUp">
                 <div class="app">
                     <div class="vertical-center" style="margin-top: 85px">

@@ -5,7 +5,7 @@
             <ul class="nav navbar-nav flex-row float-right">
                 <li class="nav-item">
                     <div style="height:40px; width:40px; margin-top:3px;">
-                        <router-link exact to="profile-page-client" data-bs-toggle="tooltip" data-bs-placement="top" title="Profile page"><font-awesome-icon class="fa-2x" icon="fa-solid fa-user" /></router-link>
+                        <router-link exact to="/profile-page-client" data-bs-toggle="tooltip" data-bs-placement="top" title="Profile page"><font-awesome-icon class="fa-2x" icon="fa-solid fa-user" /></router-link>
                     </div>
                 </li>
                 <li class="nav-item dropdown">

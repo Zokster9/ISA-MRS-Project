@@ -1,9 +1,7 @@
 <template>
-    <div class="d-flex flex-row">
-        <div>
-            <NavbarUser></NavbarUser>
-        </div>
-        <div class="d-flex flex-column justify-content-center mx-auto align-items-center">
+    <div>
+        <NavbarUser></NavbarUser>
+        <div class="d-flex flex-column justify-content-center mx-auto align-items-center my-4">
             <div class="d-flex flex-row" style="margin: 50px">
                 <label style="margin:10px;">Choose report type: </label>
                 <select v-model="selected" name="reportType">

@@ -3,7 +3,7 @@
         <div v-if="!isFirstTimeAdmin">
             <NavbarAdmin></NavbarAdmin>
         </div>
-        <div class="mx-auto" v-if="!isFirstTimeAdmin">
+        <div class="mx-auto my-4" v-if="!isFirstTimeAdmin">
             <PersonalInfoUser v-if="data" :user="data"></PersonalInfoUser>
         </div>
         <div class="mx-auto" v-if="isFirstTimeAdmin"> 

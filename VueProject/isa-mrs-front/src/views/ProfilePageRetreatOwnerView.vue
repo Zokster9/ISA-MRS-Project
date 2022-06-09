@@ -3,7 +3,7 @@
         <div>
             <NavbarUser></NavbarUser>
         </div>
-        <div class="mx-auto">
+        <div class="mx-auto my-4">
             <PersonalInfoUser v-if="user" :user="user"></PersonalInfoUser>
         </div>
     </div>

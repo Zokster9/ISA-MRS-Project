@@ -1,9 +1,7 @@
 <template>
-    <div class="d-flex flex-row">
-        <div>
-            <NavbarUser></NavbarUser>
-        </div>
-        <div class="row justify-content-center mx-auto">
+    <div>
+        <NavbarUser></NavbarUser>
+        <div class="justify-content-center mx-auto my-4">
             <div class="col-auto">
                 <br>
                 <br>

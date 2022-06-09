@@ -1,16 +1,13 @@
 <template>
-    <div class="d-flex flex-row">
-        <div>
-            <NavbarAdmin></NavbarAdmin>
-        </div>
-        <div class="row justify-content-center mx-auto">
+    <div>
+        <NavbarAdmin></NavbarAdmin>
+        <div class="justify-content-center mx-auto my-4">
             <div class="col-auto">
                 <br>
                 <br>
                 <table class="table table-striped table-responsive table-bordered mb-5">
                     <thead>
                         <th colspan="100%" class="text-center h2"> Complaints </th>
-                        
                     </thead>
                     <tbody>
                         <tr>
