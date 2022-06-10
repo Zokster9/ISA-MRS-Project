@@ -1,7 +1,7 @@
 <template>
     <div>
         <NavbarAdmin></NavbarAdmin>
-        <div class="ustify-content-center mx-auto">
+        <div class="justify-content-center mx-auto">
             <div class="signUp">
                 <div class="app">
                     <div class="vertical-center" style="margin-top: 85px">

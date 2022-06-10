@@ -1,7 +1,7 @@
 <template>
     <div>
         <NavbarUser></NavbarUser>
-        <div class="justify-content-center mx-auto my-4">
+        <div class="row justify-content-center mx-auto my-4">
             <div class="col-auto">
                 <br>
                 <br>

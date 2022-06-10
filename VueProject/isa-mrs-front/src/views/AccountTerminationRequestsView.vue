@@ -1,7 +1,7 @@
 <template>
     <div>
         <NavbarAdmin></NavbarAdmin>
-        <div class="justify-content-center my-5">
+        <div class="row justify-content-center my-5">
             <div class="col-auto">
                 <br>
                 <br>

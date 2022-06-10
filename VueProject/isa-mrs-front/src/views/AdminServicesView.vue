@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div class="d-flex flex-row">
         <NavbarAdmin></NavbarAdmin>
-        <div class="justify-content-center mx-auto my-4">
+        <div class="row justify-content-center mx-auto my-4">
             <div class="col-auto">
                 <br>
                 <br>
@@ -15,7 +15,7 @@
                 </table>
             </div>
         </div>
-        <div class="justify-content-center mx-auto">
+        <div class="row justify-content-center mx-auto my-4">
             <div class="col-auto">
                 <br>
                 <br>
@@ -29,7 +29,7 @@
                 </table>
             </div>
         </div>
-        <div class="justify-content-center mx-auto">
+        <div class="row justify-content-center mx-auto my-4">
             <div class="col-auto">
                 <br>
                 <br>
