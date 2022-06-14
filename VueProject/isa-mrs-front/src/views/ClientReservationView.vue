@@ -60,6 +60,7 @@
     import Vue from 'vue'
     import axios from 'axios'
     import VueAxios from 'vue-axios'
+import router from '@/router';
 
     Vue.use(VueAxios, axios)
 
@@ -150,6 +151,11 @@
                 .catch(() => {
                     alert("Something went wrong!")
                 })
+            }
+        },
+        mounted() {
+            if (window.sessionStorage.getItem("role") != "ROLE_client") {
+                router.push("/");
             }
         }
     }

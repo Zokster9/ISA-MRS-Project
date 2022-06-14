@@ -321,37 +321,42 @@ import router from '@/router'
         },
 
         mounted() {
-            axios.get("http://localhost:8088/ships/get/" + this.$route.params.id, {
-                headers: {
-					Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
-				}
-            }).then((response) => {
-                this.ship = response.data;
-                this.form.name = response.data.name;
-                this.form.description = response.data.description;
-                this.form.country = response.data.country;
-                this.form.city = response.data.city;
-                this.form.address = response.data.street;
-                this.form.price = response.data.price;
-                this.form.price = response.data.price;
-                this.form.rulesOfConduction = response.data.rulesOfConduct;
-                this.form.fishingEquipment = response.data.fishingEquipment;
-                this.form.pictures = response.data.pictures;
-                this.form.shipType = response.data.type;
-                this.form.shipLength = response.data.length;
-                this.form.capacity = response.data.capacity;
-                this.form.reservationCancellationConditions = response.data.reservationCancellationConditions;
-                this.form.engineNumber = response.data.engineNum;
-                this.form.enginePower = response.data.enginePower;
-                this.form.maxSpeed = response.data.maxSpeed;
-                this.form.navigationEquipment = response.data.navigationEquipment;
-                this.form.additionalServices = response.data.additionalServices;
-            });
-            axios.get("http://localhost:8088/tags/ship", {
-                headers: {
-                    Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
-                }
-            }).then((response) => {this.tags = response.data});
+            if (window.sessionStorage.getItem("role") === "ROLE_shipOwner") {
+                axios.get("http://localhost:8088/ships/get/" + this.$route.params.id, {
+                    headers: {
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
+                    }
+                }).then((response) => {
+                    this.ship = response.data;
+                    this.form.name = response.data.name;
+                    this.form.description = response.data.description;
+                    this.form.country = response.data.country;
+                    this.form.city = response.data.city;
+                    this.form.address = response.data.street;
+                    this.form.price = response.data.price;
+                    this.form.price = response.data.price;
+                    this.form.rulesOfConduction = response.data.rulesOfConduct;
+                    this.form.fishingEquipment = response.data.fishingEquipment;
+                    this.form.pictures = response.data.pictures;
+                    this.form.shipType = response.data.type;
+                    this.form.shipLength = response.data.length;
+                    this.form.capacity = response.data.capacity;
+                    this.form.reservationCancellationConditions = response.data.reservationCancellationConditions;
+                    this.form.engineNumber = response.data.engineNum;
+                    this.form.enginePower = response.data.enginePower;
+                    this.form.maxSpeed = response.data.maxSpeed;
+                    this.form.navigationEquipment = response.data.navigationEquipment;
+                    this.form.additionalServices = response.data.additionalServices;
+                });
+                axios.get("http://localhost:8088/tags/ship", {
+                    headers: {
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
+                    }
+                }).then((response) => {this.tags = response.data});
+            }
+            else {
+                router.push("/");
+            }
         }
     }
 </script>

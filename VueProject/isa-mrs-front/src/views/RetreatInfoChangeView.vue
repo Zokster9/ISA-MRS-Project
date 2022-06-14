@@ -179,29 +179,34 @@ import router from '@/router'
         },
 
         mounted() {
-            axios.get("http://localhost:8088/retreats/get/" + this.$route.params.id, {
-                headers: {
-					Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
-				}
-            }).then((response) => {
-                this.retreat = response.data;
-                this.form.name = response.data.name;
-                this.form.description = response.data.description;
-                this.form.country = response.data.country;
-                this.form.city = response.data.city;
-                this.form.address = response.data.street;
-                this.form.numOfRooms = response.data.numOfRooms;
-                this.form.numOfBeds = response.data.numOfBeds;
-                this.form.price = response.data.price;
-                this.form.rulesOfConduction = response.data.rulesOfConduct;
-                this.form.additionalServices = response.data.additionalServices;
-                this.form.pictures = response.data.pictures;
-            });
-            axios.get("http://localhost:8088/tags/retreat", {
-                headers: {
-                    Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
-                }
-            }).then((response) => {this.tags = response.data});
+            if (window.sessionStorage.getItem('role') === "ROLE_retreatOwner") {
+                axios.get("http://localhost:8088/retreats/get/" + this.$route.params.id, {
+                    headers: {
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
+                    }
+                }).then((response) => {
+                    this.retreat = response.data;
+                    this.form.name = response.data.name;
+                    this.form.description = response.data.description;
+                    this.form.country = response.data.country;
+                    this.form.city = response.data.city;
+                    this.form.address = response.data.street;
+                    this.form.numOfRooms = response.data.numOfRooms;
+                    this.form.numOfBeds = response.data.numOfBeds;
+                    this.form.price = response.data.price;
+                    this.form.rulesOfConduction = response.data.rulesOfConduct;
+                    this.form.additionalServices = response.data.additionalServices;
+                    this.form.pictures = response.data.pictures;
+                });
+                axios.get("http://localhost:8088/tags/retreat", {
+                    headers: {
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
+                    }
+                }).then((response) => {this.tags = response.data});
+            }
+            else {
+                router.push("/");
+            }
         }
     }
 </script>

@@ -53,6 +53,7 @@
     import VueAxios from 'vue-axios'
     import NavbarAdmin from "@/components/NavbarAdmin.vue"
     import AdminServiceRow from "@/components/AdminServiceRow.vue"
+import router from '@/router'
 
     Vue.use(VueAxios, axios)
 
@@ -70,15 +71,20 @@
             }
         },
         mounted () {
-            axios.get("http://localhost:8088/ships/getAll").then((response) => {
-                this.ships = response.data
-            }),
-            axios.get("http://localhost:8088/retreats/getAll").then((response) => {
-                this.retreats = response.data
-            }),
-            axios.get("http://localhost:8088/adventures/getAll").then((response) => {
-                this.adventures = response.data
-            })
+            if (window.sessionStorage.getItem('role') === "ROLE_admin" || window.sessionStorage.getItem("role") === "ROLE_mainAdmin") {
+                axios.get("http://localhost:8088/ships/getAll").then((response) => {
+                    this.ships = response.data
+                }),
+                axios.get("http://localhost:8088/retreats/getAll").then((response) => {
+                    this.retreats = response.data
+                }),
+                axios.get("http://localhost:8088/adventures/getAll").then((response) => {
+                    this.adventures = response.data
+                })
+            }
+            else {
+                router.push("/");
+            }
         }
     }
 </script>

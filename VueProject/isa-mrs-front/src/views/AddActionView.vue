@@ -162,34 +162,38 @@
             }
         },
 		mounted() {
-            if (window.sessionStorage.getItem("role") === "ROLE_fishingInstructor"){
-                axios.get('http://localhost:8088/adventures/get/' + this.$route.params.id, {
-                    headers: {
-                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
-                    }
-                }).then((response) => {
-                    this.tags = response.data.additionalServices;
-                });
+            if (window.sessionStorage.getItem('role')) {
+                if (window.sessionStorage.getItem("role") === "ROLE_fishingInstructor"){
+                    axios.get('http://localhost:8088/adventures/get/' + this.$route.params.id, {
+                        headers: {
+                            Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
+                        }
+                    }).then((response) => {
+                        this.tags = response.data.additionalServices;
+                    });
+                }
+                else if (window.sessionStorage.getItem("role") === "ROLE_shipOwner"){
+                    axios.get('http://localhost:8088/ships/get/' + this.$route.params.id, {
+                        headers: {
+                            Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
+                        }
+                    }).then((response) => {
+                        this.tags = response.data.additionalServices;
+                    });
+                }
+                else if (window.sessionStorage.getItem("role") === "ROLE_retreatOwner"){
+                    axios.get('http://localhost:8088/retreats/get/' + this.$route.params.id, {
+                        headers: {
+                            Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
+                        }
+                    }).then((response) => {
+                        this.tags = response.data.additionalServices;
+                    });
+                }
             }
-            else if (window.sessionStorage.getItem("role") === "ROLE_shipOwner"){
-                axios.get('http://localhost:8088/ships/get/' + this.$route.params.id, {
-                    headers: {
-                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
-                    }
-                }).then((response) => {
-                    this.tags = response.data.additionalServices;
-                });
+            else {
+                router.push("/");
             }
-            else if (window.sessionStorage.getItem("role") === "ROLE_retreatOwner"){
-                axios.get('http://localhost:8088/retreats/get/' + this.$route.params.id, {
-                    headers: {
-                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
-                    }
-                }).then((response) => {
-                    this.tags = response.data.additionalServices;
-                });
-            }
-		
 		}
     }
 </script>

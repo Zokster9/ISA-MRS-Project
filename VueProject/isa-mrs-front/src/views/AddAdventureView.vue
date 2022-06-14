@@ -243,11 +243,16 @@
             }
         },
         mounted(){
-            axios.get("http://localhost:8088/tags/adventure", {
-                headers: {
-                    Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
-                }
-            }).then((response) => {this.tags = response.data});
+            if (window.sessionStorage.getItem("role") === "ROLE_fishingInstructor") {
+                axios.get("http://localhost:8088/tags/adventure", {
+                    headers: {
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
+                    }
+                }).then((response) => {this.tags = response.data});
+            }
+            else {
+                router.push("/");
+            }
         }
     }
 </script>

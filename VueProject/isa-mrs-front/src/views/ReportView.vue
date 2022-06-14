@@ -32,6 +32,7 @@
     import NavbarUser from '@/components/NavbarUser.vue'
     import AverageServiceRating from '@/components/AverageServiceRating.vue'
     import GraphAttendance from '@/components/GraphAttendance.vue'
+    import router from '@/router'
 
     export default {
         name: 'ReportView',
@@ -64,6 +65,11 @@
                     this.graphAttendance = false;
                     this.incomeReport = true;
                 }
+            }
+        },
+        mounted() {
+            if (window.sessionStorage.getItem('role') != "ROLE_retreatOwner" && window.sessionStorage.getItem("role") != "ROLE_shipOwner" && window.sessionStorage.getItem("role") != "ROLE_fishingInstructor") {
+                router.push("/");
             }
         }
     }

@@ -35,6 +35,7 @@
     import axios from 'axios'
     import VueAxios from 'vue-axios'
     import Vue from 'vue'
+    import router from '@/router'
 
     Vue.use(VueAxios, axios)
 
@@ -50,13 +51,17 @@
             }
         },
         mounted () {
-            axios.get("http://localhost:8088/complaints/findAll",{
-                headers:{
-                    Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
-                }
-            }).then((response) =>{
-                this.complaints = response.data
-            })
+            if (window.sessionStorage.getItem('role') === "ROLE_admin" || window.sessionStorage.getItem("role") === "ROLE_mainAdmin") {
+                axios.get("http://localhost:8088/complaints/findAll",{
+                    headers:{
+                        Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
+                    }
+                }).then((response) =>{
+                    this.complaints = response.data
+                })
+            }else {
+                router.push("/");
+            }
         }
     }
 </script>

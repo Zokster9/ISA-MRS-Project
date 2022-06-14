@@ -18,6 +18,7 @@
     import FastReservationClient from '@/components/FastReservationInfo.vue'
     import axios from 'axios'
     import VueAxios from 'vue-axios'
+import router from '@/router'
 
     Vue.use(VueAxios, axios)
     
@@ -89,7 +90,12 @@
             }
         },
         mounted() {
-            this.getActions();
+            if (window.sessionStorage.getItem("role") === "ROLE_client") {
+                this.getActions();
+            }
+            else {
+                router.push("/");
+            }
         }
     }
 </script>
