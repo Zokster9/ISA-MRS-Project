@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="flex">
         <NavbarAdmin></NavbarAdmin>
         <div class="row justify-content-center mx-auto my-4">
             <div class="col-auto">
@@ -17,7 +17,16 @@
                             <td class="text-center align-items"> <b> User type </b></td>
                             <td class="text-center align-items"> <b> DELETE </b></td>
                         </tr>
-                        <AdminUserDataRow v-for="user in this.users" :user="user" :key="user.id"> </AdminUserDataRow>
+                        <AdminUserDataRow v-for="user in this.visibleUsers"
+                        :user="user"
+                        :key="user.id"> 
+                        </AdminUserDataRow>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td>
+                                <PaginationComponent :elements="this.users" v-on:page:update="updatePage" :currentPage="this.currentPage" :pageSize="this.pageSize"></PaginationComponent>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -31,7 +40,8 @@
     import axios from 'axios'
     import VueAxios from 'vue-axios'
     import Vue from 'vue'
-import router from '@/router'
+    import router from '@/router'
+    import PaginationComponent from '@/components/PaginationComponent.vue'
 
     Vue.use(VueAxios, axios)
 
@@ -39,11 +49,15 @@ import router from '@/router'
         name: 'AdminUsersView',
         components: {
             NavbarAdmin,
-            AdminUserDataRow
+            AdminUserDataRow,
+            PaginationComponent
         },
         data(){
             return {
-                users: []
+                users: [],
+                currentPage: 0,
+                pageSize: 3,
+                visibleUsers: []
             }
         },
         mounted () {
@@ -54,11 +68,25 @@ import router from '@/router'
                     }
                 }).then((response) =>{
                     this.users = response.data
+                    this.updateVisibleUsers();
                 })
             }
             else {
                 router.push("/");
             }
-        }
+        },
+        methods: {
+            updateVisibleUsers(){
+                //1. param: pocetni index, 2. param: index do kojeg prikazujemo
+                this.visibleUsers = this.users.slice(this.currentPage * this.pageSize, (this.currentPage * this.pageSize) + this.pageSize);
+                if (this.visibleUsers.length == 0 && this.currentPage > 0){
+                    this.updatePage(this.currentPage - 1);
+                }
+            },
+            updatePage(pageNumber){
+                this.currentPage = pageNumber;
+                this.updateVisibleUsers();
+            },
+        },
     }
 </script>
