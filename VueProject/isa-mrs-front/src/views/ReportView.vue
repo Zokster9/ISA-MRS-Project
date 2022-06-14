@@ -1,9 +1,7 @@
 <template>
-    <div class="d-flex flex-row">
-        <div>
-            <NavbarUser></NavbarUser>
-        </div>
-        <div class="d-flex flex-column justify-content-center mx-auto align-items-center">
+    <div>
+        <NavbarUser></NavbarUser>
+        <div class="d-flex flex-column justify-content-center mx-auto align-items-center my-4">
             <h2 style="margin: 0px 10px 0px 0px"> Business reports </h2>
             <div class="d-flex flex-row" style="margin: 50px">
                 <label style="margin:10px;">Choose report type: </label>

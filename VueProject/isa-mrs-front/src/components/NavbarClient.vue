@@ -5,7 +5,7 @@
             <ul class="nav navbar-nav flex-row float-right">
                 <li class="nav-item">
                     <div style="height:40px; width:40px; margin-top:3px;">
-                        <router-link exact to="profile-page-client" data-bs-toggle="tooltip" data-bs-placement="top" title="Profile page"><font-awesome-icon class="fa-2x" icon="fa-solid fa-user" /></router-link>
+                        <router-link exact to="/profile-page-client" data-bs-toggle="tooltip" data-bs-placement="top" title="Profile page"><font-awesome-icon class="fa-2x" icon="fa-solid fa-user" /></router-link>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -48,9 +48,33 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <router-link exact to="/" class="nav-link pr-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Sign out"><font-awesome-icon class="fa-lg" icon="fa-solid fa-right-from-bracket" /></router-link>
+                    <button @click="logout" class="btn nav-link pr-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Sign out"><font-awesome-icon class="fa-lg" icon="fa-solid fa-right-from-bracket" /></button>
                 </li>
             </ul>
         </div>
     </nav>
 </template>
+
+<script>
+import router from '@/router';
+import { defineComponent } from '@vue/composition-api'
+
+export default defineComponent({
+    methods: {
+        logout() {
+            window.sessionStorage.removeItem('accessToken');
+            window.sessionStorage.removeItem('role');
+            router.push('/');
+        }
+    }
+})
+</script>
+
+<style scoped>
+
+.btn:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+</style>
