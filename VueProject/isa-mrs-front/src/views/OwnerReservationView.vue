@@ -61,6 +61,7 @@
     import axios from 'axios'
     import {required, email} from 'vuelidate/lib/validators'
     import VueAxios from 'vue-axios'
+import router from '@/router'
 
     Vue.use(VueAxios, axios)
     Vue.use(Vuelidate)
@@ -159,6 +160,9 @@
             else if (window.sessionStorage.getItem("role") === "ROLE_fishingInstructor") {
                 path = 'adventures';
                 this.form.serviceName = 'adventure';
+            }
+            else {
+                router.push("/");
             }
             axios.get('http://localhost:8088/' + path + '/get/' + this.$route.params.id, {
                 headers: {

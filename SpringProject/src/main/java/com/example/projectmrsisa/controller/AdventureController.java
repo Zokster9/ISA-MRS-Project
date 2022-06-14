@@ -84,7 +84,7 @@ public class AdventureController {
         return new ResponseEntity<>(new AdventureDTO(adventure), HttpStatus.CREATED);
     }
 
-    @GetMapping(value = "/getAdventure/{id}", produces = "application/json")
+    @GetMapping(value = "/get/{id}", produces = "application/json")
     @PreAuthorize("hasAnyRole('fishingInstructor', 'admin', 'mainAdmin', 'client')")
     public ResponseEntity<AdventureDTO> getAdventureById(@PathVariable Integer id) {
         try {

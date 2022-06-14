@@ -64,6 +64,7 @@
     import Vue from 'vue'
     import Vuelidate from 'vuelidate'
     import { required, minValue, maxValue } from 'vuelidate/lib/validators'
+    import router from '@/router'
 
     Vue.use(VueAxios, axios)
     Vue.use(Vuelidate)
@@ -143,22 +144,26 @@
             }
         },
         mounted () {
-            axios.get("http://localhost:8088/reservations/findAllNotCancelled",{
-                headers:{
-                    Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
-                }
-            }).then((response) =>{
-                this.reservations = response.data;
-                axios.post("http://localhost:8088/reservations/calculateSystemIncome", {
-                    reservationsDTO: this.reservations,
-                },{
+            if (window.sessionStorage.getItem('role') === "ROLE_admin" || window.sessionStorage.getItem("role") === "ROLE_mainAdmin") {
+                axios.get("http://localhost:8088/reservations/findAllNotCancelled",{
                     headers:{
                         Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
                     }
-                }).then((response) => {
-                    this.totalIncome = response.data;
+                }).then((response) =>{
+                    this.reservations = response.data;
+                    axios.post("http://localhost:8088/reservations/calculateSystemIncome", {
+                        reservationsDTO: this.reservations,
+                    },{
+                        headers:{
+                            Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
+                        }
+                    }).then((response) => {
+                        this.totalIncome = response.data;
+                    })
                 })
-            })
+            }else {
+                router.push("/");
+            }
         },
         validations: {
             newPercentage: {

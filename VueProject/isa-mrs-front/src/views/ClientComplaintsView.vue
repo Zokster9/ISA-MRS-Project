@@ -50,6 +50,7 @@
     import VueAxios from 'vue-axios'
     import Vuelidate from 'vuelidate'
     import { required } from 'vuelidate/lib/validators'
+import router from '@/router'
     Vue.use(VueAxios, axios)
     Vue.use(Vuelidate)
 
@@ -102,17 +103,22 @@
             }
         },
         mounted () {
-            axios.get("http://localhost:8088/reservations/getNonComplainedReservations", {
-                headers: {
-                    Authorization: 'Bearer ' + window.sessionStorage.getItem('accessToken')
-                }
-            })
-            .then(response => {
-                this.reservations = response.data;
-            })
-            .catch(() => {
-                alert("Something went wrong");
-            })
+            if (window.sessionStorage.getItem("role") === "ROLE_client") {
+                axios.get("http://localhost:8088/reservations/getNonComplainedReservations", {
+                    headers: {
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem('accessToken')
+                    }
+                })
+                .then(response => {
+                    this.reservations = response.data;
+                })
+                .catch(() => {
+                    alert("Something went wrong");
+                })
+            }
+            else {
+                router.push("/");
+            }
         }
     }
 </script>

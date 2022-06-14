@@ -34,6 +34,7 @@
     import { required, } from 'vuelidate/lib/validators'
     import axios from 'axios'
     import VueAxios from 'vue-axios'
+import router from '@/router'
 
     Vue.use(VueAxios, axios)
     Vue.use(Vuelidate)
@@ -86,6 +87,11 @@
                 revision: {
                     required
                 }
+            }
+        },
+        mounted() {
+            if (window.sessionStorage.getItem("role") != "ROLE_client") {
+                router.push("/");
             }
         }
     }

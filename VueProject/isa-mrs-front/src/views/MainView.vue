@@ -41,11 +41,27 @@
 
 <script>
 import NavbarGuest from '@/components/NavbarGuest.vue'
+import router from '@/router'
 
-export default ({
+export default {
     name: 'MainView',
     components: {
         NavbarGuest,   
     },
-})
+    mounted() {
+      if (window.sessionStorage.getItem("role")) {
+        if (window.sessionStorage.getItem("role") === "ROLE_retreatOwner") {
+          router.push('/profile-page-retreat-owner');
+				}else if (window.sessionStorage.getItem("role") === "ROLE_shipOwner") {
+					router.push('/profile-page-ship-owner');
+				} else if (window.sessionStorage.getItem("role") === "ROLE_fishingInstructor") {
+					router.push("/profile-page-fishing-instructor");
+				} else if (window.sessionStorage.getItem("role") === "ROLE_client") {
+					router.push("/home-page-client");
+				} else if (window.sessionStorage.getItem("role") === "ROLE_admin" || window.sessionStorage.getItem("role") === "ROLE_mainAdmin") {
+					router.push("/profile-page-admin");
+				}
+      }
+    }
+}
 </script>

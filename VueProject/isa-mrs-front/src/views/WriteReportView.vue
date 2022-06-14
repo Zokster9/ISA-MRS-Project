@@ -124,6 +124,11 @@
                     minLength: minLength(10)
                 }
             }
+        },
+        mounted() {
+            if (window.sessionStorage.getItem('role') != "ROLE_retreatOwner" && window.sessionStorage.getItem("role") != "ROLE_shipOwner" && window.sessionStorage.getItem("role") != "ROLE_fishingInstructor") {
+                router.push("/");
+            }
         }
     })
 </script>

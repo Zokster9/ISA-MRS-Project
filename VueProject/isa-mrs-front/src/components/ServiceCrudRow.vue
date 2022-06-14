@@ -82,6 +82,11 @@
                     alert("Adventure successfully deleted.")
                     window.location.reload()
                 })
+            },
+            showService(id) {
+                if (window.sessionStorage.getItem('role') === "ROLE_retreatOwner") router.push("/retreat/" + id);
+                else if (window.sessionStorage.getItem('role') === "ROLE_shipOwner") router.push("/ship/" + id);
+                else if (window.sessionStorage.getItem('role') === "ROLE_fishingInstructor") router.push("/adventure/" + id);
             }
         },
         data(){

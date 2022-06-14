@@ -104,6 +104,7 @@
     import { required, minLength, maxLength, email, sameAs } from 'vuelidate/lib/validators'
     import axios from 'axios'
     import VueAxios from 'vue-axios'
+    import router from '@/router'
 
     Vue.use(VueAxios, axios)
     Vue.use(Vuelidate)
@@ -216,6 +217,21 @@
                     minLength : minLength(13),
                     isPhoneNumberCorrect
                 },
+            }
+        },
+        mounted() {
+            if (window.sessionStorage.getItem("role")) {
+                if (window.sessionStorage.getItem("role") === "ROLE_retreatOwner") {
+                    router.push('/profile-page-retreat-owner');
+				}else if (window.sessionStorage.getItem("role") === "ROLE_shipOwner") {
+					router.push('/profile-page-ship-owner');
+				} else if (window.sessionStorage.getItem("role") === "ROLE_fishingInstructor") {
+					router.push("/profile-page-fishing-instructor");
+				} else if (window.sessionStorage.getItem("role") === "ROLE_client") {
+					router.push("/home-page-client");
+				} else if (window.sessionStorage.getItem("role") === "ROLE_admin" || window.sessionStorage.getItem("role") === "ROLE_mainAdmin") {
+					router.push("/profile-page-admin");
+				}
             }
         }
     })

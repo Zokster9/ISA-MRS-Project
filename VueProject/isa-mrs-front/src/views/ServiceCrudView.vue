@@ -128,21 +128,26 @@ import router from '@/router'
                 },
         },
         mounted(){
-            axios.get("http://localhost:8088/users/findMyEntities", {
-				headers: {
-					Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
-				}
-			}).then((response) =>{
-                this.services = response.data;
-                this.servicesCopy = JSON.parse(JSON.stringify(response.data));
-                if (window.sessionStorage.getItem("role") === "ROLE_fishingInstructor"){
-                    this.userType = "fishingInstructor";
-                } else if (window.sessionStorage.getItem("role") === "ROLE_retreatOwner"){
-                    this.userType = "retreatOwner"
-                } else if (window.sessionStorage.getItem("role") === "ROLE_shipOwner"){
-                    this.userType = "shipOwner"
-                }
-            })
+            if (window.sessionStorage.getItem('role') === "ROLE_retreatOwner" || window.sessionStorage.getItem("role") === "ROLE_shipOwner" || window.sessionStorage.getItem("role") === "ROLE_fishingInstructor") {
+                axios.get("http://localhost:8088/users/findMyEntities", {
+                    headers: {
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
+                    }
+                }).then((response) =>{
+                    this.services = response.data;
+                    this.servicesCopy = JSON.parse(JSON.stringify(response.data));
+                    if (window.sessionStorage.getItem("role") === "ROLE_fishingInstructor"){
+                        this.userType = "fishingInstructor";
+                    } else if (window.sessionStorage.getItem("role") === "ROLE_retreatOwner"){
+                        this.userType = "retreatOwner"
+                    } else if (window.sessionStorage.getItem("role") === "ROLE_shipOwner"){
+                        this.userType = "shipOwner"
+                    }
+                })
+            }
+            else {
+                router.push("/");
+            }
         },
     }
 </script>

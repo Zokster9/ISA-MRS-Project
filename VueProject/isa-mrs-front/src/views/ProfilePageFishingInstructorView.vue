@@ -15,6 +15,7 @@
     import Vue from 'vue'
     import axios from 'axios'
     import VueAxios from 'vue-axios'
+import router from '@/router'
 
     Vue.use(VueAxios, axios)
 
@@ -30,13 +31,18 @@
             }
         },
         mounted(){
-            axios.get("http://localhost:8088/users/getLoggedUser", {
-				headers: {
-					Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
-				}
-			}).then((response) =>{
-                this.user = response.data
-            })
+            if (window.sessionStorage.getItem('role') === "ROLE_fishingInstructor") {
+                axios.get("http://localhost:8088/users/getLoggedUser", {
+                    headers: {
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
+                    }
+                }).then((response) =>{
+                    this.user = response.data
+                })
+            }
+            else {
+                router.push("/");
+            }
         }
     }
 </script>

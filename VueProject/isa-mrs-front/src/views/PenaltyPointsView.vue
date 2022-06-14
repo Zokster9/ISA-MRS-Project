@@ -19,6 +19,7 @@
     import NavbarClient from '@/components/NavbarClient.vue'
     import axios from 'axios'
     import VueAxios from 'vue-axios'
+import router from '@/router'
 
     Vue.use(VueAxios, axios)
 
@@ -38,17 +39,22 @@
             }
         },
         mounted () {
-            axios.get("http://localhost:8088/clients/getLoggedClient", {
-               headers:{
-                    Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
-                }
-            })
-            .then(response => {
-                this.client = response.data;
-            })
-            .catch(() => {
-                alert("Something went wrong!");
-            })
+            if (window.sessionStorage.getItem('role') === "ROLE_client") {
+                axios.get("http://localhost:8088/clients/getLoggedClient", {
+                headers:{
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
+                    }
+                })
+                .then(response => {
+                    this.client = response.data;
+                })
+                .catch(() => {
+                    alert("Something went wrong!");
+                })
+            }
+            else {
+                router.push("/");
+            }
         }
     }
 </script>

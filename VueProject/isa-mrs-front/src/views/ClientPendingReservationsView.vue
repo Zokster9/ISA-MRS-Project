@@ -25,6 +25,7 @@
     import Vue from 'vue'
     import axios from 'axios'
     import VueAxios from 'vue-axios'
+import router from '@/router'
 
     Vue.use(VueAxios, axios)
 
@@ -70,7 +71,12 @@
             }
         },
         mounted () {
-            this.getPendingReservations();
+            if (window.sessionStorage.getItem("role") === "ROLE_client") {
+                this.getPendingReservations();
+            }
+            else {
+                router.push("/");
+            }
         }
     }
 </script>

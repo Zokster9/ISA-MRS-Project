@@ -40,12 +40,18 @@
 </template>
 
 <script>
-    import NavbarClient from '@/components/NavbarClient.vue'
+  import NavbarClient from '@/components/NavbarClient.vue'
+  import router from '@/router'
 
-    export default {
-        name: 'HomepageClient',
-        components: {
-            NavbarClient,    
-        }
+  export default {
+    name: 'HomepageClient',
+    components: {
+      NavbarClient,    
+    },
+    mounted() {
+      if (window.sessionStorage.getItem("role") != "ROLE_client") {
+        router.push("/");
+      }
     }
+  }
 </script>

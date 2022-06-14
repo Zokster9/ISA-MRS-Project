@@ -11,6 +11,14 @@
 					<a class="next" @click="changePicture(1)">&#10095;</a>
                 </div>
 				<div class="d-flex flex-column" style="border-radius: 25px; margin: 5px; border: 1px solid #323539">
+                    <div>
+                        <h5 style="margin: 5px">Additional services</h5>
+                        <ul>
+                            <template v-for="service in ship.additionalServices">
+                                <li style="margin: 5px" :key="service">{{service}}</li>
+                            </template>
+                        </ul>
+                    </div>
 					<div>
                         <h5 style="margin: 5px">Rules of conduct</h5>
                         <ul>
@@ -37,8 +45,8 @@
                     </div>
 				</div>
             </div>
-            <div class="d-flex flex-column" style="width: 50%; margin: 5px">
-                <div style="height: 10%; margin: 5px">
+            <div class="d-flex flex-column" style="width: 50%; margin: 5px;">
+                <div style="height: 10%; margin: 5px; align-self: center;">
                     <h1>
                         <span>{{ship.name}}</span>
                     </h1>
@@ -58,7 +66,7 @@
                         <h5 style="margin: 5px">Engine number: {{ship.engineNum}}</h5>
                     </div>
                     <div class="d-flex flex-row">
-                        <h5 style="margin: 5px">Engine power: {{ship.enginePower}}</h5>
+                        <h5 style="margin: 5px">Engine power: {{ship.enginePower}} kW</h5>
                     </div>
                     <div class="d-flex flex-row">
                         <h5 style="margin: 5px">Max speed: {{ship.maxSpeed}}</h5>
@@ -67,7 +75,7 @@
                         <h5 style="margin: 5px">Capacity: {{ship.capacity}}</h5>
                     </div>
                     <div class="d-flex flex-row">
-                        <h5 style="margin: 5px">Price: {{ship.price}}</h5>
+                        <h5 style="margin: 5px">Price: {{ship.price}} €</h5>
                     </div>
                     <div>
                         <h5 style="margin: 5px">Reservation cancellation conditions</h5>
@@ -80,27 +88,20 @@
 					<div>
 						<iframe :src="mapSrc" style="margin: 15px; border-radius: 25px; border: 1px solid #323539"></iframe>
 					</div>
-                    <div class="mx-2 my-2">
+                </div>
+                <div class="d-flex flex-row" style="height: 10%; margin: 5px; border: 1px solid #323539">
+                    <div v-if="isClient" class="d-flex flex-column" style="margin: 10px; align-self: left;">
                         <button @click="subscribe" v-if="isClient && !isSubscribed" class="btn btn-primary" value="Subscribe">Subscribe</button>
                         <button @click="unsubscribe" v-if="isClient && isSubscribed" class="btn btn-primary" value="Unsubscribe">Unsubscribe</button>
                     </div>
-                    <div class="mx-2 my-2" v-if="isClient">
+                    <div v-if="isClient" class="d-flex flex-column" style="margin: 10px; align-self: right;">
                         <button @click="goToActions" class="btn btn-primary" value="Actions">See actions</button>
                     </div>
-                </div>
-                <div class="d-flex flex-row" style="height: 10%; margin: 5px; border: 1px solid #323539">
-                    <div class="d-flex flex-row" style="margin: 5px; width: 66%">
-                        <div class="d-flex flex-row" style="margin: 5px; width: 50%">
-                            <label style="margin: 5px">Date from: </label>
-                            <input type="date" />
-                        </div> 
-                        <div class="d-flex flex-row" style="margin: 5px; width: 50%">
-                            <label style="margin: 5px">Date to: </label>
-                            <input type="date" />
-                        </div>    
+                    <div style="margin: 10px; align-self: center;" v-if="isOwner">
+                        <button class="btn btn-primary" @click="reserveForClient" value="Reserve">Reserve for client</button>
                     </div>
-                    <div style="margin: 10px; width: 33%">
-                        <button class="btn btn-primary" value="Reserve">Make reservation</button>
+                    <div style="margin: 10px; align-self: center;" v-if="isOwner">
+                        <button class="btn btn-primary" @click="showCalendar" value="Show calendar">Show calendar for ship</button>
                     </div>
                 </div>
             </div>
@@ -127,7 +128,10 @@
         },
         computed: {
             isClient() {
-                return window.sessionStorage.getItem("role") === "ROLE_client"
+                return window.sessionStorage.getItem("role") === "ROLE_client";
+            },
+            isOwner() {
+                return window.sessionStorage.getItem("role") === "ROLE_shipOwner";
             },
             isSubscribed() {
                 if (this.client != null) {
@@ -173,6 +177,12 @@
             goToActions() {
                 this.$router.push("/fast-reservations/" + this.$route.params.id)
             },
+            reserveForClient() {
+                this.$router.push("/owner-reserve/" + this.$route.params.id);
+            },
+            showCalendar() {
+                this.$router.push("/service-calendar/" + this.$route.params.id);
+            }
         },
         mounted() {
             axios.get("http://localhost:8088/ships/get/" + this.$route.params.id, 

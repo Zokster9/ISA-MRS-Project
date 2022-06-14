@@ -68,6 +68,7 @@
     import { required, minLength, maxLength, email } from 'vuelidate/lib/validators'
     import axios from 'axios'
     import VueAxios from 'vue-axios'
+import router from '@/router'
 
     Vue.use(VueAxios, axios)
     Vue.use(Vuelidate)
@@ -168,21 +169,25 @@
             }
         },
 		mounted() {
-			axios.get("http://localhost:8088/users/getLoggedUser", {
-				headers: {
-					Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
-				}
-			}).then((response) =>{
-                this.user = response.data;
-				this.form.name = response.data.name;
-				this.form.surname = response.data.surname;
-				this.form.email = response.data.email;
-				this.form.address = response.data.addressDTO.street;
-				this.form.country = response.data.addressDTO.country;
-				this.form.city = response.data.addressDTO.city;
-				this.form.phoneNumber = response.data.phoneNumber;
-            })
-		
+            if (window.sessionStorage.getItem("role")) {
+                axios.get("http://localhost:8088/users/getLoggedUser", {
+                    headers: {
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
+                    }
+                }).then((response) =>{
+                    this.user = response.data;
+                    this.form.name = response.data.name;
+                    this.form.surname = response.data.surname;
+                    this.form.email = response.data.email;
+                    this.form.address = response.data.addressDTO.street;
+                    this.form.country = response.data.addressDTO.country;
+                    this.form.city = response.data.addressDTO.city;
+                    this.form.phoneNumber = response.data.phoneNumber;
+                })
+            }
+            else {
+                router.push("/");
+            }
 		}
     }
 </script>

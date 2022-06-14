@@ -72,6 +72,7 @@
     import axios from 'axios'
     import VueAxios from 'vue-axios'
     import NavbarAdmin from '@/components/NavbarAdmin.vue'
+    import router from '@/router'
 
     Vue.use(VueAxios, axios)
     Vue.use(Vuelidate)
@@ -116,6 +117,11 @@
                     alert("Successfully changed loyalty program!")
                     window.location.reload();
                 })
+            }
+        },
+        mounted() {
+            if (window.sessionStorage.getItem('role') != "ROLE_admin" && window.sessionStorage.getItem("role") != "ROLE_mainAdmin") {
+                router.push("/");
             }
         },
         validations: {

@@ -28,6 +28,7 @@
     import Vue from 'vue'
     import Vuelidate from 'vuelidate'
     import { required, sameAs } from 'vuelidate/lib/validators'
+import router from '@/router'
 
     Vue.use(VueAxios, axios)
     Vue.use(Vuelidate)
@@ -77,20 +78,25 @@
             }
         },
         mounted () {
-            axios.get("http://localhost:8088/users/getLoggedAdmin",
-            {
-                headers: {
-                    Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
-                }
-            }).then((response)=>{
-                this.data = response.data;
-                if (this.data.passwordChanged === false && window.sessionStorage.getItem("role") === "ROLE_admin"){
-                    this.isFirstTimeAdmin = true;
-                }
-                else{
-                    this.isFirstTimeAdmin = false;
-                }
-            })
+            if (window.sessionStorage.getItem('role') === "ROLE_admin" || window.sessionStorage.getItem("role") === "ROLE_mainAdmin") {
+                axios.get("http://localhost:8088/users/getLoggedAdmin",
+                {
+                    headers: {
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
+                    }
+                }).then((response)=>{
+                    this.data = response.data;
+                    if (this.data.passwordChanged === false && window.sessionStorage.getItem("role") === "ROLE_admin"){
+                        this.isFirstTimeAdmin = true;
+                    }
+                    else{
+                        this.isFirstTimeAdmin = false;
+                    }
+                })
+            }
+            else {
+                router.push("/");
+            }
         }
     }
 </script>
