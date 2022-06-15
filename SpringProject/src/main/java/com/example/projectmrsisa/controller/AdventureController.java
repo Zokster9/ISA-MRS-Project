@@ -159,7 +159,7 @@ public class AdventureController {
             List<AdventureDTO> adventureDTOS = new ArrayList<>();
             for (Adventure adventure : adventures) {
                 if (adventure.isDeleted()) continue;
-                adventureDTOS.add(new AdventureDTO(adventure));
+                adventureDTOS.add(new AdventureDTO(adventure, "adventure"));
             }
             return new ResponseEntity<>(adventureDTOS, HttpStatus.OK);
         }catch (Exception e) {

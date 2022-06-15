@@ -23,10 +23,12 @@ public class RetreatDTO {
     private int numOfRooms;
     private int numOfBeds;
     private List<String> additionalServices;
+    private String serviceType;
 
     public RetreatDTO() {}
 
-    public RetreatDTO(String name, String description, String country, String city, String street, List<String> pictures, List<String> rulesOfConduct, int numOfRooms, int numOfBeds, double price, List<String> additionalServices) {
+    public RetreatDTO(String name, String description, String country, String city, String street, List<String> pictures,
+                      List<String> rulesOfConduct, int numOfRooms, int numOfBeds, double price, List<String> additionalServices) {
         this.name = name;
         this.description = description;
         this.country = country;
@@ -57,6 +59,26 @@ public class RetreatDTO {
         for (Tag t : retreat.getAdditionalServices()) {
             this.additionalServices.add(t.getName());
         }
+    }
+
+    public RetreatDTO(Retreat retreat, String serviceType) {
+        this.id = retreat.getId();
+        this.ownerId = retreat.getOwner().getId();
+        this.name= retreat.getName();
+        this.description = retreat.getDescription();
+        this.country = retreat.getAddress().getCountry();
+        this.city = retreat.getAddress().getCity();
+        this.street = retreat.getAddress().getStreet();
+        this.pictures = new ArrayList<>(retreat.getPictures());
+        this.rulesOfConduct = new ArrayList<>(retreat.getRulesOfConduct());
+        this.numOfBeds = retreat.getNumOfBeds();
+        this.numOfRooms = retreat.getNumOfRooms();
+        this.price = retreat.getPrice();
+        this.additionalServices = new ArrayList<>();
+        for (Tag t : retreat.getAdditionalServices()) {
+            this.additionalServices.add(t.getName());
+        }
+        this.serviceType = serviceType;
     }
 
     public int getId() {
@@ -161,5 +183,13 @@ public class RetreatDTO {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public String getServiceType() {
+        return serviceType;
+    }
+
+    public void setServiceType(String serviceType) {
+        this.serviceType = serviceType;
     }
 }

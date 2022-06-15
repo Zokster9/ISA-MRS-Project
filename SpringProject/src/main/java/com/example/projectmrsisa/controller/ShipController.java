@@ -59,7 +59,7 @@ public class ShipController {
             List<ShipDTO> shipDTOS = new ArrayList<>();
             for (Ship ship : ships) {
                 if(ship.isDeleted()) continue;
-                shipDTOS.add(new ShipDTO(ship));
+                shipDTOS.add(new ShipDTO(ship, "ship"));
             }
             return new ResponseEntity<>(shipDTOS, HttpStatus.OK);
         } catch (Exception e) {

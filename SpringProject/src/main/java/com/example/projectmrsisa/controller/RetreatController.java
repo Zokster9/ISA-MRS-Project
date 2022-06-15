@@ -59,7 +59,7 @@ public class RetreatController {
             List<RetreatDTO> retreatDTOS = new ArrayList<>();
             for (Retreat retreat : retreats) {
                 if (retreat.isDeleted()) continue;
-                retreatDTOS.add(new RetreatDTO(retreat));
+                retreatDTOS.add(new RetreatDTO(retreat, "retreat"));
             }
             return new ResponseEntity<>(retreatDTOS, HttpStatus.OK);
         } catch (Exception e) {

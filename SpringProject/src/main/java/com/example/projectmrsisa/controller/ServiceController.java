@@ -42,6 +42,12 @@ public class ServiceController {
     @Autowired
     private ReservationService reservationService;
 
+    @Autowired
+    private RetreatService retreatService;
+
+    @Autowired
+    private  ShipService shipService;
+
     @Transactional
     @DeleteMapping(value="/delete/{id}")
     @PreAuthorize("hasAnyRole('admin', 'mainAdmin', 'fishingInstructor', 'shipOwner', 'retreatOwner')")
@@ -76,9 +82,19 @@ public class ServiceController {
     public ResponseEntity<List<ServiceDTO>> getAllSubscriptions(Principal principal) {
         Client client = (Client) userService.findUserByEmail(principal.getName());
         List<ServiceDTO> serviceDTOs = new ArrayList<>();
-        for (Service service: client.getSubscriptions())
-            serviceDTOs.add(new ServiceDTO(service));
+        for (Service service: client.getSubscriptions()) {
+            serviceDTOs.add(new ServiceDTO(service, getServiceType(service)));
+        }
         return new ResponseEntity<>(serviceDTOs, HttpStatus.OK);
+    }
+
+    private String getServiceType(Service service) {
+        if (retreatService.getRetreatById(service.getId()) != null)
+            return "retreat";
+        else if (shipService.findShipById(service.getId()) != null)
+            return "ship";
+        else
+            return "adventure";
     }
 
     @GetMapping(value="/getAvailableFastReservations/{serviceId}")
