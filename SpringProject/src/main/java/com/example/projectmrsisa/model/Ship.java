@@ -71,6 +71,7 @@ public class Ship extends Service {
         this.fishingEquipment = new HashSet<>(shipDTO.getFishingEquipment());
         this.reservationCancellationConditions = shipDTO.getReservationCancellationConditions();
         this.setAdditionalServices(additionalServices);
+        this.setNumberOfReservations(0);
     }
 
     public String getType() {

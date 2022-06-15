@@ -31,7 +31,6 @@ public class ReportController {
     @Autowired
     private EmailService emailService;
 
-    @Transactional
     @PostMapping(value="/penalizeClient")
     @PreAuthorize("hasAnyRole('fishingInstructor','shipOwner', 'retreatOwner')")
     public ResponseEntity<ReportDTO> penalizeClient(@RequestBody PenalDTO penalDTO){
@@ -53,7 +52,6 @@ public class ReportController {
         return new ResponseEntity<>(reportDTO, HttpStatus.OK);
     }
 
-    @Transactional
     @PostMapping(value="/sendReport")
     @PreAuthorize("hasAnyRole('fishingInstructor','shipOwner', 'retreatOwner')")
     public ResponseEntity<ReportDTO> sendReport(@RequestBody PenalDTO penalDTO){
@@ -74,7 +72,6 @@ public class ReportController {
         return new ResponseEntity<>(reportDTO, HttpStatus.OK);
     }
 
-    @Transactional
     @PostMapping(value="/askForPenal")
     @PreAuthorize("hasAnyRole('fishingInstructor','shipOwner', 'retreatOwner')")
     public ResponseEntity<ReportDTO> askForPenal(@RequestBody PenalDTO penalDTO){
@@ -111,7 +108,6 @@ public class ReportController {
         return new ResponseEntity<>(reportDTOS, HttpStatus.OK);
     }
 
-    @Transactional
     @PutMapping(value="/updateReport")
     @PreAuthorize("hasAnyRole('admin','mainAdmin')")
     public ResponseEntity<ReportDTO> updateReport(@RequestBody ReportDTO reportDTO){

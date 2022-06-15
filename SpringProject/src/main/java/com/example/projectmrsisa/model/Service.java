@@ -41,6 +41,11 @@ public abstract class Service {
     @JoinTable(name = "service_tags", joinColumns = @JoinColumn(name = "service_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
     private Set<Tag> additionalServices = new HashSet<>();
+    @Version
+    @Column(name = "version", columnDefinition = "integer DEFAULT 0", nullable = false)
+    private Long version;
+    @Column(name = "num_of_reservations", nullable = false)
+    private Integer numberOfReservations;
 
     public Service() {
         this.isDeleted = false;
@@ -159,5 +164,21 @@ public abstract class Service {
 
     public void addAction(Action action) {
         this.actions.add(action);
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
+    }
+
+    public Integer getNumberOfReservations() {
+        return numberOfReservations;
+    }
+
+    public void setNumberOfReservations(Integer numberOfReservations) {
+        this.numberOfReservations = numberOfReservations;
     }
 }

@@ -60,6 +60,9 @@
                 }).then(() => {
                     alert("Retreat successfully deleted.");
                     window.location.reload();
+                }).catch((error) => {
+                    if (error.response.status === 409) alert("Error. Pending reservation for retreat exists.");
+                    else alert("Error occured. You can not delete this retreat.");
                 })
             },
             deleteShip(id) {
@@ -70,6 +73,9 @@
                 }).then(() => {
                     alert("Ship successfully deleted.");
                     window.location.reload();
+                }).catch((error) => {
+                    if (error.response.status === 409) alert("Error. Pending reservation for ship exists.");
+                    else alert("Error occured. You can not delete this ship.");
                 })
             },
             deleteAdventure(id) {
@@ -81,6 +87,9 @@
                 }).then(() =>{
                     alert("Adventure successfully deleted.")
                     window.location.reload()
+                }).catch((error) => {
+                    if (error.response.status === 409) alert("Error. Pending reservation for adventure exists.");
+                    else alert("Error occured. You can not delete this adventure.");
                 })
             },
             showService(id) {

@@ -7,6 +7,7 @@ import com.example.projectmrsisa.model.Tag;
 import com.example.projectmrsisa.repository.AdventureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -25,8 +26,10 @@ public class AdventureService {
 
     public Adventure findAdventureById(Integer id) { return adventureRepository.findAdventureById(id); }
 
+    @Transactional(readOnly = false)
     public void deleteAdventureById(Integer id) { adventureRepository.deleteAdventureById(id); }
 
+    @Transactional(readOnly = false)
     public Adventure updateAdventure(Adventure adventure, AdventureDTO adventureDTO, Set<Tag> additionalServices) {
         if (!adventure.getName().equals(adventureDTO.getName())) adventure.setName(adventureDTO.getName());
         if (!adventure.getDescription().equals(adventureDTO.getDescription()))

@@ -51,7 +51,7 @@ insert into user_role (user_id, role_id) values (5, 4);
 
 insert into clients (id, penalty_points, is_penalized) values (5, 0, false);
 
-insert into services (name, description, price, owner_id, address_id, is_deleted) values ('Brvnara na Dunavu', 'Lepo mesto pored reke za kvalitetan odmor. Pogodno za zurke, proslave i drizenja sa prijateljima.', 50, 1, 3, false);
+insert into services (name, description, price, owner_id, address_id, is_deleted, num_of_reservations) values ('Brvnara na Dunavu', 'Lepo mesto pored reke za kvalitetan odmor. Pogodno za zurke, proslave i drizenja sa prijateljima.', 50, 1, 3, false, 3);
 insert into my_pictures (id, pictures) values (1, 'pic1.jpg');
 insert into my_pictures (id, pictures) values (1, 'pic2.jpg');
 insert into my_pictures (id, pictures) values (1, 'pic3.jpg');
@@ -59,14 +59,14 @@ insert into my_pictures (id, pictures) values (1, 'pic4.jpg');
 insert into my_rules_of_conduct (id, rules_of_conduct) values (1, 'Inside smoking disallowed');
 insert into my_rules_of_conduct (id, rules_of_conduct) values (1, 'Pet friendly');
 
-insert into services (name, description, price, owner_id, address_id, is_deleted) values ('Nojeva barka', 'Brod za ljude sa dubokim dzepom.', 500, 2, 1, false);
+insert into services (name, description, price, owner_id, address_id, is_deleted, num_of_reservations) values ('Nojeva barka', 'Brod za ljude sa dubokim dzepom.', 500, 2, 1, false, 3);
 insert into my_pictures (id, pictures) values (2, 'ship1.jpg');
 insert into my_pictures (id, pictures) values (2, 'ship2.jpg');
 insert into my_pictures (id, pictures) values (2, 'ship3.jpg');
 insert into my_rules_of_conduct (id, rules_of_conduct) values (2, 'Smoking disallowed');
 insert into my_rules_of_conduct (id, rules_of_conduct) values (2, 'Weapons disallowed');
 
-insert into services (name, description, price, owner_id, address_id, is_deleted) values ('Instrukcije pecanja', 'Naucite da pecate. Strpljiv i veoma prijatan instruktor', 30, 3, 3, false);
+insert into services (name, description, price, owner_id, address_id, is_deleted, num_of_reservations) values ('Instrukcije pecanja', 'Naucite da pecate. Strpljiv i veoma prijatan instruktor', 30, 3, 3, false, 4);
 insert into my_pictures (id, pictures) values (3, 'adventure1.jpg');
 insert into my_pictures (id, pictures) values (3, 'adventure2.jpg');
 insert into my_pictures (id, pictures) values (3, 'adventure3.jpg');

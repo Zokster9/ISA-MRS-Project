@@ -53,7 +53,6 @@ public class RevisionController {
         return new ResponseEntity<>(revisionDTOS, HttpStatus.OK);
     }
 
-    @Transactional
     @PostMapping(value="/updateRevision")
     @PreAuthorize("hasAnyRole('admin','mainAdmin')")
     public ResponseEntity<RevisionDTO> updateRevision(@RequestBody RevisionDTO revisionDTO){

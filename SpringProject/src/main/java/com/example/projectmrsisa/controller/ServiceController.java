@@ -42,11 +42,11 @@ public class ServiceController {
     @Autowired
     private ReservationService reservationService;
 
-    @Transactional
     @DeleteMapping(value="/delete/{id}")
-    @PreAuthorize("hasAnyRole('admin', 'mainAdmin', 'fishingInstructor', 'shipOwner', 'retreatOwner')")
+    @PreAuthorize("hasAnyRole('admin', 'mainAdmin')")
     public ResponseEntity deleteService(@PathVariable Integer id) {
         try {
+            if (!reservationService.pendingReservationForServiceExists(id)) return new ResponseEntity<>(HttpStatus.CONFLICT);
             serviceService.deleteServiceById(id);
             return new ResponseEntity(HttpStatus.OK);
         } catch (Exception e){

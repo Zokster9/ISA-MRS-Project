@@ -25,7 +25,6 @@ public class DiscountController {
     @Autowired
     private DiscountService discountService;
 
-    @Transactional
     @PostMapping(value="/updatePercentage")
     @PreAuthorize("hasAnyRole('mainAdmin','admin')")
     public ResponseEntity<DiscountDTO> createNewDiscount(@RequestBody DiscountDTO discountDTO){

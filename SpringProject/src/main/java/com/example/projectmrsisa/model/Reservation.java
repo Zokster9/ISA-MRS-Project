@@ -9,7 +9,6 @@ import java.util.Set;
 
 @Entity
 @Table(name="reservations")
-@Inheritance(strategy = InheritanceType.JOINED)
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

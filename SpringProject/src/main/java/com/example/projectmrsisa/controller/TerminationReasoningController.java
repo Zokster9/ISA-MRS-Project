@@ -46,7 +46,6 @@ public class TerminationReasoningController {
         return new ResponseEntity<>(trDTO, HttpStatus.OK);
     }
 
-    @Transactional
     @PostMapping(value="/declineTermination")
     @PreAuthorize("hasAnyRole('admin', 'mainAdmin')")
     public ResponseEntity<UserDTO> declineTermination(@RequestBody TerminationChoiceDTO terminationChoiceDTO){
@@ -62,7 +61,6 @@ public class TerminationReasoningController {
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
-    @Transactional
     @PostMapping(value="/acceptTermination")
     @PreAuthorize("hasAnyRole('admin', 'mainAdmin')")
     public ResponseEntity<UserDTO> acceptTermination(@RequestBody TerminationChoiceDTO terminationChoiceDTO){

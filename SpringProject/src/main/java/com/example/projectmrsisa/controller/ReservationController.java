@@ -3,6 +3,7 @@ package com.example.projectmrsisa.controller;
 import com.example.projectmrsisa.dto.*;
 import com.example.projectmrsisa.model.*;
 import com.example.projectmrsisa.service.*;
+import com.example.projectmrsisa.validators.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,6 +55,8 @@ public class ReservationController {
 
     @Autowired
     private LoyaltyProgramService loyaltyProgramService;
+
+    private Validator validator = new Validator();
 
     @GetMapping(value = "/getPrivilegedUserReservations")
     @PreAuthorize("hasAnyRole('fishingInstructor', 'shipOwner', 'retreatOwner')")
@@ -173,13 +176,12 @@ public class ReservationController {
             Reservation reservation = reservationService.addReservation(new Reservation(reservationDTO, service, client, additionalServices));
             ReservationDTO resDTO = new ReservationDTO(reservation);
             emailService.sendReservationConfirmation(resDTO);
-            return new ResponseEntity<>(resDTO, HttpStatus.CREATED);
+            return new ResponseEntity<>(resDTO, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
-    @Transactional
     @PutMapping(value = "/changeStatus")
     @PreAuthorize("hasAnyRole('fishingInstructor', 'shipOwner', 'retreatOwner')")
     public ResponseEntity<ReservationDTO> changeReservationStatus(@RequestBody ReservationDTO reservationDTO) {
@@ -216,7 +218,7 @@ public class ReservationController {
     @PostMapping(value = "/make-for-client/{serviceId}", produces = "application/json")
     @PreAuthorize("hasAnyRole('retreatOwner', 'shipOwner', 'fishingInstructor')")
     public ResponseEntity<ReservationDTO> makeReservationForClient(@RequestBody ReservationDTO reservationDTO, @PathVariable Integer serviceId) {
-        if (!validReservationDTO(reservationDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (!validator.validReservationDTO(reservationDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         try {
             Client client = (Client) userService.findUserByEmail(reservationDTO.getClientEmail());
             Service service = serviceService.findById(serviceId);
@@ -243,31 +245,6 @@ public class ReservationController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-    }
-
-    private boolean validReservationDTO(ReservationDTO reservationDTO) {
-        if (reservationDTO.getClientEmail() == null || !reservationDTO.getClientEmail().matches("^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$")) {
-            return false;
-        }
-        if (!validDates(reservationDTO.getFromDate(), reservationDTO.getToDate(), reservationDTO.getFromTime(), reservationDTO.getToTime()))
-            return false;
-        for (String as : reservationDTO.getAdditionalServices()) {
-            if (as.equals("") || as.length() > 14) return false;
-        }
-        return reservationDTO.getNumOfPeople() > 0;
-    }
-
-    private boolean validDates(Date dateFrom, Date dateTo, String timeFrom, String timeTo) {
-        Date today = new Date();
-        if (dateFrom == null || dateTo == null || timeFrom == null || timeTo == null) return false;
-        if (dateFrom.compareTo(today) < 0) return false;
-        if (dateTo.compareTo(today) < 0) return false;
-        if (dateFrom.compareTo(dateTo) > 0) return false;
-        if (dateFrom.compareTo(dateTo) == 0) {
-            return Integer.parseInt(timeFrom) * 60 + Integer.parseInt(timeFrom)
-                    < Integer.parseInt(timeTo) * 60 + Integer.parseInt(timeTo);
-        }
-        return true;
     }
 
     @GetMapping(value = "/getNonComplainedReservations")
@@ -497,7 +474,6 @@ public class ReservationController {
         return differenceInDays >= 3;
     }
 
-    @Transactional
     @PutMapping(value = "/cancelReservation/{reservationId}")
     @PreAuthorize("hasRole('client')")
     public ResponseEntity<ReservationDTO> cancelReservation(@PathVariable Integer reservationId) {

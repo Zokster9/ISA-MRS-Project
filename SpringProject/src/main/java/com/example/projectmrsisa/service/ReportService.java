@@ -4,10 +4,12 @@ import com.example.projectmrsisa.model.Report;
 import com.example.projectmrsisa.repository.ReportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional(readOnly = false)
 public class ReportService {
 
     @Autowired
