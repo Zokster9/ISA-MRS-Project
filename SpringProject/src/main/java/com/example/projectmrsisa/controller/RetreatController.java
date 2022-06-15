@@ -52,6 +52,9 @@ public class RetreatController {
     @Autowired
     private SubscriptionService subscriptionService;
 
+    @Autowired
+    private RevisionService revisionService;
+
     @GetMapping(value="/getAll", produces = "application/json")
     public ResponseEntity<List<RetreatDTO>> getRetreats() {
         try {
@@ -59,7 +62,7 @@ public class RetreatController {
             List<RetreatDTO> retreatDTOS = new ArrayList<>();
             for (Retreat retreat : retreats) {
                 if (retreat.isDeleted()) continue;
-                retreatDTOS.add(new RetreatDTO(retreat, "retreat"));
+                retreatDTOS.add(new RetreatDTO(retreat, "retreat", revisionService.getAverageRatingForService(retreat.getId())));
             }
             return new ResponseEntity<>(retreatDTOS, HttpStatus.OK);
         } catch (Exception e) {

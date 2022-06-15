@@ -51,6 +51,9 @@ public class AdventureController {
     @Autowired
     private ClientService clientService;
 
+    @Autowired
+    private RevisionService revisionService;
+
     @PostMapping(value="/create-adventure",consumes = "application/json")
     @PreAuthorize("hasRole('fishingInstructor')")
     public ResponseEntity<AdventureDTO> createAdventure(@RequestBody AdventureDTO adventureDTO, Principal principal) {
@@ -159,7 +162,7 @@ public class AdventureController {
             List<AdventureDTO> adventureDTOS = new ArrayList<>();
             for (Adventure adventure : adventures) {
                 if (adventure.isDeleted()) continue;
-                adventureDTOS.add(new AdventureDTO(adventure, "adventure"));
+                adventureDTOS.add(new AdventureDTO(adventure, "adventure", revisionService.getAverageRatingForService(adventure.getId())));
             }
             return new ResponseEntity<>(adventureDTOS, HttpStatus.OK);
         }catch (Exception e) {

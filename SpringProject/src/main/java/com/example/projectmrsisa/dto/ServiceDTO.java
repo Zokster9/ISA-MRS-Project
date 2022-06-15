@@ -17,6 +17,7 @@ public class ServiceDTO {
     private String ownerName;
     private String ownerSurname;
     private String serviceType;
+    private double averageRating;
 
     public ServiceDTO() {
 
@@ -39,7 +40,7 @@ public class ServiceDTO {
         this.country = service.getAddress().getCountry();
     }
 
-    public ServiceDTO(Service service, String serviceType) {
+    public ServiceDTO(Service service, String serviceType, double averageRating) {
         this.id = service.getId();
         this.name = service.getName();
         this.description = service.getDescription();
@@ -55,6 +56,7 @@ public class ServiceDTO {
         this.street = service.getAddress().getStreet();
         this.country = service.getAddress().getCountry();
         this.serviceType = serviceType;
+        this.averageRating = averageRating;
     }
 
     public int getId() {
@@ -151,5 +153,13 @@ public class ServiceDTO {
 
     public void setServiceType(String serviceType) {
         this.serviceType = serviceType;
+    }
+
+    public double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(double averageRating) {
+        this.averageRating = averageRating;
     }
 }

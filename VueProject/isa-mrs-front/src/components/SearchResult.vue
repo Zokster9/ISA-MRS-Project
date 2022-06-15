@@ -11,9 +11,13 @@
                 <span class="card-text">Description</span>
                 <span class="float-end">{{ searchResult.description }}</span>
             </div>
-            <div>
+            <div v-if="searchResult.averageRating > 0">
                 <span class="card-text">Average rating</span>
-                <span class="card-text float-end">4.5/5</span>
+                <span class="card-text float-end">{{searchResult.averageRating}}/5</span>
+            </div>
+            <div v-else>
+                <span class="card-text">Average rating</span>
+                <span class="card-text float-end">No rating yet.</span>
             </div>
       </div>
     </router-link>

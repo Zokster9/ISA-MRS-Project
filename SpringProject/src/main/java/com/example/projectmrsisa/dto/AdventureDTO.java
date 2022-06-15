@@ -24,6 +24,7 @@ public class AdventureDTO {
     private String city;
     private List<String> additionalServices;
     private String serviceType;
+    private double averageRating;
 
     public AdventureDTO(){
 
@@ -70,7 +71,30 @@ public class AdventureDTO {
         }
     }
 
-    public AdventureDTO(Adventure adventure, String serviceType){
+    public AdventureDTO(Adventure adventure, double averageRating){
+        this.id = adventure.getId();
+        this.ownerId = adventure.getOwner().getId();
+        this.name = adventure.getName();
+        this.description = adventure.getDescription();
+        this.pictures = new ArrayList<>(adventure.getPictures());
+        this.rulesOfConduct = new ArrayList<>(adventure.getRulesOfConduct());
+        this.price = adventure.getPrice();
+        this.instructorBiography = adventure.getInstructorBiography();
+        this.fishingEquipment = new ArrayList<>(adventure.getFishingEquipment());
+        this.maxNumOfPeople = adventure.getMaxNumOfPeople();
+        this.reservationCancellationConditions = adventure.getReservationCancellationConditions();
+        this.isDeleted = adventure.isDeleted();
+        this.country = adventure.getAddress().getCountry();
+        this.city = adventure.getAddress().getCity();
+        this.street = adventure.getAddress().getStreet();
+        this.additionalServices = new ArrayList<>();
+        for (Tag additionalService : adventure.getAdditionalServices()) {
+            this.additionalServices.add(additionalService.getName());
+        }
+        this.averageRating = averageRating;
+    }
+
+    public AdventureDTO(Adventure adventure, String serviceType, double averageRating){
         this.id = adventure.getId();
         this.ownerId = adventure.getOwner().getId();
         this.name = adventure.getName();
@@ -91,6 +115,7 @@ public class AdventureDTO {
             this.additionalServices.add(additionalService.getName());
         }
         this.serviceType = serviceType;
+        this.averageRating = averageRating;
     }
 
     public Integer getId() {
@@ -227,5 +252,13 @@ public class AdventureDTO {
 
     public void setServiceType(String serviceType) {
         this.serviceType = serviceType;
+    }
+
+    public double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(double averageRating) {
+        this.averageRating = averageRating;
     }
 }

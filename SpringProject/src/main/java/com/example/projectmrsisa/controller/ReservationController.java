@@ -55,6 +55,9 @@ public class ReservationController {
     @Autowired
     private LoyaltyProgramService loyaltyProgramService;
 
+    @Autowired
+    private RevisionService revisionService;
+
     @GetMapping(value = "/getPrivilegedUserReservations")
     @PreAuthorize("hasAnyRole('fishingInstructor', 'shipOwner', 'retreatOwner')")
     public ResponseEntity<List<ReservationDTO>> getPrivilegedUserReservations(Principal principal) {
@@ -88,7 +91,7 @@ public class ReservationController {
                         reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime())) {
                     if (!reservationService.isReserved(retreat.getId(), reservationQueryDTO.getFromDate(),
                             reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime(), user.getId())) {
-                        retreatDTOs.add(new RetreatDTO(retreat));
+                        retreatDTOs.add(new RetreatDTO(retreat, revisionService.getAverageRatingForService(retreat.getId())));
                     }
                 }
             }
@@ -111,7 +114,7 @@ public class ReservationController {
                         reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime())) {
                     if (!reservationService.isReserved(ship.getId(), reservationQueryDTO.getFromDate(),
                             reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime(), user.getId())) {
-                        shipDTOs.add(new ShipDTO(ship));
+                        shipDTOs.add(new ShipDTO(ship, revisionService.getAverageRatingForService(ship.getId())));
                     }
                 }
             }
@@ -134,7 +137,7 @@ public class ReservationController {
                         reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime())) {
                     if (!reservationService.isReserved(adventure.getId(), reservationQueryDTO.getFromDate(),
                             reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime(), user.getId())) {
-                        adventureDTOs.add(new AdventureDTO(adventure));
+                        adventureDTOs.add(new AdventureDTO(adventure, revisionService.getAverageRatingForService(adventure.getId())));
                     }
                 }
             }

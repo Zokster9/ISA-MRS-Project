@@ -57,6 +57,19 @@ public class RevisionService {
         return countAverageRatingForService(sum, count, servicePictures);
     }
 
+    public double getAverageRatingForService(int serviceId) {
+        List<Revision> revisions = revisionRepository.findRevisionForService(serviceId);
+        int num_of_revisions = revisions.size();
+        if (num_of_revisions == 0) {
+            return 0;
+        }
+        double rating = 0;
+        for (Revision revision : revisions) {
+            rating += revision.getRating().getServiceRating();
+        }
+        return rating / num_of_revisions;
+    }
+
     private List<ServiceAverageRatingDTO> countAverageRatingForService(Map<String, Double> sum, Map<String, Integer> count, Map<String, List<String>> servicePictures) {
         List<ServiceAverageRatingDTO> averageRatingDTOS = new ArrayList<>();
         int id = 1;

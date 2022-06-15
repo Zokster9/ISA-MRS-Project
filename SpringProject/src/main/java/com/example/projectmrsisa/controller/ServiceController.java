@@ -46,7 +46,10 @@ public class ServiceController {
     private RetreatService retreatService;
 
     @Autowired
-    private  ShipService shipService;
+    private ShipService shipService;
+
+    @Autowired
+    private RevisionService revisionService;
 
     @Transactional
     @DeleteMapping(value="/delete/{id}")
@@ -83,7 +86,7 @@ public class ServiceController {
         Client client = (Client) userService.findUserByEmail(principal.getName());
         List<ServiceDTO> serviceDTOs = new ArrayList<>();
         for (Service service: client.getSubscriptions()) {
-            serviceDTOs.add(new ServiceDTO(service, getServiceType(service)));
+            serviceDTOs.add(new ServiceDTO(service, getServiceType(service), revisionService.getAverageRatingForService(service.getId())));
         }
         return new ResponseEntity<>(serviceDTOs, HttpStatus.OK);
     }

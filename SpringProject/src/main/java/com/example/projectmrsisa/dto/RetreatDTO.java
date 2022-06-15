@@ -24,6 +24,7 @@ public class RetreatDTO {
     private int numOfBeds;
     private List<String> additionalServices;
     private String serviceType;
+    private double averageRating;
 
     public RetreatDTO() {}
 
@@ -61,7 +62,27 @@ public class RetreatDTO {
         }
     }
 
-    public RetreatDTO(Retreat retreat, String serviceType) {
+    public RetreatDTO(Retreat retreat, double averageRating) {
+        this.id = retreat.getId();
+        this.ownerId = retreat.getOwner().getId();
+        this.name= retreat.getName();
+        this.description = retreat.getDescription();
+        this.country = retreat.getAddress().getCountry();
+        this.city = retreat.getAddress().getCity();
+        this.street = retreat.getAddress().getStreet();
+        this.pictures = new ArrayList<>(retreat.getPictures());
+        this.rulesOfConduct = new ArrayList<>(retreat.getRulesOfConduct());
+        this.numOfBeds = retreat.getNumOfBeds();
+        this.numOfRooms = retreat.getNumOfRooms();
+        this.price = retreat.getPrice();
+        this.additionalServices = new ArrayList<>();
+        for (Tag t : retreat.getAdditionalServices()) {
+            this.additionalServices.add(t.getName());
+        }
+        this.averageRating = averageRating;
+    }
+
+    public RetreatDTO(Retreat retreat, String serviceType, double averageRating) {
         this.id = retreat.getId();
         this.ownerId = retreat.getOwner().getId();
         this.name= retreat.getName();
@@ -79,6 +100,7 @@ public class RetreatDTO {
             this.additionalServices.add(t.getName());
         }
         this.serviceType = serviceType;
+        this.averageRating = averageRating;
     }
 
     public int getId() {
@@ -191,5 +213,13 @@ public class RetreatDTO {
 
     public void setServiceType(String serviceType) {
         this.serviceType = serviceType;
+    }
+
+    public double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(double averageRating) {
+        this.averageRating = averageRating;
     }
 }

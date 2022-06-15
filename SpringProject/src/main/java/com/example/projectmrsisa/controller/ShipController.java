@@ -52,6 +52,9 @@ public class ShipController {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private RevisionService revisionService;
+
     @GetMapping(value="/getAll", produces = "application/json")
     public ResponseEntity<List<ShipDTO>> getShips() {
         try {
@@ -59,7 +62,7 @@ public class ShipController {
             List<ShipDTO> shipDTOS = new ArrayList<>();
             for (Ship ship : ships) {
                 if(ship.isDeleted()) continue;
-                shipDTOS.add(new ShipDTO(ship, "ship"));
+                shipDTOS.add(new ShipDTO(ship, "ship", revisionService.getAverageRatingForService(ship.getId())));
             }
             return new ResponseEntity<>(shipDTOS, HttpStatus.OK);
         } catch (Exception e) {

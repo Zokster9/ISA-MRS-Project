@@ -29,6 +29,7 @@ public class ShipDTO {
     private String reservationCancellationConditions;
     private List<String> additionalServices;
     private String serviceType;
+    private double averageRating;
 
     public ShipDTO() {}
 
@@ -84,7 +85,34 @@ public class ShipDTO {
         }
     }
 
-    public ShipDTO(Ship ship, String serviceType) {
+    public ShipDTO(Ship ship, double averageRating) {
+        this.id = ship.getId();
+        this.owner_id = ship.getOwner().getId();
+        this.name = ship.getName();
+        this.description = ship.getDescription();
+        this.country = ship.getAddress().getCountry();
+        this.city = ship.getAddress().getCity();
+        this.street = ship.getAddress().getStreet();
+        this.pictures = new ArrayList<>(ship.getPictures());
+        this.price = ship.getPrice();
+        this.rulesOfConduct = new ArrayList<>(ship.getRulesOfConduct());
+        this.type = ship.getType();
+        this.length = ship.getLength();
+        this.engineNum = ship.getEngineNum();
+        this.enginePower = ship.getEnginePower();
+        this.maxSpeed = ship.getMaxSpeed();
+        this.navigationEquipment = new ArrayList<>(ship.getNavigationEquipment());
+        this.capacity = ship.getCapacity();
+        this.fishingEquipment = new ArrayList<>(ship.getFishingEquipment());
+        this.reservationCancellationConditions = ship.getReservationCancellationConditions();
+        this.additionalServices = new ArrayList<>();
+        for (Tag additionalService : ship.getAdditionalServices()) {
+            this.additionalServices.add(additionalService.getName());
+        }
+        this.averageRating = averageRating;
+    }
+
+    public ShipDTO(Ship ship, String serviceType, double averageRating) {
         this.id = ship.getId();
         this.owner_id = ship.getOwner().getId();
         this.name = ship.getName();
@@ -109,6 +137,7 @@ public class ShipDTO {
             this.additionalServices.add(additionalService.getName());
         }
         this.serviceType = serviceType;
+        this.averageRating = averageRating;
     }
 
     public int getId() {
@@ -277,5 +306,13 @@ public class ShipDTO {
 
     public void setServiceType(String serviceType) {
         this.serviceType = serviceType;
+    }
+
+    public double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(double averageRating) {
+        this.averageRating = averageRating;
     }
 }
