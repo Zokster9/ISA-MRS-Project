@@ -61,6 +61,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/users/activate-client/{id}").permitAll()
                 .antMatchers("/users/adventures/getAll").permitAll()
                 .antMatchers("/tags").permitAll()
+                .antMatchers("/services/search").permitAll()
+                .antMatchers("/retreats/get/{id}").permitAll()
+                .antMatchers("/ships/get/{id}").permitAll()
                 .anyRequest().authenticated().and()
                 .cors().and()
                 .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, customUserDetailsService), BasicAuthenticationFilter.class);

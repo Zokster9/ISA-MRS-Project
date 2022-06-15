@@ -62,7 +62,7 @@
 						<iframe :src="mapSrc" style="margin: 15px; border-radius: 25px; border: 1px solid #323539"></iframe>
 					</div>
                 </div>
-                <div class="d-flex flex-row" style="height: 10%; margin: 5px; border: 1px solid #323539">
+                <div v-if="isClient || isOwner" class="d-flex flex-row" style="height: 10%; margin: 5px; border: 1px solid #323539">
                     <div v-if="isClient" class="d-flex flex-column" style="margin: 10px; align-self: left;">
                         <button @click="subscribe" v-if="isClient && !isSubscribed" class="btn btn-primary" value="Subscribe">Subscribe</button>
                         <button @click="unsubscribe" v-if="isClient && isSubscribed" class="btn btn-primary" value="Unsubscribe">Unsubscribe</button>
