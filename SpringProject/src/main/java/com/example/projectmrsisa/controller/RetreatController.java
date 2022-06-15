@@ -128,7 +128,7 @@ public class RetreatController {
     public ResponseEntity<RetreatDTO> getRetreatById(@PathVariable Integer id) {
         try {
             Retreat retreat = retreatService.getRetreatById(id);
-            return new ResponseEntity<>(new RetreatDTO(retreat), HttpStatus.OK);
+            return new ResponseEntity<>(new RetreatDTO(retreat, revisionService.getAverageRatingForService(retreat.getId())), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

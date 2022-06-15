@@ -92,7 +92,7 @@ public class AdventureController {
     public ResponseEntity<AdventureDTO> getAdventureById(@PathVariable Integer id) {
         try {
             Adventure adventure = adventureService.findAdventureById(id);
-            return new ResponseEntity<>(new AdventureDTO(adventure), HttpStatus.OK);
+            return new ResponseEntity<>(new AdventureDTO(adventure, revisionService.getAverageRatingForService(adventure.getId())), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

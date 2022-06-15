@@ -152,7 +152,7 @@ public class ShipController {
         try {
             Ship ship = shipService.findShipById(id);
             if (ship == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            return new ResponseEntity<>(new ShipDTO(ship), HttpStatus.OK);
+            return new ResponseEntity<>(new ShipDTO(ship, revisionService.getAverageRatingForService(ship.getId())), HttpStatus.OK);
         }catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

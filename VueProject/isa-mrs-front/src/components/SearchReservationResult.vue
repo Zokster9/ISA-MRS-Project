@@ -13,7 +13,8 @@
             </div>
             <div v-if="searchResult.averageRating > 0">
                 <span class="card-text">Average rating</span>
-                <span class="card-text float-end">{{searchResult.averageRating}}/5</span>
+                <span class="card-text float-end"><StarRating :show-rating="false" :increment="0.01" :star-size="24" :inline="true" 
+                :rating="searchResult.averageRating" :read-only="true"></StarRating> {{searchResult.averageRating}}/5</span>
             </div>
             <div v-else>
                 <span class="card-text">Average rating</span>
@@ -29,8 +30,13 @@
 </template>
 
 <script>
+import StarRating from 'vue-star-rating'
+
 export default ({
     props: ['searchResult', 'serviceType'],
+    components: {
+        StarRating,
+    },
     methods: {
         reserve(event) {
             event.stopPropagation();

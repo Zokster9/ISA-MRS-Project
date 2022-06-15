@@ -53,6 +53,11 @@
                         <h5 style="margin: 5px">Address</h5>
                         <p style="margin: 5px">{{retreat.country}}, {{retreat.city}}, {{retreat.street}}</p>
                     </div>
+                    <div>
+                        <h5 style="margin: 5px">Average rating</h5>
+                        <p style="margin: 5px"><StarRating :show-rating="false" :increment="0.01" :star-size="24" :inline="true" 
+                            :rating="retreat.averageRating" :read-only="true"></StarRating> {{retreat.averageRating}}/5 </p>
+                    </div>
 					<div>
 						<iframe :src="mapSrc" style="margin: 15px; border-radius: 25px; border: 1px solid #323539"></iframe>
 					</div>
@@ -81,11 +86,15 @@
     import Vue from 'vue'
     import axios from 'axios'
     import VueAxios from 'vue-axios'
+    import StarRating from 'vue-star-rating'
 
     Vue.use(VueAxios, axios)
 
     export default {
         name: 'RetreatView',
+        components: {
+            StarRating,
+        },
         data() {
             return {
                 retreat: null,
