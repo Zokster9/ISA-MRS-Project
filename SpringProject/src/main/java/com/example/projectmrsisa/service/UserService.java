@@ -92,4 +92,8 @@ public class UserService {
     public void resetLoyaltyStatus(LoyaltyStatus status){
         userRepository.resetLoyaltyStatus(status);
     }
+
+    public List<User> getAllInstructors(String role) {
+        return userRepository.getAllInstructors(role);
+    }
 }

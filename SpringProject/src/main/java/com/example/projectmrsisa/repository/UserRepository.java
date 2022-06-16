@@ -68,4 +68,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Modifying
     @Query("update User u set u.loyaltyStatus=?1")
     public void resetLoyaltyStatus(LoyaltyStatus status);
+
+    @Query("SELECT user FROM User user LEFT JOIN user.roles role WHERE role.name = ?1")
+    List<User> getAllInstructors(String role);
 }
