@@ -310,7 +310,11 @@ public class ReservationController {
             List<ReservationDTO> reservationDTOS = new ArrayList<>();
             for (Reservation reservation : reservations) {
                 if (shipService.findShipById(reservation.getService().getId()) != null) {
-                    reservationDTOS.add(new ReservationDTO(reservation));
+                    Revision revision = revisionService.findClientsRevisionForReservation(reservation.getId(), client.getId());
+                    if (revision != null)
+                        reservationDTOS.add(new ReservationDTO(reservation, revision.getRating().getServiceRating()));
+                    else
+                        reservationDTOS.add(new ReservationDTO(reservation));
                 }
             }
             return new ResponseEntity<>(reservationDTOS, HttpStatus.OK);
@@ -329,7 +333,11 @@ public class ReservationController {
             List<ReservationDTO> reservationDTOS = new ArrayList<>();
             for (Reservation reservation : reservations) {
                 if (retreatService.getRetreatById(reservation.getService().getId()) != null) {
-                    reservationDTOS.add(new ReservationDTO(reservation));
+                    Revision revision = revisionService.findClientsRevisionForReservation(reservation.getId(), client.getId());
+                    if (revision != null)
+                        reservationDTOS.add(new ReservationDTO(reservation, revision.getRating().getServiceRating()));
+                    else
+                        reservationDTOS.add(new ReservationDTO(reservation));
                 }
             }
             return new ResponseEntity<>(reservationDTOS, HttpStatus.OK);
@@ -348,7 +356,11 @@ public class ReservationController {
             List<ReservationDTO> reservationDTOS = new ArrayList<>();
             for (Reservation reservation : reservations) {
                 if (adventureService.findAdventureById(reservation.getService().getId()) != null) {
-                    reservationDTOS.add(new ReservationDTO(reservation));
+                    Revision revision = revisionService.findClientsRevisionForReservation(reservation.getId(), client.getId());
+                    if (revision != null)
+                        reservationDTOS.add(new ReservationDTO(reservation, revision.getRating().getServiceRating()));
+                    else
+                        reservationDTOS.add(new ReservationDTO(reservation));
                 }
             }
             return new ResponseEntity<>(reservationDTOS, HttpStatus.OK);

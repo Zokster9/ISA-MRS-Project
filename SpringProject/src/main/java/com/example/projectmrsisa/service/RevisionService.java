@@ -88,6 +88,10 @@ public class RevisionService {
         return Double.parseDouble(df.format(averageRating));
     }
 
+    public Revision findClientsRevisionForReservation(int reservationId, int clientId) {
+        return revisionRepository.findClientsRevisionForReservation(reservationId, clientId);
+    }
+
     private List<ServiceAverageRatingDTO> countAverageRatingForService(Map<String, Double> sum, Map<String, Integer> count, Map<String, List<String>> servicePictures) {
         List<ServiceAverageRatingDTO> averageRatingDTOS = new ArrayList<>();
         int id = 1;
