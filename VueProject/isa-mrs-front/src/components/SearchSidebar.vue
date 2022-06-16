@@ -42,7 +42,6 @@
 
 <script>
     export default {
-        props: ["results"],
         data() {
             return {
                 sortBy: "name",
@@ -65,5 +64,5 @@
                 }, 100)
             }
         },
-}
+    }
 </script>
