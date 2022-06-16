@@ -146,7 +146,7 @@ import router from '@/router';
                 .then(() => {
                     alert("Reservation is successful. Check your email.")
                     this.modal = false
-                    this.search(this.reservationForm);
+                    this.availableReservations = this.availableReservations.filter(service => service.id != this.selectedService.id);
                 })
                 .catch(() => {
                     alert("Something went wrong!")

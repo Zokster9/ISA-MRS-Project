@@ -27,7 +27,8 @@
                 <div v-if="reservation.userRating">
                     <span class="card-text">Your rating</span>
                     <span class="float-end"><StarRating :show-rating="false" :increment="0.01" :star-size="24" :inline="true" 
-                                :rating="reservation.userRating" :read-only="true"></StarRating> {{ reservation.userRating }}/5</span>
+                                :rating="reservation.userRating" :read-only="true"></StarRating> {{ reservation.userRating }}/5
+                    </span>
                 </div>
                 <div v-else>
                     <button @click="review" class="btn btn-primary my-3">Make a revision</button>

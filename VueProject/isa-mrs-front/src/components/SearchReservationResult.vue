@@ -11,6 +11,10 @@
                 <span class="card-text">Description</span>
                 <span class="float-end">{{ searchResult.description }}</span>
             </div>
+            <div>
+                <span class="card-text">Price</span>
+                <span class="card-text float-end">{{searchResult.price}}<span>&#8364;</span>, per day</span>
+            </div>
             <div v-if="searchResult.averageRating > 0">
                 <span class="card-text">Average rating</span>
                 <span class="card-text float-end"><StarRating :show-rating="false" :increment="0.01" :star-size="24" :inline="true" 
@@ -19,10 +23,6 @@
             <div v-else>
                 <span class="card-text">Average rating</span>
                 <span class="card-text float-end">No rating yet.</span>
-            </div>
-            <div>
-                <span class="card-text">Price</span>
-                <span class="card-text float-end">{{searchResult.price}}<span>&#8364;</span>, per day</span>
             </div>
             <button @click="reserve" class="btn btn-primary my-3">Make a reservation</button>
       </div>
