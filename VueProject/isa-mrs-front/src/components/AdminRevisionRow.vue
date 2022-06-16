@@ -54,7 +54,10 @@
                     }
                 }).then(() => {
                     window.location.reload();
-                })
+                }).catch((error) => {
+                    if (error.response.status === 409) alert("Error. Some other administrator already replied to this revision request.");
+                    else alert("Error occured. Accepting of a revision wasn't successful.");
+                });
             },
             declineRevision(id, clientName, clientSurname, ownerName, ownerSurname, serviceName, servicePictures, revision, ownerRating, serviceRating){
                 axios.post("http://localhost:8088/revisions/updateRevision", {
@@ -76,7 +79,10 @@
                     }
                 }).then(() => {
                     window.location.reload();
-                })
+                }).catch((error) => {
+                    if (error.response.status === 409) alert("Error. Some other administrator already replied to this revision request.");
+                    else alert("Error occured. Declining of a revision wasn't successful.");
+                });
             }
         },
         data(){

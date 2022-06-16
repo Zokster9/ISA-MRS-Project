@@ -6,9 +6,11 @@ import com.example.projectmrsisa.model.Revision;
 import com.example.projectmrsisa.model.User;
 import com.example.projectmrsisa.repository.RevisionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.QueryHint;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +26,7 @@ public class RevisionService {
         return revisionRepository.findUnansweredRevisions();
     }
 
+    @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value ="0")})
     public Revision findRevisionById(Integer id){
         return revisionRepository.findRevisionById(id);
     }

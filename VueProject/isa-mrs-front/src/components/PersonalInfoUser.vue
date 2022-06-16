@@ -88,8 +88,10 @@
 					}
 				})
                 .then(() => {
-                    this.$router.push("/main-screen")
-                    alert("Napisan razlog");
+                    alert("Successfully sent termination reason.")
+                    window.sessionStorage.removeItem('accessToken');
+                    window.sessionStorage.removeItem('role');
+                    this.$router.push("/")
                 })
             },
             changePassword(){

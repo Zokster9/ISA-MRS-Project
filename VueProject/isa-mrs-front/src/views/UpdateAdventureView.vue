@@ -225,8 +225,9 @@ import router from '@/router'
 				}).then(() => {
                     alert("Adventure updated!");
                     router.back();
-                }).catch(() => {
-                    alert("ne valja brt");
+                }).catch((error) => {
+                    if (error.response.status === 409) alert("Error. Pending reservation for this retreat exists.");
+                    else alert("Error occured. Retreat has not been updated.");
                 });
             },
             addPicture(e) {

@@ -69,7 +69,10 @@
                 })
                 .then(() => {
                     window.location.reload();
-                })
+                }).catch((error) => {
+                    if (error.response.status === 409) alert("Error. Some other administrator already replied to this termination request.");
+                    else alert("Error occured. Termination wasn't successful.");
+                });
             },
             acceptTermination(){
                 axios.post("http://localhost:8088/termination/acceptTermination",
@@ -84,7 +87,10 @@
                 })
                 .then(() => {
                     window.location.reload();
-                })
+                }).catch((error) => {
+                    if (error.response.status === 409) alert("Error. Some other administrator already replied to this termination request.");
+                    else alert("Error occured. Termination wasn't successful.");
+                });
             },
         },
         validations:{

@@ -3,10 +3,12 @@ package com.example.projectmrsisa.service;
 import com.example.projectmrsisa.model.*;
 import com.example.projectmrsisa.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.QueryHint;
 import java.util.List;
 
 @Service
@@ -28,6 +30,7 @@ public class UserService {
         return userRepository.findUsersByActivatedStatus(isActivated, isDeleted);
     }
 
+    @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value ="0")})
     public User findUserById(Integer id){
         return userRepository.findUserById(id);
     }

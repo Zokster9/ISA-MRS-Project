@@ -2,9 +2,11 @@ package com.example.projectmrsisa.repository;
 
 import com.example.projectmrsisa.model.Complaint;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import javax.persistence.LockModeType;
 import java.util.List;
 
 public interface ComplaintRepository extends JpaRepository<Complaint, Integer> {
@@ -23,6 +25,7 @@ public interface ComplaintRepository extends JpaRepository<Complaint, Integer> {
     @Query("select c from Complaint c where c.id=?1")
     public Complaint findComplaintById(Integer id);
 
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select c from Complaint c where c.reservation.id = ?1")
     Complaint findComplaintByReservationId(Integer id);
 }

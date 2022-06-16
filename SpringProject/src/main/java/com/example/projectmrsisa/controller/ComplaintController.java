@@ -7,6 +7,7 @@ import com.example.projectmrsisa.service.ComplaintService;
 import com.example.projectmrsisa.service.EmailService;
 import com.example.projectmrsisa.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -49,7 +50,13 @@ public class ComplaintController {
     @PreAuthorize("hasAnyRole('mainAdmin','admin')")
     @Transactional
     public ResponseEntity<ComplaintDTO> answerComplaint(@RequestBody ComplaintDTO complaintDTO){
-        Complaint complaint = complaintService.findComplaintById(complaintDTO.getId());
+        Complaint complaint;
+        //LOCK
+        try {
+            complaint = complaintService.findComplaintById(complaintDTO.getId());
+        } catch (PessimisticLockingFailureException e){
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
         try{
             complaintService.updateComplaintStatus(complaintDTO.getId());
             complaintService.updateComplaintResponse(complaintDTO.getResponse(), complaintDTO.getId());

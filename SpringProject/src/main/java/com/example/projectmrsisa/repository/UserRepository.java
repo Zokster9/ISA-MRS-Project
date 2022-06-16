@@ -1,10 +1,10 @@
 package com.example.projectmrsisa.repository;
 
 import com.example.projectmrsisa.model.*;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.*;
 
+import javax.persistence.LockModeType;
+import javax.persistence.QueryHint;
 import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
@@ -13,6 +13,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     public List<User> findUsersByActivatedStatus(Boolean isActivated, Boolean isDeleted);
 
     @Query("select u from User u where u.id = ?1")
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     public User findUserById(Integer id);
 
     @Modifying

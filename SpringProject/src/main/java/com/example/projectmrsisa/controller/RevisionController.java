@@ -8,6 +8,7 @@ import com.example.projectmrsisa.model.Revision;
 import com.example.projectmrsisa.model.User;
 import com.example.projectmrsisa.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -57,8 +58,13 @@ public class RevisionController {
     @PreAuthorize("hasAnyRole('admin','mainAdmin')")
     public ResponseEntity<RevisionDTO> updateRevision(@RequestBody RevisionDTO revisionDTO){
         Revision revision;
+        //LOCK
         try{
             revision = revisionService.findRevisionById(revisionDTO.getId());
+        } catch (PessimisticLockingFailureException e){
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+        try{
             revisionService.updateRevisionAnsweredStatus(revisionDTO.getId());
         } catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

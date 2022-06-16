@@ -308,8 +308,9 @@ import router from '@/router'
                 }).then((response) => {
                     alert(response.data.name + " ship updated!");
                     router.push('/service-crud');
-                }).catch(() => {
-                    alert("Error occurred while adding ship!");
+                }).catch((error) => {
+                    if (error.response.status === 409) alert("Error. Pending reservation for this ship exists.");
+                    else alert("Error occured. Ship has not been updated.");
                 });
             },
             addPicture(e) {

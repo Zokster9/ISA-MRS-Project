@@ -10,6 +10,7 @@ import com.example.projectmrsisa.service.ServiceService;
 import com.example.projectmrsisa.service.TerminationReasoningService;
 import com.example.projectmrsisa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -49,7 +50,13 @@ public class TerminationReasoningController {
     @PostMapping(value="/declineTermination")
     @PreAuthorize("hasAnyRole('admin', 'mainAdmin')")
     public ResponseEntity<UserDTO> declineTermination(@RequestBody TerminationChoiceDTO terminationChoiceDTO){
-        User user = userService.findUserById(terminationChoiceDTO.getUserId());
+        User user;
+        //LOCK
+        try {
+            user = userService.findUserById(terminationChoiceDTO.getUserId());
+        } catch (PessimisticLockingFailureException e){
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
         terminationReasoningService.updateTerminationReasoningByAnsweredStatus(user);
         userService.updateUserActivatedStatusById(terminationChoiceDTO.getUserId()); // aktiviram korisnika opet
         UserDTO userDTO = new UserDTO(user);
@@ -64,7 +71,13 @@ public class TerminationReasoningController {
     @PostMapping(value="/acceptTermination")
     @PreAuthorize("hasAnyRole('admin', 'mainAdmin')")
     public ResponseEntity<UserDTO> acceptTermination(@RequestBody TerminationChoiceDTO terminationChoiceDTO){
-        User user = userService.findUserById(terminationChoiceDTO.getUserId());
+        User user;
+        //LOCK
+        try{
+            user = userService.findUserById(terminationChoiceDTO.getUserId());
+        } catch (PessimisticLockingFailureException e){
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
         terminationReasoningService.updateTerminationReasoningByAnsweredStatus(user);
         userService.updateUserDeletedStatusById(terminationChoiceDTO.getUserId());
         serviceService.deleteServicesByOwner(user);

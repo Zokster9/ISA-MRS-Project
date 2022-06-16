@@ -88,7 +88,6 @@ public class AdventureController {
         }
     }
 
-    @Transactional
     @PutMapping(value="/updateAdventure/{id}", produces = "application/json")
     @PreAuthorize("hasRole('fishingInstructor')")
     public ResponseEntity<AdventureDTO> updateRetreat(@PathVariable Integer id, @RequestBody AdventureDTO adventureDTO){

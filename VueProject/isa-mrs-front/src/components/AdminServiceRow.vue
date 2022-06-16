@@ -47,6 +47,9 @@
                 }).then(()=>{
                     alert("Service has been successfully deleted!")
                     window.location.reload()
+                }).catch((error) => {
+                    if (error.response.status === 409) alert("Error. Pending reservation for service exists.");
+                    else alert("Error occured. You can not delete this adventure.");
                 })
             }
         },
