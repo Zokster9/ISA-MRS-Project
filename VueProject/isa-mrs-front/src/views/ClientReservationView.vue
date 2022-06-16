@@ -157,6 +157,17 @@ import router from '@/router';
             if (window.sessionStorage.getItem("role") != "ROLE_client") {
                 router.push("/");
             }
+            axios.get("http://localhost:8088/clients/getLoggedClient", {
+                    headers:{
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
+                    }
+                }).then((response) => {
+                    let client = response.data
+                    if (client.penalized === true) {
+                        alert("You cannot make reservations, you have been PENALIZED! Check your penalty points screen for more information.")
+                        router.push("/penalty-points");
+                    }
+                })
         }
     }
 </script>

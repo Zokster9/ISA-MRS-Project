@@ -81,16 +81,18 @@ public class ReservationController {
     @GetMapping(value = "/retreat/getAvailableReservations")
     @PreAuthorize("hasRole('client')")
     public ResponseEntity<List<RetreatDTO>> getAvailableRetreats(Principal principal, ReservationQueryDTO reservationQueryDTO) {
-        User user;
+        Client client;
         try {
-            user = userService.findUserByEmail(principal.getName());
+            client = (Client) userService.findUserByEmail(principal.getName());
+            if (client.isPenalized())
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             List<Retreat> retreats = retreatService.getRetreats();
             List<RetreatDTO> retreatDTOs = new ArrayList<>();
             for (Retreat retreat : retreats) {
                 if (serviceAvailabilityService.isAvailable(retreat.getId(), reservationQueryDTO.getFromDate(),
                         reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime())) {
                     if (!reservationService.isReserved(retreat.getId(), reservationQueryDTO.getFromDate(),
-                            reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime(), user.getId())) {
+                            reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime(), client.getId())) {
                         retreatDTOs.add(new RetreatDTO(retreat, revisionService.getAverageRatingForService(retreat.getId())));
                     }
                 }
@@ -104,16 +106,18 @@ public class ReservationController {
     @GetMapping(value = "/ship/getAvailableReservations")
     @PreAuthorize("hasRole('client')")
     public ResponseEntity<List<ShipDTO>> getAvailableShips(Principal principal, ReservationQueryDTO reservationQueryDTO) {
-        User user;
+        Client client;
         try {
-            user = userService.findUserByEmail(principal.getName());
+            client = (Client) userService.findUserByEmail(principal.getName());
+            if (client.isPenalized())
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             List<Ship> ships = shipService.getShips();
             List<ShipDTO> shipDTOs = new ArrayList<>();
             for (Ship ship : ships) {
                 if (serviceAvailabilityService.isAvailable(ship.getId(), reservationQueryDTO.getFromDate(),
                         reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime())) {
                     if (!reservationService.isReserved(ship.getId(), reservationQueryDTO.getFromDate(),
-                            reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime(), user.getId())) {
+                            reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime(), client.getId())) {
                         shipDTOs.add(new ShipDTO(ship, revisionService.getAverageRatingForService(ship.getId())));
                     }
                 }
@@ -127,16 +131,18 @@ public class ReservationController {
     @GetMapping(value = "/adventure/getAvailableReservations")
     @PreAuthorize("hasRole('client')")
     public ResponseEntity<List<AdventureDTO>> getAvailableAdventures(Principal principal, ReservationQueryDTO reservationQueryDTO) {
-        User user;
+        Client client;
         try {
-            user = userService.findUserByEmail(principal.getName());
+            client = (Client) userService.findUserByEmail(principal.getName());
+            if (client.isPenalized())
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             List<Adventure> adventures = adventureService.getAdventures();
             List<AdventureDTO> adventureDTOs = new ArrayList<>();
             for (Adventure adventure : adventures) {
                 if (serviceAvailabilityService.isAvailable(adventure.getId(), reservationQueryDTO.getFromDate(),
                         reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime())) {
                     if (!reservationService.isReserved(adventure.getId(), reservationQueryDTO.getFromDate(),
-                            reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime(), user.getId())) {
+                            reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime(), client.getId())) {
                         adventureDTOs.add(new AdventureDTO(adventure, revisionService.getAverageRatingForService(adventure.getId())));
                     }
                 }
@@ -154,6 +160,8 @@ public class ReservationController {
         Service service;
         try {
             client = (Client) userService.findUserByEmail(principal.getName());
+            if (client.isPenalized())
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             service = serviceService.findById(reservationDTO.getServiceId());
             Set<Tag> additionalServices = new HashSet<>();
             if (reservationDTO.getServiceType() != null) {
