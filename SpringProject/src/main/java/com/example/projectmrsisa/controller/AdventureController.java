@@ -88,7 +88,6 @@ public class AdventureController {
     }
 
     @GetMapping(value = "/get/{id}", produces = "application/json")
-    @PreAuthorize("hasAnyRole('fishingInstructor', 'admin', 'mainAdmin', 'client')")
     public ResponseEntity<AdventureDTO> getAdventureById(@PathVariable Integer id) {
         try {
             Adventure adventure = adventureService.findAdventureById(id);
@@ -247,6 +246,23 @@ public class AdventureController {
                 actionDTOS.add(new ActionDTO(action));
             }
             return new ResponseEntity<>(actionDTOS, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value="/getInstructorsAdventures/{id}")
+    public ResponseEntity<List<AdventureDTO>> getInstructorsAdventures(@PathVariable Integer id) {
+        try {
+            List<Adventure> adventures = adventureService.findOwnersAdventures(id);
+            List<AdventureDTO> adventureDTOS = new ArrayList<>();
+            for (Adventure adventure : adventures) {
+                if (!adventure.isDeleted()) {
+                    adventureDTOS.add(new AdventureDTO(adventure, "adventure",
+                            revisionService.getAverageRatingForService(adventure.getId())));
+                }
+            }
+            return new ResponseEntity<>(adventureDTOS, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

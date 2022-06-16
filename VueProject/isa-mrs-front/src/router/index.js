@@ -314,6 +314,12 @@ const routes = [{
         component: () =>
             import('../views/ClientFastReservationView.vue')
     },
+    {
+        path: '/adventures/:id',
+        name: 'adventures',
+        component: () =>
+            import('../views/AdventuresView.vue')
+    },
 ]
 
 const router = new VueRouter({
