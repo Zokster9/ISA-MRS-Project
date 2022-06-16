@@ -93,7 +93,8 @@ public class ReservationController {
                         reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime())) {
                     if (!reservationService.isReserved(retreat.getId(), reservationQueryDTO.getFromDate(),
                             reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime(), client.getId())) {
-                        retreatDTOs.add(new RetreatDTO(retreat, revisionService.getAverageRatingForService(retreat.getId())));
+                        if (retreatSuitableForReservation(retreat, reservationQueryDTO))
+                            retreatDTOs.add(new RetreatDTO(retreat, revisionService.getAverageRatingForService(retreat.getId())));
                     }
                 }
             }
@@ -101,6 +102,14 @@ public class ReservationController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    private boolean retreatSuitableForReservation(Retreat retreat, ReservationQueryDTO reservationQueryDTO) {
+        int maxCapacity = retreat.getNumOfBeds() + 1;
+        if (maxCapacity < reservationQueryDTO.getNumOfPeople() ||
+                reservationQueryDTO.getNumOfRooms() != retreat.getNumOfRooms())
+            return false;
+        return serviceHasTag(retreat, reservationQueryDTO);
     }
 
     @GetMapping(value = "/ship/getAvailableReservations")
@@ -117,8 +126,10 @@ public class ReservationController {
                 if (serviceAvailabilityService.isAvailable(ship.getId(), reservationQueryDTO.getFromDate(),
                         reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime())) {
                     if (!reservationService.isReserved(ship.getId(), reservationQueryDTO.getFromDate(),
-                            reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime(), client.getId())) {
-                        shipDTOs.add(new ShipDTO(ship, revisionService.getAverageRatingForService(ship.getId())));
+                            reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(),
+                            reservationQueryDTO.getToTime(), client.getId())) {
+                        if (serviceHasTag(ship, reservationQueryDTO))
+                            shipDTOs.add(new ShipDTO(ship, revisionService.getAverageRatingForService(ship.getId())));
                     }
                 }
             }
@@ -142,8 +153,10 @@ public class ReservationController {
                 if (serviceAvailabilityService.isAvailable(adventure.getId(), reservationQueryDTO.getFromDate(),
                         reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime())) {
                     if (!reservationService.isReserved(adventure.getId(), reservationQueryDTO.getFromDate(),
-                            reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime(), client.getId())) {
-                        adventureDTOs.add(new AdventureDTO(adventure, revisionService.getAverageRatingForService(adventure.getId())));
+                            reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(),
+                            reservationQueryDTO.getToTime(), client.getId())) {
+                        if (adventureSuitableForReservation(adventure, reservationQueryDTO))
+                            adventureDTOs.add(new AdventureDTO(adventure, revisionService.getAverageRatingForService(adventure.getId())));
                     }
                 }
             }
@@ -151,6 +164,30 @@ public class ReservationController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    private boolean adventureSuitableForReservation(Adventure adventure, ReservationQueryDTO reservationQueryDTO) {
+        int maxCapacity = adventure.getMaxNumOfPeople();
+        if (maxCapacity < reservationQueryDTO.getNumOfPeople())
+            return false;
+        return serviceHasTag(adventure, reservationQueryDTO);
+    }
+
+    private boolean serviceHasTag(Service service, ReservationQueryDTO reservationQueryDTO) {
+        boolean hasTag = false;
+        for (String tagName : reservationQueryDTO.getAdditionalServices()) {
+            for (Tag tag : service.getAdditionalServices()) {
+                if (tag.getName().equals(tagName)) {
+                    hasTag = true;
+                    break;
+                } else {
+                    hasTag = false;
+                }
+            }
+            if (!hasTag)
+                break;
+        }
+        return hasTag;
     }
 
     @PostMapping(value = "/makeAReservation")

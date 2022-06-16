@@ -1,5 +1,6 @@
 package com.example.projectmrsisa.controller;
 
+import com.example.projectmrsisa.dto.TagDTO;
 import com.example.projectmrsisa.model.Tag;
 import com.example.projectmrsisa.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -21,10 +23,14 @@ public class TagController {
     private TagService tagService;
 
     @GetMapping(value="/{description}", produces = "application/json")
-    public ResponseEntity<List<Tag>> getTags(@PathVariable String description) {
+    public ResponseEntity<List<TagDTO>> getTags(@PathVariable String description) {
         try {
             List<Tag> tags = tagService.getTags(description);
-            return new ResponseEntity<>(tags, HttpStatus.OK);
+            List<TagDTO> tagDTOs = new ArrayList<>();
+            for (Tag tag : tags) {
+                tagDTOs.add(new TagDTO(tag));
+            }
+            return new ResponseEntity<>(tagDTOs, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
