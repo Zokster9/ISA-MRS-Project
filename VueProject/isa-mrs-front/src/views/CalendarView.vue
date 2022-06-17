@@ -1,9 +1,13 @@
 <template>
-	<div class="w-50 mx-auto mt-5">
-		<div>
-			<FullCalendar :options="calendarOptions" />
-		</div>
-	</div>
+    <div>
+        <NavbarUser></NavbarUser>
+        <br><br><br>
+        <div class="w-50 mx-auto mt-5">
+            <div>
+                <FullCalendar :options="calendarOptions" />
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -12,11 +16,12 @@
     import dayGridPlugin from '@fullcalendar/daygrid'
     import interactionPlugin from '@fullcalendar/interaction'
     import axios from 'axios'
-import router from '@/router'
+    import router from '@/router'
+    import NavbarUser from '@/components/NavbarUser.vue'
 
 export default {
     components: {
-        FullCalendar
+        FullCalendar, NavbarUser
     },
     data() {
         return {

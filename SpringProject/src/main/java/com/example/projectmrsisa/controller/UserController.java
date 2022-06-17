@@ -3,6 +3,7 @@ package com.example.projectmrsisa.controller;
 import com.example.projectmrsisa.dto.*;
 import com.example.projectmrsisa.model.*;
 import com.example.projectmrsisa.service.*;
+import com.example.projectmrsisa.validators.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +48,8 @@ public class UserController {
 
     @Autowired
     private RevisionService revisionService;
+    
+    private Validator validator = new Validator();
 
     @GetMapping(value="/inactive", produces = "application/json")
     @PreAuthorize("hasAnyRole('admin', 'mainAdmin')")
@@ -76,7 +79,6 @@ public class UserController {
         return new ResponseEntity<>(inactiveUsersDTO, HttpStatus.OK);
     }
 
-    @Transactional
     @PostMapping(value="/accept")
     @PreAuthorize("hasAnyRole('admin', 'mainAdmin')")
     public ResponseEntity<UserDTO> acceptUser(@RequestBody RegistrationChoiceDTO registrationChoiceDTO){
@@ -92,7 +94,6 @@ public class UserController {
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
-    @Transactional
     @PostMapping(value="/activate-client/{id}")
     public ResponseEntity<UserDTO> activateClient(@PathVariable Integer id) {
         User user = userService.findUserById(id);
@@ -101,7 +102,6 @@ public class UserController {
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
-    @Transactional
     @PostMapping(value="/decline")
     @PreAuthorize("hasAnyRole('admin', 'mainAdmin')")
     public ResponseEntity<UserDTO> declineUser(@RequestBody RegistrationChoiceDTO registrationChoiceDTO){
@@ -117,12 +117,11 @@ public class UserController {
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
-    @Transactional
     @PostMapping("/changeInfo")
     @PreAuthorize("hasAnyRole('admin', 'client', 'retreatOwner', 'shipOwner', 'fishingInstructor', 'mainAdmin')")
     public ResponseEntity<UserDTO> changeInfo(@RequestBody UserDTO userDTO, Principal user){
-        if (!validChangedUserInfo(userDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        if(!validAddress(userDTO.getAddressDTO())) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (!validator.validChangedUserInfo(userDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if(!validator.validAddress(userDTO.getAddressDTO().getCountry(), userDTO.getAddressDTO().getCity(), userDTO.getAddressDTO().getStreet())) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         if (!userDTO.getEmail().equals(user.getName())) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         Address a;
         try {
@@ -152,12 +151,11 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Transactional
     @PostMapping("/register")
     public ResponseEntity<UserDTO> register(@RequestBody UserDTO userDTO) {
-        if (!validUser(userDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        if (!validAddress(userDTO.getAddressDTO())) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        if (!validRegistrationData(userDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (!validator.validUser(userDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (!validator.validAddress(userDTO.getAddressDTO().getCountry(), userDTO.getAddressDTO().getCity(), userDTO.getAddressDTO().getStreet())) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (!validator.validRegistrationData(userDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         Address a;
         Role role;
         try {
@@ -188,12 +186,11 @@ public class UserController {
         }
     }
 
-    @Transactional
     @PostMapping("/registerAdmin")
     @PreAuthorize("hasRole('mainAdmin')")
     public ResponseEntity<AdminDTO> registerAdmin(@RequestBody UserDTO userDTO){
-        if (!validAdmin(userDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        if (!validAddress(userDTO.getAddressDTO())) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (!validator.validAdmin(userDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (!validator.validAddress(userDTO.getAddressDTO().getCountry(), userDTO.getAddressDTO().getCity(), userDTO.getAddressDTO().getStreet())) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         Address a;
         Role role;
         try{
@@ -211,63 +208,6 @@ public class UserController {
         }
     }
 
-    private boolean validAddress(AddressDTO addressDTO) {
-        if (addressDTO.getCountry().equals("") || addressDTO.getCountry() == null || !addressDTO.getCountry().matches("([A-Z]{1})([a-z]+)([^0-9]*)$")) {
-            return false;
-        }
-        if (addressDTO.getCity().equals("") || addressDTO.getCity() == null || !addressDTO.getCity().matches("([A-Z]{1})([a-z]+)([^0-9]*)$")) {
-            return false;
-        }
-        return !addressDTO.getStreet().equals("") && addressDTO.getStreet() != null;
-    }
-
-    private boolean validUser(UserDTO userDTO) {
-        if (userDTO.getEmail() == null || !userDTO.getEmail().matches("^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$")) {
-            return false;
-        }
-        if (userDTO.getPassword() == null || userDTO.getConfirmPassword() == null || !userDTO.getPassword().equals(userDTO.getConfirmPassword())) {
-            return false;
-        }
-        if (!validChangedUserInfo(userDTO)) return false;
-        if (userDTO.getPhoneNumber() == null || userDTO.getPhoneNumber().equals("") || !userDTO.getPhoneNumber().matches("^[+]?(\\d{1,2})?[\\s.-]?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$")) {
-            return false;
-        }
-        return userDTO.getRegistrationType().equals("client") || userDTO.getRegistrationType().equals("privilegedUser");
-    }
-
-    private boolean validAdmin(UserDTO adminDTO) {
-        if (adminDTO.getEmail() == null || !adminDTO.getEmail().matches("^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$")) {
-            return false;
-        }
-        if (adminDTO.getPassword() == null || adminDTO.getConfirmPassword() == null || !adminDTO.getPassword().equals(adminDTO.getConfirmPassword())) {
-            return false;
-        }
-        if (!validChangedUserInfo(adminDTO)) return false;
-        if (adminDTO.getPhoneNumber() == null || adminDTO.getPhoneNumber().equals("") || !adminDTO.getPhoneNumber().matches("^[+]?(\\d{1,2})?[\\s.-]?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$")) {
-            return false;
-        }
-        return true;
-    }
-
-    private boolean validRegistrationData(UserDTO userDTO) {
-        if (userDTO.getRegistrationType().equals("privilegedUser")) {
-            if (userDTO.getRegistrationExplanation() == null || userDTO.getRegistrationExplanation().equals("")) return false;
-            return userDTO.getPrivilegedUserType().equals("retreatOwner") || userDTO.getPrivilegedUserType().equals("shipOwner") || userDTO.getPrivilegedUserType().equals("fishingInstructor");
-        }
-        return true;
-    }
-
-    private boolean validChangedUserInfo(UserDTO userDTO){
-        if (userDTO.getName() == null ||userDTO.getName().equals("") || !userDTO.getName().matches("([A-Z]{1})([a-z]+)([^0-9]*)$")) {
-            return false;
-        }
-        if (userDTO.getSurname() == null ||userDTO.getSurname().equals("") || !userDTO.getSurname().matches("([A-Z]{1})([a-z]+)([^0-9]*)$")) {
-            return false;
-        }
-        return userDTO.getPhoneNumber() != null && !userDTO.getPhoneNumber().equals("") && userDTO.getPhoneNumber().matches("^[+]?(\\d{1,2})?[\\s.-]?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$");
-    }
-
-
     @GetMapping(value="/findByEmail/{email}")
     //TODO: Autorizacija
     public ResponseEntity<UserDTO> getUser(@PathVariable String email){
@@ -276,7 +216,6 @@ public class UserController {
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
-    @Transactional
     @PostMapping(value="/sendTerminationReason")
     @PreAuthorize("hasAnyRole('client', 'retreatOwner', 'shipOwner', 'fishingInstructor')")
     public ResponseEntity<UserDTO> sendTerminationReason(@RequestBody TerminationReasonDTO terminationReasonDTO, Principal principal){
@@ -288,7 +227,6 @@ public class UserController {
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
-    @Transactional
     @PostMapping(value="/changePassword")
     @PreAuthorize("hasAnyRole('admin', 'client', 'retreatOwner', 'shipOwner', 'fishingInstructor', 'mainAdmin')")
     public ResponseEntity<UserDTO> changePassword(@RequestBody PasswordChangeDTO passwordChangeDTO, Principal loggedUser){
@@ -301,7 +239,6 @@ public class UserController {
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
-    @Transactional
     @PutMapping(value = "/activateAdmin")
     @PreAuthorize("hasRole('admin')")
     public ResponseEntity<UserDTO> activateAdmin(@RequestBody PasswordChangeDTO passwordChangeDTO, Principal loggedUser){
@@ -395,7 +332,6 @@ public class UserController {
         return new ResponseEntity<>(usersDTO, HttpStatus.OK);
     }
 
-    @Transactional
     @DeleteMapping(value="/delete/{id}")
     @PreAuthorize("hasAnyRole('admin', 'mainAdmin')")
     public ResponseEntity<UserDTO> deleteUser(@PathVariable Integer id){

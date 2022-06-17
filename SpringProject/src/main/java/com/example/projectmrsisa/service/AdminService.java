@@ -4,6 +4,7 @@ import com.example.projectmrsisa.model.Admin;
 import com.example.projectmrsisa.repository.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AdminService {
@@ -15,6 +16,7 @@ public class AdminService {
         return adminRepository.save(admin);
     }
 
+    @Transactional(readOnly = false)
     public void updatePasswordChangedStatus(Integer id){
         adminRepository.updatePasswordChangedStatus(id);
     }

@@ -49,6 +49,7 @@ public class Adventure extends Service {
         this.setFishingEquipment(new HashSet<>(adventureDTO.getFishingEquipment()));
         this.setReservationCancellationConditions(adventureDTO.getReservationCancellationConditions());
         this.setAdditionalServices(additionalServices);
+        this.setNumberOfReservations(0);
     }
 
     public String getInstructorBiography() {

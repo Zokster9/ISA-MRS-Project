@@ -25,7 +25,6 @@ public class LoyaltyProgramController {
     @Autowired
     private UserService userService;
 
-    @Transactional
     @PostMapping(value="/add")
     @PreAuthorize("hasAnyRole('admin', 'mainAdmin')")
     public ResponseEntity<LoyaltyProgramDTO> addNewLoyaltyProgram(@RequestBody LoyaltyProgramDTO loyaltyProgramDTO){

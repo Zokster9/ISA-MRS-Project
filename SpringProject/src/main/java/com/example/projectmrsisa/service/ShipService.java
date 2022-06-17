@@ -7,12 +7,14 @@ import com.example.projectmrsisa.model.Tag;
 import com.example.projectmrsisa.repository.ShipRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Service
+@Transactional
 public class ShipService {
 
     @Autowired
@@ -28,6 +30,7 @@ public class ShipService {
         return shipRepository.findShipById(id);
     }
 
+    @Transactional(readOnly = false)
     public Ship updateShip(Ship ship, ShipDTO shipDTO, Set<Tag> additionalServices) {
         if (!ship.getName().equals(shipDTO.getName())) ship.setName(shipDTO.getName());
         if (!ship.getDescription().equals(shipDTO.getDescription())) ship.setDescription(shipDTO.getDescription());
@@ -57,10 +60,12 @@ public class ShipService {
         return shipRepository.save(ship);
     }
 
+    @Transactional(readOnly = false)
     public void deleteShipById(Integer id) {
         shipRepository.deleteShipById(id);
     }
 
+    @Transactional(readOnly = false)
     public Ship addAction(Ship ship, Action action) {
         ship.addAction(action);
         return shipRepository.save(ship);

@@ -7,18 +7,24 @@ import com.example.projectmrsisa.model.ReservationStatus;
 import com.example.projectmrsisa.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 @Service
+@Transactional
 public class ReservationService {
 
     @Autowired
     private ReservationRepository reservationRepository;
 
-    public Reservation addReservation(Reservation reservation) { return reservationRepository.save(reservation); }
+    @Transactional(readOnly = false)
+    public Reservation addReservation(Reservation reservation) {
+        reservation.getService().setNumberOfReservations(reservation.getService().getNumberOfReservations() + 1);
+        return reservationRepository.save(reservation);
+    }
 
     public boolean checkIfReservationsExistForDate(Integer serviceId, Date fromDate, Date toDate) {
         List<Reservation> reservations = reservationRepository.findReservationByServiceId(serviceId);
@@ -116,5 +122,13 @@ public class ReservationService {
 
     public List<Reservation> findReservationsInDateSpanForPrivilegedUser(Date fromDate, Date toDate, Integer id){
         return reservationRepository.findReservationsInDateSpanForPrivilegedUser(fromDate, toDate, id);
+    }
+
+    public boolean pendingReservationForServiceExists(Integer serviceId) {
+        List<Reservation> reservations = reservationRepository.findReservationByServiceId(serviceId);
+        for (Reservation reservation: reservations) {
+            if (reservation.getStatus() == ReservationStatus.Pending) return false;
+        }
+        return true;
     }
 }
