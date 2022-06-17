@@ -51,7 +51,7 @@ insert into user_role (user_id, role_id) values (5, 4);
 
 insert into clients (id, penalty_points, is_penalized) values (5, 0, false);
 
-insert into services (name, description, price, owner_id, address_id, is_deleted, num_of_reservations) values ('Brvnara na Dunavu', 'Lepo mesto pored reke za kvalitetan odmor. Pogodno za zurke, proslave i drizenja sa prijateljima.', 50, 1, 3, false, 3);
+insert into services (name, description, price, owner_id, address_id, is_deleted, num_of_reservations) values ('Brvnara na Dunavu', 'Lepo mesto pored reke za kvalitetan odmor. Pogodno za zurke, proslave i druzenja sa prijateljima.', 50, 1, 3, false, 3);
 insert into my_pictures (id, pictures) values (1, 'pic1.jpg');
 insert into my_pictures (id, pictures) values (1, 'pic2.jpg');
 insert into my_pictures (id, pictures) values (1, 'pic3.jpg');
