@@ -18,7 +18,13 @@
                             <td> <b> Reservation status </b> </td>
                             <td> <b> Action </b> </td>
                         </tr>
-                        <ReservationHistoryPrivilegedUserRow v-for="reservation in reservations" :reservation="reservation" :key="reservation.id"></ReservationHistoryPrivilegedUserRow>
+                        <ReservationHistoryPrivilegedUserRow v-for="reservation in currentPageReservations" :reservation="reservation" :key="reservation.id"></ReservationHistoryPrivilegedUserRow>
+                        <tr>
+                            <td colspan="5"></td>
+                            <td>
+                                <PaginationComponent :elements="this.reservations" v-on:page:update="updatePage" :currentPage="this.currentPage" :pageSize="this.pageSize"></PaginationComponent>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>                                  
             </div>
@@ -32,7 +38,8 @@
     import Vue from 'vue'
     import axios from 'axios'
     import VueAxios from 'vue-axios'
-import router from '@/router'
+    import router from '@/router'
+    import PaginationComponent from '@/components/PaginationComponent.vue'
 
     Vue.use(VueAxios, axios)
 
@@ -40,15 +47,29 @@ import router from '@/router'
         name: 'ReservationHistoryPrivilegedUser',
         components: {
             NavbarUser,
-            ReservationHistoryPrivilegedUserRow
+            ReservationHistoryPrivilegedUserRow,
+            PaginationComponent
         },
         data(){
             return{
-                reservations: []
+                currentPage: 0,
+                pageSize: 5,
+                reservations: [],
+                currentPageReservations: []
             }
         },
         methods: {
-
+            updateVisibleReservations(){
+                //1. param: pocetni index, 2. param: index do kojeg prikazujemo
+                this.currentPageReservations = this.reservations.slice(this.currentPage * this.pageSize, (this.currentPage * this.pageSize) + this.pageSize);
+                if (this.currentPageReservations.length == 0 && this.currentPage > 0){
+                    this.updatePage(this.currentPage - 1);
+                }
+            },
+            updatePage(pageNumber){
+                this.currentPage = pageNumber;
+                this.updateVisibleReservations();
+            },
         },
         mounted(){
             if (window.sessionStorage.getItem('role') === "ROLE_retreatOwner" || window.sessionStorage.getItem("role") === "ROLE_shipOwner" || window.sessionStorage.getItem("role") === "ROLE_fishingInstructor") {
@@ -58,6 +79,7 @@ import router from '@/router'
                     }
                 }).then((response) =>{
                     this.reservations = response.data
+                    this.updateVisibleReservations();
                 })
             }
             else {
