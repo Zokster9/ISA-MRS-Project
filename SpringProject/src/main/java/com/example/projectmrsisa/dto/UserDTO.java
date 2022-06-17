@@ -22,6 +22,7 @@ public class UserDTO {
     private String registrationExplanation;
     private RegistrationReasoningDTO registrationReasoningDTO;
     private PrivilegedUser privilegedUser;
+    private double averageRating;
 
     public UserDTO(){
 
@@ -40,6 +41,22 @@ public class UserDTO {
         isDeleted = user.isDeleted();
         isActive = user.isActive();
         privilegedUser = PrivilegedUser.NOT_PRIVILEGED_USER;
+    }
+
+    public UserDTO(User user, double averageRating){
+        id = user.getId();
+        email = user.getEmail();
+        password = user.getPassword();
+        name = user.getName();
+        surname = user.getSurname();
+        addressDTO = new AddressDTO(user.getAddress());
+        phoneNumber = user.getPhoneNumber();
+        loyaltyStatus = user.getLoyaltyStatus();
+        loyaltyPoints = user.getLoyaltyPoints();
+        isDeleted = user.isDeleted();
+        isActive = user.isActive();
+        privilegedUser = PrivilegedUser.NOT_PRIVILEGED_USER;
+        this.averageRating = averageRating;
     }
 
     public UserDTO(User user, PrivilegedUser privilegedUser){
@@ -207,5 +224,13 @@ public class UserDTO {
 
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
+    }
+
+    public double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(double averageRating) {
+        this.averageRating = averageRating;
     }
 }

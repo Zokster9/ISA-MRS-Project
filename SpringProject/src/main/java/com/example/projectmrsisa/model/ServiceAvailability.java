@@ -18,10 +18,10 @@ public class ServiceAvailability {
     @JoinColumn(name = "service_id", nullable = false)
     private Service service;
 
-    @Column(name="dateFrom", unique = true, nullable = false)
+    @Column(name="dateFrom", nullable = false)
     private Date dateFrom;
 
-    @Column(name="dateTo", unique = true, nullable = false)
+    @Column(name="dateTo", nullable = false)
     private Date dateTo;
 
     @Column(name="timeFrom", nullable = false)

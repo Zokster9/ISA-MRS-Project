@@ -79,7 +79,9 @@ import router from '@/router'
                 })
                 .then(() => {
                     alert("Complaint successfully sent!");
-                    this.$router.push("/home-page-client")
+                    this.reservations = this.reservations.filter(reservation => reservation.id != this.selected)
+                    this.selected = ''
+                    this.complaint = ''
                 })
                 .catch(() => {
                     alert("Complaint couldn't be sent!");
@@ -88,11 +90,15 @@ import router from '@/router'
             getDate (date) {
                 let origin_date = new Date(date)
                 let month = origin_date.getMonth() + 1
+                let day = origin_date.getDate()
                 if (month < 10) {
                     month = '0' + month
                 }
-                return origin_date.getFullYear() + '/' + month + '/' + origin_date.getDate()
-            }
+                if (day < 10) {
+                    day = '0' + day
+                }
+                return origin_date.getFullYear() + '/' + month + '/' + day
+            },
         },
         validations: {
             complaint: {

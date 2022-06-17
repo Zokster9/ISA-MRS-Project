@@ -16,6 +16,7 @@
     "@fullcalendar/daygrid": "^5.11.0",
     "@fullcalendar/interaction": "^5.11.0",
     "@fullcalendar/vue": "^5.11.0",
+    "@johmun/vue-tags-input": "^2.1.0",
     "@types/vuelidate": "^0.7.15",
     "@vue/composition-api": "^1.5.0",
     "@vuelidate/core": "^2.0.0-alpha.40",
@@ -30,6 +31,7 @@
     "vue-axios": "^3.4.1",
     "vue-chartjs": "^4.1.1",
     "vue-router": "^3.5.1",
+    "vue-star-rating": "^1.7.0",
     "vuelidate": "^0.7.7"
   },
   "devDependencies": {

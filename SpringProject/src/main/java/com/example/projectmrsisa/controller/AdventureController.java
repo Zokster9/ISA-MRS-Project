@@ -51,6 +51,9 @@ public class AdventureController {
     @Autowired
     private ClientService clientService;
 
+    @Autowired
+    private RevisionService revisionService;
+
     @PostMapping(value="/create-adventure",consumes = "application/json")
     @PreAuthorize("hasRole('fishingInstructor')")
     public ResponseEntity<AdventureDTO> createAdventure(@RequestBody AdventureDTO adventureDTO, Principal principal) {
@@ -85,11 +88,10 @@ public class AdventureController {
     }
 
     @GetMapping(value = "/get/{id}", produces = "application/json")
-    @PreAuthorize("hasAnyRole('fishingInstructor', 'admin', 'mainAdmin', 'client')")
     public ResponseEntity<AdventureDTO> getAdventureById(@PathVariable Integer id) {
         try {
             Adventure adventure = adventureService.findAdventureById(id);
-            return new ResponseEntity<>(new AdventureDTO(adventure), HttpStatus.OK);
+            return new ResponseEntity<>(new AdventureDTO(adventure, revisionService.getAverageRatingForService(adventure.getId())), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -159,7 +161,7 @@ public class AdventureController {
             List<AdventureDTO> adventureDTOS = new ArrayList<>();
             for (Adventure adventure : adventures) {
                 if (adventure.isDeleted()) continue;
-                adventureDTOS.add(new AdventureDTO(adventure));
+                adventureDTOS.add(new AdventureDTO(adventure, "adventure", revisionService.getAverageRatingForService(adventure.getId())));
             }
             return new ResponseEntity<>(adventureDTOS, HttpStatus.OK);
         }catch (Exception e) {
@@ -244,6 +246,23 @@ public class AdventureController {
                 actionDTOS.add(new ActionDTO(action));
             }
             return new ResponseEntity<>(actionDTOS, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value="/getInstructorsAdventures/{id}")
+    public ResponseEntity<List<AdventureDTO>> getInstructorsAdventures(@PathVariable Integer id) {
+        try {
+            List<Adventure> adventures = adventureService.findOwnersAdventures(id);
+            List<AdventureDTO> adventureDTOS = new ArrayList<>();
+            for (Adventure adventure : adventures) {
+                if (!adventure.isDeleted()) {
+                    adventureDTOS.add(new AdventureDTO(adventure, "adventure",
+                            revisionService.getAverageRatingForService(adventure.getId())));
+                }
+            }
+            return new ResponseEntity<>(adventureDTOS, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

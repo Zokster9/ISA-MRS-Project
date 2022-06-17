@@ -7,6 +7,10 @@
                     <input v-model="form.name" id="name" type="text" class="form-control form-control-lg"/>
                 </div>
                 <div class="form-group">
+                    <label for="name">Surname</label>
+                    <input v-model="form.surname" id="name" type="text" class="form-control form-control-lg"/>
+                </div>
+                <div class="form-group">
                     <label for="address">Address</label>
                     <input v-model="form.address" id="address" type="text" class="form-control form-control-lg"/>
                 </div>
@@ -19,8 +23,8 @@
                     <input v-model="form.country" id="country" type="text" class="form-control form-control-lg"/>
                 </div>
                 <div class="form-group">
-                    <label for="description">Promotional description</label>
-                    <input v-model="form.description" id="description" type="text" class="form-control form-control-lg"/>
+                    <label for="description">Phone number</label>
+                    <input v-model="form.phoneNumber" id="description" type="text" class="form-control form-control-lg"/>
                 </div>
                 <div class="form-group">
                     <button @click="search" type="submit" class="btn btn-primary btn-lg btn-block">Search</button>
@@ -41,28 +45,29 @@
 </template>
 
 <script>
-    export default {
-        data() {
-            return {
-                sortBy: "name",
-                form: {
-                    name: "",
-                    address: "",
-                    city: "",
-                    country: "",
-                    description: "",
-                },
-            }
-        },
-        methods: {
-            search() {
-                this.$emit("search", this.form)
+export default {
+    data() {
+        return {
+            sortBy: "name",
+            form: {
+                name: "",
+                surname: "",
+                address: "",
+                city: "",
+                country: "",
+                phoneNumber: "",
             },
-            async sort() {
-                await setTimeout(() => {
-                    this.$emit("sort", this.sortBy)
-                }, 100)
-            }
+        }
+    },
+    methods: {
+        search() {
+            this.$emit("search", this.form)
         },
-    }
+        async sort() {
+            await setTimeout(() => {
+                this.$emit("sort", this.sortBy)
+            }, 100)
+        }
+    },
+}
 </script>

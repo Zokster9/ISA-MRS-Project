@@ -70,7 +70,7 @@ insert into services (name, description, price, owner_id, address_id, is_deleted
 insert into my_pictures (id, pictures) values (3, 'adventure1.jpg');
 insert into my_pictures (id, pictures) values (3, 'adventure2.jpg');
 insert into my_pictures (id, pictures) values (3, 'adventure3.jpg');
-insert into my_pictures (id, pictures) values (3, 'adventure4.png');
+insert into my_pictures (id, pictures) values (3, 'adventure4.jpg');
 insert into my_rules_of_conduct (id, rules_of_conduct) values (3, 'Must be properly dressed');
 insert into my_rules_of_conduct (id, rules_of_conduct) values (3, 'Can''t be noisy');
 

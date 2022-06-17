@@ -8,6 +8,7 @@ import com.example.projectmrsisa.repository.RevisionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +43,7 @@ public class RevisionService {
         Map<String, Double> sum = new HashMap<>();
         Map<String, Integer> count = new HashMap<>();
         Map<String, List<String>> servicePictures = new HashMap<>();
-        List<Revision> revisions = revisionRepository.findRevisionForUser(user.getId());
+        List<Revision> revisions = revisionRepository.findRevisionForServiceOwner(user.getId());
         for (Revision revision: revisions) {
             String serviceName = revision.getReservation().getService().getName();
             if (!sum.containsKey(serviceName)) {
@@ -55,6 +56,40 @@ public class RevisionService {
             }
         }
         return countAverageRatingForService(sum, count, servicePictures);
+    }
+
+    public double getAverageRatingForService(int serviceId) {
+        List<Revision> revisions = revisionRepository.findRevisionForService(serviceId);
+        int num_of_revisions = revisions.size();
+        if (num_of_revisions == 0) {
+            return 0;
+        }
+        double rating = 0;
+        for (Revision revision : revisions) {
+            rating += revision.getRating().getServiceRating();
+        }
+        DecimalFormat df = new DecimalFormat("0.00");
+        double averageRating = rating / num_of_revisions;
+        return Double.parseDouble(df.format(averageRating));
+    }
+
+    public double getAverageRatingForServiceOwner(int ownerId) {
+        List<Revision> revisions = revisionRepository.findRevisionForServiceOwner(ownerId);
+        int num_of_revisions = revisions.size();
+        if (num_of_revisions == 0) {
+            return 0;
+        }
+        double rating = 0;
+        for (Revision revision : revisions) {
+            rating += revision.getRating().getUserRating();
+        }
+        DecimalFormat df = new DecimalFormat("0.00");
+        double averageRating = rating / num_of_revisions;
+        return Double.parseDouble(df.format(averageRating));
+    }
+
+    public Revision findClientsRevisionForReservation(int reservationId, int clientId) {
+        return revisionRepository.findClientsRevisionForReservation(reservationId, clientId);
     }
 
     private List<ServiceAverageRatingDTO> countAverageRatingForService(Map<String, Double> sum, Map<String, Integer> count, Map<String, List<String>> servicePictures) {

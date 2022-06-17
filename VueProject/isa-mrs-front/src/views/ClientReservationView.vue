@@ -2,7 +2,7 @@
     <div style="width: 100%; height: 100%;">
         <NavbarClient></NavbarClient>
         <div class="d-flex">
-            <ReservationSidebar @search="search" @sort="sort" style="background-color: #ffffff;"></ReservationSidebar>
+            <ReservationSidebar :adventureTags="adventureTags" :retreatTags="retreatTags" :shipTags="shipTags" @search="search" @sort="sort" style="background-color: #ffffff;"></ReservationSidebar>
             <div style="width:50%;height:100%;margin:auto;margin-top:110px;">
                 <div v-if="availableReservations" class="vertical-center">
                     <div v-if="orderedResults.length != 0">
@@ -78,7 +78,9 @@ import router from '@/router';
                 type: "",
                 modal: false,
                 selectedService: null,
-                additionalServices: [],
+                retreatTags: [],
+                shipTags: [],
+                adventureTags: [],
                 reservationForm: null,
             }
         },
@@ -88,8 +90,8 @@ import router from '@/router';
             },
         },
         methods: {
-            search(reservationForm) {
-                this.additionalServices = []
+            search(reservationForm, additionalServices) {
+                console.log(additionalServices)
                 this.type = reservationForm.serviceType;
                 this.reservationForm = reservationForm;
                 axios.get("http://localhost:8088/reservations/" + this.type + "/getAvailableReservations", {
@@ -103,6 +105,8 @@ import router from '@/router';
                         toTime: reservationForm.endTime,
                         numOfDays: reservationForm.numberOfDays,
                         numOfPeople: reservationForm.numberOfPeople,
+                        additionalServices: additionalServices,
+                        numOfRooms: reservationForm.numberOfRooms,
                     }
                 })
                 .then(response => {
@@ -135,7 +139,6 @@ import router from '@/router';
                     price: this.reservationForm.numberOfDays * this.selectedService.price,
                     serviceId: this.selectedService.id,
                     numOfPeople: this.reservationForm.numberOfPeople,
-                    additionalServices: this.additionalServices,
                     serviceType: this.reservationForm.serviceType,
                 },
                 {
@@ -146,7 +149,7 @@ import router from '@/router';
                 .then(() => {
                     alert("Reservation is successful. Check your email.")
                     this.modal = false
-                    this.search(this.reservationForm);
+                    this.availableReservations = this.availableReservations.filter(service => service.id != this.selectedService.id);
                 })
                 .catch(() => {
                     alert("Something went wrong!")
@@ -157,6 +160,41 @@ import router from '@/router';
             if (window.sessionStorage.getItem("role") != "ROLE_client") {
                 router.push("/");
             }
+            axios.get("http://localhost:8088/clients/getLoggedClient", {
+                    headers:{
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
+                    }
+                }).then((response) => {
+                    let client = response.data
+                    if (client.penalized === true) {
+                        alert("You cannot make reservations, you have been PENALIZED! Check your penalty points screen for more information.")
+                        router.push("/penalty-points");
+                    }
+                })
+            axios.get("http://localhost:8088/tags/retreat", {
+                    headers:{
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
+                    }
+                })
+            .then((response) => {
+                this.retreatTags = response.data
+            })
+            axios.get("http://localhost:8088/tags/ship", {
+                    headers:{
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
+                    }
+                })
+            .then((response) => {
+                this.shipTags = response.data
+            })
+            axios.get("http://localhost:8088/tags/adventure", {
+                    headers:{
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
+                    }
+                })
+            .then((response) => {
+                this.adventureTags = response.data
+            })
         }
     }
 </script>

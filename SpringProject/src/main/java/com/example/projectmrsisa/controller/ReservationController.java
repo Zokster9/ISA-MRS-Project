@@ -55,6 +55,9 @@ public class ReservationController {
     @Autowired
     private LoyaltyProgramService loyaltyProgramService;
 
+    @Autowired
+    private RevisionService revisionService;
+
     @GetMapping(value = "/getPrivilegedUserReservations")
     @PreAuthorize("hasAnyRole('fishingInstructor', 'shipOwner', 'retreatOwner')")
     public ResponseEntity<List<ReservationDTO>> getPrivilegedUserReservations(Principal principal) {
@@ -78,17 +81,20 @@ public class ReservationController {
     @GetMapping(value = "/retreat/getAvailableReservations")
     @PreAuthorize("hasRole('client')")
     public ResponseEntity<List<RetreatDTO>> getAvailableRetreats(Principal principal, ReservationQueryDTO reservationQueryDTO) {
-        User user;
+        Client client;
         try {
-            user = userService.findUserByEmail(principal.getName());
+            client = (Client) userService.findUserByEmail(principal.getName());
+            if (client.isPenalized())
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             List<Retreat> retreats = retreatService.getRetreats();
             List<RetreatDTO> retreatDTOs = new ArrayList<>();
             for (Retreat retreat : retreats) {
                 if (serviceAvailabilityService.isAvailable(retreat.getId(), reservationQueryDTO.getFromDate(),
                         reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime())) {
                     if (!reservationService.isReserved(retreat.getId(), reservationQueryDTO.getFromDate(),
-                            reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime(), user.getId())) {
-                        retreatDTOs.add(new RetreatDTO(retreat));
+                            reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime(), client.getId())) {
+                        if (retreatSuitableForReservation(retreat, reservationQueryDTO))
+                            retreatDTOs.add(new RetreatDTO(retreat, revisionService.getAverageRatingForService(retreat.getId())));
                     }
                 }
             }
@@ -98,20 +104,32 @@ public class ReservationController {
         }
     }
 
+    private boolean retreatSuitableForReservation(Retreat retreat, ReservationQueryDTO reservationQueryDTO) {
+        int maxCapacity = retreat.getNumOfBeds() + 1;
+        if (maxCapacity < reservationQueryDTO.getNumOfPeople() ||
+                reservationQueryDTO.getNumOfRooms() != retreat.getNumOfRooms())
+            return false;
+        return serviceHasTag(retreat, reservationQueryDTO);
+    }
+
     @GetMapping(value = "/ship/getAvailableReservations")
     @PreAuthorize("hasRole('client')")
     public ResponseEntity<List<ShipDTO>> getAvailableShips(Principal principal, ReservationQueryDTO reservationQueryDTO) {
-        User user;
+        Client client;
         try {
-            user = userService.findUserByEmail(principal.getName());
+            client = (Client) userService.findUserByEmail(principal.getName());
+            if (client.isPenalized())
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             List<Ship> ships = shipService.getShips();
             List<ShipDTO> shipDTOs = new ArrayList<>();
             for (Ship ship : ships) {
                 if (serviceAvailabilityService.isAvailable(ship.getId(), reservationQueryDTO.getFromDate(),
                         reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime())) {
                     if (!reservationService.isReserved(ship.getId(), reservationQueryDTO.getFromDate(),
-                            reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime(), user.getId())) {
-                        shipDTOs.add(new ShipDTO(ship));
+                            reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(),
+                            reservationQueryDTO.getToTime(), client.getId())) {
+                        if (serviceHasTag(ship, reservationQueryDTO))
+                            shipDTOs.add(new ShipDTO(ship, revisionService.getAverageRatingForService(ship.getId())));
                     }
                 }
             }
@@ -124,17 +142,21 @@ public class ReservationController {
     @GetMapping(value = "/adventure/getAvailableReservations")
     @PreAuthorize("hasRole('client')")
     public ResponseEntity<List<AdventureDTO>> getAvailableAdventures(Principal principal, ReservationQueryDTO reservationQueryDTO) {
-        User user;
+        Client client;
         try {
-            user = userService.findUserByEmail(principal.getName());
+            client = (Client) userService.findUserByEmail(principal.getName());
+            if (client.isPenalized())
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             List<Adventure> adventures = adventureService.getAdventures();
             List<AdventureDTO> adventureDTOs = new ArrayList<>();
             for (Adventure adventure : adventures) {
                 if (serviceAvailabilityService.isAvailable(adventure.getId(), reservationQueryDTO.getFromDate(),
                         reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime())) {
                     if (!reservationService.isReserved(adventure.getId(), reservationQueryDTO.getFromDate(),
-                            reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime(), user.getId())) {
-                        adventureDTOs.add(new AdventureDTO(adventure));
+                            reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(),
+                            reservationQueryDTO.getToTime(), client.getId())) {
+                        if (adventureSuitableForReservation(adventure, reservationQueryDTO))
+                            adventureDTOs.add(new AdventureDTO(adventure, revisionService.getAverageRatingForService(adventure.getId())));
                     }
                 }
             }
@@ -144,6 +166,30 @@ public class ReservationController {
         }
     }
 
+    private boolean adventureSuitableForReservation(Adventure adventure, ReservationQueryDTO reservationQueryDTO) {
+        int maxCapacity = adventure.getMaxNumOfPeople();
+        if (maxCapacity < reservationQueryDTO.getNumOfPeople())
+            return false;
+        return serviceHasTag(adventure, reservationQueryDTO);
+    }
+
+    private boolean serviceHasTag(Service service, ReservationQueryDTO reservationQueryDTO) {
+        boolean hasTag = false;
+        for (String tagName : reservationQueryDTO.getAdditionalServices()) {
+            for (Tag tag : service.getAdditionalServices()) {
+                if (tag.getName().equals(tagName)) {
+                    hasTag = true;
+                    break;
+                } else {
+                    hasTag = false;
+                }
+            }
+            if (!hasTag)
+                break;
+        }
+        return hasTag;
+    }
+
     @PostMapping(value = "/makeAReservation")
     @PreAuthorize("hasRole('client')")
     public ResponseEntity<ReservationDTO> makeAReservation(Principal principal, @RequestBody ReservationDTO reservationDTO) {
@@ -151,6 +197,8 @@ public class ReservationController {
         Service service;
         try {
             client = (Client) userService.findUserByEmail(principal.getName());
+            if (client.isPenalized())
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             service = serviceService.findById(reservationDTO.getServiceId());
             Set<Tag> additionalServices = new HashSet<>();
             if (reservationDTO.getServiceType() != null) {
@@ -299,7 +347,11 @@ public class ReservationController {
             List<ReservationDTO> reservationDTOS = new ArrayList<>();
             for (Reservation reservation : reservations) {
                 if (shipService.findShipById(reservation.getService().getId()) != null) {
-                    reservationDTOS.add(new ReservationDTO(reservation));
+                    Revision revision = revisionService.findClientsRevisionForReservation(reservation.getId(), client.getId());
+                    if (revision != null)
+                        reservationDTOS.add(new ReservationDTO(reservation, revision.getRating().getServiceRating()));
+                    else
+                        reservationDTOS.add(new ReservationDTO(reservation));
                 }
             }
             return new ResponseEntity<>(reservationDTOS, HttpStatus.OK);
@@ -318,7 +370,11 @@ public class ReservationController {
             List<ReservationDTO> reservationDTOS = new ArrayList<>();
             for (Reservation reservation : reservations) {
                 if (retreatService.getRetreatById(reservation.getService().getId()) != null) {
-                    reservationDTOS.add(new ReservationDTO(reservation));
+                    Revision revision = revisionService.findClientsRevisionForReservation(reservation.getId(), client.getId());
+                    if (revision != null)
+                        reservationDTOS.add(new ReservationDTO(reservation, revision.getRating().getServiceRating()));
+                    else
+                        reservationDTOS.add(new ReservationDTO(reservation));
                 }
             }
             return new ResponseEntity<>(reservationDTOS, HttpStatus.OK);
@@ -337,7 +393,11 @@ public class ReservationController {
             List<ReservationDTO> reservationDTOS = new ArrayList<>();
             for (Reservation reservation : reservations) {
                 if (adventureService.findAdventureById(reservation.getService().getId()) != null) {
-                    reservationDTOS.add(new ReservationDTO(reservation));
+                    Revision revision = revisionService.findClientsRevisionForReservation(reservation.getId(), client.getId());
+                    if (revision != null)
+                        reservationDTOS.add(new ReservationDTO(reservation, revision.getRating().getServiceRating()));
+                    else
+                        reservationDTOS.add(new ReservationDTO(reservation));
                 }
             }
             return new ResponseEntity<>(reservationDTOS, HttpStatus.OK);

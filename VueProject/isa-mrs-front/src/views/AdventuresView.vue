@@ -1,12 +1,12 @@
 <template>
-    <div id="ships-screen">
+    <div id="fishing-instructors-screen">
         <NavbarClient v-if="isClient"></NavbarClient>
         <NavbarGuest v-else></NavbarGuest>
         <div class="d-flex">
             <SearchSidebar @sort="sort" @search="search" style="background-color: #ffffff;"></SearchSidebar>
             <div style="width:50%;height:100%;margin:auto;margin-top:110px;">
                 <div v-if="searchResults" class="vertical-center">
-                    <SearchResult v-for="searchResult in orderedResults" :searchResult="searchResult" :key="searchResult.id"></SearchResult>
+                    <SearchResult v-for="searchResult in searchResults" :searchResult="searchResult" :key="searchResult.id"></SearchResult>
                 </div>
             </div>
         </div>
@@ -26,7 +26,7 @@
     Vue.use(VueAxios, axios)
 
     export default {
-        name: 'ShipsView',
+        name: 'AdventuresView',
         components: {
             NavbarGuest,
             SearchResult,
@@ -62,7 +62,7 @@
                         city: form.city,
                         country: form.country,
                         promotionalDescription: form.description,
-                        serviceType: "ship",
+                        serviceType: "adventure",
                     }
                 })
                 .then(response => {
@@ -71,10 +71,10 @@
                 .catch(() => {
                     alert("Something went wrong!");
                 })
-            }
+            },
         },
         mounted () {
-            axios.get("http://localhost:8088/ships/getAll")
+            axios.get("http://localhost:8088/adventures/getInstructorsAdventures/" + this.$route.params.id)
             .then(response => {
                 this.searchResults = response.data;
             })

@@ -1,17 +1,10 @@
 package com.example.projectmrsisa.dto;
 
-import com.example.projectmrsisa.model.Address;
 import com.example.projectmrsisa.model.Ship;
 import com.example.projectmrsisa.model.Tag;
 
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.JoinColumn;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class ShipDTO {
 
@@ -35,10 +28,15 @@ public class ShipDTO {
     private List<String> fishingEquipment;
     private String reservationCancellationConditions;
     private List<String> additionalServices;
+    private String serviceType;
+    private double averageRating;
 
     public ShipDTO() {}
 
-    public ShipDTO(int id, int owner_id, String name, String description, String country, String city, String street, double price, List<String> pictures, List<String> rulesOfConduct, String type, double length, String engineNum, int enginePower, String maxSpeed, List<String> navigationEquipment, int capacity, List<String> fishingEquipment, String reservationCancellationConditions, List<String> additionalServices) {
+    public ShipDTO(int id, int owner_id, String name, String description, String country, String city, String street,
+                   double price, List<String> pictures, List<String> rulesOfConduct, String type, double length,
+                   String engineNum, int enginePower, String maxSpeed, List<String> navigationEquipment, int capacity,
+                   List<String> fishingEquipment, String reservationCancellationConditions, List<String> additionalServices) {
         this.id = id;
         this.owner_id = owner_id;
         this.name = name;
@@ -85,6 +83,61 @@ public class ShipDTO {
         for (Tag additionalService : ship.getAdditionalServices()) {
             this.additionalServices.add(additionalService.getName());
         }
+    }
+
+    public ShipDTO(Ship ship, double averageRating) {
+        this.id = ship.getId();
+        this.owner_id = ship.getOwner().getId();
+        this.name = ship.getName();
+        this.description = ship.getDescription();
+        this.country = ship.getAddress().getCountry();
+        this.city = ship.getAddress().getCity();
+        this.street = ship.getAddress().getStreet();
+        this.pictures = new ArrayList<>(ship.getPictures());
+        this.price = ship.getPrice();
+        this.rulesOfConduct = new ArrayList<>(ship.getRulesOfConduct());
+        this.type = ship.getType();
+        this.length = ship.getLength();
+        this.engineNum = ship.getEngineNum();
+        this.enginePower = ship.getEnginePower();
+        this.maxSpeed = ship.getMaxSpeed();
+        this.navigationEquipment = new ArrayList<>(ship.getNavigationEquipment());
+        this.capacity = ship.getCapacity();
+        this.fishingEquipment = new ArrayList<>(ship.getFishingEquipment());
+        this.reservationCancellationConditions = ship.getReservationCancellationConditions();
+        this.additionalServices = new ArrayList<>();
+        for (Tag additionalService : ship.getAdditionalServices()) {
+            this.additionalServices.add(additionalService.getName());
+        }
+        this.averageRating = averageRating;
+    }
+
+    public ShipDTO(Ship ship, String serviceType, double averageRating) {
+        this.id = ship.getId();
+        this.owner_id = ship.getOwner().getId();
+        this.name = ship.getName();
+        this.description = ship.getDescription();
+        this.country = ship.getAddress().getCountry();
+        this.city = ship.getAddress().getCity();
+        this.street = ship.getAddress().getStreet();
+        this.pictures = new ArrayList<>(ship.getPictures());
+        this.price = ship.getPrice();
+        this.rulesOfConduct = new ArrayList<>(ship.getRulesOfConduct());
+        this.type = ship.getType();
+        this.length = ship.getLength();
+        this.engineNum = ship.getEngineNum();
+        this.enginePower = ship.getEnginePower();
+        this.maxSpeed = ship.getMaxSpeed();
+        this.navigationEquipment = new ArrayList<>(ship.getNavigationEquipment());
+        this.capacity = ship.getCapacity();
+        this.fishingEquipment = new ArrayList<>(ship.getFishingEquipment());
+        this.reservationCancellationConditions = ship.getReservationCancellationConditions();
+        this.additionalServices = new ArrayList<>();
+        for (Tag additionalService : ship.getAdditionalServices()) {
+            this.additionalServices.add(additionalService.getName());
+        }
+        this.serviceType = serviceType;
+        this.averageRating = averageRating;
     }
 
     public int getId() {
@@ -245,5 +298,21 @@ public class ShipDTO {
 
     public void setAdditionalServices(List<String> additionalServices) {
         this.additionalServices = additionalServices;
+    }
+
+    public String getServiceType() {
+        return serviceType;
+    }
+
+    public void setServiceType(String serviceType) {
+        this.serviceType = serviceType;
+    }
+
+    public double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(double averageRating) {
+        this.averageRating = averageRating;
     }
 }

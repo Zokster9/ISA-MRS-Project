@@ -62,6 +62,32 @@ public class ReservationDTO {
         this.privilegedUserId = reservation.getService().getOwner().getId();
     }
 
+    public ReservationDTO(Reservation reservation, double userRating){
+        this.id = reservation.getId();
+        this.fromDate = reservation.getFromDate();
+        this.toDate = reservation.getToDate();
+        this.fromTime = reservation.getFromTime();
+        this.toTime = reservation.getToTime();
+        this.price = reservation.getPrice();
+        this.status = reservation.getStatus();
+        this.serviceId = reservation.getService().getId();
+        this.clientName = reservation.getClient().getName();
+        this.clientSurname = reservation.getClient().getSurname();
+        this.clientEmail = reservation.getClient().getEmail();
+        this.clientCountry = reservation.getClient().getAddress().getCountry();
+        this.clientCity = reservation.getClient().getAddress().getCity();
+        this.clientStreet = reservation.getClient().getAddress().getStreet();
+        this.serviceName = reservation.getService().getName();
+        this.servicePictures = reservation.getService().getPictures();
+        this.additionalServices = new HashSet<>();
+        for (Tag additionalService: reservation.getService().getAdditionalServices()) {
+            this.additionalServices.add(additionalService.getName());
+        }
+        this.clientId = reservation.getClient().getId();
+        this.privilegedUserId = reservation.getService().getOwner().getId();
+        this.userRating = userRating;
+    }
+
     public Integer getId() {
         return id;
     }

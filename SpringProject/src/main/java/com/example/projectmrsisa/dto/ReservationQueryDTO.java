@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class ReservationQueryDTO {
     private String serviceType;
@@ -12,16 +13,21 @@ public class ReservationQueryDTO {
     private String toTime;
     private int numOfDays;
     private int numOfPeople;
+    private List<String> additionalServices;
+    private int numOfRooms;
 
     public ReservationQueryDTO() {}
 
-    public ReservationQueryDTO(String serviceType, String fromDate, String fromTime, String toTime, int numOfDays, int numOfPeople) {
+    public ReservationQueryDTO(String serviceType, String fromDate, String fromTime, String toTime, int numOfDays,
+                               int numOfPeople, List<String> additionalServices, int numOfRooms) {
         this.serviceType = serviceType;
         this.fromDate = fromDate;
         this.fromTime = fromTime;
         this.toTime = toTime;
         this.numOfDays = numOfDays;
         this.numOfPeople = numOfPeople;
+        this.additionalServices = additionalServices;
+        this.numOfRooms = numOfRooms;
     }
 
     public Date getToDate() {
@@ -88,5 +94,21 @@ public class ReservationQueryDTO {
 
     public void setNumOfPeople(int numOfPeople) {
         this.numOfPeople = numOfPeople;
+    }
+
+    public List<String> getAdditionalServices() {
+        return additionalServices;
+    }
+
+    public void setAdditionalServices(List<String> additionalServices) {
+        this.additionalServices = additionalServices;
+    }
+
+    public int getNumOfRooms() {
+        return numOfRooms;
+    }
+
+    public void setNumOfRooms(int numOfRooms) {
+        this.numOfRooms = numOfRooms;
     }
 }

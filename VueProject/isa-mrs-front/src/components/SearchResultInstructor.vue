@@ -1,15 +1,15 @@
 <template>
-    <router-link exact :to="'/' + searchResult.serviceType + '/' + searchResult.id" tag="div" class="card mb-5 mx-2">
-        <img :src="require('@/assets/' + searchResult.pictures[0])" class="card-img-top" alt="Nema slike">
+    <router-link exact :to="'/adventures/' + searchResult.id" tag="div" class="card mb-5 mx-2">
         <div class="card-body">
-            <h5 class="card-title">{{searchResult.name}}</h5>
+            <h5 class="card-title">{{searchResult.name}}  {{searchResult.surname}}</h5>
             <div>
                 <span class="card-text">Address</span>
-                <span class="float-end">{{ searchResult.street }}, {{searchResult.city}}, {{searchResult.country}}</span>
+                <span class="float-end">{{ searchResult.addressDTO.street }}, 
+                    {{searchResult.addressDTO.city}}, {{searchResult.addressDTO.country}}</span>
             </div>
             <div>
-                <span class="card-text">Description</span>
-                <span class="float-end">{{ searchResult.description }}</span>
+                <span class="card-text">Phone number</span>
+                <span class="float-end">{{ searchResult.phoneNumber }}</span>
             </div>
             <div v-if="searchResult.averageRating > 0">
                 <span class="card-text">Average rating</span>
