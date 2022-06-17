@@ -53,10 +53,14 @@
             getDate(date) {
                 let origin_date = new Date(date)
                 let month = origin_date.getMonth() + 1
+                let day = origin_date.getDate()
                 if (month < 10) {
                     month = '0' + month
                 }
-                return origin_date.getFullYear() + '/' + month + '/' + origin_date.getDate()
+                if (day < 10) {
+                    day = '0' + day
+                }
+                return origin_date.getFullYear() + '/' + month + '/' + day
             },
             review() {
                 this.$emit("review", this.reservation.id);
