@@ -1,4 +1,7 @@
 <template>
+    <div>
+    <NavbarUser></NavbarUser>
+    <br><br><br><br>
     <div class="signIn">
         <div class="app">
             <div class="vertical-center">
@@ -37,6 +40,7 @@
             </div>
         </div>
     </div>
+    </div>
 </template>
 <script>
     import Vue from 'vue'
@@ -45,6 +49,7 @@
     import axios from 'axios'
     import VueAxios from 'vue-axios'
     import router from '@/router'
+    import NavbarUser from '@/components/NavbarUser.vue'
 
     Vue.use(VueAxios, axios)
     Vue.use(Vuelidate)
@@ -52,7 +57,7 @@
     export default({
         name: 'WriteAReport',
         components: {
-
+            NavbarUser
         },
         data () {
             return {

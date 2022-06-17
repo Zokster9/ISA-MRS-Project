@@ -1,4 +1,7 @@
 <template>
+    <div>
+    <NavbarUser></NavbarUser>
+    <br><br>
     <form class="w-50 mx-auto mt-5">
             <h2> Retreat info </h2>
                 <div class="form-group mb-3">
@@ -79,18 +82,23 @@
                     <button @click="changeRetreat" type="submit" class="btn btn-primary float-end">Update retreat</button>
                 </div>
         </form>
+    </div>
 </template>
 
 <script>
     import Vue from 'vue'
     import axios from 'axios'
     import VueAxios from 'vue-axios'
-import router from '@/router'
+    import router from '@/router'
+    import NavbarUser from '@/components/NavbarUser.vue'
 
     Vue.use(VueAxios, axios)
 
     export default {
         name: "AddRetreat",
+        components: {
+            NavbarUser
+        },
         data() {
             return {
                 form: {

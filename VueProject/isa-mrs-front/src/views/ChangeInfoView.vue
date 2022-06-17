@@ -1,4 +1,6 @@
 <template>
+    <div>
+    <NavbarUser></NavbarUser>
     <div class="signUp">    
         <div class="app">
             <div class="vertical-center" style="margin-top: 85px">
@@ -60,6 +62,7 @@
             </div>
         </div>
     </div>
+    </div>
 </template>
 
 <script>
@@ -68,7 +71,8 @@
     import { required, minLength, maxLength, email } from 'vuelidate/lib/validators'
     import axios from 'axios'
     import VueAxios from 'vue-axios'
-import router from '@/router'
+    import router from '@/router'
+    import NavbarUser from '@/components/NavbarUser.vue'
 
     Vue.use(VueAxios, axios)
     Vue.use(Vuelidate)
@@ -77,6 +81,9 @@ import router from '@/router'
     const isPhoneNumberCorrect = (value) => RegExp(/^[+]?(\d{1,2})?[\s.-]?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/).test(value);
 
     export default {
+        components: {
+            NavbarUser
+        },
         data () {
             return {
                 form:{
