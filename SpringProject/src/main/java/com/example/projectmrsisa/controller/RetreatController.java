@@ -88,7 +88,7 @@ public class RetreatController {
             a = addressService.getAddress(new Address(retreatDTO.getCountry(), retreatDTO.getCity(), retreatDTO.getStreet()));
             additionalServices = tagService.findTags(retreatDTO.getAdditionalServices(), "retreat");
             Retreat retreat = retreatService.addRetreat(new Retreat(retreatDTO, a, additionalServices, retreatOwner));
-            return new ResponseEntity<>(new RetreatDTO(retreat), HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         }catch (Exception e) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
     }
 

@@ -72,6 +72,7 @@ public class Ship extends Service {
         this.reservationCancellationConditions = shipDTO.getReservationCancellationConditions();
         this.setAdditionalServices(additionalServices);
         this.setNumberOfReservations(0);
+        this.setNumOfAvailabilities(0);
     }
 
     public String getType() {

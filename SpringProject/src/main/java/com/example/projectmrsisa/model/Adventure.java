@@ -50,6 +50,7 @@ public class Adventure extends Service {
         this.setReservationCancellationConditions(adventureDTO.getReservationCancellationConditions());
         this.setAdditionalServices(additionalServices);
         this.setNumberOfReservations(0);
+        this.setNumOfAvailabilities(0);
     }
 
     public String getInstructorBiography() {

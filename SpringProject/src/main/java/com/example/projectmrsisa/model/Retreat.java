@@ -39,6 +39,7 @@ public class Retreat extends Service {
         this.numOfBeds = retreatDTO.getNumOfBeds();
         this.setAdditionalServices(additionalServices);
         this.setNumberOfReservations(0);
+        this.setNumOfAvailabilities(0);
     }
 
     public int getNumOfRooms() {
