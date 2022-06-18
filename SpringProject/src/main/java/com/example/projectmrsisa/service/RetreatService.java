@@ -6,8 +6,12 @@ import com.example.projectmrsisa.model.Retreat;
 import com.example.projectmrsisa.model.Tag;
 import com.example.projectmrsisa.repository.RetreatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
 import java.util.List;
@@ -17,14 +21,18 @@ import java.util.Set;
 @Transactional
 public class RetreatService {
 
+    private final Logger LOG = LoggerFactory.getLogger(RetreatService.class);
+
     @Autowired
     private RetreatRepository retreatRepository;
 
     public Retreat addRetreat(Retreat retreat) {
         return retreatRepository.save(retreat);
     }
-    
+
+    @Cacheable("retreat")
     public Retreat getRetreatById(Integer id) {
+        LOG.info("Retreat with id: " + id + " successfully cached!");
         return retreatRepository.getRetreatById(id);
     }
 
@@ -60,5 +68,10 @@ public class RetreatService {
     public Retreat addAction(Retreat retreat, Action action) {
         retreat.addAction(action);
         return retreatRepository.save(retreat);
+    }
+
+    @CacheEvict(cacheNames = {"retreat"}, allEntries = true)
+    public void removeFromCache() {
+        LOG.info("Retreats removed from cache!");
     }
 }
