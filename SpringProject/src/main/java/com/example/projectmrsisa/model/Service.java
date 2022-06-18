@@ -2,6 +2,7 @@ package com.example.projectmrsisa.model;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -190,5 +191,18 @@ public abstract class Service {
 
     public void setNumOfAvailabilities(Integer numOfAvailabilities) {
         this.numOfAvailabilities = numOfAvailabilities;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Service service = (Service) o;
+        return Objects.equals(name, service.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }

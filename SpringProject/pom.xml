@@ -91,6 +91,15 @@
             <artifactId>spring-security-test</artifactId>
             <version>4.0.4.RELEASE</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.cache</groupId>
+            <artifactId>cache-api</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
