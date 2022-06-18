@@ -1,4 +1,6 @@
 <template>
+    <div>
+    <NavbarUser></NavbarUser>
     <div class="signUp">    
         <div class="app">
             <div class="vertical-center" style="margin-top: 85px">
@@ -66,17 +68,22 @@
             </div>
         </div>
     </div>
+    </div>
 </template>
 <script>
     import Vue from 'vue'
     import axios from 'axios'
     import VueAxios from 'vue-axios'
     import router from '@/router'
+    import NavbarUser from '@/components/NavbarUser.vue'
 
     Vue.use(VueAxios, axios)
 
     export default {
         name: "AddAction",
+        components: {
+            NavbarUser,
+        },
         data () {
             return {
                 form:{

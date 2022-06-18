@@ -46,6 +46,8 @@ public abstract class Service {
     private Long version;
     @Column(name = "num_of_reservations", nullable = false)
     private Integer numberOfReservations;
+    @Column(name = "num_of_availabilities", columnDefinition = "integer DEFAULT 0", nullable = false)
+    private Integer numOfAvailabilities;
 
     public Service() {
         this.isDeleted = false;
@@ -180,5 +182,13 @@ public abstract class Service {
 
     public void setNumberOfReservations(Integer numberOfReservations) {
         this.numberOfReservations = numberOfReservations;
+    }
+
+    public Integer getNumOfAvailabilities() {
+        return numOfAvailabilities;
+    }
+
+    public void setNumOfAvailabilities(Integer numOfAvailabilities) {
+        this.numOfAvailabilities = numOfAvailabilities;
     }
 }

@@ -67,7 +67,7 @@ import router from '@/router'
                 })
                 .then(() => {
                     alert("You have successfully reviewed a reservation!");
-                    this.$router.push("/home-page-client");
+                    this.$router.back();
                 })
                 .catch(() => {
                     alert("Try again later!");

@@ -46,6 +46,9 @@ public class UserController {
     @Autowired
     private ServiceService serviceService;
 
+    @Autowired
+    private RevisionService revisionService;
+    
     private Validator validator = new Validator();
 
     @GetMapping(value="/inactive", produces = "application/json")
@@ -336,5 +339,84 @@ public class UserController {
         userService.updateUserDeletedStatusById(id);
         serviceService.deleteServicesByOwner(user);
         return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
+    }
+
+    @GetMapping(value="/getAllInstructors")
+    public ResponseEntity<List<UserDTO>> getAllInstructors() {
+        List<User> instructors = userService.getAllInstructors("ROLE_fishingInstructor");
+        List<UserDTO> userDTOS = new ArrayList<>();
+        for (User instructor : instructors) {
+            userDTOS.add(new UserDTO(instructor, revisionService.getAverageRatingForServiceOwner(instructor.getId())));
+        }
+        return new ResponseEntity<>(userDTOS, HttpStatus.OK);
+    }
+
+    @GetMapping(value="/searchInstructors")
+    public ResponseEntity<List<UserDTO>> searchInstructors(FishingInstructorQueryDTO fishingInstructorQueryDTO) {
+        List<User> instructors = userService.getAllInstructors("ROLE_fishingInstructor");
+        List<UserDTO> userDTOS = new ArrayList<>();
+        for (User instructor : instructors) {
+            if (containsName(instructor, fishingInstructorQueryDTO.getName()) && containsSurname(instructor, fishingInstructorQueryDTO.getSurname())
+            && containsAddress(instructor, fishingInstructorQueryDTO.getAddress()) && containsCity(instructor, fishingInstructorQueryDTO.getCity())
+            && containsCountry(instructor, fishingInstructorQueryDTO.getCountry()) && containsPhoneNumber(instructor, fishingInstructorQueryDTO.getPhoneNumber()))
+            {
+                userDTOS.add(new UserDTO(instructor, revisionService.getAverageRatingForServiceOwner(instructor.getId())));
+            }
+        }
+        return new ResponseEntity<>(userDTOS, HttpStatus.OK);
+    }
+
+    private boolean containsName(User user, String name) {
+        if (name.equals("")) {
+            return true;
+        } else {
+            String userName = user.getName().toLowerCase();
+            return userName.contains(name.toLowerCase());
+        }
+    }
+    private boolean containsSurname(User user, String surname) {
+        if (surname.equals("")) {
+            return true;
+        } else {
+            String userSurname = user.getSurname().toLowerCase();
+            return userSurname.contains(surname.toLowerCase());
+        }
+    }
+
+
+    private boolean containsCity(User user, String city) {
+        if (city.equals("")) {
+            return true;
+        } else {
+            String userCity = user.getAddress().getCity().toLowerCase();
+            return userCity.contains(city.toLowerCase());
+        }
+    }
+
+    private boolean containsAddress(User user, String address) {
+        if (address.equals("")) {
+            return true;
+        } else {
+            String userAddress = user.getAddress().getStreet().toLowerCase();
+            return userAddress.contains(address.toLowerCase());
+        }
+    }
+
+    private boolean containsCountry(User user, String country) {
+        if (country.equals("")) {
+            return true;
+        } else {
+            String userCountry = user.getAddress().getCountry().toLowerCase();
+            return userCountry.contains(country.toLowerCase());
+        }
+    }
+
+    private boolean containsPhoneNumber(User user, String phoneNumber) {
+        if (phoneNumber.equals("")) {
+            return true;
+        } else {
+            String userPhoneNumber = user.getPhoneNumber().toLowerCase();
+            return userPhoneNumber.contains(phoneNumber.toLowerCase());
+        }
     }
 }

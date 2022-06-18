@@ -9,7 +9,7 @@
                 <div class="progress-bar bg-danger" role="progressbar" :style="{ width: penaltyPercentage+'%' }" :aria-valuenow="penaltyPercentage" aria-valuemin="0" aria-valuemax="100">{{client.penaltyPoints}} / 3</div>
             </div>
             <h5 v-if="client.penaltyPoints < 3">If you have 3 or more penalty points you CANNOT make reservations in the current month!</h5>
-            <h5 class="penaltyMessage" v-else>You have been penalised! You CANNOT make reservations in the current month!</h5>
+            <h5 class="penaltyMessage" v-else>You have been penalized! You CANNOT make reservations in the current month!</h5>
         </div>
     </div>
 </template>

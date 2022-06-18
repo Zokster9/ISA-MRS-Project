@@ -1,4 +1,8 @@
 <template>
+    <div>
+    <NavbarUser v-if="isOwner"></NavbarUser>
+    <NavbarClient v-else-if="isClient"></NavbarClient>
+    <NavbarGuest v-else></NavbarGuest>
     <div v-if="retreat" style="margin: 100px">
         <div class="d-flex flex-row" style="margin: 50px">
             <div class="d-flex flex-column" style="width: 50%">
@@ -49,6 +53,15 @@
                     <div class="d-flex flex-row">
                         <h5 style="margin: 5px">Price: {{retreat.price}} €</h5>
                     </div>
+                    <div v-if="retreat.averageRating > 0">
+                            <h5 style="margin: 5px">Average rating</h5>
+                            <p style="margin: 5px"><StarRating :show-rating="false" :increment="0.01" :star-size="24" :inline="true" 
+                                :rating="retreat.averageRating" :read-only="true"></StarRating> {{retreat.averageRating}}/5 </p>
+                        </div>
+                        <div v-else>
+                            <h5 style="margin: 5px">Average rating</h5>
+                            <p style="margin: 5px">Retreat has no rating yet.</p>
+                        </div>
                     <div>
                         <h5 style="margin: 5px">Address</h5>
                         <p style="margin: 5px">{{retreat.country}}, {{retreat.city}}, {{retreat.street}}</p>
@@ -57,23 +70,24 @@
 						<iframe :src="mapSrc" style="margin: 15px; border-radius: 25px; border: 1px solid #323539"></iframe>
 					</div>
                 </div>
-                <div class="d-flex flex-row" style="height: 10%; margin: 5px; border: 1px solid #323539">
-                    <div v-if="isClient" class="d-flex flex-column" style="margin: 10px; align-self: left;">
-                        <button @click="subscribe" v-if="isClient && !isSubscribed" class="btn btn-primary" value="Subscribe">Subscribe</button>
-                        <button @click="unsubscribe" v-if="isClient && isSubscribed" class="btn btn-primary" value="Unsubscribe">Unsubscribe</button>
+                <div class="d-flex flex-row" style="height: 10%; margin: 5px;">
+                    <div v-if="isClient" class="d-flex flex-column" style="margin: 10px; align-self: left; width: 50%">
+                        <button @click="subscribe" v-if="isClient && !isSubscribed" class="btn btn-primary" style="height:100%" value="Subscribe">Subscribe</button>
+                        <button @click="unsubscribe" v-if="isClient && isSubscribed" class="btn btn-primary" style="height:100%" value="Unsubscribe">Unsubscribe</button>
                     </div>
-                    <div v-if="isClient" class="d-flex flex-column" style="margin: 10px; align-self: right;">
-                        <button @click="goToActions" class="btn btn-primary" value="Actions">See actions</button>
+                    <div v-if="isClient" class="d-flex flex-column" style="margin: 10px; align-self: right; width: 50%">
+                        <button @click="goToActions" class="btn btn-primary" style="width:100%" value="Actions">See actions</button>
                     </div>
-                    <div style="margin: 10px; align-self: center;" v-if="isOwner">
-                        <button class="btn btn-primary" @click="reserveForClient" value="Reserve">Reserve for client</button>
+                    <div style="margin: 10px; align-self: center; width: 50%" v-if="isOwner">
+                        <button class="btn btn-primary" @click="reserveForClient" style="width:100%" value="Reserve">Reserve for client</button>
                     </div>
-                    <div style="margin: 10px; align-self: center;" v-if="isOwner">
-                        <button class="btn btn-primary" @click="showCalendar" value="Show calendar">Show calendar for ship</button>
+                    <div style="margin: 10px; align-self: center; width: 50%" v-if="isOwner">
+                        <button class="btn btn-primary" @click="showCalendar" style="width:100%" value="Show calendar">Show calendar for ship</button>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 </template>
 
@@ -81,11 +95,21 @@
     import Vue from 'vue'
     import axios from 'axios'
     import VueAxios from 'vue-axios'
+    import StarRating from 'vue-star-rating'
+    import NavbarClient from '@/components/NavbarClient.vue'
+    import NavbarGuest from '@/components/NavbarGuest.vue'
+    import NavbarUser from '@/components/NavbarUser.vue'
 
     Vue.use(VueAxios, axios)
 
     export default {
         name: 'RetreatView',
+        components: {
+            StarRating,
+            NavbarGuest,
+            NavbarClient,
+            NavbarUser,
+        },
         data() {
             return {
                 retreat: null,

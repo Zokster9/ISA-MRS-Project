@@ -53,6 +53,9 @@ public class RetreatController {
     @Autowired
     private SubscriptionService subscriptionService;
 
+    @Autowired
+    private RevisionService revisionService;
+    
     private Validator validator = new Validator();
 
     @GetMapping(value="/getAll", produces = "application/json")
@@ -62,7 +65,7 @@ public class RetreatController {
             List<RetreatDTO> retreatDTOS = new ArrayList<>();
             for (Retreat retreat : retreats) {
                 if (retreat.isDeleted()) continue;
-                retreatDTOS.add(new RetreatDTO(retreat));
+                retreatDTOS.add(new RetreatDTO(retreat, "retreat", revisionService.getAverageRatingForService(retreat.getId())));
             }
             return new ResponseEntity<>(retreatDTOS, HttpStatus.OK);
         } catch (Exception e) {
@@ -90,11 +93,10 @@ public class RetreatController {
     }
 
     @GetMapping(value = "/get/{id}", produces = "application/json")
-    @PreAuthorize("hasAnyRole('retreatOwner', 'admin', 'mainAdmin', 'client')")
     public ResponseEntity<RetreatDTO> getRetreatById(@PathVariable Integer id) {
         try {
             Retreat retreat = retreatService.getRetreatById(id);
-            return new ResponseEntity<>(new RetreatDTO(retreat), HttpStatus.OK);
+            return new ResponseEntity<>(new RetreatDTO(retreat, revisionService.getAverageRatingForService(retreat.getId())), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

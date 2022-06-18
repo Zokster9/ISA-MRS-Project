@@ -50,7 +50,7 @@ import router from '@/router'
                 })
                 .then(() => {
                     alert("Reservation successfully cancelled");
-                    this.getPendingReservations();
+                    this.pendingReservations = this.pendingReservations.filter(pendingReservation => pendingReservation.id != reservationId)
                 })
                 .catch(() => {
                     alert("This reservation cannot be cancelled.")

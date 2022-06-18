@@ -50,6 +50,9 @@ public class ShipController {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private RevisionService revisionService;
+    
     private Validator validator = new Validator();
 
     @GetMapping(value="/getAll", produces = "application/json")
@@ -59,7 +62,7 @@ public class ShipController {
             List<ShipDTO> shipDTOS = new ArrayList<>();
             for (Ship ship : ships) {
                 if(ship.isDeleted()) continue;
-                shipDTOS.add(new ShipDTO(ship));
+                shipDTOS.add(new ShipDTO(ship, "ship", revisionService.getAverageRatingForService(ship.getId())));
             }
             return new ResponseEntity<>(shipDTOS, HttpStatus.OK);
         } catch (Exception e) {
@@ -87,12 +90,11 @@ public class ShipController {
     }
 
     @GetMapping(value = "/get/{id}", produces = "application/json")
-    @PreAuthorize("hasAnyRole('shipOwner', 'admin', 'mainAdmin', 'client')")
     public ResponseEntity<ShipDTO> getShipById(@PathVariable Integer id) {
         try {
             Ship ship = shipService.findShipById(id);
             if (ship == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            return new ResponseEntity<>(new ShipDTO(ship), HttpStatus.OK);
+            return new ResponseEntity<>(new ShipDTO(ship, revisionService.getAverageRatingForService(ship.getId())), HttpStatus.OK);
         }catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

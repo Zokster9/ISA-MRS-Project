@@ -5,6 +5,7 @@ import com.example.projectmrsisa.model.Retreat;
 import com.example.projectmrsisa.repository.ActionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -16,7 +17,9 @@ public class ActionService {
     @Autowired
     private ActionRepository actionRepository;
 
+    @Transactional(readOnly = false)
     public Action addAction(Action action) {
+        action.getService().setNumberOfReservations(action.getService().getNumberOfReservations() + 1);
         return actionRepository.save(action);
     }
 

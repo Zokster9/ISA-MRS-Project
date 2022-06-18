@@ -1,4 +1,6 @@
 <template>
+    <div>
+    <NavbarUser></NavbarUser>
     <form class="w-50 mx-auto mt-5">
             <h2> Ship info </h2>
                 <div class="form-group mb-3">
@@ -191,18 +193,23 @@
                     <button @click="updateRetreat" type="submit" class="btn btn-primary float-end">Update ship</button>
                 </div>
         </form>
+    </div>  
 </template>
 
 <script>
     import Vue from 'vue'
     import axios from 'axios'
     import VueAxios from 'vue-axios'
-import router from '@/router'
+    import router from '@/router'
+    import NavbarUser from '@/components/NavbarUser.vue'
 
     Vue.use(VueAxios, axios)
 
     export default {
         name: "AddShip",
+        components: {
+            NavbarUser
+        },
         data() {
             return {
                 form: {

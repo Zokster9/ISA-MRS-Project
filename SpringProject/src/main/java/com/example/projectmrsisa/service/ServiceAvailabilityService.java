@@ -4,18 +4,22 @@ import com.example.projectmrsisa.model.ServiceAvailability;
 import com.example.projectmrsisa.repository.ServiceAvailabilityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class ServiceAvailabilityService {
 
     @Autowired
     private ServiceAvailabilityRepository serviceAvailabilityRepository;
 
+    @Transactional(readOnly = false)
     public ServiceAvailability addAvailability(Integer serviceId, ServiceAvailability serviceAvailability) {
         if (checkExistingAvailabilities(serviceId, serviceAvailability.getDateFrom(), serviceAvailability.getDateTo())) {
+            serviceAvailability.getService().setNumOfAvailabilities(serviceAvailability.getService().getNumOfAvailabilities() + 1);
             return serviceAvailabilityRepository.save(serviceAvailability);
         }else return null;
     }
