@@ -14,7 +14,7 @@ jobs:
           command: mvn test
 
 orbs:
-  heroku: circleci/heroku@7.53.0
+  heroku: circleci/heroku@1.2.6
 workflows:
   heroku_deploy:
     jobs:
