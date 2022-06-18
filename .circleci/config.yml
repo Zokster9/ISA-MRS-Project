@@ -1,0 +1,24 @@
+version: 2.1
+
+jobs:
+  build-and-test:
+    docker:
+      - image: cimg/openjdk:8.0
+    steps:
+      - checkout
+      - run:
+          name: Build
+          command: mvn -B -DskipTests clean package
+      - run:
+          name: Test
+          command: mvn test
+
+orbs:
+  heroku: circleci/heroku@7.53.0
+workflows:
+  heroku_deploy:
+    jobs:
+      - build-and-test
+      - heroku/deploy-via-git:
+          requires:
+            - build-and-test
