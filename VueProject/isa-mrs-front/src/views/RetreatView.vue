@@ -2,6 +2,7 @@
     <div>
     <NavbarUser v-if="isOwner"></NavbarUser>
     <NavbarClient v-else-if="isClient"></NavbarClient>
+    <NavbarAdmin v-else-if="isAdmin"></NavbarAdmin>
     <NavbarGuest v-else></NavbarGuest>
     <div v-if="retreat" style="margin: 100px">
         <div class="d-flex flex-row" style="margin: 50px">
@@ -99,6 +100,7 @@
     import NavbarClient from '@/components/NavbarClient.vue'
     import NavbarGuest from '@/components/NavbarGuest.vue'
     import NavbarUser from '@/components/NavbarUser.vue'
+    import NavbarAdmin from '@/components/NavbarAdmin.vue'
 
     Vue.use(VueAxios, axios)
 
@@ -109,6 +111,7 @@
             NavbarGuest,
             NavbarClient,
             NavbarUser,
+            NavbarAdmin
         },
         data() {
             return {
@@ -130,6 +133,9 @@
                     return this.client.subscriptions.includes(parseInt(this.$route.params.id));
                 }
                 return false;
+            },
+            isAdmin() {
+                return window.sessionStorage.getItem('role') === "ROLE_admin" || window.sessionStorage.getItem('role') === "ROLE_mainAdmin";
             }
         },
         methods: {
