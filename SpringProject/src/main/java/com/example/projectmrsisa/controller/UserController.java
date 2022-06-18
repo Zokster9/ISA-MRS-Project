@@ -209,7 +209,6 @@ public class UserController {
     }
 
     @GetMapping(value="/findByEmail/{email}")
-    //TODO: Autorizacija
     public ResponseEntity<UserDTO> getUser(@PathVariable String email){
         User user = userService.findUserByEmail(email);
         UserDTO userDTO = new UserDTO(user);
