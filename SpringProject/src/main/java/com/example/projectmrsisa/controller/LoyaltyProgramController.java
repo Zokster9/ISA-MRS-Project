@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,7 +36,7 @@ public class LoyaltyProgramController {
             loyaltyProgramDTO.setPrivilegedUserBonusGold(loyaltyProgramDTO.getPrivilegedUserBonusGold() * 0.01);
             loyaltyProgram = loyaltyProgramService.addNewLoyaltyProgram(new LoyaltyProgram(loyaltyProgramDTO));
             userService.resetLoyaltyPoints();
-            userService.resetLoyaltyStatus(LoyaltyStatus.Regular);
+            userService.resetLoyaltyStatus(LoyaltyStatus.REGULAR);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

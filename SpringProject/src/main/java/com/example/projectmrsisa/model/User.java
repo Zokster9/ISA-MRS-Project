@@ -48,7 +48,7 @@ public class User implements UserDetails{
     private List<Role> roles;
 
     public User() {
-        this.loyaltyStatus = LoyaltyStatus.Regular;
+        this.loyaltyStatus = LoyaltyStatus.REGULAR;
         this.isDeleted = false;
         this.isActive = false;
     }
@@ -76,7 +76,7 @@ public class User implements UserDetails{
         this.address = address;
         this.phoneNumber = userDTO.getPhoneNumber();
         this.loyaltyPoints = 0;
-        this.loyaltyStatus = LoyaltyStatus.Regular;
+        this.loyaltyStatus = LoyaltyStatus.REGULAR;
         this.isDeleted = false;
         this.isActive = false;
         this.roles = new ArrayList<>();
@@ -91,7 +91,7 @@ public class User implements UserDetails{
         this.address = address;
         this.phoneNumber = userDTO.getPhoneNumber();
         this.loyaltyPoints = 0;
-        this.loyaltyStatus = LoyaltyStatus.Regular;
+        this.loyaltyStatus = LoyaltyStatus.REGULAR;
         this.isDeleted = false;
         this.isActive = isAdmin;
         this.roles = new ArrayList<>();

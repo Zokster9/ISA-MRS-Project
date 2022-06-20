@@ -10,7 +10,7 @@
                         <th colspan="100%" class="text-center h2"> Ships </th>
                     </thead>
                     <tbody>
-                        <AdminServiceRow v-for="ship in this.ships" :service="ship" :key="ship.id"> </AdminServiceRow>
+                        <AdminServiceRow @deleteService="deleteService" v-for="ship in this.ships" :service="ship" :key="ship.id"> </AdminServiceRow>
                     </tbody>
                 </table>
             </div>
@@ -24,7 +24,7 @@
                         <th colspan="100%" class="text-center h2"> Retreats </th>
                     </thead>
                     <tbody>
-                        <AdminServiceRow v-for="retreat in this.retreats" :service="retreat" :key="retreat.id"> </AdminServiceRow>
+                        <AdminServiceRow @deleteService="deleteService" v-for="retreat in this.retreats" :service="retreat" :key="retreat.id"> </AdminServiceRow>
                     </tbody>
                 </table>
             </div>
@@ -38,7 +38,7 @@
                         <th colspan="100%" class="text-center h2"> Adventures </th>
                     </thead>
                     <tbody>
-                        <AdminServiceRow v-for="adventure in this.adventures" :service="adventure" :key="adventure.id"> </AdminServiceRow>
+                        <AdminServiceRow @deleteService="deleteService" v-for="adventure in this.adventures" :service="adventure" :key="adventure.id"> </AdminServiceRow>
                     </tbody>
                 </table>
             </div>
@@ -66,6 +66,19 @@ import router from '@/router'
                 ships: [],
                 retreats: [],
                 adventures: []
+            }
+        },
+        methods: {
+            deleteService(id) {
+                let ships = this.ships.filter(ship => id == ship.id)
+                let retreats = this.retreats.filter(retreat => id == retreat.id)
+                if (ships.length == 1) {
+                    this.ships = this.ships.filter(ship => id != ship.id)
+                } else if (retreats.length == 1) {
+                    this.retreats = this.retreats.filter(retreat => id != retreat.id)
+                } else {
+                    this.adventures = this.adventures.filter(adventure => id != adventure.id)
+                }
             }
         },
         mounted () {

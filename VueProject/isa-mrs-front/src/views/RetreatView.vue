@@ -190,6 +190,10 @@
 					}
 				}).then((response) => {
 					this.retreat = response.data;
+                    if (this.retreat.id === 0) {
+                        alert("This retreat is unavailable!")
+                        this.$router.back()
+                    }
 					this.mapSrc = "https://maps.google.com/maps?q=" + response.data.country + "," + response.data.city + "," + response.data.street + "&t=&z=13&ie=UTF8&iwloc=&output=embed"
 				}
 			);

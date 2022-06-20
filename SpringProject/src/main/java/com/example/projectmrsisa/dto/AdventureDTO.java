@@ -27,7 +27,7 @@ public class AdventureDTO {
     private double averageRating;
 
     public AdventureDTO(){
-
+        id = 0;
     }
 
     public AdventureDTO(String name, String description, List<String> pictures, List<String> rulesOfConduct, double price,

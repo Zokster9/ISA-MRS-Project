@@ -17,7 +17,7 @@
                             <td class="text-center align-items"> <b> User type </b></td>
                             <td class="text-center align-items"> <b> DELETE </b></td>
                         </tr>
-                        <AdminUserDataRow v-for="user in this.visibleUsers"
+                        <AdminUserDataRow @delete="deleteUser" v-for="user in this.visibleUsers"
                         :user="user"
                         :key="user.id"> 
                         </AdminUserDataRow>
@@ -87,6 +87,10 @@
                 this.currentPage = pageNumber;
                 this.updateVisibleUsers();
             },
+            deleteUser(id) {
+                this.users = this.users.filter(user => id != user.id)
+                this.updateVisibleUsers();
+            }
         },
     }
 </script>

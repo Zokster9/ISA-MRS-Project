@@ -1,6 +1,5 @@
 package com.example.projectmrsisa.service;
 
-import com.example.projectmrsisa.dto.AddressDTO;
 import com.example.projectmrsisa.model.Address;
 import com.example.projectmrsisa.repository.AddressRepository;
 import org.springframework.beans.factory.annotation.Autowired;

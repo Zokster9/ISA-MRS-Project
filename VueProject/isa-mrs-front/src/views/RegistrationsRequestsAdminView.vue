@@ -15,7 +15,7 @@
                             <td> <b> Registration reasoning </b> </td>
                             <td colspan="2" class="text-center"> <b> Options </b> </td>
                         </tr>
-                        <RegistrationRequestsRow v-for="user in unactivatedUsers" :user="user" :key="user.id"></RegistrationRequestsRow>
+                        <RegistrationRequestsRow @removeUser="removeUser" v-for="user in unactivatedUsers" :user="user" :key="user.id"></RegistrationRequestsRow>
                     </tbody>
                 </table>
             </div>
@@ -42,6 +42,11 @@ import router from '@/router'
         data () {
             return {
                 unactivatedUsers: [],
+            }
+        },
+        methods: {
+            removeUser(id) {
+                this.unactivatedUsers = this.unactivatedUsers.filter(unactivedUser => id != unactivedUser.id)
             }
         },
         mounted(){

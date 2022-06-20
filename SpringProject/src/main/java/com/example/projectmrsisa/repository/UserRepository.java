@@ -1,6 +1,9 @@
 package com.example.projectmrsisa.repository;
 
-import com.example.projectmrsisa.model.*;
+import com.example.projectmrsisa.model.Address;
+import com.example.projectmrsisa.model.LoyaltyStatus;
+import com.example.projectmrsisa.model.RegistrationReasoning;
+import com.example.projectmrsisa.model.User;
 import org.springframework.data.jpa.repository.*;
 
 import javax.persistence.LockModeType;
@@ -14,6 +17,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query("select u from User u where u.id = ?1")
     @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value ="0")})
     public User findUserById(Integer id);
 
     @Modifying

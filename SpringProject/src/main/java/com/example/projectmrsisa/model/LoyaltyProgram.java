@@ -3,8 +3,6 @@ package com.example.projectmrsisa.model;
 import com.example.projectmrsisa.dto.LoyaltyProgramDTO;
 
 import javax.persistence.*;
-import java.util.HashMap;
-import java.util.Map;
 
 @Entity
 @Table(name="loyalty_programs")

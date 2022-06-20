@@ -21,7 +21,7 @@ import java.util.Set;
 @Transactional
 public class RetreatService {
 
-    private final Logger LOG = LoggerFactory.getLogger(RetreatService.class);
+    private final Logger log = LoggerFactory.getLogger(RetreatService.class);
 
     @Autowired
     private RetreatRepository retreatRepository;
@@ -32,7 +32,7 @@ public class RetreatService {
 
     @Cacheable("retreat")
     public Retreat getRetreatById(Integer id) {
-        LOG.info("Retreat with id: " + id + " successfully cached!");
+        log.info("Retreat with id: " + id + " successfully cached!");
         return retreatRepository.getRetreatById(id);
     }
 
@@ -72,6 +72,6 @@ public class RetreatService {
 
     @CacheEvict(cacheNames = {"retreat"}, allEntries = true)
     public void removeFromCache() {
-        LOG.info("Retreats removed from cache!");
+        log.info("Retreats removed from cache!");
     }
 }

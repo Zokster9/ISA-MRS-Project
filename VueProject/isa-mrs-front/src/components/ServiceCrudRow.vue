@@ -59,7 +59,8 @@
                     }
                 }).then(() => {
                     alert("Retreat successfully deleted.");
-                    window.location.reload();
+                    this.$emit('removeService', id)
+                    this.reset()
                 }).catch((error) => {
                     if (error.response.status === 409) alert("Error. Pending reservation for retreat exists.");
                     else alert("Error occured. You can not delete this retreat.");
@@ -72,7 +73,8 @@
                     }
                 }).then(() => {
                     alert("Ship successfully deleted.");
-                    window.location.reload();
+                    this.$emit('removeService', id)
+                    this.reset()
                 }).catch((error) => {
                     if (error.response.status === 409) alert("Error. Pending reservation for ship exists.");
                     else alert("Error occured. You can not delete this ship.");
@@ -86,7 +88,8 @@
                     }
                 }).then(() =>{
                     alert("Adventure successfully deleted.")
-                    window.location.reload()
+                    this.$emit('removeService', id)
+                    this.reset()
                 }).catch((error) => {
                     if (error.response.status === 409) alert("Error. Pending reservation for adventure exists.");
                     else alert("Error occured. You can not delete this adventure.");
@@ -96,6 +99,12 @@
                 if (window.sessionStorage.getItem('role') === "ROLE_retreatOwner") router.push("/retreat/" + id);
                 else if (window.sessionStorage.getItem('role') === "ROLE_shipOwner") router.push("/ship/" + id);
                 else if (window.sessionStorage.getItem('role') === "ROLE_fishingInstructor") router.push("/adventure/" + id);
+            },
+            reset() {
+                this.hoverEditButton = false
+                this.hoverDeleteButton = false
+                this.hoverNewActionButton = false
+                this.linkToService = ""
             }
         },
         data(){

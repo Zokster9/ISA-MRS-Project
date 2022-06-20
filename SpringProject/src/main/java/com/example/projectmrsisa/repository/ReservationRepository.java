@@ -24,7 +24,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     @Query("select r from Reservation r where r.client.id = ?1 and r.service.id = ?2")
     public List<Reservation> findReservationsForClientAndService(Integer clientId, Integer serviceId);
 
-    @Query("select r from Reservation r where r.client.id = ?1 and r.status = 1")
+    @Query("select r from Reservation r where r.client.id = ?1 and (r.status = 1 or r.status = 3 or r.status = 4)")
     List<Reservation> findClientsFinishedReservations(Integer clientId);
 
     @Query("select r from Reservation r where r.client.id = ?1 and r.status = 0")

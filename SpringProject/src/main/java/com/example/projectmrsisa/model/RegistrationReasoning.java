@@ -16,7 +16,7 @@ public class RegistrationReasoning {
     private User privilegedUser;
 
     @Column(name= "registrationReasoning", nullable = false)
-    private String registrationReasoning;
+    private String reasoning;
 
     @Column(name= "isAnswered", nullable = false)
     private boolean isAnswered;
@@ -25,16 +25,16 @@ public class RegistrationReasoning {
 
     }
 
-    public RegistrationReasoning(User privilegedUser, String registrationReasoning) {
+    public RegistrationReasoning(User privilegedUser, String reasoning) {
         this.privilegedUser = privilegedUser;
-        this.registrationReasoning = registrationReasoning;
+        this.reasoning = reasoning;
         this.isAnswered = false;
     }
 
-    public RegistrationReasoning(Integer id, User privilegedUser, String registrationReasoning, boolean isAnswered){
+    public RegistrationReasoning(Integer id, User privilegedUser, String reasoning, boolean isAnswered){
         this.id = id;
         this.privilegedUser = privilegedUser;
-        this.registrationReasoning = registrationReasoning;
+        this.reasoning = reasoning;
         this.isAnswered = isAnswered;
     }
 
@@ -54,12 +54,12 @@ public class RegistrationReasoning {
         this.privilegedUser = privilegedUser;
     }
 
-    public String getRegistrationReasoning() {
-        return registrationReasoning;
+    public String getReasoning() {
+        return reasoning;
     }
 
-    public void setRegistrationReasoning(String registrationReasoning) {
-        this.registrationReasoning = registrationReasoning;
+    public void setReasoning(String registrationReasoning) {
+        this.reasoning = registrationReasoning;
     }
 
     public boolean isAnswered() {

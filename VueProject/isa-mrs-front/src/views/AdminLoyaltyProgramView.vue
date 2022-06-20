@@ -113,8 +113,18 @@
                     }
                 }).then(() => {
                     alert("Successfully changed loyalty program!")
-                    window.location.reload();
+                    this.reset();
                 })
+            },
+            reset() {
+                this.form.clientPointsPerReservation = ""
+                this.form.privilegedUserPointsPerReservation = ""
+                this.form.requiredPointsSilver = ""
+                this.form.requiredPointsGold = ""
+                this.form.clientBonusSilver = ""
+                this.form.privilegedUserBonusSilver = ""
+                this.form.clientBonusGold = ""
+                this.form.privilegedUserBonusGold = ""
             }
         },
         mounted() {

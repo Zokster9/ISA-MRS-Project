@@ -2,7 +2,6 @@ package com.example.projectmrsisa.service;
 
 import com.example.projectmrsisa.dto.ReportDTO;
 import com.example.projectmrsisa.dto.ReservationDTO;
-import com.example.projectmrsisa.dto.RetreatDTO;
 import com.example.projectmrsisa.dto.UserDTO;
 import com.example.projectmrsisa.model.Client;
 import com.example.projectmrsisa.model.User;
@@ -17,6 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class EmailService {
@@ -27,30 +27,31 @@ public class EmailService {
     @Autowired
     private Environment env;
 
-    //private Queue<SimpleMailMessage> mails = new ArrayDeque<SimpleMailMessage>();
+
+    private final String emailTo = "spring.mail.username";
+    private final String emailFrom = "isamrsprojekat@gmail.com";
 
     @Async
     public void sendApprovedRevisionEmail(String revision, double serviceRating, double ownerRating, User privilegedUser, Client client){
         SimpleMailMessage mail = new SimpleMailMessage();
-        mail.setTo(env.getProperty("spring.mail.username"));
-        mail.setFrom("isamrsprojekat@gmail.com");
+        mail.setTo(Objects.requireNonNull(env.getProperty(emailTo)));
+        mail.setFrom(emailFrom);
         mail.setSubject("Approved revision confirmation");
         mail.setText("Dear " + privilegedUser.getName() + " " + privilegedUser.getSurname() +
                 ", revision from client " + client.getName() + " " + client.getSurname() + " has been accepted. In the revision, client gave you a rating of "
-                + Double.toString(serviceRating) + ", your service received a rating of " + Double.toString(ownerRating) + ", while revision text is: " + revision);
+                + serviceRating + ", your service received a rating of " + ownerRating + ", while revision text is: " + revision);
         javaMailSender.send(mail);
     }
 
     @Async
-    public void sendReservationConfirmation(ReservationDTO reservationDTO) throws MessagingException {
+    public void sendReservationConfirmation(ReservationDTO reservationDTO) {
         SimpleMailMessage mail = new SimpleMailMessage();
-        mail.setTo(env.getProperty("spring.mail.username"));
-        mail.setFrom("isamrsprojekat@gmail.com");
+        mail.setTo(Objects.requireNonNull(env.getProperty(emailTo)));
+        mail.setFrom(emailFrom);
         mail.setSubject("Reservation approved");
         mail.setText("Dear " + reservationDTO.getClientName() + " " + reservationDTO.getClientSurname() +
                 " your reservation for " + reservationDTO.getServiceName() + ", from " + reservationDTO.getFromDate() +
                 " to " + reservationDTO.getToDate() + ", has been approved.");
-        //mails.add(mail);
         javaMailSender.send(mail);
     }
 
@@ -58,8 +59,8 @@ public class EmailService {
     public void sendActivationEmail(UserDTO user) throws MessagingException {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
-        helper.setTo(env.getProperty("spring.mail.username"));
-        helper.setFrom("isamrsprojekat@gmail.com");
+        helper.setTo(Objects.requireNonNull(env.getProperty(emailTo)));
+        helper.setFrom(emailFrom);
         helper.setSubject("Account activation");
         helper.setText(buildEmail(user.getName() + " " + user.getSurname(), user.getId()), true);
         javaMailSender.send(mimeMessage);
@@ -137,52 +138,48 @@ public class EmailService {
     @Async
     public void sendRegistrationAcceptedEmail(UserDTO user){
         SimpleMailMessage mail = new SimpleMailMessage();
-        mail.setTo(env.getProperty("spring.mail.username"));
-        mail.setFrom("isamrsprojekat@gmail.com");
+        mail.setTo(Objects.requireNonNull(env.getProperty(emailTo)));
+        mail.setFrom(emailFrom);
         mail.setSubject("Registration accepted");
         mail.setText("Dear " + user.getName() + " " + user.getSurname() + " you have been accepted into our system!");
-        //mails.add(mail);
         javaMailSender.send(mail);
     }
 
     @Async
     public void sendRegistrationDeclinedEmail(UserDTO user, String declinedRegistrationReason){
         SimpleMailMessage mail = new SimpleMailMessage();
-        mail.setTo(env.getProperty("spring.mail.username"));
-        mail.setFrom("isamrsprojekat@gmail.com");
+        mail.setTo(Objects.requireNonNull(env.getProperty(emailTo)));
+        mail.setFrom(emailFrom);
         mail.setSubject("Registration declined");
         mail.setText("Dear " + user.getName() + " " + user.getSurname() + " your registration reason has been declined because of the following reason: " + declinedRegistrationReason);
-        //mails.add(mail);
         javaMailSender.send(mail);
     }
 
     @Async
     public void sendTerminationAcceptedEmail(UserDTO user, String acceptedTerminationReason){
         SimpleMailMessage mail = new SimpleMailMessage();
-        mail.setTo(env.getProperty("spring.mail.username"));
-        mail.setFrom("isamrsprojekat@gmail.com");
+        mail.setTo(Objects.requireNonNull(env.getProperty(emailTo)));
+        mail.setFrom(emailFrom);
         mail.setSubject("Termination accepted");
         mail.setText("Dear " + user.getName() + " " + user.getSurname() + " your account termination has been accepted because of the following reason: " + acceptedTerminationReason);
-        //mails.add(mail);
         javaMailSender.send(mail);
     }
 
     @Async
     public void sendTerminationDeclinedEmail(UserDTO user, String declinedTerminationReason){
         SimpleMailMessage mail = new SimpleMailMessage();
-        mail.setTo(env.getProperty("spring.mail.username"));
-        mail.setFrom("isamrsprojekat@gmail.com");
+        mail.setTo(Objects.requireNonNull(env.getProperty(emailTo)));
+        mail.setFrom(emailFrom);
         mail.setSubject("Termination declined");
         mail.setText("Dear " + user.getName() + " " + user.getSurname() + " your account termination has been declined because of the following reason: " + declinedTerminationReason);
-        //mails.add(mail);
         javaMailSender.send(mail);
     }
 
     @Async
     public void sendSubscriptionEmails(List<String> emails) {
         SimpleMailMessage mail = new SimpleMailMessage();
-        mail.setTo(env.getProperty("spring.mail.username"));
-        mail.setFrom("isamrsprojekat@gmail.com");
+        mail.setTo(Objects.requireNonNull(env.getProperty(emailTo)));
+        mail.setFrom(emailFrom);
         mail.setSubject("Fast reservation for your subscription");
         mail.setText("Fast reservation has been added for service that you have been subscribed. Go check it out.");
         for (String email: emails) {
@@ -193,8 +190,8 @@ public class EmailService {
     @Async
     public void confirmReport(ReportDTO report){
         SimpleMailMessage mail = new SimpleMailMessage();
-        mail.setTo(env.getProperty("spring.mail.username"));
-        mail.setFrom("isamrsprojekat@gmail.com");
+        mail.setTo(Objects.requireNonNull(env.getProperty(emailTo)));
+        mail.setFrom(emailFrom);
         mail.setSubject("Report status update- Accepted");
         mail.setText("Report from " + report.getOwnerName() + " " + report.getOwnerSurname() + " about client " + report.getClientName() + " " + report.getClientSurname()
         + " has been accepted. Text of report: " + report.getReport());
@@ -205,8 +202,8 @@ public class EmailService {
     @Async
     public void declineReport(ReportDTO report){
         SimpleMailMessage mail = new SimpleMailMessage();
-        mail.setTo(env.getProperty("spring.mail.username"));
-        mail.setFrom("isamrsprojekat@gmail.com");
+        mail.setTo(Objects.requireNonNull(env.getProperty(emailTo)));
+        mail.setFrom(emailFrom);
         mail.setSubject("Report status update- Declined");
         mail.setText("Report from " + report.getOwnerName() + " " + report.getOwnerSurname() + " about client " + report.getClientName() + " " + report.getClientSurname()
                 + " has been declined. Text of report: " + report.getReport());
@@ -217,8 +214,8 @@ public class EmailService {
     @Async
     public void sendComplaintEmailClient(String complaint, Client client){
         SimpleMailMessage mailClient = new SimpleMailMessage();
-        mailClient.setTo(env.getProperty("spring.mail.username"));
-        mailClient.setFrom("isamrsprojekat@gmail.com");
+        mailClient.setTo(Objects.requireNonNull(env.getProperty(emailTo)));
+        mailClient.setFrom(emailFrom);
         mailClient.setSubject("Complaint answer");
         mailClient.setText("Dear " + client.getName() + " " + client.getSurname() + ", this is admin's response to your complaint: " + complaint);
         javaMailSender.send(mailClient);
@@ -227,8 +224,8 @@ public class EmailService {
     @Async
     public void sendComplaintEmailPrivilegedUser(String complaint, User privilegedUser){
         SimpleMailMessage mailPrivilegedUser = new SimpleMailMessage();
-        mailPrivilegedUser.setTo(env.getProperty("spring.mail.username"));
-        mailPrivilegedUser.setFrom("isamrsprojekat@gmail.com");
+        mailPrivilegedUser.setTo(Objects.requireNonNull(env.getProperty(emailTo)));
+        mailPrivilegedUser.setFrom(emailFrom);
         mailPrivilegedUser.setSubject("Complaint answer");
         mailPrivilegedUser.setText("Dear " + privilegedUser.getName() + " " + privilegedUser.getSurname() +
                 ", this is admin's response to a complaint that was written about your service: " + complaint);

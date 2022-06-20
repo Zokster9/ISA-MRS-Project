@@ -10,8 +10,8 @@ public class ReservationsDTO {
 
     }
 
-    public ReservationsDTO(List<ReservationDTO> reservationDTOS){
-        this.reservationsDTO = reservationsDTO;
+    public ReservationsDTO(List<ReservationDTO> reservationsDTOS){
+        this.reservationsDTO = reservationsDTOS;
     }
 
     public List<ReservationDTO> getReservationsDTO() {

@@ -62,7 +62,10 @@ public class TokenUtils {
         String username;
         try {
             final Claims claims = this.getAllClaimsFromToken(token);
-            username = claims.getSubject();
+            if (claims != null)
+                username = claims.getSubject();
+            else
+                username = null;
         } catch (ExpiredJwtException ex) {
             throw ex;
         } catch (Exception e) {
@@ -75,7 +78,10 @@ public class TokenUtils {
         Date issueAt;
         try {
             final Claims claims = this.getAllClaimsFromToken(token);
-            issueAt = claims.getIssuedAt();
+            if (claims != null)
+                issueAt = claims.getIssuedAt();
+            else
+                issueAt = null;
         } catch (ExpiredJwtException ex) {
             throw ex;
         } catch (Exception e) {
@@ -88,7 +94,10 @@ public class TokenUtils {
         String audience;
         try {
             final Claims claims = this.getAllClaimsFromToken(token);
-            audience = claims.getAudience();
+            if (claims != null)
+                audience = claims.getAudience();
+            else
+                audience = null;
         } catch (ExpiredJwtException ex) {
             throw ex;
         } catch (Exception e) {
@@ -101,7 +110,10 @@ public class TokenUtils {
         Date expiration;
         try {
             final Claims claims = this.getAllClaimsFromToken(token);
-            expiration = claims.getExpiration();
+            if (claims != null)
+                expiration = claims.getExpiration();
+            else
+                expiration = null;
         } catch (ExpiredJwtException ex) {
             throw ex;
         } catch (Exception e) {
@@ -127,9 +139,8 @@ public class TokenUtils {
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
-        User user = (User) userDetails;
         final String username = getUsernameFromToken(token);
-        final Date created = getIssuedAtDateFromToken(token);
+        getIssuedAtDateFromToken(token);
 
         return (username != null
                 && username.equals(userDetails.getUsername())); // korisnicko ime iz tokena se podudara sa korisnickom imenom koje pise u bazi

@@ -51,7 +51,7 @@
                         Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }
                 }).then(() => {
-                    window.location.reload();
+                    this.$emit('send', id);
                 })
             }
         },

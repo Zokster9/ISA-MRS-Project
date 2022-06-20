@@ -10,12 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -55,6 +53,8 @@ public class RetreatController {
 
     @Autowired
     private RevisionService revisionService;
+
+    private final String serviceType = "retreat";
     
     private Validator validator = new Validator();
 
@@ -65,7 +65,7 @@ public class RetreatController {
             List<RetreatDTO> retreatDTOS = new ArrayList<>();
             for (Retreat retreat : retreats) {
                 if (retreat.isDeleted()) continue;
-                retreatDTOS.add(new RetreatDTO(retreat, "retreat", revisionService.getAverageRatingForService(retreat.getId())));
+                retreatDTOS.add(new RetreatDTO(retreat, serviceType, revisionService.getAverageRatingForService(retreat.getId())));
             }
             return new ResponseEntity<>(retreatDTOS, HttpStatus.OK);
         } catch (Exception e) {
@@ -86,8 +86,8 @@ public class RetreatController {
         Set<Tag> additionalServices;
         try {
             a = addressService.getAddress(new Address(retreatDTO.getCountry(), retreatDTO.getCity(), retreatDTO.getStreet()));
-            additionalServices = tagService.findTags(retreatDTO.getAdditionalServices(), "retreat");
-            Retreat retreat = retreatService.addRetreat(new Retreat(retreatDTO, a, additionalServices, retreatOwner));
+            additionalServices = tagService.findTags(retreatDTO.getAdditionalServices(), serviceType);
+            retreatService.addRetreat(new Retreat(retreatDTO, a, additionalServices, retreatOwner));
             return new ResponseEntity<>(HttpStatus.OK);
         }catch (Exception e) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
     }
@@ -96,6 +96,8 @@ public class RetreatController {
     public ResponseEntity<RetreatDTO> getRetreatById(@PathVariable Integer id) {
         try {
             Retreat retreat = retreatService.getRetreatById(id);
+            if (retreat.isDeleted())
+                return new ResponseEntity<>(new RetreatDTO(), HttpStatus.OK);
             return new ResponseEntity<>(new RetreatDTO(retreat, revisionService.getAverageRatingForService(retreat.getId())), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -110,7 +112,7 @@ public class RetreatController {
         if (!reservationService.pendingReservationForServiceExists(id)) return new ResponseEntity<>(HttpStatus.CONFLICT);
         try {
             Retreat retreat = retreatService.getRetreatById(id);
-            Set<Tag> newAdditionalServices = tagService.findTags(retreatDTO.getAdditionalServices(), "retreat");
+            Set<Tag> newAdditionalServices = tagService.findTags(retreatDTO.getAdditionalServices(), serviceType);
             retreat = retreatService.updateRetreat(retreat, retreatDTO, newAdditionalServices);
             return new ResponseEntity<>(new RetreatDTO(retreat), HttpStatus.OK);
         }catch (Exception e) {
@@ -158,10 +160,10 @@ public class RetreatController {
             if (!retreat.getOwner().getEmail().equals(loggedUser.getName())) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             if (!reservationService.checkIfReservationsExistForDate(id, actionDTO.getDateFrom(), actionDTO.getDateTo())) return new ResponseEntity<>(HttpStatus.CONFLICT);
             if (!actionService.actionAlreadyExists(retreat.getActions(), actionDTO.getDateFrom(), actionDTO.getDateTo())) return new ResponseEntity<>(HttpStatus.CONFLICT);
-            Set<Tag> additionalServices = tagService.findTags(actionDTO.getAdditionalServices(), "retreat");
+            Set<Tag> additionalServices = tagService.findTags(actionDTO.getAdditionalServices(), serviceType);
             Action action = new Action(actionDTO, additionalServices, retreat);
             action = actionService.addAction(action);
-            retreat = retreatService.addAction(retreat, action);
+            retreatService.addAction(retreat, action);
             List<String> emails = subscriptionService.findClientsWithSubscription(clientService.findAll(), id);
             emailService.sendSubscriptionEmails(emails);
             return new ResponseEntity<>(new ActionDTO(action), HttpStatus.ACCEPTED);

@@ -45,9 +45,9 @@ public class UserServiceTest {
 
     @Test
     public void testFindAll() {
-        when(userRepositoryMock.findAll()).thenReturn(Arrays.asList(new User(1, "matijazaric9@gmail.com", "$2a$10$6zhtvn7zujmExlDo2pDwUODVq09LpFBuBL62g6Bsd2lOJjnuctrKC", "Matija", "Zaric", new Address("Srbija", "Loznica", "Drinska 84"), "+381657842312", LoyaltyStatus.Regular, 0)));
+        when(userRepositoryMock.findAll()).thenReturn(Arrays.asList(new User(1, "matijazaric9@gmail.com", "$2a$10$6zhtvn7zujmExlDo2pDwUODVq09LpFBuBL62g6Bsd2lOJjnuctrKC", "Matija", "Zaric", new Address("Srbija", "Loznica", "Drinska 84"), "+381657842312", LoyaltyStatus.REGULAR, 0)));
         List<User> users = userService.findAll();
-        assertEquals(users.get(0).getEmail(), "matijazaric9@gmail.com");
+        assertEquals("matijazaric9@gmail.com", users.get(0).getEmail());
         verify(userRepositoryMock, times(1)).findAll();
         verifyNoMoreInteractions(userRepositoryMock);
     }

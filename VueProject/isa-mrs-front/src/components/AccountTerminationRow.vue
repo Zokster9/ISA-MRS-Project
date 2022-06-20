@@ -68,7 +68,15 @@
                     }
                 })
                 .then(() => {
-                    window.location.reload();
+                    this.isAcceptButtonHidden = false
+                    this.isDeclineButtonHidden = false
+                    this.hoverAcceptButton = false
+                    this.hoverDeclineButton = false
+                    this.hideAcceptButton = false
+                    this.hideDeclineButton = false
+                    this.acceptReasoning = ""
+                    this.declineReasoning = ""
+                    this.$emit("removeTermination", this.termination.userId);
                 }).catch((error) => {
                     if (error.response.status === 409) alert("Error. Some other administrator already replied to this termination request.");
                     else alert("Error occured. Termination wasn't successful.");
@@ -86,7 +94,15 @@
                     }
                 })
                 .then(() => {
-                    window.location.reload();
+                    this.isAcceptButtonHidden = false
+                    this.isDeclineButtonHidden = false
+                    this.hoverAcceptButton = false
+                    this.hoverDeclineButton = false
+                    this.hideAcceptButton = false
+                    this.hideDeclineButton = false
+                    this.acceptReasoning = ""
+                    this.declineReasoning = ""
+                    this.$emit("removeTermination", this.termination.userId);
                 }).catch((error) => {
                     if (error.response.status === 409) alert("Error. Some other administrator already replied to this termination request.");
                     else alert("Error occured. Termination wasn't successful.");

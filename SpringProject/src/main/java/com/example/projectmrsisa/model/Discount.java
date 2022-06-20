@@ -13,7 +13,7 @@ public class Discount {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
     @Column(name = "discount", nullable = false)
-    private double discount;
+    private double discountRate;
     @Column(name="toDate", nullable = false)
     private Date toDate;
     @Column(name="fromDate", nullable = false)
@@ -23,16 +23,16 @@ public class Discount {
 
     }
 
-    public Discount(Integer id, double discount, boolean isActive, Date toDate, Date fromDate){
+    public Discount(Integer id, double discountRate, Date toDate, Date fromDate){
         this.id = id;
-        this.discount = discount;
+        this.discountRate = discountRate;
         this.toDate = toDate;
         this.fromDate = fromDate;
     }
 
     public Discount(DiscountDTO discountDTO){
         this.id = discountDTO.getId();
-        this.discount = discountDTO.getDiscount();
+        this.discountRate = discountDTO.getDiscount();
         this.toDate = discountDTO.getToDate();
         this.fromDate = discountDTO.getFromDate();
     }
@@ -45,12 +45,12 @@ public class Discount {
         this.id = id;
     }
 
-    public double getDiscount() {
-        return discount;
+    public double getDiscountRate() {
+        return discountRate;
     }
 
-    public void setDiscount(double discount) {
-        this.discount = discount;
+    public void setDiscountRate(double discount) {
+        this.discountRate = discount;
     }
 
     public Date getToDate() {

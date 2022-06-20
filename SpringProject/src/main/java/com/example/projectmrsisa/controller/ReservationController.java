@@ -7,12 +7,13 @@ import com.example.projectmrsisa.validators.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -58,6 +59,8 @@ public class ReservationController {
 
     @Autowired
     private RevisionService revisionService;
+
+    private final String dateFormat = "yyyy-MM-dd";
     
     private Validator validator = new Validator();
 
@@ -93,12 +96,11 @@ public class ReservationController {
             List<RetreatDTO> retreatDTOs = new ArrayList<>();
             for (Retreat retreat : retreats) {
                 if (serviceAvailabilityService.isAvailable(retreat.getId(), reservationQueryDTO.getFromDate(),
-                        reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime())) {
-                    if (!reservationService.isReserved(retreat.getId(), reservationQueryDTO.getFromDate(),
-                            reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime(), client.getId())) {
-                        if (retreatSuitableForReservation(retreat, reservationQueryDTO))
-                            retreatDTOs.add(new RetreatDTO(retreat, revisionService.getAverageRatingForService(retreat.getId())));
-                    }
+                        reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime()) &&
+                        !reservationService.isReserved(retreat.getId(), reservationQueryDTO.getFromDate(),
+                                reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime(), client.getId()) &&
+                        retreatSuitableForReservation(retreat, reservationQueryDTO)) {
+                    retreatDTOs.add(new RetreatDTO(retreat, revisionService.getAverageRatingForService(retreat.getId())));
                 }
             }
             return new ResponseEntity<>(retreatDTOs, HttpStatus.OK);
@@ -127,13 +129,12 @@ public class ReservationController {
             List<ShipDTO> shipDTOs = new ArrayList<>();
             for (Ship ship : ships) {
                 if (serviceAvailabilityService.isAvailable(ship.getId(), reservationQueryDTO.getFromDate(),
-                        reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime())) {
-                    if (!reservationService.isReserved(ship.getId(), reservationQueryDTO.getFromDate(),
-                            reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(),
-                            reservationQueryDTO.getToTime(), client.getId())) {
-                        if (serviceHasTag(ship, reservationQueryDTO))
-                            shipDTOs.add(new ShipDTO(ship, revisionService.getAverageRatingForService(ship.getId())));
-                    }
+                        reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime()) &&
+                        !reservationService.isReserved(ship.getId(), reservationQueryDTO.getFromDate(),
+                        reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(),
+                        reservationQueryDTO.getToTime(), client.getId()) &&
+                        serviceHasTag(ship, reservationQueryDTO)) {
+                    shipDTOs.add(new ShipDTO(ship, revisionService.getAverageRatingForService(ship.getId())));
                 }
             }
             return new ResponseEntity<>(shipDTOs, HttpStatus.OK);
@@ -154,13 +155,11 @@ public class ReservationController {
             List<AdventureDTO> adventureDTOs = new ArrayList<>();
             for (Adventure adventure : adventures) {
                 if (serviceAvailabilityService.isAvailable(adventure.getId(), reservationQueryDTO.getFromDate(),
-                        reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime())) {
-                    if (!reservationService.isReserved(adventure.getId(), reservationQueryDTO.getFromDate(),
-                            reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(),
-                            reservationQueryDTO.getToTime(), client.getId())) {
-                        if (adventureSuitableForReservation(adventure, reservationQueryDTO))
-                            adventureDTOs.add(new AdventureDTO(adventure, revisionService.getAverageRatingForService(adventure.getId())));
-                    }
+                        reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(), reservationQueryDTO.getToTime()) &&
+                        !reservationService.isReserved(adventure.getId(), reservationQueryDTO.getFromDate(),
+                                reservationQueryDTO.getToDate(), reservationQueryDTO.getFromTime(),
+                                reservationQueryDTO.getToTime(), client.getId()) && adventureSuitableForReservation(adventure, reservationQueryDTO)) {
+                    adventureDTOs.add(new AdventureDTO(adventure, revisionService.getAverageRatingForService(adventure.getId())));
                 }
             }
             return new ResponseEntity<>(adventureDTOs, HttpStatus.OK);
@@ -215,9 +214,9 @@ public class ReservationController {
             }
             LoyaltyProgram loyaltyProgram = loyaltyProgramService.findActiveLoyaltyProgram();
             double discount = 0;
-            if (client.getLoyaltyStatus() == LoyaltyStatus.Silver) {
+            if (client.getLoyaltyStatus() == LoyaltyStatus.SILVER) {
                 discount = loyaltyProgram.getSilverClientBonus();
-            } else if (client.getLoyaltyStatus() == LoyaltyStatus.Gold) {
+            } else if (client.getLoyaltyStatus() == LoyaltyStatus.GOLD) {
                 discount = loyaltyProgram.getGoldClientBonus();
             }
             reservationDTO.setPrice(reservationDTO.getPrice() * (1 - discount));
@@ -244,19 +243,19 @@ public class ReservationController {
             client.addPoints(loyaltyProgram.getClientPointsPerReservation());
             privilegedUser.addPoints(loyaltyProgram.getPrivilegedPointsPerReservation());
 
-            if (client.getLoyaltyStatus() == LoyaltyStatus.Regular && client.getLoyaltyPoints() >= loyaltyProgram.getSilverPointsRequired()) {
-                client.setLoyaltyStatus(LoyaltyStatus.Silver);
-            } else if (client.getLoyaltyStatus() == LoyaltyStatus.Silver && client.getLoyaltyPoints() >= loyaltyProgram.getGoldPointsRequired()) {
-                client.setLoyaltyStatus(LoyaltyStatus.Gold);
+            if (client.getLoyaltyStatus() == LoyaltyStatus.REGULAR && client.getLoyaltyPoints() >= loyaltyProgram.getSilverPointsRequired()) {
+                client.setLoyaltyStatus(LoyaltyStatus.SILVER);
+            } else if (client.getLoyaltyStatus() == LoyaltyStatus.SILVER && client.getLoyaltyPoints() >= loyaltyProgram.getGoldPointsRequired()) {
+                client.setLoyaltyStatus(LoyaltyStatus.GOLD);
             }
 
-            if (privilegedUser.getLoyaltyStatus() == LoyaltyStatus.Silver && privilegedUser.getLoyaltyPoints() >= loyaltyProgram.getSilverPointsRequired()) {
-                privilegedUser.setLoyaltyStatus(LoyaltyStatus.Silver);
-            } else if (privilegedUser.getLoyaltyStatus() == LoyaltyStatus.Gold && privilegedUser.getLoyaltyPoints() >= loyaltyProgram.getGoldPointsRequired()) {
-                privilegedUser.setLoyaltyStatus(LoyaltyStatus.Gold);
+            if (privilegedUser.getLoyaltyStatus() == LoyaltyStatus.REGULAR && privilegedUser.getLoyaltyPoints() >= loyaltyProgram.getSilverPointsRequired()) {
+                privilegedUser.setLoyaltyStatus(LoyaltyStatus.SILVER);
+            } else if (privilegedUser.getLoyaltyStatus() == LoyaltyStatus.SILVER && privilegedUser.getLoyaltyPoints() >= loyaltyProgram.getGoldPointsRequired()) {
+                privilegedUser.setLoyaltyStatus(LoyaltyStatus.GOLD);
             }
-            reservationService.changeReservationStatus(ReservationStatus.Finished, reservationDTO.getId());
-            reservationDTO.setStatus(ReservationStatus.Finished);
+            reservationService.changeReservationStatus(ReservationStatus.FINISHED, reservationDTO.getId());
+            reservationDTO.setStatus(ReservationStatus.FINISHED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -272,19 +271,24 @@ public class ReservationController {
             Service service = serviceService.findById(serviceId);
             if (!reservationService.currentReservationForClientAndService(serviceId, client))
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-            if (!serviceAvailabilityService.isAvailable(serviceId, reservationDTO.getFromDate(), reservationDTO.getToDate(), reservationDTO.getFromTime(), reservationDTO.getToTime()))
+            if (!serviceAvailabilityService.isAvailable(serviceId, reservationDTO.getFromDate(), reservationDTO.getToDate(),
+                    reservationDTO.getFromTime(), reservationDTO.getToTime()))
                 return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
             if (!reservationService.checkIfReservationsExistForDate(serviceId, reservationDTO.getFromDate(), reservationDTO.getToDate()))
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             Set<Tag> additionalServices = tagService.findTags(new ArrayList<>(reservationDTO.getAdditionalServices()), reservationDTO.getServiceName());
             LoyaltyProgram loyaltyProgram = loyaltyProgramService.findActiveLoyaltyProgram();
             double discount = 0;
-            if (client.getLoyaltyStatus() == LoyaltyStatus.Silver) {
+            if (client.getLoyaltyStatus() == LoyaltyStatus.SILVER) {
                 discount = loyaltyProgram.getSilverClientBonus();
-            } else if (client.getLoyaltyStatus() == LoyaltyStatus.Gold) {
+            } else if (client.getLoyaltyStatus() == LoyaltyStatus.GOLD) {
                 discount = loyaltyProgram.getGoldClientBonus();
             }
-            reservationDTO.setPrice((int) ((reservationDTO.getToDate().getTime() - reservationDTO.getFromDate().getTime()) / (1000 * 60 * 60 * 24)) * service.getPrice() * (1 - discount));
+            double finalPrice = (double) ((reservationDTO.getToDate().getTime() - reservationDTO.getFromDate().getTime())
+                    / (1000 * 60 * 60 * 24)) * service.getPrice() * (1 - discount);
+            DecimalFormat df = new DecimalFormat("0.00");
+            finalPrice = Double.parseDouble(df.format(finalPrice));
+            reservationDTO.setPrice(finalPrice);
             Reservation reservation = new Reservation(reservationDTO, service, client, additionalServices);
             reservation = reservationService.addReservation(reservation);
             reservationDTO = new ReservationDTO(reservation);
@@ -346,12 +350,15 @@ public class ReservationController {
             List<Reservation> reservations = reservationService.findClientsFinishedReservations(client.getId());
             List<ReservationDTO> reservationDTOS = new ArrayList<>();
             for (Reservation reservation : reservations) {
-                if (retreatService.getRetreatById(reservation.getService().getId()) != null) {
-                    Revision revision = revisionService.findClientsRevisionForReservation(reservation.getId(), client.getId());
-                    if (revision != null)
-                        reservationDTOS.add(new ReservationDTO(reservation, revision.getRating().getServiceRating()));
-                    else
-                        reservationDTOS.add(new ReservationDTO(reservation));
+                try {
+                    if (retreatService.getRetreatById(reservation.getService().getId()) != null) {
+                        Revision revision = revisionService.findClientsRevisionForReservation(reservation.getId(), client.getId());
+                        if (revision != null)
+                            reservationDTOS.add(new ReservationDTO(reservation, revision.getRating().getServiceRating()));
+                        else
+                            reservationDTOS.add(new ReservationDTO(reservation));
+                    }
+                } catch (ClassCastException ignored) {
                 }
             }
             return new ResponseEntity<>(reservationDTOS, HttpStatus.OK);
@@ -433,7 +440,7 @@ public class ReservationController {
     }
 
     public Date getDate(String date) {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
         try {
             return formatter.parse(date);
         } catch (ParseException e) {
@@ -454,7 +461,7 @@ public class ReservationController {
         for (Discount discount : discounts) {
             for (ReservationDTO reservationDTO : reservationsDTO.getReservationsDTO()) {
                 if (reservationDTO.getFromDate().after(discount.getFromDate()) && reservationDTO.getFromDate().before(discount.getToDate())) {
-                    systemIncome += reservationDTO.getPrice() * discount.getDiscount();
+                    systemIncome += reservationDTO.getPrice() * discount.getDiscountRate();
                 }
             }
         }
@@ -496,12 +503,12 @@ public class ReservationController {
         for (Discount discount : discounts) {
             for (ReservationDTO reservationDTO : reservationsDTO.getReservationsDTO()) {
                 if (reservationDTO.getFromDate().after(discount.getFromDate()) && reservationDTO.getFromDate().before(discount.getToDate())) {
-                    if (owner.getLoyaltyStatus() == LoyaltyStatus.Silver) {
-                        income += reservationDTO.getPrice() * (1 - discount.getDiscount() + loyaltyProgram.getSilverPrivilegedBonus());
-                    } else if (owner.getLoyaltyStatus() == LoyaltyStatus.Gold) {
-                        income += reservationDTO.getPrice() * (1 - discount.getDiscount() + loyaltyProgram.getGoldPrivilegedUserBonus());
+                    if (owner.getLoyaltyStatus() == LoyaltyStatus.SILVER) {
+                        income += reservationDTO.getPrice() * (1 - discount.getDiscountRate() + loyaltyProgram.getSilverPrivilegedBonus());
+                    } else if (owner.getLoyaltyStatus() == LoyaltyStatus.GOLD) {
+                        income += reservationDTO.getPrice() * (1 - discount.getDiscountRate() + loyaltyProgram.getGoldPrivilegedUserBonus());
                     } else {
-                        income += reservationDTO.getPrice() * (1 - discount.getDiscount());
+                        income += reservationDTO.getPrice() * (1 - discount.getDiscountRate());
                     }
                 }
             }
@@ -540,8 +547,8 @@ public class ReservationController {
         try {
             Reservation reservation = reservationService.findReservationById(reservationId);
             if (isCancellationValid(reservation.getFromDate())) {
-                reservationService.changeReservationStatus(ReservationStatus.Cancelled, reservationId);
-                reservation.setStatus(ReservationStatus.Cancelled);
+                reservationService.changeReservationStatus(ReservationStatus.CANCELLED, reservationId);
+                reservation.setStatus(ReservationStatus.CANCELLED);
                 return new ResponseEntity<>(new ReservationDTO(reservation), HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
@@ -564,27 +571,29 @@ public class ReservationController {
         }
         List<Integer> values = new ArrayList<>();
         List<String> dates = new ArrayList<>();
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat df = new SimpleDateFormat(dateFormat);
         for (Reservation reservation : reservations){
-            if (reservation.getStatus() != ReservationStatus.Cancelled){
+            if (reservation.getStatus() != ReservationStatus.CANCELLED){
                 String year = df.format(reservation.getFromDate()).substring(0, 4);
-                if (dates.contains(year)){
-                    for (int i = 0; i < dates.size(); i++){
-                        if (year.equals(dates.get(i))){
-                            int currVal = values.get(i);
-                            values.set(i, currVal + 1);
-                        }
-                    }
-                }
-                else
-                {
-                    dates.add(year);
-                    values.add(1);
-                }
+                addYears(values, dates, year);
             }
         }
         GraphDTO graphDTO = new GraphDTO(dates, values);
         return new ResponseEntity<>(graphDTO, HttpStatus.OK);
+    }
+
+    private void addYears(List<Integer> values, List<String> dates, String year) {
+        if (dates.contains(year)){
+            for (int i = 0; i < dates.size(); i++) {
+                if (year.equals(dates.get(i))) {
+                    int currVal = values.get(i);
+                    values.set(i, currVal + 1);
+                }
+            }
+        } else {
+            dates.add(year);
+            values.add(1);
+        }
     }
 
     @GetMapping(value="/monthlyReport")
@@ -600,23 +609,11 @@ public class ReservationController {
         }
         List<Integer> values = new ArrayList<>();
         List<String> dates = new ArrayList<>();
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat df = new SimpleDateFormat(dateFormat);
         for (Reservation reservation : reservations){
-            if (reservation.getStatus() != ReservationStatus.Cancelled){
+            if (reservation.getStatus() != ReservationStatus.CANCELLED){
                 String yearMonth = df.format(reservation.getFromDate()).substring(0, 7);
-                if (dates.contains(yearMonth)){
-                    for (int i = 0; i < dates.size(); i++){
-                        if (yearMonth.equals(dates.get(i))){
-                            int currVal = values.get(i);
-                            values.set(i, currVal + 1);
-                        }
-                    }
-                }
-                else
-                {
-                    dates.add(yearMonth);
-                    values.add(1);
-                }
+                addYears(values, dates, yearMonth);
             }
         }
         GraphDTO graphDTO = new GraphDTO(dates, values);
@@ -642,10 +639,10 @@ public class ReservationController {
         }
 
         for (Reservation reservation : reservations){
-            if (reservation.getStatus() != ReservationStatus.Cancelled){
+            if (reservation.getStatus() != ReservationStatus.CANCELLED){
                 for (int i = 0; i < dates.size(); i++){
-                    Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(dates.get(i).substring(0, 10));
-                    Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse(dates.get(i).substring(12));
+                    Date startDate = new SimpleDateFormat(dateFormat).parse(dates.get(i).substring(0, 10));
+                    Date endDate = new SimpleDateFormat(dateFormat).parse(dates.get(i).substring(12));
                     if (reservation.getFromDate().after(startDate) && reservation.getFromDate().before(endDate)){
                         int currVal = values.get(i);
                         values.set(i, currVal + 1);
@@ -659,48 +656,48 @@ public class ReservationController {
 
     public List<String> getDates(){
         List<String> dates = new ArrayList<>();
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat df = new SimpleDateFormat(dateFormat);
         Date today = new Date();
 
         Calendar cal1 = Calendar.getInstance();
         cal1.add(Calendar.DATE, -28);
-        Date date_minus_28 = cal1.getTime();
+        Date dateMinus28 = cal1.getTime();
 
         Calendar cal2 = Calendar.getInstance();
         cal2.add(Calendar.DATE, -21);
-        Date date_minus_21 = cal2.getTime();
-        dates.add(df.format(date_minus_28) + " - " + df.format(date_minus_21));
+        Date dateMinus21 = cal2.getTime();
+        dates.add(df.format(dateMinus28) + " - " + df.format(dateMinus21));
 
         Calendar cal3 = Calendar.getInstance();
         cal3.add(Calendar.DATE, -14);
-        Date date_minus_14 = cal3.getTime();
-        dates.add(df.format(date_minus_21) + " - " + df.format(date_minus_14));
+        Date dateMinus14 = cal3.getTime();
+        dates.add(df.format(dateMinus21) + " - " + df.format(dateMinus14));
 
         Calendar cal4 = Calendar.getInstance();
         cal4.add(Calendar.DATE, -7);
-        Date date_minus_7 = cal4.getTime();
-        dates.add(df.format(date_minus_14) + " - " + df.format(date_minus_7));
-        dates.add(df.format(date_minus_7) + " - " + df.format(today));
+        Date dateMinus7 = cal4.getTime();
+        dates.add(df.format(dateMinus14) + " - " + df.format(dateMinus7));
+        dates.add(df.format(dateMinus7) + " - " + df.format(today));
 
         Calendar cal5 = Calendar.getInstance();
         cal5.add(Calendar.DATE, +7);
-        Date date_plus_7 = cal5.getTime();
-        dates.add(df.format(today) + " - " + df.format(date_plus_7));
+        Date datePlus7 = cal5.getTime();
+        dates.add(df.format(today) + " - " + df.format(datePlus7));
 
         Calendar cal6 = Calendar.getInstance();
         cal6.add(Calendar.DATE, +14);
-        Date date_plus_14 = cal6.getTime();
-        dates.add(df.format(date_plus_7) + " - " + df.format(date_plus_14));
+        Date datePlus14 = cal6.getTime();
+        dates.add(df.format(datePlus7) + " - " + df.format(datePlus14));
 
         Calendar cal7 = Calendar.getInstance();
         cal7.add(Calendar.DATE, +21);
-        Date date_plus_21 = cal7.getTime();
-        dates.add(df.format(date_plus_14) + " - " + df.format(date_plus_21));
+        Date datePlus21 = cal7.getTime();
+        dates.add(df.format(datePlus14) + " - " + df.format(datePlus21));
 
         Calendar cal8 = Calendar.getInstance();
         cal8.add(Calendar.DATE, +28);
-        Date date_plus_28 = cal8.getTime();
-        dates.add(df.format(date_plus_21) + " - " + df.format(date_plus_28));
+        Date datePlus28 = cal8.getTime();
+        dates.add(df.format(datePlus21) + " - " + df.format(datePlus28));
 
         return dates;
     }

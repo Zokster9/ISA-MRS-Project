@@ -320,6 +320,12 @@ const routes = [{
         component: () =>
             import('../views/AdventuresView.vue')
     },
+    {
+        path: '*',
+        name: 'undefined',
+        component: () =>
+            import('../views/NotDefinedView.vue')
+    }
 ]
 
 const router = new VueRouter({

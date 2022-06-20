@@ -1,7 +1,6 @@
 package com.example.projectmrsisa.service;
 
 import com.example.projectmrsisa.model.Action;
-import com.example.projectmrsisa.model.Retreat;
 import com.example.projectmrsisa.repository.ActionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

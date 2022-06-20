@@ -12,7 +12,7 @@ public class Revision {
     @Column(name="id", unique = true, nullable = false)
     private Integer id;
     @Column(name="revision", nullable = false)
-    private String revision;
+    private String userRevision;
     @Column(name="isApproved")
     private boolean isApproved;
     @Column(name="isAnswered")
@@ -29,9 +29,9 @@ public class Revision {
         this.isAnswered = false;
     }
 
-    public Revision(Integer id, String revision, boolean isApproved, boolean isAnswered, Rating rating, User privilegedUser, Client client, Reservation reservation) {
+    public Revision(Integer id, String userRevision, boolean isApproved, boolean isAnswered, Rating rating, Reservation reservation) {
         this.id = id;
-        this.revision = revision;
+        this.userRevision = userRevision;
         this.isApproved = isApproved;
         this.isAnswered = isAnswered;
         this.rating = rating;
@@ -39,7 +39,7 @@ public class Revision {
     }
 
     public Revision(RevisionDTO revisionDTO, Rating rating, Reservation reservation) {
-        this.revision = revisionDTO.getRevision();
+        this.userRevision = revisionDTO.getRevision();
         this.isApproved = false;
         this.isAnswered = false;
         this.rating = rating;
@@ -54,12 +54,12 @@ public class Revision {
         this.id = id;
     }
 
-    public String getRevision() {
-        return revision;
+    public String getUserRevision() {
+        return userRevision;
     }
 
-    public void setRevision(String revision) {
-        this.revision = revision;
+    public void setUserRevision(String revision) {
+        this.userRevision = revision;
     }
 
     public boolean isApproved() {

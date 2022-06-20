@@ -63,7 +63,7 @@ public class Reservation {
         this.toTime = reservationDTO.getToTime();
         this.price = reservationDTO.getPrice();
         this.numOfPeople = reservationDTO.getNumOfPeople();
-        this.status = ReservationStatus.Pending;
+        this.status = ReservationStatus.PENDING;
         this.service = service;
         this.client = client;
         this.additionalServices = additionalServices;

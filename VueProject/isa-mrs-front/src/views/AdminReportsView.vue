@@ -18,7 +18,7 @@
                             <td class="text-center align-middle"> <b> Accept report </b></td>
                             <td class="text-center align-middle"> <b> Decline report </b></td>
                         </tr>
-                        <AdminReportRow v-for="report in this.reports" :report="report" :key="report.id"> </AdminReportRow>
+                        <AdminReportRow @removeReport="removeReport" v-for="report in this.reports" :report="report" :key="report.id"> </AdminReportRow>
                     </tbody>
                 </table>
             </div>
@@ -43,6 +43,11 @@
         data(){
             return {
                 reports: []
+            }
+        },
+        methods: {
+            removeReport(id) {
+                this.reports = this.reports.filter(report => id != report.id)
             }
         },
         mounted () {

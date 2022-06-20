@@ -202,6 +202,10 @@
                 }
             }).then((response) => {
                 this.adventure = response.data;
+                if (this.adventure.id === 0) {
+                    alert("This adventure is unavailable!")
+                    this.$router.back()
+                }
                 this.mapSrc = "https://maps.google.com/maps?q=" + response.data.country + "," + response.data.city + "," + response.data.street + "&t=&z=13&ie=UTF8&iwloc=&output=embed";
             });
             if (window.sessionStorage.getItem("role") === "ROLE_client") {

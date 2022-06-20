@@ -18,7 +18,7 @@
                             <td> <b> Reservation status </b> </td>
                             <td> <b> Action </b> </td>
                         </tr>
-                        <ReservationHistoryPrivilegedUserRow v-for="reservation in currentPageReservations" :reservation="reservation" :key="reservation.id"></ReservationHistoryPrivilegedUserRow>
+                        <ReservationHistoryPrivilegedUserRow @endReservation="endReservation" v-for="reservation in currentPageReservations" :reservation="reservation" :key="reservation.id"></ReservationHistoryPrivilegedUserRow>
                         <tr>
                             <td colspan="5"></td>
                             <td>
@@ -70,6 +70,16 @@
                 this.currentPage = pageNumber;
                 this.updateVisibleReservations();
             },
+            endReservation() {
+                axios.get("http://localhost:8088/reservations/getPrivilegedUserReservations", {
+                    headers: {
+                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
+                    }
+                }).then((response) =>{
+                    this.reservations = response.data
+                    this.updateVisibleReservations();
+                })
+            }
         },
         mounted(){
             if (window.sessionStorage.getItem('role') === "ROLE_retreatOwner" || window.sessionStorage.getItem("role") === "ROLE_shipOwner" || window.sessionStorage.getItem("role") === "ROLE_fishingInstructor") {

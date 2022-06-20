@@ -1,6 +1,5 @@
 package com.example.projectmrsisa.service;
 
-import com.example.projectmrsisa.dto.ReservationDTO;
 import com.example.projectmrsisa.model.Client;
 import com.example.projectmrsisa.model.Reservation;
 import com.example.projectmrsisa.model.ReservationStatus;
@@ -61,27 +60,28 @@ public class ReservationService {
         if (reservations.isEmpty()) return false;
         else {
             for (Reservation reservation: reservations) {
-                if ((reservation.getFromDate().compareTo(fromDate) <= 0 && reservation.getToDate().compareTo(toDate) >= 0
-                        && reservation.getFromDate().compareTo(toDate) <= 0 && reservation.getToDate().compareTo(fromDate) >= 0)
-                        || (reservation.getFromDate().compareTo(fromDate) >= 0 && reservation.getToDate().compareTo(toDate) >= 0
-                        && reservation.getFromDate().compareTo(toDate) <= 0 && reservation.getToDate().compareTo(fromDate) >= 0)
-                        || (reservation.getFromDate().compareTo(fromDate) <= 0 && reservation.getToDate().compareTo(toDate) <= 0
-                        && reservation.getFromDate().compareTo(toDate) <= 0 && reservation.getToDate().compareTo(fromDate) >= 0)
-                        || (reservation.getFromDate().compareTo(fromDate) >= 0 && reservation.getToDate().compareTo(toDate) <= 0
-                        && reservation.getFromDate().compareTo(toDate) <= 0 && reservation.getToDate().compareTo(fromDate) >= 0)) {
+                if ((reservation.getFromDate().compareTo(fromDate) < 0 && reservation.getToDate().compareTo(toDate) > 0
+                        && reservation.getFromDate().compareTo(toDate) < 0 && reservation.getToDate().compareTo(fromDate) > 0)
+                        || (reservation.getFromDate().compareTo(fromDate) > 0 && reservation.getToDate().compareTo(toDate) > 0
+                        && reservation.getFromDate().compareTo(toDate) < 0 && reservation.getToDate().compareTo(fromDate) > 0)
+                        || (reservation.getFromDate().compareTo(fromDate) < 0 && reservation.getToDate().compareTo(toDate) < 0
+                        && reservation.getFromDate().compareTo(toDate) < 0 && reservation.getToDate().compareTo(fromDate) > 0)
+                        || (reservation.getFromDate().compareTo(fromDate) > 0 && reservation.getToDate().compareTo(toDate) < 0
+                        && reservation.getFromDate().compareTo(toDate) < 0 && reservation.getToDate().compareTo(fromDate) > 0)
+                        || (reservation.getFromDate().compareTo(fromDate) == 0 && reservation.getToDate().compareTo(toDate) == 0)) {
                     if (reservation.getFromDate().compareTo(fromDate) == 0 && reservation.getToDate().compareTo(toDate) == 0
                             && reservation.getFromTime().compareTo(fromTime) == 0 && reservation.getToTime().compareTo(toTime) == 0) {
-                        return (reservation.getStatus() == ReservationStatus.Cancelled || reservation.getStatus() == ReservationStatus.Pending)
+                        return (reservation.getStatus() == ReservationStatus.CANCELLED || reservation.getStatus() == ReservationStatus.PENDING)
                                 && Objects.equals(reservation.getClient().getId(), clientId);
                     }
                     return true;
                 }
                 else {
-                    if (reservation.getToDate().compareTo(fromDate) == 0) {
-                        if (reservation.getToTime().compareTo(fromTime) > 0) return true;
+                    if (reservation.getToDate().compareTo(fromDate) == 0 && reservation.getToTime().compareTo(fromTime) > 0) {
+                        return true;
                     }
-                    if (reservation.getFromDate().compareTo(toDate) == 0) {
-                        if (reservation.getFromTime().compareTo(toTime) < 0) return true;
+                    if (reservation.getFromDate().compareTo(toDate) == 0 && reservation.getFromTime().compareTo(toTime) < 0) {
+                        return true;
                     }
                 }
             }
@@ -97,9 +97,9 @@ public class ReservationService {
         List<Reservation> reservations = reservationRepository.findReservationsForClientAndService(client.getId(), serviceId);
         Date today = new Date();
         for (Reservation reservation: reservations) {
-            if (reservation.getFromDate().compareTo(today) < 0 && reservation.getToDate().compareTo(today) > 0) return true;
-            else if (reservation.getFromDate().compareTo(today) == 0) return true;
-            else if (reservation.getToDate().compareTo(today) == 0) return true;
+            if ((reservation.getFromDate().compareTo(today) < 0 && reservation.getToDate().compareTo(today) > 0) ||
+                    reservation.getFromDate().compareTo(today) == 0 || reservation.getToDate().compareTo(today) == 0)
+                return true;
         }
         return false;
     }
@@ -127,7 +127,7 @@ public class ReservationService {
     public boolean pendingReservationForServiceExists(Integer serviceId) {
         List<Reservation> reservations = reservationRepository.findReservationByServiceId(serviceId);
         for (Reservation reservation: reservations) {
-            if (reservation.getStatus() == ReservationStatus.Pending) return false;
+            if (reservation.getStatus() == ReservationStatus.PENDING) return false;
         }
         return true;
     }

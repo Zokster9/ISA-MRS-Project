@@ -30,7 +30,7 @@ public class UserService {
         return userRepository.findUsersByActivatedStatus(isActivated, isDeleted);
     }
 
-    @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value ="0")})
+    @Transactional(readOnly = false)
     public User findUserById(Integer id){
         return userRepository.findUserById(id);
     }

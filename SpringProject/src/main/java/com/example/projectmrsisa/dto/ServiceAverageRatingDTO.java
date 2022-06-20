@@ -4,7 +4,7 @@ import java.util.List;
 
 public class ServiceAverageRatingDTO {
 
-    private int Id;
+    private int id;
 
     private String serviceName;
 
@@ -16,18 +16,18 @@ public class ServiceAverageRatingDTO {
     }
 
     public ServiceAverageRatingDTO(int id, String serviceName, double averageRating, List<String> servicePictures) {
-        Id = id;
+        this.id = id;
         this.serviceName = serviceName;
         this.averageRating = averageRating;
         this.servicePictures = servicePictures;
     }
 
     public int getId() {
-        return Id;
+        return id;
     }
 
     public void setId(int id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getServiceName() {

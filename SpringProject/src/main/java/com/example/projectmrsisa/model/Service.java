@@ -50,11 +50,11 @@ public abstract class Service {
     @Column(name = "num_of_availabilities", columnDefinition = "integer DEFAULT 0", nullable = false)
     private Integer numOfAvailabilities;
 
-    public Service() {
+    protected Service() {
         this.isDeleted = false;
     }
 
-    public Service(Integer id, String name, String description, User owner, Address address, Set<String> pictures,
+    protected Service(Integer id, String name, String description, User owner, Address address, Set<String> pictures,
                    Set<String> rulesOfConduct, double price, boolean isDeleted, Set<Action> actions, Set<Tag> additionalServices) {
         this.id = id;
         this.name = name;

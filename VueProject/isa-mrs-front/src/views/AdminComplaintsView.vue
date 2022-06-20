@@ -18,7 +18,7 @@
                             <td class="text-center align-middle"> <b> Response </b></td>
                             <td class="text-center align-middle"> <b> Send response </b></td>
                         </tr>
-                        <AdminComplaintRow v-for="complaint in this.complaints" :complaint="complaint" :key="complaint.id"> </AdminComplaintRow>
+                        <AdminComplaintRow @send="send" v-for="complaint in this.complaints" :complaint="complaint" :key="complaint.id"> </AdminComplaintRow>
                     </tbody>
                 </table>
             </div>
@@ -45,6 +45,11 @@
         data(){
             return {
                 complaints: []
+            }
+        },
+        methods: {
+            send(id) {
+                this.complaints = this.complaints.filter(complaint => id != complaint.id);
             }
         },
         mounted () {

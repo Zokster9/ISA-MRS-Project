@@ -52,7 +52,7 @@
                     }
                 }).then(() => {
                     alert("Report has been accepted.")
-                    window.location.reload();
+                    this.$emit("removeReport", id)
                 })
             },
             declineReport(id, clientName, clientSurname, ownerName, ownerSurname, serviceName, servicePictures, report, reservationId){
@@ -76,7 +76,7 @@
                     }
                 }).then(() => {
                     alert("Report has been declined.")
-                    window.location.reload();
+                    this.$emit("removeReport", id)
                 })
             }
         },

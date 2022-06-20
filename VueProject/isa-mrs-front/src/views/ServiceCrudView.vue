@@ -24,7 +24,7 @@
                             <td class="text-center align-items"> <b> DELETE </b> </td>
                             <td class="text-center align-items"> <b> ADD ACTION </b> </td>
                         </tr>
-                        <ServiceCrudRow v-for="service in services" :service="service" :key="service.id"></ServiceCrudRow>
+                        <ServiceCrudRow @removeService="removeService" v-for="service in services" :service="service" :key="service.id"></ServiceCrudRow>
                     </tbody>
                 </table>
                     <div>
@@ -61,69 +61,72 @@ import router from '@/router'
             }
         },
         methods: {
-                showAll(){
-                    while (this.services.length != 0){
-                        this.services.pop();
-                    }
+            showAll(){
+                while (this.services.length != 0){
+                    this.services.pop();
+                }
+                for (let i = 0; i < this.servicesCopy.length; i++){
+                    this.services.push(this.servicesCopy[i]);
+                }
+            },
+            search(){
+                while (this.services.length != 0){
+                    this.services.pop();
+                }
+                while (this.activeIndexes.length != 0){
+                    this.activeIndexes.pop();
+                }
+                if (this.searchText.length == 0){
                     for (let i = 0; i < this.servicesCopy.length; i++){
                         this.services.push(this.servicesCopy[i]);
                     }
-                },
-                search(){
-                    while (this.services.length != 0){
-                        this.services.pop();
+                    return;
+                }
+                for (let i = 0; i < this.servicesCopy.length; i++){
+                    if (this.searchByName(this.servicesCopy[i].name) || this.searchByAddress(this.servicesCopy[i].country, this.servicesCopy[i].city, this.servicesCopy[i].street)
+                        || this.searchByRulesOfConduct(this.servicesCopy[i].rulesOfConduct)){
+                        this.activeIndexes.push(i);
                     }
-                    while (this.activeIndexes.length != 0){
-                        this.activeIndexes.pop();
-                    }
-                    if (this.searchText.length == 0){
-                        for (let i = 0; i < this.servicesCopy.length; i++){
+                }
+                for (let i = 0; i < this.servicesCopy.length; i++){
+                    for (let j = 0; j < this.activeIndexes.length; j++){
+                        if (i == this.activeIndexes[j]){
                             this.services.push(this.servicesCopy[i]);
-                        }
-                        return;
-                    }
-                    for (let i = 0; i < this.servicesCopy.length; i++){
-                        if (this.searchByName(this.servicesCopy[i].name) || this.searchByAddress(this.servicesCopy[i].country, this.servicesCopy[i].city, this.servicesCopy[i].street)
-                            || this.searchByRulesOfConduct(this.servicesCopy[i].rulesOfConduct)){
-                            this.activeIndexes.push(i);
+                            break;
                         }
                     }
-                    for (let i = 0; i < this.servicesCopy.length; i++){
-                        for (let j = 0; j < this.activeIndexes.length; j++){
-                            if (i == this.activeIndexes[j]){
-                                this.services.push(this.servicesCopy[i]);
-                                break;
-                            }
-                        }
-                    }
-                },
-                searchByName(name){
-                    if (name.includes(this.searchText)){
-                        return true;
-                    }
-                    return false;
-                },
-                searchByAddress(country, city, street){
-                    if (country.toLowerCase().includes(this.searchText.toLowerCase())) return true;
-                    if (city.toLowerCase().includes(this.searchText.toLowerCase())) return true;
-                    if (street.toLowerCase().includes(this.searchText.toLowerCase())) return true;
-                    return false;
-                },
-                searchByRulesOfConduct(rulesOfConduct){
-                    for (let rule of rulesOfConduct) {
-                        if (rule.toLowerCase() === this.searchText.toLowerCase()) return true;
-                    }
-                    return false;
-                },
-                addService() {
-                    if (window.sessionStorage.getItem("role") === "ROLE_fishingInstructor"){
-                        router.push('/add-adventure');
-                    } else if (window.sessionStorage.getItem("role") === "ROLE_retreatOwner"){
-                        router.push('/add-retreat');
-                    } else if (window.sessionStorage.getItem("role") === "ROLE_shipOwner"){
-                        router.push('/add-ship');
-                    }
-                },
+                }
+            },
+            searchByName(name){
+                if (name.includes(this.searchText)){
+                    return true;
+                }
+                return false;
+            },
+            searchByAddress(country, city, street){
+                if (country.toLowerCase().includes(this.searchText.toLowerCase())) return true;
+                if (city.toLowerCase().includes(this.searchText.toLowerCase())) return true;
+                if (street.toLowerCase().includes(this.searchText.toLowerCase())) return true;
+                return false;
+            },
+            searchByRulesOfConduct(rulesOfConduct){
+                for (let rule of rulesOfConduct) {
+                    if (rule.toLowerCase() === this.searchText.toLowerCase()) return true;
+                }
+                return false;
+            },
+            addService() {
+                if (window.sessionStorage.getItem("role") === "ROLE_fishingInstructor"){
+                    router.push('/add-adventure');
+                } else if (window.sessionStorage.getItem("role") === "ROLE_retreatOwner"){
+                    router.push('/add-retreat');
+                } else if (window.sessionStorage.getItem("role") === "ROLE_shipOwner"){
+                    router.push('/add-ship');
+                }
+            },
+            removeService(id) {
+                this.services = this.services.filter(service => id != service.id)
+            },
         },
         mounted(){
             if (window.sessionStorage.getItem('role') === "ROLE_retreatOwner" || window.sessionStorage.getItem("role") === "ROLE_shipOwner" || window.sessionStorage.getItem("role") === "ROLE_fishingInstructor") {

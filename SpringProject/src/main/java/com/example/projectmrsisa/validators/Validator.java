@@ -1,9 +1,6 @@
 package com.example.projectmrsisa.validators;
 
 import com.example.projectmrsisa.dto.*;
-import com.example.projectmrsisa.model.User;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,15 +10,16 @@ public class Validator {
 
     private String[] fishingEquipment = {"Hooks", "Lines", "Floats", "Rods", "Reels", "Baits", "Lures", "Spears", "Nets", "Gaffs", "Traps"};
     private String[] navigationEquipment = {"Gyro Compass", "Radar", "Autopilot", "Echo sounder", "Magnetic Compass", "ARPA", "GPS Receiver", "Navigation lamps"};
+    private final String countryRegex = "([A-Z])([a-z]+)([^0-9]*)$";
 
     public boolean validAddress(String country, String city, String street) {
-        if (country.equals("") || country == null || !country.matches("([A-Z]{1})([a-z]+)([^0-9]*)$")) {
+        if (country == null || country.equals("") || !country.matches(countryRegex)) {
             return false;
         }
-        if (city.equals("") || city == null || !city.matches("([A-Z]{1})([a-z]+)([^0-9]*)$")) {
+        if (city == null || city.equals("") || !city.matches(countryRegex)) {
             return false;
         }
-        return !street.equals("") && street != null;
+        return street != null && !street.equals("");
     }
 
     public boolean validateRetreatData(RetreatDTO retreatDTO) {
@@ -49,8 +47,7 @@ public class Validator {
     }
 
     public boolean validServiceAvailability(ServiceAvailabilityDTO serviceAvailabilityDTO) {
-        if (!validDates(serviceAvailabilityDTO.getDateFrom(), serviceAvailabilityDTO.getDateTo(), serviceAvailabilityDTO.getTimeFrom(), serviceAvailabilityDTO.getTimeTo())) return false;
-        return true;
+        return validDates(serviceAvailabilityDTO.getDateFrom(), serviceAvailabilityDTO.getDateTo(), serviceAvailabilityDTO.getTimeFrom(), serviceAvailabilityDTO.getTimeTo());
     }
 
     public boolean validDates(Date dateFrom, Date dateTo, String timeFrom, String timeTo) {
@@ -68,12 +65,11 @@ public class Validator {
 
     public boolean validAction(ActionDTO actionDTO) {
         if (!validDates(actionDTO.getDateFrom(), actionDTO.getDateTo(), actionDTO.getTimeFrom(), actionDTO.getTimeTo())) return false;
-        System.out.println(actionDTO.getMaxNumOfPeople());
         if (actionDTO.getMaxNumOfPeople() <= 0) return false;
         for (String as: actionDTO.getAdditionalServices()) {
             if (as.equals("") || as.length() > 14) return false;
         }
-        return !(actionDTO.getPrice() <= 0);
+        return actionDTO.getPrice() > 0;
     }
 
     public boolean validateShipData(ShipDTO shipDTO) {
@@ -142,10 +138,7 @@ public class Validator {
         if (adventureDTO.getInstructorBiography().length() < 5 || adventureDTO.getInstructorBiography() == null) {
             return false;
         }
-        if (!validAddress(adventureDTO.getCountry(), adventureDTO.getCity(), adventureDTO.getStreet())){
-            return false;
-        }
-        return true;
+        return validAddress(adventureDTO.getCountry(), adventureDTO.getCity(), adventureDTO.getStreet());
     }
 
     public boolean validReservationDTO(ReservationDTO reservationDTO) {
@@ -177,17 +170,14 @@ public class Validator {
             return false;
         }
         if (!validChangedUserInfo(userDTO)) return false;
-        if (userDTO.getPhoneNumber() == null || userDTO.getPhoneNumber().equals("") || !userDTO.getPhoneNumber().matches("^[+]?(\\d{1,2})?[\\s.-]?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$")) {
-            return false;
-        }
-        return true;
+        return userDTO.getPhoneNumber() != null && !userDTO.getPhoneNumber().equals("") && userDTO.getPhoneNumber().matches("^[+]?(\\d{1,2})?[\\s.-]?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$");
     }
 
     public boolean validChangedUserInfo(UserDTO userDTO){
-        if (userDTO.getName() == null ||userDTO.getName().equals("") || !userDTO.getName().matches("([A-Z]{1})([a-z]+)([^0-9]*)$")) {
+        if (userDTO.getName() == null ||userDTO.getName().equals("") || !userDTO.getName().matches(countryRegex)) {
             return false;
         }
-        if (userDTO.getSurname() == null ||userDTO.getSurname().equals("") || !userDTO.getSurname().matches("([A-Z]{1})([a-z]+)([^0-9]*)$")) {
+        if (userDTO.getSurname() == null ||userDTO.getSurname().equals("") || !userDTO.getSurname().matches(countryRegex)) {
             return false;
         }
         return userDTO.getPhoneNumber() != null && !userDTO.getPhoneNumber().equals("") && userDTO.getPhoneNumber().matches("^[+]?(\\d{1,2})?[\\s.-]?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$");
