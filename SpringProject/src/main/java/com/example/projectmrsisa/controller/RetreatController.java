@@ -79,9 +79,9 @@ public class RetreatController {
         User retreatOwner;
         try {
             retreatOwner = userService.findUserByEmail(loggedUser.getName());
+            if (!validator.validAddress(retreatDTO.getCountry(), retreatDTO.getCity(), retreatDTO.getStreet())) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            if (!validator.validateRetreatData(retreatDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (Exception e) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
-        if (!validator.validAddress(retreatDTO.getCountry(), retreatDTO.getCity(), retreatDTO.getStreet())) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        if (!validator.validateRetreatData(retreatDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         Address a;
         Set<Tag> additionalServices;
         try {

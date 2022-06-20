@@ -1,7 +1,7 @@
 <template>
     <div>
     <NavbarUser></NavbarUser>
-    <form class="w-50 mx-auto mt-5">
+    <form class="w-50 mx-auto mt-5" @submit.prevent="changeAdventure">
         <h2> Adventure info </h2>
             <div class="form-group mb-3">
                 <label>Name</label>
@@ -129,7 +129,7 @@
                 <input accept="image/*" type="file" class="form-control" @change="addPicture($event)" multiple/>
             </div>
             <div class="form-group- mb-3">
-                <button @click="changeAdventure" type="submit" class="btn btn-primary float-end">Update adventure</button>
+                <button type="submit" class="btn btn-primary float-end">Update adventure</button>
             </div>
         </form>
     </div>

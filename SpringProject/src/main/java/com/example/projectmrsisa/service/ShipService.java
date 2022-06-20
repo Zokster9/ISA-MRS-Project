@@ -14,12 +14,13 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class ShipService {
 
     @Autowired
     private ShipRepository shipRepository;
 
+    @Transactional(readOnly = false)
     public Ship addShip(Ship ship) {
         return shipRepository.save(ship);
     }

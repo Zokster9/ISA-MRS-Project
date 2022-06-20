@@ -6,7 +6,7 @@
             <div class="vertical-center" style="margin-top: 85px">
                 <div class="inner-block">
                     <div class="signUp">
-                        <form @submit.prevent>
+                        <form @submit.prevent="addAction">
                             <h3>Add a new action:</h3>  
 
                             <div class="form-group required">
@@ -60,7 +60,7 @@
                             </div>
                             
                             <div class="form-group">
-                                <button @click="addAction"  :disabled="isFormValid == false" type="submit" class="btn btn-dark btn-lg btn-block">Add action</button>
+                                <button :disabled="isFormValid == false" type="submit" class="btn btn-dark btn-lg btn-block">Add action</button>
                             </div>
                         </form>
                     </div>

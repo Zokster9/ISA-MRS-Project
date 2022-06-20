@@ -29,7 +29,7 @@
                               </div>
                               <div class="modal-body">
                                   <h5>Choose additional services</h5>
-                                  <form class="w-50 mx-auto mt-5">
+                                  <form class="w-50 mx-auto mt-5" @submit.prevent="confirmReservation">
                                       <div class="form-group mb-3">
                                         <label>Additional services:</label>
                                         <br>
@@ -40,7 +40,7 @@
                                             </div>
                                         </template>
                                     </div>
-                                    <button class="btn btn-primary my-3" @click="confirmReservation">Reserve</button>
+                                    <button class="btn btn-primary my-3" type="submit">Reserve</button>
                                   </form>
                               </div>
                           </div>
@@ -60,7 +60,7 @@
     import Vue from 'vue'
     import axios from 'axios'
     import VueAxios from 'vue-axios'
-import router from '@/router';
+    import router from '@/router';
 
     Vue.use(VueAxios, axios)
 

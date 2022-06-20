@@ -704,4 +704,19 @@ public class ReservationController {
 
         return dates;
     }
+
+    @GetMapping(path = "/reservations-for-service/{serviceId}")
+    @PreAuthorize("hasAnyRole('fishingInstructor','retreatOwner','shipOwner')")
+    public ResponseEntity<List<ReservationDTO>> getReservationsForService(@PathVariable Integer serviceId) {
+        try {
+            List<Reservation> reservations = reservationService.findReservationByServiceId(serviceId);
+            List<ReservationDTO> reservationDTOS = new ArrayList<>();
+            for (Reservation reservation: reservations) {
+                reservationDTOS.add(new ReservationDTO(reservation));
+            }
+            return new ResponseEntity<>(reservationDTOS, HttpStatus.OK);
+        }catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }

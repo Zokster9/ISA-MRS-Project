@@ -7,7 +7,7 @@
                     <div class="vertical-center" style="margin-top: 85px">
                         <div class="inner-block">
                             <div class="signUp">
-                                <form @submit.prevent>
+                                <form @submit.prevent="createNewLoyaltyProgram">
                                     <h3>Add a new loyalty program</h3>
                                     
                                     <div class="form-group required">
@@ -51,7 +51,7 @@
                                     </div>                                                                                                                                                                                                                      
                                     
                                     <div class="form-group">
-                                        <button @click="createNewLoyaltyProgram"  :disabled="$v.form.$invalid" type="submit" class="btn btn-dark btn-lg btn-block">Create</button>
+                                        <button :disabled="$v.form.$invalid" type="submit" class="btn btn-dark btn-lg btn-block">Create</button>
                                     </div>
                                 </form>
                             </div>

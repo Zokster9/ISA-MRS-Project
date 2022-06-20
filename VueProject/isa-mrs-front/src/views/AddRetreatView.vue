@@ -2,7 +2,7 @@
     <div>
         <NavbarUser></NavbarUser>
         <br><br>
-        <form class="w-50 mx-auto mt-5">
+        <form @submit.prevent="addRetreat" class="w-50 mx-auto mt-5">
             <h2> New retreat </h2>
                 <div class="form-group mb-3">
                     <label>Name</label>
@@ -37,32 +37,32 @@
                     <input v-model.number="form.price" type="number" class="form-control" placeholder="Price is required, and it must be number greater than 0."/>
                 </div>
                 <div class="form-group mb-3">
-                    <label>Rules of conduction:</label>
+                    <label style="font-weight: bold;">Rules of conduction:</label>
                     <br>
                     <div class="form-group mb-3">
                         <input type="checkbox" v-model="form.rulesOfConduction" value="Inside smoking disallowed"/>
-                        <label>Inside smoking disallowed</label>
+                        <label style="margin: 5px">Inside smoking disallowed</label>
                     </div>
                     <div class="form-group mb-3">
                         <input type="checkbox" v-model="form.rulesOfConduction" value="Pet friendly"/>
-                        <label>Pet friendly</label>
+                        <label style="margin: 5px">Pet friendly</label>
                     </div>
                     <div class="form-group mb-3">
                         <input type="checkbox" v-model="form.rulesOfConduction" value="Parties disallowed"/>
-                        <label>Parties disallowed</label>
+                        <label style="margin: 5px">Parties disallowed</label>
                     </div>
                     <div class="form-group mb-3">
                         <input type="checkbox" v-model="form.rulesOfConduction" value="Furniture braking is charged extra"/>
-                        <label>Furniture braking is charged extra</label>
+                        <label style="margin: 5px">Furniture braking is charged extra</label>
                     </div>
                 </div>
                 <div class="form-group mb-3">
-                    <label>Additional services:</label>
+                    <label style="font-weight: bold;">Additional services:</label>
                     <br>
                     <template v-for="tag in tags">
                         <div class="form-group mb-3" :key="tag.id">
                             <input type="checkbox" v-model="form.additionalServices" :value="tag.name" :key="tag.id"/>
-                            <label :for="tag.key">{{tag.name}}</label>
+                            <label :for="tag.key" style="margin: 5px">{{tag.name}}</label>
                         </div>
                     </template>
                 </div>
@@ -71,9 +71,10 @@
                     <input accept="image/*" type="file" class="form-control" @change="addPicture($event)" multiple/>
                 </div>
                 <div class="form-group mb-3">
-                    <button @click="addRetreat" type="submit" class="btn btn-primary float-end">Add retreat</button>
+                    <button type="submit" class="btn btn-primary float-end">Add retreat</button>
                 </div>
         </form>
+        <br><br><br><br><br><br>
     </div>
 </template>
 
@@ -162,12 +163,11 @@
 					headers: {
 						Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
 					}
-				}).then(response => {
-                    alert('Added retreat: ' + response.data.name + '.');
-                    router.push('/profile-page-retreat-owner');
-                }).catch(error => {
-                    if (error.response.status === 400) alert("Server error.");
-                    else alert("Error occurred while adding retreat!");
+				}).then(() => {
+                    alert('Successfully added retreat');
+                    router.back();
+                }).catch(() => {
+                    alert("Error occurred while adding retreat!");
                 });
             },
 

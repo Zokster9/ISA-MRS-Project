@@ -5,7 +5,7 @@
             <div class="vertical-center">
                 <div class="inner-block">
                     <div class="signIn">
-                        <form @submit.prevent>
+                        <form @submit.prevent="signIn">
                             <h3>Sign In</h3>
                             
                             <div class="form-group required">
@@ -19,7 +19,7 @@
                             </div>
                             
                             <div class="form-group">
-                                <button @click="signIn" :disabled="$v.form.$invalid" type="submit" class="btn btn-dark btn-lg btn-block">Sign In</button>
+                                <button :disabled="$v.form.$invalid" type="submit" class="btn btn-dark btn-lg btn-block">Sign In</button>
                             </div>
                         </form>
                     </div>

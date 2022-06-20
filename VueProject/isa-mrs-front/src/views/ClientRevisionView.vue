@@ -4,7 +4,7 @@
                 <div class="vertical-center">
                     <div class="inner-block">
                         <div class="revisions">
-                            <form @submit.prevent>
+                            <form @submit.prevent="review">
                                 <div class="form-group required">
                                     <label class="control-label">Enter your service rating: </label>
                                     <input v-model="form.serviceRating" type="number" min="1" max="5" class="form-control form-control-lg"/>
@@ -18,7 +18,7 @@
                                     <textarea v-model="form.revision" placeholder="Please enter your revision..." class="form-control form-control-lg"></textarea>
                                 </div>
                                 <div class="form-group">
-                                    <button @click="review" :disabled="$v.$invalid" type="submit" class="btn btn-dark btn-lg btn-block">Send revision</button>
+                                    <button :disabled="$v.$invalid" type="submit" class="btn btn-dark btn-lg btn-block">Send revision</button>
                                 </div>
                             </form>
                         </div>

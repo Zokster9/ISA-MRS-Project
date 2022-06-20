@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class RetreatService {
 
     private final Logger LOG = LoggerFactory.getLogger(RetreatService.class);
@@ -26,6 +26,7 @@ public class RetreatService {
     @Autowired
     private RetreatRepository retreatRepository;
 
+    @Transactional(readOnly = false)
     public Retreat addRetreat(Retreat retreat) {
         return retreatRepository.save(retreat);
     }

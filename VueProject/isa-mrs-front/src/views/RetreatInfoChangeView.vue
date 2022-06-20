@@ -2,7 +2,7 @@
     <div>
     <NavbarUser></NavbarUser>
     <br><br>
-    <form class="w-50 mx-auto mt-5">
+    <form @submit.prevent="changeRetreat" class="w-50 mx-auto mt-5">
             <h2> Retreat info </h2>
                 <div class="form-group mb-3">
                     <label>Name</label>
@@ -79,9 +79,10 @@
                     <input accept="image/*" type="file" class="form-control" @change="addPicture($event)" multiple/>
                 </div>
                 <div class="form-group mb-3">
-                    <button @click="changeRetreat" type="submit" class="btn btn-primary float-end">Update retreat</button>
+                    <button type="submit" class="btn btn-primary float-end">Update retreat</button>
                 </div>
         </form>
+        <br><br><br><br><br><br>
     </div>
 </template>
 
@@ -172,8 +173,7 @@
 						'Authorization': 'Bearer ' + window.sessionStorage.getItem("accessToken")
 					}
 				}).then(() => {
-                    alert("Retreat updated!");
-                    router.push("/service-crud");
+                    alert("Retreat successfully updated!");
                 }).catch((error) => {
                     if (error.response.status === 409) alert("Error. Pending reservation for this retreat exists.");
                     else alert("Error occured. Retreat has not been updated.");
