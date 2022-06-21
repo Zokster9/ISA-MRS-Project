@@ -10,6 +10,7 @@ import com.example.projectmrsisa.service.EmailService;
 import com.example.projectmrsisa.service.ReportService;
 import com.example.projectmrsisa.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -118,8 +119,14 @@ public class ReportController {
     @PreAuthorize("hasAnyRole('admin','mainAdmin')")
     public ResponseEntity<ReportDTO> updateReport(@RequestBody ReportDTO reportDTO){
         Report report;
-        try{
+        try {
             report = reportService.findReportById(reportDTO.getId());
+        } catch (PessimisticLockingFailureException e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        try{
             reportService.setReportAnswered(reportDTO.getId());
             reservationService.changeReservationStatus(ReservationStatus.FINISHED_REPORTED, reportDTO.getReservationId());
         } catch (Exception e){

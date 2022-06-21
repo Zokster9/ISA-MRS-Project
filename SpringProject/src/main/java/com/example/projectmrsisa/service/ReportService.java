@@ -23,6 +23,7 @@ public class ReportService {
         return reportRepository.findNegativeUnansweredReports();
     }
 
+    @Transactional(readOnly = false)
     public Report findReportById(Integer id){
         return reportRepository.findReportById(id);
     }
