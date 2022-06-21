@@ -325,7 +325,7 @@ const routes = [{
         name: 'undefined',
         component: () =>
             import('../views/NotDefinedView.vue')
-    }
+    },
 ]
 
 const router = new VueRouter({
