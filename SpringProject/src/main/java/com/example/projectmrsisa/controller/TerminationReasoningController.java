@@ -39,7 +39,7 @@ public class TerminationReasoningController {
     @PreAuthorize("hasAnyRole('admin', 'mainAdmin')")
     public ResponseEntity<List<TerminationReasoningDTO>> findToBeTerminatedUsers(){
         List<TerminationReasoning> unansweredTerminationReasonings = terminationReasoningService.findUnansweredTerminationReasonings();
-        List<TerminationReasoningDTO>  trDTO = new ArrayList<TerminationReasoningDTO>();
+        List<TerminationReasoningDTO> trDTO = new ArrayList<>();
         for (TerminationReasoning tr : unansweredTerminationReasonings){
             trDTO.add(new TerminationReasoningDTO(tr));
         }
