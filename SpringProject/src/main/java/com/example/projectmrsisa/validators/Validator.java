@@ -2,9 +2,7 @@ package com.example.projectmrsisa.validators;
 
 import com.example.projectmrsisa.dto.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
+import java.util.*;
 
 public class Validator {
 
@@ -51,7 +49,12 @@ public class Validator {
     }
 
     public boolean validDates(Date dateFrom, Date dateTo, String timeFrom, String timeTo) {
-        Date today = new Date();
+        Calendar date = new GregorianCalendar();
+        date.set(Calendar.HOUR_OF_DAY, 0);
+        date.set(Calendar.MINUTE, 0);
+        date.set(Calendar.SECOND, 0);
+        date.set(Calendar.MILLISECOND, 0);
+        Date today = date.getTime();
         if (dateFrom == null || dateTo == null || timeFrom == null || timeTo == null) return false;
         if (dateFrom.compareTo(today) < 0) return false;
         if (dateTo.compareTo(today) < 0 ) return false;
@@ -67,7 +70,7 @@ public class Validator {
         if (!validDates(actionDTO.getDateFrom(), actionDTO.getDateTo(), actionDTO.getTimeFrom(), actionDTO.getTimeTo())) return false;
         if (actionDTO.getMaxNumOfPeople() <= 0) return false;
         for (String as: actionDTO.getAdditionalServices()) {
-            if (as.equals("") || as.length() > 14) return false;
+            if (as.equals("")) return false;
         }
         return actionDTO.getPrice() > 0;
     }
