@@ -1,12 +1,10 @@
 package com.example.projectmrsisa.repository;
 
 import com.example.projectmrsisa.model.Complaint;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Lock;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.*;
 
 import javax.persistence.LockModeType;
+import javax.persistence.QueryHint;
 import java.util.List;
 
 public interface ComplaintRepository extends JpaRepository<Complaint, Integer> {
@@ -27,5 +25,6 @@ public interface ComplaintRepository extends JpaRepository<Complaint, Integer> {
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select c from Complaint c where c.reservation.id = ?1")
+    @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value ="0")})
     Complaint findComplaintByReservationId(Integer id);
 }

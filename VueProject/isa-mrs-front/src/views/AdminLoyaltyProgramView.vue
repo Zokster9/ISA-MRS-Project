@@ -12,46 +12,46 @@
                                     
                                     <div class="form-group required">
                                         <label class="control-label"> Client points per reservation: </label>
-                                        <input v-model="form.clientPointsPerReservation" type="number" class="form-control form-control-lg">
+                                        <input v-model="form.clientPointsPerReservation" min="1" type="number" class="form-control form-control-lg">
                                     </div>
 
                                     <div class="form-group required">
                                         <label class="control-label"> Privileged user points per reservation: </label>
-                                        <input v-model="form.privilegedUserPointsPerReservation" type="number" class="form-control form-control-lg">
+                                        <input v-model="form.privilegedUserPointsPerReservation" min="1" type="number" class="form-control form-control-lg">
                                     </div>
                                     
                                     <div class="form-group required">
                                         <label class="control-label"> Required points for silver status: </label>
-                                        <input v-model="form.requiredPointsSilver" type="number" class="form-control form-control-lg">
+                                        <input v-model="form.requiredPointsSilver" min="1" type="number" class="form-control form-control-lg">
                                     </div>
 
                                     <div class="form-group required">
                                         <label class="control-label"> Required points for gold status: </label>
-                                        <input v-model="form.requiredPointsGold" type="number" class="form-control form-control-lg">
+                                        <input v-model="form.requiredPointsGold" min="1" type="number" class="form-control form-control-lg">
                                     </div>     
 
                                     <div class="form-group required">
                                         <label class="control-label"> Client silver discount: </label>
-                                        <input v-model="form.clientBonusSilver" type="number" placeholder="Number between 1 and 100" class="form-control form-control-lg">
+                                        <input v-model="form.clientBonusSilver" min="1" type="number" placeholder="Number between 1 and 100" class="form-control form-control-lg">
                                     </div>    
                                     
                                     <div class="form-group required">
                                         <label class="control-label"> Privileged user silver discount: </label>
-                                        <input v-model="form.privilegedUserBonusSilver" type="number" placeholder="Number between 1 and 100" class="form-control form-control-lg">
+                                        <input v-model="form.privilegedUserBonusSilver" min="1" type="number" placeholder="Number between 1 and 100" class="form-control form-control-lg">
                                     </div>
                                     
                                     <div class="form-group required">
                                         <label class="control-label"> Client gold discount: </label>
-                                        <input v-model="form.clientBonusGold" type="number" placeholder="Number between 1 and 100" class="form-control form-control-lg">
+                                        <input v-model="form.clientBonusGold" min="1" type="number" placeholder="Number between 1 and 100" class="form-control form-control-lg">
                                     </div>
 
                                     <div class="form-group required">
                                         <label class="control-label"> Privileged user gold discount: </label>
-                                        <input v-model="form.privilegedUserBonusGold" type="number" placeholder="Number between 1 and 100" class="form-control form-control-lg">
+                                        <input v-model="form.privilegedUserBonusGold" min="1" type="number" placeholder="Number between 1 and 100" class="form-control form-control-lg">
                                     </div>                                                                                                                                                                                                                      
                                     
                                     <div class="form-group">
-                                        <button :disabled="$v.form.$invalid" type="submit" class="btn btn-dark btn-lg btn-block">Create</button>
+                                        <button :disabled="$v.form.$invalid || !validData" type="submit" class="btn btn-dark btn-lg btn-block">Create</button>
                                     </div>
                                 </form>
                             </div>
@@ -66,14 +66,16 @@
 <script>
     import Vue from 'vue'
     import Vuelidate from 'vuelidate'
-    import { required, minValue, maxValue } from 'vuelidate/lib/validators'
+    import { required, maxValue } from 'vuelidate/lib/validators'
     import axios from 'axios'
     import VueAxios from 'vue-axios'
     import NavbarAdmin from '@/components/NavbarAdmin.vue'
     import router from '@/router'
 
+    
     Vue.use(VueAxios, axios)
     Vue.use(Vuelidate)
+    const isInteger = (value) => RegExp(/^[1-9]\d*$/).test(value);
 
     export default({
         name: 'AdminLoyaltyProgramView',
@@ -94,6 +96,17 @@
                 }
             }
         },
+        computed: {
+            validData() {
+                if (this.form.requiredPointsSilver === "" || this.form.requiredPointsGold === "" || 
+                this.form.clientBonusSilver === "" || this.form.clientBonusGold === "" || this.form.privilegedUserBonusSilver === "" || 
+                this.form.privilegedUserBonusGold === "") return false;
+                if (parseInt(this.form.requiredPointsSilver) >= parseInt(this.form.requiredPointsGold) || 
+                parseInt(this.form.clientBonusSilver) >= parseInt(this.form.clientBonusGold) ||
+                parseInt(this.form.privilegedUserBonusSilver) >= parseInt(this.form.privilegedUserBonusGold)) return false;
+                return true;
+            },
+        },
         methods: {
             createNewLoyaltyProgram(){
                 axios.post("http://localhost:8088/loyaltyPrograms/add",
@@ -113,8 +126,18 @@
                     }
                 }).then(() => {
                     alert("Successfully changed loyalty program!")
-                    window.location.reload();
+                    this.reset();
                 })
+            },
+            reset() {
+                this.form.clientPointsPerReservation = ""
+                this.form.privilegedUserPointsPerReservation = ""
+                this.form.requiredPointsSilver = ""
+                this.form.requiredPointsGold = ""
+                this.form.clientBonusSilver = ""
+                this.form.privilegedUserBonusSilver = ""
+                this.form.clientBonusGold = ""
+                this.form.privilegedUserBonusGold = ""
             }
         },
         mounted() {
@@ -125,36 +148,40 @@
         validations: {
             form: {
                 clientPointsPerReservation: {
-                    required    
+                    required,
+                    isInteger,    
                 },
                 privilegedUserPointsPerReservation: {
-                    required
+                    required,
+                    isInteger,
                 },
                 requiredPointsSilver: {
-                    required
+                    required,
+                    isInteger,
                 },
                 requiredPointsGold: {
-                    required
+                    required,
+                    isInteger,
                 },
                 clientBonusSilver: {
                     required,
-                    minValue: minValue(1),
-                    maxValue: maxValue(100)
+                    maxValue: maxValue(100),
+                    isInteger,
                 },
                 privilegedUserBonusSilver: {
                     required,
-                    minValue: minValue(1),
-                    maxValue: maxValue(100)
+                    maxValue: maxValue(100),
+                    isInteger,
                 },
                 clientBonusGold: {
                     required,
-                    minValue: minValue(1),
-                    maxValue: maxValue(100)                    
+                    maxValue: maxValue(100),
+                    isInteger,                  
                 },
                 privilegedUserBonusGold: {
                     required,
-                    minValue: minValue(1),
-                    maxValue: maxValue(100)                    
+                    isInteger,
+                    maxValue: maxValue(100),           
                 }
             }
         }

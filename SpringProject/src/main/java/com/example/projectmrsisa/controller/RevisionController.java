@@ -12,7 +12,6 @@ import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -75,7 +74,7 @@ public class RevisionController {
             } catch (Exception e){
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
-            emailService.sendApprovedRevisionEmail(revision.getRevision(), revision.getRating().getServiceRating(),
+            emailService.sendApprovedRevisionEmail(revision.getUserRevision(), revision.getRating().getServiceRating(),
                     revision.getRating().getUserRating(), revision.getReservation().getService().getOwner(), revision.getReservation().getClient());
         }
         RevisionDTO revisionDTO1 = new RevisionDTO(revision);

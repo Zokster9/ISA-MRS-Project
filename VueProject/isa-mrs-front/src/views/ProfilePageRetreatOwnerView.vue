@@ -30,18 +30,6 @@
                 user: "",
             }
         },
-        methods: {
-            logout() {
-                axios.get("http://localhost:8088/auth/logout", {
-                    headers: {
-                        Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
-                    }
-                }).then(() => {
-                    window.sessionStorage.setItem("accessToken", "");
-                    window.sessionStorage.setItem("role", null);
-                });
-            }
-        },
         mounted(){
             if (window.sessionStorage.getItem('role') === "ROLE_retreatOwner") {
                 axios.get("http://localhost:8088/users/getLoggedUser", {

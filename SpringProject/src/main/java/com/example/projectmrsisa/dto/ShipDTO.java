@@ -9,7 +9,7 @@ import java.util.List;
 public class ShipDTO {
 
     private int id;
-    private int owner_id;
+    private int ownerId;
     private String name;
     private String description;
     private String country;
@@ -31,14 +31,16 @@ public class ShipDTO {
     private String serviceType;
     private double averageRating;
 
-    public ShipDTO() {}
+    public ShipDTO() {
+        id = 0;
+    }
 
-    public ShipDTO(int id, int owner_id, String name, String description, String country, String city, String street,
+    public ShipDTO(int id, int ownerId, String name, String description, String country, String city, String street,
                    double price, List<String> pictures, List<String> rulesOfConduct, String type, double length,
                    String engineNum, int enginePower, String maxSpeed, List<String> navigationEquipment, int capacity,
                    List<String> fishingEquipment, String reservationCancellationConditions, List<String> additionalServices) {
         this.id = id;
-        this.owner_id = owner_id;
+        this.ownerId = ownerId;
         this.name = name;
         this.description = description;
         this.country = country;
@@ -61,7 +63,7 @@ public class ShipDTO {
 
     public ShipDTO(Ship ship) {
         this.id = ship.getId();
-        this.owner_id = ship.getOwner().getId();
+        this.ownerId = ship.getOwner().getId();
         this.name = ship.getName();
         this.description = ship.getDescription();
         this.country = ship.getAddress().getCountry();
@@ -87,7 +89,7 @@ public class ShipDTO {
 
     public ShipDTO(Ship ship, double averageRating) {
         this.id = ship.getId();
-        this.owner_id = ship.getOwner().getId();
+        this.ownerId = ship.getOwner().getId();
         this.name = ship.getName();
         this.description = ship.getDescription();
         this.country = ship.getAddress().getCountry();
@@ -114,7 +116,7 @@ public class ShipDTO {
 
     public ShipDTO(Ship ship, String serviceType, double averageRating) {
         this.id = ship.getId();
-        this.owner_id = ship.getOwner().getId();
+        this.ownerId = ship.getOwner().getId();
         this.name = ship.getName();
         this.description = ship.getDescription();
         this.country = ship.getAddress().getCountry();
@@ -148,12 +150,12 @@ public class ShipDTO {
         this.id = id;
     }
 
-    public int getOwner_id() {
-        return owner_id;
+    public int getOwnerId() {
+        return ownerId;
     }
 
-    public void setOwner_id(int owner_id) {
-        this.owner_id = owner_id;
+    public void setOwnerId(int ownerId) {
+        this.ownerId = ownerId;
     }
 
     public String getName() {

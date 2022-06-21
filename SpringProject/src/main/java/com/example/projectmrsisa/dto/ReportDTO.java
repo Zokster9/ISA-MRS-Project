@@ -27,7 +27,7 @@ public class ReportDTO {
 
     public ReportDTO(Report report){
         this.id = report.getId();
-        this.report = report.getReport();
+        this.report = report.getUserReport();
         this.isNegative = report.isNegative();
         this.hasShowedUp = report.isHasShowedUp();
         this.isPenalized = report.isPenalized();
@@ -95,14 +95,6 @@ public class ReportDTO {
 
     public void setReservationId(Integer reservationId) {
         this.reservationId = reservationId;
-    }
-
-    public void setNegative(boolean negative) {
-        isNegative = negative;
-    }
-
-    public void setPenalized(boolean penalized) {
-        isPenalized = penalized;
     }
 
     public void setAnswered(boolean answered) {

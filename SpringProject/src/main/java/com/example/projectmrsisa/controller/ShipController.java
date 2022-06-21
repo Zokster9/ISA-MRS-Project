@@ -1,20 +1,21 @@
 package com.example.projectmrsisa.controller;
 
+import com.example.projectmrsisa.dto.ActionDTO;
 import com.example.projectmrsisa.dto.ServiceAvailabilityDTO;
 import com.example.projectmrsisa.dto.ShipDTO;
 import com.example.projectmrsisa.model.*;
-import com.example.projectmrsisa.dto.ActionDTO;
 import com.example.projectmrsisa.service.*;
 import com.example.projectmrsisa.validators.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value="/ships")
@@ -93,7 +94,8 @@ public class ShipController {
     public ResponseEntity<ShipDTO> getShipById(@PathVariable Integer id) {
         try {
             Ship ship = shipService.findShipById(id);
-            if (ship == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            if (ship.isDeleted())
+                return new ResponseEntity<>(new ShipDTO(), HttpStatus.OK);
             return new ResponseEntity<>(new ShipDTO(ship, revisionService.getAverageRatingForService(ship.getId())), HttpStatus.OK);
         }catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -159,7 +161,7 @@ public class ShipController {
             Set<Tag> additionalServices = tagService.findTags(actionDTO.getAdditionalServices(), "ship");
             Action action = new Action(actionDTO, additionalServices, ship);
             action = actionService.addAction(action);
-            ship = shipService.addAction(ship, action);
+            shipService.addAction(ship, action);
             List<String> emails = subscriptionService.findClientsWithSubscription(clientService.findAll(), id);
             emailService.sendSubscriptionEmails(emails);
             return new ResponseEntity<>(new ActionDTO(action), HttpStatus.ACCEPTED);

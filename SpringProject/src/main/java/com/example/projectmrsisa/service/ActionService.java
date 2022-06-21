@@ -1,15 +1,12 @@
 package com.example.projectmrsisa.service;
 
 import com.example.projectmrsisa.model.Action;
-import com.example.projectmrsisa.model.Retreat;
 import com.example.projectmrsisa.repository.ActionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class ActionService {
@@ -24,7 +21,13 @@ public class ActionService {
     }
 
     public List<Action> getActionsByServiceAndCurrentDate(int serviceId) {
-        return actionRepository.getActionsByServiceAndCurrentDate(serviceId, new Date());
+        Calendar date = new GregorianCalendar();
+        date.set(Calendar.HOUR_OF_DAY, 0);
+        date.set(Calendar.MINUTE, 0);
+        date.set(Calendar.SECOND, 0);
+        date.set(Calendar.MILLISECOND, 0);
+        Date today = date.getTime();
+        return actionRepository.getActionsByServiceAndCurrentDate(serviceId, today);
     }
 
     public boolean actionAlreadyExists(Set<Action> actions, Date fromDate, Date toDate) {

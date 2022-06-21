@@ -60,10 +60,12 @@ import router from '@/router'
                 return origin_date.getFullYear() + '-' + month + '-' + day
             },
             reserve(action) {
-                let fromDate = this.getDate(action.dateFrom);
-                let toDate = this.getDate(action.dateTo)
-                console.log(fromDate);
-                console.log(toDate);
+                let fromDate = new Date(action.dateFrom);
+                let toDate = new Date(action.dateTo)
+                fromDate.setHours(0, 0, 0, 0);
+                toDate.setHours(0, 0, 0, 0);
+                console.log(fromDate)
+                console.log(toDate)
                 axios.post("http://localhost:8088/reservations/makeAReservation", {
                     fromDate: fromDate,
                     toDate: toDate,

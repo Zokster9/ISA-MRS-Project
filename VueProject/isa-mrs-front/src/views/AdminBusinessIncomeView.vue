@@ -86,14 +86,29 @@
                 axios.post("http://localhost:8088/discounts/updatePercentage",{
                     discount: this.newPercentage,
                     fromDate: new Date(),
-                    toDate: new Date('2100-01-01 02:00:00')
+                    toDate: new Date('2100-01-01 00:00:00')
                 },{
                     headers:{
                         Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
                     },
                 }).then(() => {
                     alert("Successfully changed percentage taken of system reservations!")
-                    window.location.reload();
+                    axios.get("http://localhost:8088/reservations/findAllNotCancelled",{
+                        headers:{
+                            Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
+                        }
+                    }).then((response) =>{
+                        this.reservations = response.data;
+                        axios.post("http://localhost:8088/reservations/calculateSystemIncome", {
+                            reservationsDTO: this.reservations,
+                        },{
+                            headers:{
+                                Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
+                            }
+                        }).then((response) => {
+                            this.totalIncome = response.data;
+                        })
+                    })
                 })
             },
             search(){
@@ -135,10 +150,14 @@
             getDate (date) {
                 let origin_date = new Date(date)
                 let month = origin_date.getMonth() + 1
+                let day = origin_date.getDate()
                 if (month < 10) {
                     month = '0' + month
                 }
-                return origin_date.getFullYear() + '/' + month + '/' + origin_date.getDate()
+                if (day < 10) {
+                    day = '0' + day
+                }
+                return origin_date.getFullYear() + '/' + month + '/' + day
             }
         },
         mounted () {

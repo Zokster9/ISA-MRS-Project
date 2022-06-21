@@ -14,7 +14,7 @@
                                     <tr>
                                         <td>
                                             <label for="name">Starting date </label>
-                                            <input v-model="form.startDate" id="date" type="date" class="form-control form-control-lg"/>
+                                            <input :min="currentDate" v-model="form.startDate" id="date" type="date" class="form-control form-control-lg"/>
                                         </td>
                                         <td>
                                             <label for="surname">Starting time </label>
@@ -28,7 +28,7 @@
                                     <tr>
                                         <td>
                                             <label for="name">Ending date </label>
-                                            <input v-model="form.endDate" id="date" type="date" class="form-control form-control-lg"/>
+                                            <input :min="currentDate" v-model="form.endDate" id="date" type="date" class="form-control form-control-lg"/>
                                         </td>
                                         <td>
                                             <label for="surname">Ending time </label>
@@ -111,11 +111,15 @@
                 }
             },
             sendData(service) {
+                let dateFrom = new Date(this.form.startDate);
+                let dateTo = new Date(this.form.endDate);
+                dateFrom.setHours(0, 0, 0, 0);
+                dateTo.setHours(0, 0, 0, 0);
                 axios.post("http://localhost:8088/" + service + "/add-action/" + this.$route.params.id,
                     {
-                        dateFrom: this.form.startDate,
+                        dateFrom: dateFrom,
                         timeFrom: this.form.startTime,
-                        dateTo: this.form.endDate,
+                        dateTo: dateTo,
                         timeTo: this.form.endTime,
                         maxNumOfPeople: this.form.maxNumOfPeople,
                         price: this.form.price,
@@ -144,25 +148,52 @@
             },
             datesAreValid() {
                 let today = new Date();
+                let todayHours = today.getHours();
+                let todayMinutes = today.getMinutes();
+                if (todayHours < 10) {
+                    todayHours = '0' + todayHours;
+                }
+                if (todayMinutes < 10) {
+                    todayMinutes = '0' + todayMinutes;
+                }
+                let todayTime = todayHours + ':' + todayMinutes;
+                let dateFrom = new Date(this.form.startDate);
+                let dateTo = new Date(this.form.endDate);
+                today.setHours(0, 0, 0, 0)
+                dateFrom.setHours(0, 0, 0, 0)
+                dateTo.setHours(0, 0, 0, 0)
                 if (!this.form.startDate || !this.form.startTime || !this.form.endDate || !this.form.endTime){
                     return false;
                 }
-                if (new Date(this.form.startDate) < today) return false;
-                if (new Date(this.form.endDate) < today) return false;
-                if (new Date(this.form.startDate).getTime() > new Date(this.form.endDate).getTime()){
-                    return false;
-                }
-                else if (new Date(this.form.startDate).getTime() < new Date(this.form.endDate).getTime()){
-                    return true;
-                }
-                else{
-                    if (parseInt(this.form.startTime.split(":")[0]) * 60 + parseInt(this.form.startTime.split(":")[1]) <  parseInt(this.form.endTime.split(":")[0]) * 60 + parseInt(this.form.endTime.split(":")[1])){
-                        return true;
-                    }
-                    else{
+                if (dateFrom.getTime() < today.getTime()) return false;
+                if (dateTo.getTime() < today.getTime()) return false;
+                if (dateTo.getTime() < dateFrom.getTime()) return false;
+                if (dateFrom.getTime() == today.getTime()) {
+                    if (this.form.startTime <= todayTime) {
                         return false;
                     }
                 }
+                if (dateTo.getTime() == today.getTime()) {
+                    if (this.form.endTime <= todayTime) {
+                        return false;
+                    }
+                }
+                if (dateFrom.getTime() == dateTo.getTime()){
+                    if (this.form.startTime >= this.form.endTime) return false;
+                }
+                return true;
+            },
+            currentDate() {
+                let date = new Date();
+                let month = date.getMonth() + 1
+                if (month < 10) {
+                    month = '0' + month
+                }
+                let day = date.getDate()
+                if (day < 10) {
+                    day = '0' + day
+                }
+                return date.getFullYear() + '-' + month + '-' + day
             },
             isFormValid() {
                 return this.priceIsValid && this.maxNumOfPeopleIsValid && this.datesAreValid;

@@ -43,7 +43,11 @@
                         Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }
                 }).then(() => {
-                    window.location.reload();
+                    this.isButtonHidden = false
+                    this.hoverAcceptButton = false
+                    this.hoverDeclineButton = false
+                    this.declineReasoning = ""
+                    this.$emit('removeUser', this.user.id)
                 })
             },
             acceptUser(){
@@ -56,7 +60,7 @@
                         Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }
                 }).then(() => {
-                    window.location.reload();
+                    this.$emit('removeUser', this.user.id)
                 })
             },
         },

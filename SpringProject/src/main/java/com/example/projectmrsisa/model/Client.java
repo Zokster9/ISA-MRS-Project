@@ -4,6 +4,7 @@ import com.example.projectmrsisa.dto.UserDTO;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -26,7 +27,7 @@ public class Client extends User {
     }
 
     public Client(Integer id, String email, String password, String name, String surname, Address address,
-                  String phoneNumber, LoyaltyStatus loyaltyStatus, String registrationReason, int loyaltyPoints, int penaltyPoints,
+                  String phoneNumber, LoyaltyStatus loyaltyStatus, int loyaltyPoints, int penaltyPoints,
                   boolean isPenalized, Set<Reservation> reservations, Set<Service> subscriptions) {
         super(id, email, password, name, surname, address, phoneNumber, loyaltyStatus, loyaltyPoints);
         this.penaltyPoints = penaltyPoints;
@@ -75,12 +76,14 @@ public class Client extends User {
 
     public boolean hasSubscription(Integer serviceId) {
         for (Service service: this.subscriptions) {
-            if (service.getId() == serviceId) return true;
+            if (Objects.equals(service.getId(), serviceId)) return true;
         }
         return false;
     }
 
     public void penalize(){
         this.penaltyPoints += 1;
+        if (this.penaltyPoints == 3)
+            this.isPenalized = true;
     }
 }

@@ -17,7 +17,7 @@ public class TerminationReasoningDTO {
         this.userId = terminationReasoning.getUser().getId();
         this.name = terminationReasoning.getUser().getName();
         this.surname =terminationReasoning.getUser().getSurname();
-        this.terminationReasoning = terminationReasoning.getTerminationReasoning();
+        this.terminationReasoning = terminationReasoning.getReasoning();
     }
 
     public int getUserId() {

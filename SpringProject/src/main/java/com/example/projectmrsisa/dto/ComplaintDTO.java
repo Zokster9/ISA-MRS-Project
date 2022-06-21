@@ -24,7 +24,7 @@ public class ComplaintDTO {
 
     public ComplaintDTO(Complaint complaint){
         id = complaint.getId();
-        this.complaint = complaint.getComplaint();
+        this.complaint = complaint.getUserComplaint();
         response = complaint.getResponse();
         isAnswered = false;
         clientName = complaint.getReservation().getClient().getName();

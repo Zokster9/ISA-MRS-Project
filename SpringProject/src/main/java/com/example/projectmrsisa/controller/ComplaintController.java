@@ -33,7 +33,7 @@ public class ComplaintController {
     @GetMapping(value="/findAll")
     @PreAuthorize("hasAnyRole('mainAdmin','admin')")
     public ResponseEntity<List<ComplaintDTO>> findUnansweredComplaints(){
-        List<Complaint> complaints = new ArrayList<>();
+        List<Complaint> complaints;
         try{
             complaints = complaintService.findUnansweredComplaints();
         }catch(Exception e){
@@ -60,8 +60,8 @@ public class ComplaintController {
         try{
             complaintService.updateComplaintStatus(complaintDTO.getId());
             complaintService.updateComplaintResponse(complaintDTO.getResponse(), complaintDTO.getId());
-            emailService.sendComplaintEmailClient(complaint.getComplaint(), complaint.getReservation().getClient());
-            emailService.sendComplaintEmailPrivilegedUser(complaint.getComplaint(), complaint.getReservation().getService().getOwner());
+            emailService.sendComplaintEmailClient(complaint.getUserComplaint(), complaint.getReservation().getClient());
+            emailService.sendComplaintEmailPrivilegedUser(complaint.getUserComplaint(), complaint.getReservation().getService().getOwner());
         } catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

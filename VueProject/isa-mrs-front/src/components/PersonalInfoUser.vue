@@ -105,7 +105,9 @@
                 })
                 .then(()=>{
                     alert("Password successfully changed!")
-                    window.location.reload();
+                    this.passwordChange.newPassword = ""
+                    this.passwordChange.confirmNewPassword = ""
+                    this.isChangingPassword = false;
                 }).catch(() => {
                     alert("Old password is incorrect!")
                 })

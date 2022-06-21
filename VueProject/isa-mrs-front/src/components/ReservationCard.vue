@@ -23,7 +23,7 @@
                 <span class="card-text">Price</span>
                 <span class="float-end">{{ reservation.price }}<span>&#8364;</span></span>
             </div>
-            <div v-if="reservation.status != 'Pending'">
+            <div v-if="reservation.status != 'PENDING'">
                 <div v-if="reservation.userRating">
                     <span class="card-text">Your rating</span>
                     <span class="float-end"><StarRating :show-rating="false" :increment="0.01" :star-size="24" :inline="true" 

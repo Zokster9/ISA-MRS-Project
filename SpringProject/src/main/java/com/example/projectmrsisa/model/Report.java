@@ -10,7 +10,7 @@ public class Report {
     @Column(name="id", unique = true, nullable = false)
     private Integer id;
     @Column(name="report", nullable = false)
-    private String report;
+    private String userReport;
     @Column(name="isNegative")
     private boolean isNegative;
     @Column(name="hasShowedUp")
@@ -26,10 +26,10 @@ public class Report {
     public Report() {
     }
 
-    public Report(Integer id, String report, boolean isNegative, boolean hasShowedUp, boolean isPenalized,
+    public Report(Integer id, String userReport, boolean isNegative, boolean hasShowedUp, boolean isPenalized,
                   boolean isAnswered, Reservation reservation) {
         this.id = id;
-        this.report = report;
+        this.userReport = userReport;
         this.isNegative = isNegative;
         this.hasShowedUp = hasShowedUp;
         this.isPenalized = isPenalized;
@@ -37,9 +37,9 @@ public class Report {
         this.reservation = reservation;
     }
 
-    public Report(String report, boolean isNegative, boolean hasShowedUp, boolean isPenalized,
+    public Report(String userReport, boolean isNegative, boolean hasShowedUp, boolean isPenalized,
                   boolean isAnswered, Reservation reservation){
-        this.report = report;
+        this.userReport = userReport;
         this.isNegative = isNegative;
         this.hasShowedUp = hasShowedUp;
         this.isPenalized = isPenalized;
@@ -55,12 +55,12 @@ public class Report {
         this.id = id;
     }
 
-    public String getReport() {
-        return report;
+    public String getUserReport() {
+        return userReport;
     }
 
-    public void setReport(String report) {
-        this.report = report;
+    public void setUserReport(String report) {
+        this.userReport = report;
     }
 
     public boolean isNegative() {

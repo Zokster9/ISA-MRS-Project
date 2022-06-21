@@ -1,12 +1,10 @@
 package com.example.projectmrsisa.dto;
 
-import com.example.projectmrsisa.model.*;
+import com.example.projectmrsisa.model.Retreat;
+import com.example.projectmrsisa.model.Tag;
 
-import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class RetreatDTO {
 
@@ -26,7 +24,9 @@ public class RetreatDTO {
     private String serviceType;
     private double averageRating;
 
-    public RetreatDTO() {}
+    public RetreatDTO() {
+        id = 0;
+    }
 
     public RetreatDTO(String name, String description, String country, String city, String street, List<String> pictures,
                       List<String> rulesOfConduct, int numOfRooms, int numOfBeds, double price, List<String> additionalServices) {

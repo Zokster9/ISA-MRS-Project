@@ -82,6 +82,7 @@
                 shipTags: [],
                 adventureTags: [],
                 reservationForm: null,
+                additionalServices: [],
             }
         },
         computed: {
@@ -91,7 +92,6 @@
         },
         methods: {
             search(reservationForm, additionalServices) {
-                console.log(additionalServices)
                 this.type = reservationForm.serviceType;
                 this.reservationForm = reservationForm;
                 axios.get("http://localhost:8088/reservations/" + this.type + "/getAvailableReservations", {
@@ -131,8 +131,10 @@
                 let date = new Date(this.reservationForm.date)
                 let toDate = date.setDate(date.getDate() + parseInt(this.reservationForm.numberOfDays) - 1)
                 toDate = new Date(toDate)
+                toDate.setHours(0, 0, 0, 0)
+                date.setHours(0, 0, 0, 0)
                 axios.post("http://localhost:8088/reservations/makeAReservation", {
-                    fromDate: this.reservationForm.date,
+                    fromDate: date,
                     toDate: toDate,
                     fromTime: this.reservationForm.startTime,
                     toTime: this.reservationForm.endTime,
@@ -140,6 +142,7 @@
                     serviceId: this.selectedService.id,
                     numOfPeople: this.reservationForm.numberOfPeople,
                     serviceType: this.reservationForm.serviceType,
+                    additionalServices: this.additionalServices,
                 },
                 {
                     headers: {
