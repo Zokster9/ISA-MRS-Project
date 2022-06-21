@@ -16,6 +16,9 @@ jobs:
           name: Build
           command: cd SpringProject && mvn -B -DskipTests=false clean package
       - run:
+          name: Test
+          command: cd SpringProject && mvn test
+      - run:
           name: Analyze
           command: cd SpringProject && mvn sonar:sonar -Dsonar.projectKey=$PROJECT_KEY -Dsonar.organization=zokster9 -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
   deploy_backend:

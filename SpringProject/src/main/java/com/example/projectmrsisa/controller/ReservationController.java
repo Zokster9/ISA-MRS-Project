@@ -285,7 +285,7 @@ public class ReservationController {
             } else if (client.getLoyaltyStatus() == LoyaltyStatus.GOLD) {
                 discount = loyaltyProgram.getGoldClientBonus();
             }
-            double finalPrice = (double) ((reservationDTO.getToDate().getTime() - reservationDTO.getFromDate().getTime())
+            double finalPrice = ((double) (reservationDTO.getToDate().getTime() - reservationDTO.getFromDate().getTime())
                     / (1000 * 60 * 60 * 24)) * service.getPrice() * (1 - discount);
             DecimalFormat df = new DecimalFormat("0.00");
             finalPrice = Double.parseDouble(df.format(finalPrice));
