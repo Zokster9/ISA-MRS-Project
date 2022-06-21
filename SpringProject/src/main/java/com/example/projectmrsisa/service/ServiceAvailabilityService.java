@@ -44,7 +44,7 @@ public class ServiceAvailabilityService {
 
     public boolean isAvailable(Integer serviceId, Date fromDate, Date toDate, String fromTime, String toTime) {
         List<ServiceAvailability> availabilityList = serviceAvailabilityRepository.findServiceAvailabilitiesByService(serviceId);
-        if (availabilityList.isEmpty()) return true;
+        if (availabilityList.isEmpty()) return false;
         for (ServiceAvailability serviceAvailability : availabilityList) {
             if (serviceAvailability.getDateFrom().compareTo(fromDate) <= 0 && serviceAvailability.getDateTo().compareTo(toDate) >= 0) {
                 if (serviceAvailability.getDateFrom().compareTo(fromDate) == 0) {

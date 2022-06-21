@@ -60,6 +60,7 @@ public class ReservationService {
         if (reservations.isEmpty()) return false;
         else {
             for (Reservation reservation: reservations) {
+                if (reservationIsFinished(reservation)) continue;
                 if ((reservation.getFromDate().compareTo(fromDate) < 0 && reservation.getToDate().compareTo(toDate) > 0
                         && reservation.getFromDate().compareTo(toDate) < 0 && reservation.getToDate().compareTo(fromDate) > 0)
                         || (reservation.getFromDate().compareTo(fromDate) > 0 && reservation.getToDate().compareTo(toDate) > 0
@@ -77,6 +78,7 @@ public class ReservationService {
                     return true;
                 }
                 else {
+                    if (reservation.getStatus() == ReservationStatus.CANCELLED) continue;
                     if (reservation.getToDate().compareTo(fromDate) == 0 && reservation.getToTime().compareTo(fromTime) > 0) {
                         return true;
                     }
@@ -87,6 +89,11 @@ public class ReservationService {
             }
         }
         return false;
+    }
+
+    private boolean reservationIsFinished(Reservation reservation) {
+        return reservation.getStatus() == ReservationStatus.FINISHED || reservation.getStatus() == ReservationStatus.FINISHED_REPORTED
+                || reservation.getStatus() == ReservationStatus.FINISHED_WAITING;
     }
 
     public void changeReservationStatus(ReservationStatus reservationStatus, Integer id) {

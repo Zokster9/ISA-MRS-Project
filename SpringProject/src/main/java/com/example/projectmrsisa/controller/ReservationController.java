@@ -177,6 +177,7 @@ public class ReservationController {
 
     private boolean serviceHasTag(Service service, ReservationQueryDTO reservationQueryDTO) {
         boolean hasTag = false;
+        if (reservationQueryDTO.getAdditionalServices() == null) return true;
         for (String tagName : reservationQueryDTO.getAdditionalServices()) {
             for (Tag tag : service.getAdditionalServices()) {
                 if (tag.getName().equals(tagName)) {
