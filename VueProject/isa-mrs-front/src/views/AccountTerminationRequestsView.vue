@@ -15,7 +15,7 @@
                             <td class="text-center"> <b> Termination reasoning </b> </td>
                             <td class="text-center" colspan="2"> <b> OPTIONS </b> </td>  
                         </tr>
-                        <TerminationRequestRow v-for="terminationRequest in terminationRequests" :termination="terminationRequest" :key="terminationRequest.id"></TerminationRequestRow>
+                        <TerminationRequestRow @removeTermination="removeTermination" v-for="terminationRequest in terminationRequests" :termination="terminationRequest" :key="terminationRequest.id"></TerminationRequestRow>
                     </tbody>
                 </table>
             </div>
@@ -42,6 +42,11 @@
         data() {
             return {
                 terminationRequests: [],
+            }
+        },
+        methods: {
+            removeTermination(id) {
+                this.terminationRequests = this.terminationRequests.filter(terminationRequest => id != terminationRequest.userId)
             }
         },
         mounted() {

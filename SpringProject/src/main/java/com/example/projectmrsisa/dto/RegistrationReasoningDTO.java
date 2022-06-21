@@ -14,7 +14,7 @@ public class RegistrationReasoningDTO {
 
     public RegistrationReasoningDTO(RegistrationReasoning registrationReasoning){
         id = registrationReasoning.getId();
-        registrationReason = registrationReasoning.getRegistrationReasoning();
+        registrationReason = registrationReasoning.getReasoning();
         privilegedUserId = registrationReasoning.getPrivilegedUser().getId();
         isAnswered = registrationReasoning.isAnswered();
     }

@@ -7,7 +7,7 @@
                     <div class="vertical-center" style="margin-top: 85px">
                         <div class="inner-block">
                             <div class="signUp">
-                                <form @submit.prevent>
+                                <form @submit.prevent="register">
                                     <h3>Add new administrator</h3>
                                     
                                     <div class="form-group required">
@@ -66,7 +66,7 @@
                                     </div>
                                     
                                     <div class="form-group">
-                                        <button @click="register"  :disabled="$v.form.$invalid" type="submit" class="btn btn-dark btn-lg btn-block">Sign Up</button>
+                                        <button :disabled="$v.form.$invalid" type="submit" class="btn btn-dark btn-lg btn-block">Sign Up</button>
                                     </div>
                                 </form>
                             </div>

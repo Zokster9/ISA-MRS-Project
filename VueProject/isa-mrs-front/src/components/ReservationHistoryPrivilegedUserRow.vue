@@ -3,7 +3,8 @@
         <td class="align-middle text-center">
             <figcaption class="mb-1"> {{reservation.serviceName}} </figcaption>
             <router-link exact :to="linkToService">
-                <img :src="require('@/assets/' + reservation.servicePictures[0])" style="width:200px; height:200px;" class="rounded">
+                <img v-if="reservation.servicePictures.length != 0" :src="require('@/assets/' + reservation.servicePictures[0])" style="width:200px; height:200px;" class="rounded">
+                <img v-else src="@/assets/no-image.png" style="width:200px; height:200px;" class="rounded" alt="Nema slike">
             </router-link>
         </td>
         <td class="align-middle text-center">
@@ -12,8 +13,8 @@
             <p> Email: {{reservation.clientEmail}} </p>
         </td>
         <td class="align-middle text-center">
-            <p> From: {{reservation.fromDate}} {{reservation.fromTime}} </p>
-            <p> To: {{reservation.toDate}} {{reservation.toTime}} </p>   
+            <p> From: {{getDate(reservation.fromDate)}} {{reservation.fromTime}} </p>
+            <p> To: {{getDate(reservation.toDate)}} {{reservation.toTime}} </p>   
         </td>
         <td class="align-middle text-center">
             <p> {{reservation.price}} euros </p>
@@ -21,10 +22,10 @@
         <td class="align-middle text-center">
             <p> {{reservation.status}} </p>
         </td>
-        <td class="align-middle text-center" v-if="reservationData.status == 'Finished'">
+        <td class="align-middle text-center" v-if="reservationData.status == 'FINISHED'">
             <button type="button" class="btn btn-primary" @click="writeReport"> Write a report </button>
         </td>
-        <td class="align-middle text-center" v-if="reservationData.status == 'Pending'">
+        <td class="align-middle text-center" v-if="reservationData.status == 'PENDING'">
             <button type="button" class="btn btn-primary" @click="endReservation"> End reservation </button>
         </td>
     </tr>
@@ -69,8 +70,20 @@
                         Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }
                 }).then(() => {
-                    window.location.reload();
+                    this.$emit('endReservation');
                 })
+            },
+            getDate(date) {
+                let origin_date = new Date(date)
+                let month = origin_date.getMonth() + 1
+                let day = origin_date.getDate()
+                if (month < 10) {
+                    month = '0' + month
+                }
+                if (day < 10) {
+                    day = '0' + day
+                }
+                return origin_date.getFullYear() + '/' + month + '/' + day
             },
             writeReport(){
                 router.push('/write-report/' + this.reservationData.id);

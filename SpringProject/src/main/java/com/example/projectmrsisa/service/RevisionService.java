@@ -27,7 +27,7 @@ public class RevisionService {
         return revisionRepository.findUnansweredRevisions();
     }
 
-    @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value ="0")})
+    @Transactional(readOnly = false)
     public Revision findRevisionById(Integer id){
         return revisionRepository.findRevisionById(id);
     }
@@ -50,6 +50,7 @@ public class RevisionService {
         Map<String, List<String>> servicePictures = new HashMap<>();
         List<Revision> revisions = revisionRepository.findRevisionForServiceOwner(user.getId());
         for (Revision revision: revisions) {
+            if (revision.getReservation().getService().isDeleted()) continue;
             String serviceName = revision.getReservation().getService().getName();
             if (!sum.containsKey(serviceName)) {
                 sum.put(serviceName, revision.getRating().getServiceRating());
@@ -65,8 +66,8 @@ public class RevisionService {
 
     public double getAverageRatingForService(int serviceId) {
         List<Revision> revisions = revisionRepository.findRevisionForService(serviceId);
-        int num_of_revisions = revisions.size();
-        if (num_of_revisions == 0) {
+        int numOfRevisions = revisions.size();
+        if (numOfRevisions == 0) {
             return 0;
         }
         double rating = 0;
@@ -74,14 +75,14 @@ public class RevisionService {
             rating += revision.getRating().getServiceRating();
         }
         DecimalFormat df = new DecimalFormat("0.00");
-        double averageRating = rating / num_of_revisions;
+        double averageRating = rating / numOfRevisions;
         return Double.parseDouble(df.format(averageRating));
     }
 
     public double getAverageRatingForServiceOwner(int ownerId) {
         List<Revision> revisions = revisionRepository.findRevisionForServiceOwner(ownerId);
-        int num_of_revisions = revisions.size();
-        if (num_of_revisions == 0) {
+        int numOfRevisions = revisions.size();
+        if (numOfRevisions == 0) {
             return 0;
         }
         double rating = 0;
@@ -89,7 +90,7 @@ public class RevisionService {
             rating += revision.getRating().getUserRating();
         }
         DecimalFormat df = new DecimalFormat("0.00");
-        double averageRating = rating / num_of_revisions;
+        double averageRating = rating / numOfRevisions;
         return Double.parseDouble(df.format(averageRating));
     }
 

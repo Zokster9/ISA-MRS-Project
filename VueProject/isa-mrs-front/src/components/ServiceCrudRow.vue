@@ -2,8 +2,11 @@
     <tr :key="service.id" :class="{activeDeleteButton: hoverDeleteButton, activeEditButton: hoverEditButton, activeAcceptButton: hoverNewActionButton}">
         <td class="align-middle text-center">
             <figcaption class="mb-1"> {{service.name}} </figcaption>
-            <router-link exact :to="linkToService">
-                <img :src="require('@/assets/' + service.pictures[0])" style="width:200px; height:200px;" class="rounded">
+            <router-link v-if="service.pictures.length != 0" exact :to="linkToService">
+                <img :src="require('@/assets/' + service.pictures[0])" alt="No image" style="width:200px; height:200px;" class="rounded">
+            </router-link>
+            <router-link v-else exact :to="linkToService">
+                <img src="@/assets/no-image.png" alt="No image" style="width:200px; height:200px;" class="rounded">
             </router-link>
         </td>
         <td class="align-middle text-center"> <button type="button" @mouseover="hoverEditButton = true" @mouseleave="hoverEditButton = false" class="btn btn-warning" @click="editService(service.id)">Edit service info</button></td>
@@ -59,7 +62,8 @@
                     }
                 }).then(() => {
                     alert("Retreat successfully deleted.");
-                    window.location.reload();
+                    this.$emit('removeService', id)
+                    this.reset()
                 }).catch((error) => {
                     if (error.response.status === 409) alert("Error. Pending reservation for retreat exists.");
                     else alert("Error occured. You can not delete this retreat.");
@@ -72,7 +76,8 @@
                     }
                 }).then(() => {
                     alert("Ship successfully deleted.");
-                    window.location.reload();
+                    this.$emit('removeService', id)
+                    this.reset()
                 }).catch((error) => {
                     if (error.response.status === 409) alert("Error. Pending reservation for ship exists.");
                     else alert("Error occured. You can not delete this ship.");
@@ -86,7 +91,8 @@
                     }
                 }).then(() =>{
                     alert("Adventure successfully deleted.")
-                    window.location.reload()
+                    this.$emit('removeService', id)
+                    this.reset()
                 }).catch((error) => {
                     if (error.response.status === 409) alert("Error. Pending reservation for adventure exists.");
                     else alert("Error occured. You can not delete this adventure.");
@@ -96,6 +102,12 @@
                 if (window.sessionStorage.getItem('role') === "ROLE_retreatOwner") router.push("/retreat/" + id);
                 else if (window.sessionStorage.getItem('role') === "ROLE_shipOwner") router.push("/ship/" + id);
                 else if (window.sessionStorage.getItem('role') === "ROLE_fishingInstructor") router.push("/adventure/" + id);
+            },
+            reset() {
+                this.hoverEditButton = false
+                this.hoverDeleteButton = false
+                this.hoverNewActionButton = false
+                this.linkToService = ""
             }
         },
         data(){

@@ -1,7 +1,7 @@
 <template>
     <div class="shadow-lg rounded" style="flex-shrink:0">
         <div style="width:300px;height:100%;">
-            <form @submit.prevent style="padding:10px;padding-top:100px">
+            <form @submit.prevent="search" style="padding:10px;padding-top:100px">
                 <div class="form-group required">
                     <label class="control-label">Choose a service type: </label>
                     <select v-model="reservationForm.serviceType" class="form-select" aria-label="Service types">
@@ -71,7 +71,7 @@
                     />
                 </div>
                 <div class="form-group">
-                    <button @click="search" :disabled="$v.reservationForm.$invalid || invalidTime || invalidDate" type="submit" class="btn btn-primary btn-lg btn-block">Search</button>
+                    <button :disabled="$v.reservationForm.$invalid || invalidTime || invalidDate" type="submit" class="btn btn-primary btn-lg btn-block">Search</button>
                 </div>
                 <div class="form-group">
                     <label>Sort by</label><br>

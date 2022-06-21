@@ -18,21 +18,22 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class RetreatService {
 
-    private final Logger LOG = LoggerFactory.getLogger(RetreatService.class);
+    private final Logger log = LoggerFactory.getLogger(RetreatService.class);
 
     @Autowired
     private RetreatRepository retreatRepository;
 
+    @Transactional(readOnly = false)
     public Retreat addRetreat(Retreat retreat) {
         return retreatRepository.save(retreat);
     }
 
     @Cacheable("retreat")
     public Retreat getRetreatById(Integer id) {
-        LOG.info("Retreat with id: " + id + " successfully cached!");
+        log.info("Retreat with id: " + id + " successfully cached!");
         return retreatRepository.getRetreatById(id);
     }
 
@@ -47,15 +48,9 @@ public class RetreatService {
         if (retreat.getNumOfBeds() != retreatDTO.getNumOfBeds()) retreat.setNumOfBeds(retreatDTO.getNumOfBeds());
         if (retreat.getNumOfRooms() != retreatDTO.getNumOfRooms()) retreat.setNumOfRooms(retreatDTO.getNumOfRooms());
         if (retreat.getPrice() != retreatDTO.getPrice()) retreat.setPrice(retreatDTO.getPrice());
-        if (retreat.getPictures().size() != retreatDTO.getPictures().size()) {
-            retreat.setPictures(new HashSet<>(retreatDTO.getPictures()));
-        }
-        if (retreat.getRulesOfConduct().size() != retreatDTO.getRulesOfConduct().size()) {
-            retreat.setRulesOfConduct(new HashSet<>(retreatDTO.getRulesOfConduct()));
-        }
-        if (retreat.getAdditionalServices().size() != additionalServices.size()) {
-            retreat.setAdditionalServices(additionalServices);
-        }
+        retreat.setPictures(new HashSet<>(retreatDTO.getPictures()));
+        retreat.setRulesOfConduct(new HashSet<>(retreatDTO.getRulesOfConduct()));
+        retreat.setAdditionalServices(additionalServices);
         return retreatRepository.save(retreat);
     }
 
@@ -72,6 +67,6 @@ public class RetreatService {
 
     @CacheEvict(cacheNames = {"retreat"}, allEntries = true)
     public void removeFromCache() {
-        LOG.info("Retreats removed from cache!");
+        log.info("Retreats removed from cache!");
     }
 }

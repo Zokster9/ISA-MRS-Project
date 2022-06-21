@@ -32,7 +32,22 @@ public class ClientService {
     }
 
     @Transactional
-    public void updateClientsPenaltyStatus() {
-        clientRepository.updateClientsPenaltyStatus();
+    public void resetPenaltyPoints(int id) {
+        clientRepository.resetPenaltyPoints(id);
+    }
+
+    @Transactional
+    public void resetPenaltyStatus(int id) {
+        clientRepository.resetPenaltyStatus(id);
+    }
+
+    @Transactional
+    public void updatePenaltyPoints(int id) {
+        clientRepository.updatePenaltyPoints(id);
+    }
+
+    @Transactional
+    public void updatePenaltyStatus(int id) {
+        clientRepository.updatePenaltyStatus(id);
     }
 }

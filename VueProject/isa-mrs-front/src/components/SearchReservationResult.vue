@@ -1,6 +1,7 @@
 <template>
     <router-link exact :to="'/'+serviceType+'/'+searchResult.id" tag="div" class="card mb-5 mx-2">
-        <img :src="require('@/assets/' + searchResult.pictures[0])" class="card-img-top" alt="Nema slike">
+        <img v-if="searchResult.pictures.length != 0" :src="require('@/assets/' + searchResult.pictures[0])" class="card-img-top" alt="Nema slike">
+        <img v-else src="@/assets/no-image.png" class="card-img-top" alt="Nema slike">
         <div class="card-body">
             <h5 class="card-title">{{searchResult.name}}</h5>
             <div>

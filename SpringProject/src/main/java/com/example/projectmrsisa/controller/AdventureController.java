@@ -1,7 +1,8 @@
 package com.example.projectmrsisa.controller;
 
-
-import com.example.projectmrsisa.dto.*;
+import com.example.projectmrsisa.dto.ActionDTO;
+import com.example.projectmrsisa.dto.AdventureDTO;
+import com.example.projectmrsisa.dto.ServiceAvailabilityDTO;
 import com.example.projectmrsisa.model.*;
 import com.example.projectmrsisa.service.*;
 import com.example.projectmrsisa.validators.Validator;
@@ -9,12 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -54,6 +53,8 @@ public class AdventureController {
 
     @Autowired
     private RevisionService revisionService;
+
+    private final String serviceType = "adventure";
     
     private Validator validator = new Validator();
 
@@ -63,7 +64,7 @@ public class AdventureController {
         User fishingInstructor = userService.findUserByEmail(principal.getName());
         if (!validator.validateAdventure(adventureDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         Address address = addressService.getAddress(new Address(adventureDTO.getCountry(), adventureDTO.getCity(), adventureDTO.getStreet()));
-        Set<Tag> additionalServices = tagService.findTags(adventureDTO.getAdditionalServices(), "adventure");
+        Set<Tag> additionalServices = tagService.findTags(adventureDTO.getAdditionalServices(), serviceType);
         Adventure adventure = adventureService.addAdventure(new Adventure(adventureDTO, address, fishingInstructor, additionalServices));
         return new ResponseEntity<>(new AdventureDTO(adventure), HttpStatus.CREATED);
     }
@@ -72,6 +73,8 @@ public class AdventureController {
     public ResponseEntity<AdventureDTO> getAdventureById(@PathVariable Integer id) {
         try {
             Adventure adventure = adventureService.findAdventureById(id);
+            if (adventure.isDeleted())
+                return new ResponseEntity<>(new AdventureDTO(), HttpStatus.OK);
             return new ResponseEntity<>(new AdventureDTO(adventure, revisionService.getAverageRatingForService(adventure.getId())), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -80,7 +83,7 @@ public class AdventureController {
 
     @DeleteMapping(value = "/delete-adventure/{id}")
     @PreAuthorize("hasRole('fishingInstructor')")
-    public ResponseEntity deleteAdventure(@PathVariable Integer id){
+    public ResponseEntity<Void> deleteAdventure(@PathVariable Integer id){
         try {
             if (!reservationService.pendingReservationForServiceExists(id)) return new ResponseEntity<>(HttpStatus.CONFLICT);
             adventureService.deleteAdventureById(id);
@@ -98,7 +101,7 @@ public class AdventureController {
         try{
             Adventure adventure = adventureService.findAdventureById(id);
             if (!reservationService.pendingReservationForServiceExists(id)) return new ResponseEntity<>(HttpStatus.CONFLICT);
-            Set<Tag> newAdditionalServices = tagService.findTags(adventureDTO.getAdditionalServices(), "adventure");
+            Set<Tag> newAdditionalServices = tagService.findTags(adventureDTO.getAdditionalServices(), serviceType);
             adventure = adventureService.updateAdventure(adventure, adventureDTO, newAdditionalServices);
             return new ResponseEntity<>(new AdventureDTO(adventure), HttpStatus.OK);
         } catch (Exception e){
@@ -113,7 +116,7 @@ public class AdventureController {
             List<AdventureDTO> adventureDTOS = new ArrayList<>();
             for (Adventure adventure : adventures) {
                 if (adventure.isDeleted()) continue;
-                adventureDTOS.add(new AdventureDTO(adventure, "adventure", revisionService.getAverageRatingForService(adventure.getId())));
+                adventureDTOS.add(new AdventureDTO(adventure, serviceType, revisionService.getAverageRatingForService(adventure.getId())));
             }
             return new ResponseEntity<>(adventureDTOS, HttpStatus.OK);
         }catch (Exception e) {
@@ -147,10 +150,10 @@ public class AdventureController {
             if (!adventure.getOwner().getEmail().equals(loggedUser.getName())) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             if (!reservationService.checkIfReservationsExistForDate(id, actionDTO.getDateFrom(), actionDTO.getDateTo())) return new ResponseEntity<>(HttpStatus.CONFLICT);
             if (!actionService.actionAlreadyExists(adventure.getActions(), actionDTO.getDateFrom(), actionDTO.getDateTo())) return new ResponseEntity<>(HttpStatus.CONFLICT);
-            Set<Tag> additionalServices = tagService.findTags(actionDTO.getAdditionalServices(), "adventure");
+            Set<Tag> additionalServices = tagService.findTags(actionDTO.getAdditionalServices(), serviceType);
             Action action = new Action(actionDTO, additionalServices, adventure);
             action = actionService.addAction(action);
-            adventure = adventureService.addAction(adventure, action);
+            adventureService.addAction(adventure, action);
             List<String> emails = subscriptionService.findClientsWithSubscription(clientService.findAll(), id);
             emailService.sendSubscriptionEmails(emails);
             return new ResponseEntity<>(new ActionDTO(action), HttpStatus.ACCEPTED);
@@ -182,7 +185,7 @@ public class AdventureController {
             List<AdventureDTO> adventureDTOS = new ArrayList<>();
             for (Adventure adventure : adventures) {
                 if (!adventure.isDeleted()) {
-                    adventureDTOS.add(new AdventureDTO(adventure, "adventure",
+                    adventureDTOS.add(new AdventureDTO(adventure, serviceType,
                             revisionService.getAverageRatingForService(adventure.getId())));
                 }
             }

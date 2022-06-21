@@ -26,7 +26,7 @@
                     }
                 }).then(() =>{
                     alert("Successfully deleted user")
-                    window.location.reload()
+                    this.$emit('delete', id)
                 })
             }
         },

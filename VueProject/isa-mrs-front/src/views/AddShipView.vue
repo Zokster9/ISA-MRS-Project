@@ -1,7 +1,7 @@
 <template>
     <div>
         <NavbarUser></NavbarUser>
-        <form class="w-50 mx-auto mt-5">
+        <form @submit.prevent="addShip" class="w-50 mx-auto mt-5">
             <h2> New ship </h2>
                 <div class="form-group mb-3">
                     <label>Name</label>
@@ -178,9 +178,10 @@
                     <p v-if="!cancellationIsValid" class="alert alert-danger">Reservation cancellation conditions are required.</p>
                 </div>
                 <div class="form-group mb-3">
-                    <button @click="addRetreat" type="submit" class="btn btn-primary float-end">Add ship</button>
+                    <button type="submit" class="btn btn-primary float-end">Add ship</button>
                 </div>
         </form>
+        <br><br><br><br><br><br>
     </div>
 </template>
 
@@ -270,7 +271,7 @@
             }
         },
         methods: {
-            addRetreat() {
+            addShip() {
                 if (this.formIsValid) {
                     this.sendData();
                 }
@@ -301,7 +302,7 @@
                     }
                 }).then(response => {
                     alert('Added ship: ' + response.data.name + '.');
-                    router.push('/profile-page-ship-owner');
+                    router.back();
                 }).catch(error => {
                     if (error.response.status === 400) alert("Server error.");
                     else alert("Error occurred while adding ship!");

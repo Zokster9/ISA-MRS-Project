@@ -28,19 +28,20 @@ export default {
         calendarOptions: {
             plugins: [ dayGridPlugin, interactionPlugin ],
             initialView: 'dayGridMonth',
-            dateClick: this.handleDateClick,
             events: [],
-			displayEventTime: false
+			displayEventTime: false,
+            eventClick: this.eventClickHandler
         }
         }
     },
     methods: {
-        handleDateClick: function(arg) {
-        alert('date click! ' + arg.dateStr)
-        }
-    },
-    mounted() {
-        if (window.sessionStorage.getItem("role") === "ROLE_retreatOwner" || window.sessionStorage.getItem("role") === "ROLE_shipOwner" || window.sessionStorage.getItem("role") === "ROLE_fishingInstructor") {
+        eventClickHandler(click){
+            let event = click.event;
+            if (event.extendedProps.status === "FINISHED") {
+                router.push('/write-report/' + event.id);
+            }
+        },
+        getAvailability() {
             axios.get('http://localhost:8088/services/get-service-availability/' + this.$route.params.id, {
                 headers: {
                     Authorization: 'Bearer ' + window.sessionStorage.getItem('accessToken')
@@ -56,6 +57,8 @@ export default {
                     });
                 }
             });
+        },
+        getActions() {
             let path = "";
             if (window.sessionStorage.getItem("role") === "ROLE_retreatOwner") path = "retreats";
             else if (window.sessionStorage.getItem("role") === "ROLE_shipOwner") path = "ships";
@@ -74,7 +77,32 @@ export default {
                         end: new Date(action.dateTo)
                     });
                 }
-            })
+            });
+        },
+        getReservations() {
+            axios.get('http://localhost:8088/reservations/reservations-for-service/' + this.$route.params.id, {
+                headers: {
+                    Authorization: 'Bearer ' + window.sessionStorage.getItem('accessToken')
+                }
+            }).then((response) => {
+                for (let reservation of response.data) {
+                    this.calendarOptions.events.push({
+                        title: "Reservation",
+                        color: "red",
+                        id: reservation.id,
+                        status: reservation.status,
+                        start: new Date(reservation.fromDate),
+                        end: new Date(reservation.toDate)
+                    });
+                }
+            });
+        }
+    },
+    mounted() {
+        if (window.sessionStorage.getItem("role") === "ROLE_retreatOwner" || window.sessionStorage.getItem("role") === "ROLE_shipOwner" || window.sessionStorage.getItem("role") === "ROLE_fishingInstructor") {
+            this.getAvailability();
+            this.getActions();
+            this.getReservations();
         }
         else {
             router.push("/");

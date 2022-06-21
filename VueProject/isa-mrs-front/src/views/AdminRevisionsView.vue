@@ -21,7 +21,7 @@
                             <td class="text-center align-middle"> <b> Accept revision </b></td>
                             <td class="text-center align-middle"> <b> Decline revision </b></td>
                         </tr>
-                        <AdminRevisionRow v-for="revision in this.revisions" :revision="revision" :key="revision.id"> </AdminRevisionRow>
+                        <AdminRevisionRow @removeRevision="removeRevision" v-for="revision in this.revisions" :revision="revision" :key="revision.id"> </AdminRevisionRow>
                     </tbody>
                 </table>
             </div>
@@ -48,6 +48,11 @@
         data(){
             return {
                 revisions: []
+            }
+        },
+        methods: {
+            removeRevision(id) {
+                this.revisions = this.revisions.filter(revision => id != revision.id)
             }
         },
         mounted () {

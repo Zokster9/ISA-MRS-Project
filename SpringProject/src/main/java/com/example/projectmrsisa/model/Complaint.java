@@ -12,7 +12,7 @@ public class Complaint {
     @Column(name="id", unique = true, nullable = false)
     private Integer id;
     @Column(name="complaint", nullable = false)
-    private String complaint;
+    private String userComplaint;
     @Column(name="response")
     private String response;
     @Column(name="isAnswered")
@@ -25,17 +25,17 @@ public class Complaint {
         this.isAnswered = false;
     }
 
-    public Complaint(Integer id, String complaint, String response, boolean isAnswered,
+    public Complaint(Integer id, String userComplaint, String response, boolean isAnswered,
                      Reservation reservation) {
         this.id = id;
-        this.complaint = complaint;
+        this.userComplaint = userComplaint;
         this.response = response;
         this.isAnswered = isAnswered;
         this.reservation = reservation;
     }
 
     public Complaint(ComplaintDTO complaintDTO, Reservation reservation) {
-        this.complaint = complaintDTO.getComplaint();
+        this.userComplaint = complaintDTO.getComplaint();
         this.response = "";
         this.isAnswered = false;
         this.reservation = reservation;
@@ -49,12 +49,12 @@ public class Complaint {
         this.id = id;
     }
 
-    public String getComplaint() {
-        return complaint;
+    public String getUserComplaint() {
+        return userComplaint;
     }
 
-    public void setComplaint(String complaint) {
-        this.complaint = complaint;
+    public void setUserComplaint(String complaint) {
+        this.userComplaint = complaint;
     }
 
     public String getResponse() {

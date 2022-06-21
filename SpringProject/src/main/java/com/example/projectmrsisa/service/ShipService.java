@@ -14,12 +14,13 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class ShipService {
 
     @Autowired
     private ShipRepository shipRepository;
 
+    @Transactional(readOnly = false)
     public Ship addShip(Ship ship) {
         return shipRepository.save(ship);
     }
@@ -42,21 +43,11 @@ public class ShipService {
         if (!ship.getMaxSpeed().equals(shipDTO.getMaxSpeed())) ship.setMaxSpeed(shipDTO.getMaxSpeed());
         if (!ship.getReservationCancellationConditions().equals(shipDTO.getReservationCancellationConditions())) ship.setReservationCancellationConditions(shipDTO.getReservationCancellationConditions());
         if (!ship.getType().equals(shipDTO.getType())) ship.setType(shipDTO.getType());
-        if (ship.getPictures().size() != shipDTO.getPictures().size()) {
-            ship.setPictures(new HashSet<>(shipDTO.getPictures()));
-        }
-        if (ship.getFishingEquipment().size() != shipDTO.getFishingEquipment().size()) {
-            ship.setFishingEquipment(new HashSet<>(shipDTO.getFishingEquipment()));
-        }
-        if (ship.getRulesOfConduct().size() != shipDTO.getRulesOfConduct().size()) {
-            ship.setRulesOfConduct(new HashSet<>(shipDTO.getRulesOfConduct()));
-        }
-        if (ship.getNavigationEquipment().size() != shipDTO.getNavigationEquipment().size()) {
-            ship.setNavigationEquipment(new HashSet<>(shipDTO.getNavigationEquipment()));
-        }
-        if (ship.getAdditionalServices().size() != additionalServices.size()) {
-            ship.setAdditionalServices(additionalServices);
-        }
+        ship.setPictures(new HashSet<>(shipDTO.getPictures()));
+        ship.setFishingEquipment(new HashSet<>(shipDTO.getFishingEquipment()));
+        ship.setRulesOfConduct(new HashSet<>(shipDTO.getRulesOfConduct()));
+        ship.setNavigationEquipment(new HashSet<>(shipDTO.getNavigationEquipment()));
+        ship.setAdditionalServices(additionalServices);
         return shipRepository.save(ship);
     }
 

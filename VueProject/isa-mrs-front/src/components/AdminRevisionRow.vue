@@ -5,7 +5,8 @@
         <td class="align-middle text-center display-4"> <b> {{ revision.ownerRating }} </b> </td>
         <td class="align-middle text-center">
             <figcaption class="mb-1"> {{revision.serviceName}} </figcaption> 
-            <img :src="require('@/assets/' + revision.servicePictures[0])" style="width:200px; height:200px" class="mb-1"> 
+            <img v-if="revision.servicePictures.length != 0" :src="require('@/assets/' + revision.servicePictures[0])" style="width:200px; height:200px" class="mb-1"> 
+            <img v-else src="@/assets/no-image.png" alt="Nema slike" style="width:200px; height:200px" class="mb-1">
         </td>
         <td class="align-middle text-center display-4"> <b> {{revision.serviceRating}}  </b> </td>
         <td class="align-middle text-center w-25">  {{revision.revision}} </td>
@@ -53,7 +54,7 @@
                         Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }
                 }).then(() => {
-                    window.location.reload();
+                    this.$emit('removeRevision', id)
                 }).catch((error) => {
                     if (error.response.status === 409) alert("Error. Some other administrator already replied to this revision request.");
                     else alert("Error occured. Accepting of a revision wasn't successful.");
@@ -78,7 +79,7 @@
                         Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }
                 }).then(() => {
-                    window.location.reload();
+                    this.$emit('removeRevision', id)
                 }).catch((error) => {
                     if (error.response.status === 409) alert("Error. Some other administrator already replied to this revision request.");
                     else alert("Error occured. Declining of a revision wasn't successful.");

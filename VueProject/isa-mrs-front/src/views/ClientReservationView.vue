@@ -29,7 +29,7 @@
                               </div>
                               <div class="modal-body">
                                   <h5>Choose additional services</h5>
-                                  <form class="w-50 mx-auto mt-5">
+                                  <form class="w-50 mx-auto mt-5" @submit.prevent="confirmReservation">
                                       <div class="form-group mb-3">
                                         <label>Additional services:</label>
                                         <br>
@@ -40,7 +40,7 @@
                                             </div>
                                         </template>
                                     </div>
-                                    <button class="btn btn-primary my-3" @click="confirmReservation">Reserve</button>
+                                    <button class="btn btn-primary my-3" type="submit">Reserve</button>
                                   </form>
                               </div>
                           </div>
@@ -60,7 +60,7 @@
     import Vue from 'vue'
     import axios from 'axios'
     import VueAxios from 'vue-axios'
-import router from '@/router';
+    import router from '@/router';
 
     Vue.use(VueAxios, axios)
 
@@ -82,6 +82,7 @@ import router from '@/router';
                 shipTags: [],
                 adventureTags: [],
                 reservationForm: null,
+                additionalServices: [],
             }
         },
         computed: {
@@ -91,7 +92,6 @@ import router from '@/router';
         },
         methods: {
             search(reservationForm, additionalServices) {
-                console.log(additionalServices)
                 this.type = reservationForm.serviceType;
                 this.reservationForm = reservationForm;
                 axios.get("http://localhost:8088/reservations/" + this.type + "/getAvailableReservations", {
@@ -131,8 +131,10 @@ import router from '@/router';
                 let date = new Date(this.reservationForm.date)
                 let toDate = date.setDate(date.getDate() + parseInt(this.reservationForm.numberOfDays) - 1)
                 toDate = new Date(toDate)
+                toDate.setHours(0, 0, 0, 0)
+                date.setHours(0, 0, 0, 0)
                 axios.post("http://localhost:8088/reservations/makeAReservation", {
-                    fromDate: this.reservationForm.date,
+                    fromDate: date,
                     toDate: toDate,
                     fromTime: this.reservationForm.startTime,
                     toTime: this.reservationForm.endTime,
@@ -140,6 +142,7 @@ import router from '@/router';
                     serviceId: this.selectedService.id,
                     numOfPeople: this.reservationForm.numberOfPeople,
                     serviceType: this.reservationForm.serviceType,
+                    additionalServices: this.additionalServices,
                 },
                 {
                     headers: {

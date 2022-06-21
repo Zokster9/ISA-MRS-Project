@@ -1,20 +1,21 @@
 package com.example.projectmrsisa.controller;
 
-import com.example.projectmrsisa.dto.*;
+import com.example.projectmrsisa.dto.ActionDTO;
+import com.example.projectmrsisa.dto.ServiceAvailabilityDTO;
+import com.example.projectmrsisa.dto.ServiceDTO;
+import com.example.projectmrsisa.dto.ServiceQueryDTO;
 import com.example.projectmrsisa.model.*;
 import com.example.projectmrsisa.service.*;
-import com.example.projectmrsisa.model.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.security.Principal;
 
 @RestController
 @RequestMapping(value="/services")
@@ -47,15 +48,19 @@ public class ServiceController {
     @Autowired
     private RevisionService revisionService;
 
+    private final String retreatType = "retreat";
+    private final String shipType = "ship";
+    private final String adventureType = "adventure";
+
     @DeleteMapping(value="/delete/{id}")
     @PreAuthorize("hasAnyRole('admin', 'mainAdmin')")
-    public ResponseEntity deleteService(@PathVariable Integer id) {
+    public ResponseEntity<Void> deleteService(@PathVariable Integer id) {
         try {
             if (!reservationService.pendingReservationForServiceExists(id)) return new ResponseEntity<>(HttpStatus.CONFLICT);
             serviceService.deleteServiceById(id);
-            return new ResponseEntity(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e){
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -88,12 +93,12 @@ public class ServiceController {
     }
 
     private String getServiceType(Service service) {
-        if (retreatService.getRetreatById(service.getId()) != null)
-            return "retreat";
+        if (adventureService.findAdventureById(service.getId()) != null)
+            return adventureType;
         else if (shipService.findShipById(service.getId()) != null)
-            return "ship";
+            return shipType;
         else
-            return "adventure";
+            return retreatType;
     }
 
     @GetMapping(value="/getAvailableFastReservations/{serviceId}")
@@ -119,41 +124,53 @@ public class ServiceController {
     @GetMapping(value="/search")
     public ResponseEntity<List<ServiceDTO>> searchServices(ServiceQueryDTO serviceQueryDTO) {
         try {
-            List<Retreat> retreats;
-            List<Ship> ships;
-            List<Adventure> adventures;
             List<ServiceDTO> serviceDTOS = new ArrayList<>();
-            if (serviceQueryDTO.getServiceType().equals("retreat")) {
-                retreats = retreatService.getRetreats();
-                for (Retreat retreat : retreats) {
-                    if (containsName(retreat, serviceQueryDTO.getName()) && containsAddress(retreat, serviceQueryDTO.getAddress())
-                    && containsCity(retreat, serviceQueryDTO.getCity()) && containsCountry(retreat, serviceQueryDTO.getCountry())
-                    && containsDescription(retreat, serviceQueryDTO.getPromotionalDescription())) {
-                        serviceDTOS.add(new ServiceDTO(retreat, "retreat", revisionService.getAverageRatingForService(retreat.getId())));
-                    }
-                }
-            } else if (serviceQueryDTO.getServiceType().equals("ship")) {
-                ships = shipService.getShips();
-                for (Ship ship : ships) {
-                    if (containsName(ship, serviceQueryDTO.getName()) && containsAddress(ship, serviceQueryDTO.getAddress())
-                            && containsCity(ship, serviceQueryDTO.getCity()) && containsCountry(ship, serviceQueryDTO.getCountry())
-                            && containsDescription(ship, serviceQueryDTO.getPromotionalDescription())) {
-                        serviceDTOS.add(new ServiceDTO(ship, "ship", revisionService.getAverageRatingForService(ship.getId())));
-                    }
-                }
+            if (serviceQueryDTO.getServiceType().equals(retreatType)) {
+                searchRetreats(serviceQueryDTO, serviceDTOS);
+            } else if (serviceQueryDTO.getServiceType().equals(shipType)) {
+                searchShips(serviceQueryDTO, serviceDTOS);
             } else {
-                adventures = adventureService.getAdventures();
-                for (Adventure adventure : adventures) {
-                    if (containsName(adventure, serviceQueryDTO.getName()) && containsAddress(adventure, serviceQueryDTO.getAddress())
-                            && containsCity(adventure, serviceQueryDTO.getCity()) && containsCountry(adventure, serviceQueryDTO.getCountry())
-                            && containsDescription(adventure, serviceQueryDTO.getPromotionalDescription())) {
-                        serviceDTOS.add(new ServiceDTO(adventure, "adventure", revisionService.getAverageRatingForService(adventure.getId())));
-                    }
-                }
+                searchAdventures(serviceQueryDTO, serviceDTOS);
             }
             return new ResponseEntity<>(serviceDTOS, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private void searchAdventures(ServiceQueryDTO serviceQueryDTO, List<ServiceDTO> serviceDTOS) {
+        List<Adventure> adventures;
+        adventures = adventureService.getAdventures();
+        for (Adventure adventure : adventures) {
+            if (containsName(adventure, serviceQueryDTO.getName()) && containsAddress(adventure, serviceQueryDTO.getAddress())
+                    && containsCity(adventure, serviceQueryDTO.getCity()) && containsCountry(adventure, serviceQueryDTO.getCountry())
+                    && containsDescription(adventure, serviceQueryDTO.getPromotionalDescription())) {
+                serviceDTOS.add(new ServiceDTO(adventure, adventureType, revisionService.getAverageRatingForService(adventure.getId())));
+            }
+        }
+    }
+
+    private void searchShips(ServiceQueryDTO serviceQueryDTO, List<ServiceDTO> serviceDTOS) {
+        List<Ship> ships;
+        ships = shipService.getShips();
+        for (Ship ship : ships) {
+            if (containsName(ship, serviceQueryDTO.getName()) && containsAddress(ship, serviceQueryDTO.getAddress())
+                    && containsCity(ship, serviceQueryDTO.getCity()) && containsCountry(ship, serviceQueryDTO.getCountry())
+                    && containsDescription(ship, serviceQueryDTO.getPromotionalDescription())) {
+                serviceDTOS.add(new ServiceDTO(ship, shipType, revisionService.getAverageRatingForService(ship.getId())));
+            }
+        }
+    }
+
+    private void searchRetreats(ServiceQueryDTO serviceQueryDTO, List<ServiceDTO> serviceDTOS) {
+        List<Retreat> retreats;
+        retreats = retreatService.getRetreats();
+        for (Retreat retreat : retreats) {
+            if (containsName(retreat, serviceQueryDTO.getName()) && containsAddress(retreat, serviceQueryDTO.getAddress())
+            && containsCity(retreat, serviceQueryDTO.getCity()) && containsCountry(retreat, serviceQueryDTO.getCountry())
+            && containsDescription(retreat, serviceQueryDTO.getPromotionalDescription())) {
+                serviceDTOS.add(new ServiceDTO(retreat, retreatType, revisionService.getAverageRatingForService(retreat.getId())));
+            }
         }
     }
 

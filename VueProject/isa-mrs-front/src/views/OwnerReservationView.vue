@@ -5,7 +5,7 @@
         <div class="app">
             <div class="vertical-center" style="margin-top: 85px">
                 <div class="inner-block">
-                    <form @submit.prevent style="padding:10px">
+                    <form @submit.prevent="makeReservation" style="padding:10px">
                         <h3>Make reservation for client:</h3> 
                         <div class="form-group required">
                             <label class="control-label">Starting date </label>
@@ -48,7 +48,7 @@
                             </template>
                         </div>
                         <div class="form-group">
-                                <button @click="makeReservation" :disabled="$v.form.$invalid || isFormValid == false" type="submit" class="btn btn-dark btn-lg btn-block">Make reservation</button>
+                                <button :disabled="$v.form.$invalid || isFormValid == false" type="submit" class="btn btn-dark btn-lg btn-block">Make reservation</button>
                         </div>
                     </form>
                 </div>

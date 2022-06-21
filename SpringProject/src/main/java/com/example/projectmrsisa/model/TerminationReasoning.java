@@ -16,7 +16,7 @@ public class TerminationReasoning {
     private User user;
 
     @Column(name = "terminationReasoning", nullable = false)
-    private String terminationReasoning;
+    private String reasoning;
 
     @Column(name = "isAnswered", nullable = false)
     private Boolean isAnswered;
@@ -25,16 +25,16 @@ public class TerminationReasoning {
 
     }
 
-    public TerminationReasoning(Integer id, User user, String terminationReasoning){
+    public TerminationReasoning(Integer id, User user, String reasoning){
         this.id = id;
         this.user = user;
-        this.terminationReasoning = terminationReasoning;
+        this.reasoning = reasoning;
         this.isAnswered = false;
     }
 
-    public TerminationReasoning(User user,String terminationReasoning){
+    public TerminationReasoning(User user,String reasoning){
         this.user = user;
-        this.terminationReasoning = terminationReasoning;
+        this.reasoning = reasoning;
         this.isAnswered = false;
     }
 
@@ -54,12 +54,12 @@ public class TerminationReasoning {
         this.user = user;
     }
 
-    public String getTerminationReasoning() {
-        return terminationReasoning;
+    public String getReasoning() {
+        return reasoning;
     }
 
-    public void setTerminationReasoning(String terminationReasoning) {
-        this.terminationReasoning = terminationReasoning;
+    public void setReasoning(String terminationReasoning) {
+        this.reasoning = terminationReasoning;
     }
 
     public Boolean getAnswered() {

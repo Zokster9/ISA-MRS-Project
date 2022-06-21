@@ -17,7 +17,7 @@ public class DiscountDTO {
 
     public DiscountDTO(Discount discount){
         this.id = discount.getId();
-        this.discount = discount.getDiscount();
+        this.discount = discount.getDiscountRate();
         this.fromDate = discount.getFromDate();
         this.toDate = discount.getToDate();
     }

@@ -20,7 +20,7 @@ public class TagService {
     }
 
     public Set<Tag> findTags(List<String> tags, String description) {
-        Set<Tag> retVal = new HashSet<Tag>();
+        Set<Tag> retVal = new HashSet<>();
         for (String tag: tags) {
             retVal.add(tagRepository.findTagByNameAndDescription(tag, description));
         }

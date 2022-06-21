@@ -1,6 +1,7 @@
 <template>
     <div class="card mb-5 mx-2">
-        <img :src="require('@/assets/' + reservation.servicePictures[0])" class="card-img-top" alt="Nema slike">
+        <img v-if="reservation.servicePictures.length != 0" :src="require('@/assets/' + reservation.servicePictures[0])" class="card-img-top" alt="Nema slike">
+        <img v-else src="@/assets/no-image.png" class="card-img-top" alt="Nema slike">
         <div class="card-body">
             <h5 class="card-title"> {{reservation.serviceName}} </h5>
             <div>
@@ -23,7 +24,7 @@
                 <span class="card-text">Price</span>
                 <span class="float-end">{{ reservation.price }}<span>&#8364;</span></span>
             </div>
-            <div v-if="reservation.status != 'Pending'">
+            <div v-if="reservation.status != 'PENDING'">
                 <div v-if="reservation.userRating">
                     <span class="card-text">Your rating</span>
                     <span class="float-end"><StarRating :show-rating="false" :increment="0.01" :star-size="24" :inline="true" 

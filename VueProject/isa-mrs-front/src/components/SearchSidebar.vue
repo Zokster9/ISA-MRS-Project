@@ -1,7 +1,7 @@
 <template>
     <div class="sidebar shadow-lg rounded" style="flex-shrink:0">
         <div style="width:300px;height:100%;">
-            <form @submit.prevent style="padding:10px;padding-top:100px">
+            <form @submit.prevent="search" style="padding:10px;padding-top:100px">
                 <div class="form-group">
                     <label for="name">Name</label>
                     <input v-model="form.name" id="name" type="text" class="form-control form-control-lg"/>
@@ -23,7 +23,7 @@
                     <input v-model="form.description" id="description" type="text" class="form-control form-control-lg"/>
                 </div>
                 <div class="form-group">
-                    <button @click="search" type="submit" class="btn btn-primary btn-lg btn-block">Search</button>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">Search</button>
                 </div>
                 <div class="form-group">
                     <label>Sort by</label><br>

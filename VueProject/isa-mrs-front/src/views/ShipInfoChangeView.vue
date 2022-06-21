@@ -1,7 +1,7 @@
 <template>
     <div>
     <NavbarUser></NavbarUser>
-    <form class="w-50 mx-auto mt-5">
+    <form class="w-50 mx-auto mt-5" @submit.prevent="updateShip">
             <h2> Ship info </h2>
                 <div class="form-group mb-3">
                     <label>Name</label>
@@ -190,7 +190,7 @@
                     <p v-if="!cancellationIsValid" class="alert alert-danger">Reservation cancellation conditions are required.</p>
                 </div>
                 <div class="form-group mb-3">
-                    <button @click="updateRetreat" type="submit" class="btn btn-primary float-end">Update ship</button>
+                    <button type="submit" class="btn btn-primary float-end">Update ship</button>
                 </div>
         </form>
     </div>  
@@ -283,7 +283,7 @@
             }
         },
         methods: {
-            updateRetreat() {
+            updateShip() {
                 if (this.formIsValid) {
                     this.sendData();
                 }

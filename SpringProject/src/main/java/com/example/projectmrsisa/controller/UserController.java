@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -48,6 +47,10 @@ public class UserController {
 
     @Autowired
     private RevisionService revisionService;
+
+    private final String roleRetreatOwner = "ROLE_retreatOwner";
+    private final String roleAdventureOwner = "ROLE_fishingInstructor";
+    private final String roleShipOwner = "ROLE_shipOwner";
     
     private Validator validator = new Validator();
 
@@ -55,25 +58,27 @@ public class UserController {
     @PreAuthorize("hasAnyRole('admin', 'mainAdmin')")
     public ResponseEntity<List<UserDTO>> getInactiveUsers(){
         List<User> inactiveUsers = userService.findUsersByActivatedStatus(false, false);
-        List<UserDTO> inactiveUsersDTO = new ArrayList<UserDTO>();
-        for (User iu : inactiveUsers){
-            PrivilegedUser privilegedUser = PrivilegedUser.NOT_PRIVILEGED_USER;
-            List<Role> userRoles = iu.getRoles();
+        List<UserDTO> inactiveUsersDTO = new ArrayList<>();
+        for (User inactiveUser : inactiveUsers){
+            PrivilegedUser privilegedUser;
+            List<Role> userRoles = inactiveUser.getRoles();
             Role role = userRoles.get(0);
             switch (role.getName()) {
-                case "ROLE_fishingInstructor":
+                case roleAdventureOwner:
                     privilegedUser = PrivilegedUser.FISHING_INSTRUCTOR;
                     break;
-                case "ROLE_retreatOwner":
+                case roleRetreatOwner:
                     privilegedUser = PrivilegedUser.RETREAT_OWNER;
                     break;
-                case "ROLE_shipOwner":
+                case roleShipOwner:
                     privilegedUser = PrivilegedUser.SHIP_OWNER;
                     break;
+                default:
+                    privilegedUser = PrivilegedUser.NOT_PRIVILEGED_USER;
             }
-            RegistrationReasoningDTO registrationReasoningDTO = new RegistrationReasoningDTO(userService.findRegistrationReasoningByUserId(iu.getId()));
+            RegistrationReasoningDTO registrationReasoningDTO = new RegistrationReasoningDTO(userService.findRegistrationReasoningByUserId(inactiveUser.getId()));
             if (!registrationReasoningDTO.isAnswered()){
-                inactiveUsersDTO.add(new UserDTO(iu, privilegedUser, registrationReasoningDTO));
+                inactiveUsersDTO.add(new UserDTO(inactiveUser, privilegedUser, registrationReasoningDTO));
             }
         }
         return new ResponseEntity<>(inactiveUsersDTO, HttpStatus.OK);
@@ -220,7 +225,7 @@ public class UserController {
     public ResponseEntity<UserDTO> sendTerminationReason(@RequestBody TerminationReasonDTO terminationReasonDTO, Principal principal){
         if (terminationReasonDTO.getTerminationReason() == null || terminationReasonDTO.getTerminationReason().equals("")) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         User user = userService.findUserByEmail(principal.getName());
-        TerminationReasoning terminationReasoning = terminationReasoningService.addTerminationReasoning(new TerminationReasoning(user, terminationReasonDTO.getTerminationReason()));
+        terminationReasoningService.addTerminationReasoning(new TerminationReasoning(user, terminationReasonDTO.getTerminationReason()));
         userService.deactivateUserById(user.getId()); // deaktiviram korisnika
         UserDTO userDTO = new UserDTO(user);
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
@@ -286,13 +291,13 @@ public class UserController {
         List<Role> roles = user.getRoles();
         Role userRole = roles.get(0);
         PrivilegedUser privilegedUser = PrivilegedUser.NOT_PRIVILEGED_USER;
-        if (userRole.getName().equals("ROLE_fishingInstructor")){
+        if (userRole.getName().equals(roleAdventureOwner)){
             privilegedUser = PrivilegedUser.FISHING_INSTRUCTOR;
         }
-        else if (userRole.getName().equals("ROLE_shipOwner")){
+        else if (userRole.getName().equals(roleShipOwner)){
             privilegedUser = PrivilegedUser.SHIP_OWNER;
         }
-        else if (userRole.getName().equals("ROLE_retreatOwner")){
+        else if (userRole.getName().equals(roleRetreatOwner)){
             privilegedUser = PrivilegedUser.RETREAT_OWNER;
         }
         UserDTO userDTO = new UserDTO(user, privilegedUser);
@@ -306,18 +311,17 @@ public class UserController {
         User mainAdmin = userService.findUserByEmail(principal.getName());
         List<UserDTO> usersDTO = new ArrayList<>();
         for (User user : users){
-            if (user.isDeleted()) continue;
-            if (user.getId().equals(mainAdmin.getId())) continue;
+            if (user.isDeleted() || user.getId().equals(mainAdmin.getId())) continue;
             List<Role> roles = user.getRoles();
             Role userRole = roles.get(0);
             PrivilegedUser privilegedUser;
-            if (userRole.getName().equals("ROLE_fishingInstructor")){
+            if (userRole.getName().equals(roleAdventureOwner)){
                 privilegedUser = PrivilegedUser.FISHING_INSTRUCTOR;
             }
-            else if (userRole.getName().equals("ROLE_shipOwner")){
+            else if (userRole.getName().equals(roleShipOwner)){
                 privilegedUser = PrivilegedUser.SHIP_OWNER;
             }
-            else if (userRole.getName().equals("ROLE_retreatOwner")){
+            else if (userRole.getName().equals(roleRetreatOwner)){
                 privilegedUser = PrivilegedUser.RETREAT_OWNER;
             }
             else if (userRole.getName().equals("ROLE_client")){
@@ -342,7 +346,7 @@ public class UserController {
 
     @GetMapping(value="/getAllInstructors")
     public ResponseEntity<List<UserDTO>> getAllInstructors() {
-        List<User> instructors = userService.getAllInstructors("ROLE_fishingInstructor");
+        List<User> instructors = userService.getAllInstructors(roleAdventureOwner);
         List<UserDTO> userDTOS = new ArrayList<>();
         for (User instructor : instructors) {
             userDTOS.add(new UserDTO(instructor, revisionService.getAverageRatingForServiceOwner(instructor.getId())));
@@ -352,7 +356,7 @@ public class UserController {
 
     @GetMapping(value="/searchInstructors")
     public ResponseEntity<List<UserDTO>> searchInstructors(FishingInstructorQueryDTO fishingInstructorQueryDTO) {
-        List<User> instructors = userService.getAllInstructors("ROLE_fishingInstructor");
+        List<User> instructors = userService.getAllInstructors(roleAdventureOwner);
         List<UserDTO> userDTOS = new ArrayList<>();
         for (User instructor : instructors) {
             if (containsName(instructor, fishingInstructorQueryDTO.getName()) && containsSurname(instructor, fishingInstructorQueryDTO.getSurname())

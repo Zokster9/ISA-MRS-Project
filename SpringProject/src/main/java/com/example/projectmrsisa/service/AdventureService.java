@@ -9,17 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-@Transactional
+@Transactional(readOnly = true)
 @Service
 public class AdventureService {
 
     @Autowired
     private AdventureRepository adventureRepository;
 
+    @Transactional(readOnly = false)
     public Adventure addAdventure(Adventure adventure) {
         return adventureRepository.save(adventure);
     }
@@ -48,6 +48,7 @@ public class AdventureService {
         return adventureRepository.save(adventure);
     }
 
+    @Transactional(readOnly = false)
     public Adventure addAction(Adventure adventure, Action action){
         adventure.addAction(action);
         return adventureRepository.save(adventure);

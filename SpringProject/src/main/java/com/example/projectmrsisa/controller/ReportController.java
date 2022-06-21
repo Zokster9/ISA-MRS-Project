@@ -5,14 +5,15 @@ import com.example.projectmrsisa.dto.ReportDTO;
 import com.example.projectmrsisa.model.Report;
 import com.example.projectmrsisa.model.Reservation;
 import com.example.projectmrsisa.model.ReservationStatus;
+import com.example.projectmrsisa.service.ClientService;
 import com.example.projectmrsisa.service.EmailService;
 import com.example.projectmrsisa.service.ReportService;
 import com.example.projectmrsisa.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -31,12 +32,15 @@ public class ReportController {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private ClientService clientService;
+
     @PostMapping(value="/penalizeClient")
     @PreAuthorize("hasAnyRole('fishingInstructor','shipOwner', 'retreatOwner')")
     public ResponseEntity<ReportDTO> penalizeClient(@RequestBody PenalDTO penalDTO){
         Reservation reservation;
         try{
-            reservationService.changeReservationStatus(ReservationStatus.Finished_Reported, penalDTO.getReservationId());
+            reservationService.changeReservationStatus(ReservationStatus.FINISHED_REPORTED, penalDTO.getReservationId());
             reservation = reservationService.findReservationById(penalDTO.getReservationId());
         } catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -44,7 +48,10 @@ public class ReportController {
         Report report = new Report(penalDTO.getComment(), true, false, true, true, reservation);
         try{
             reportService.save(report);
-            reservation.getClient().penalize();
+            clientService.updatePenaltyPoints(reservation.getClient().getId());
+            if (reservation.getClient().getPenaltyPoints() >= 3) {
+                clientService.updatePenaltyStatus(reservation.getClient().getId());
+            }
         } catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -57,7 +64,7 @@ public class ReportController {
     public ResponseEntity<ReportDTO> sendReport(@RequestBody PenalDTO penalDTO){
         Reservation reservation;
         try{
-            reservationService.changeReservationStatus(ReservationStatus.Finished_Reported, penalDTO.getReservationId());
+            reservationService.changeReservationStatus(ReservationStatus.FINISHED_REPORTED, penalDTO.getReservationId());
             reservation = reservationService.findReservationById(penalDTO.getReservationId());
         } catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -77,7 +84,7 @@ public class ReportController {
     public ResponseEntity<ReportDTO> askForPenal(@RequestBody PenalDTO penalDTO){
         Reservation reservation;
         try{
-            reservationService.changeReservationStatus(ReservationStatus.Finished_Waiting, penalDTO.getReservationId());
+            reservationService.changeReservationStatus(ReservationStatus.FINISHED_WAITING, penalDTO.getReservationId());
             reservation = reservationService.findReservationById(penalDTO.getReservationId());
         } catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -112,19 +119,26 @@ public class ReportController {
     @PreAuthorize("hasAnyRole('admin','mainAdmin')")
     public ResponseEntity<ReportDTO> updateReport(@RequestBody ReportDTO reportDTO){
         Report report;
-        Reservation reservation;
-        try{
+        try {
             report = reportService.findReportById(reportDTO.getId());
+        } catch (PessimisticLockingFailureException e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        try{
             reportService.setReportAnswered(reportDTO.getId());
-            reservation = reservationService.findReservationById(reportDTO.getReservationId());
-            reservationService.changeReservationStatus(ReservationStatus.Finished_Reported, reportDTO.getReservationId());
+            reservationService.changeReservationStatus(ReservationStatus.FINISHED_REPORTED, reportDTO.getReservationId());
         } catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         if (reportDTO.isPenalized()){
             try{
                 reportService.setReportPenalized(reportDTO.getId());
-                report.getReservation().getClient().penalize();
+                clientService.updatePenaltyPoints(report.getReservation().getClient().getId());
+                if (report.getReservation().getClient().getPenaltyPoints() >= 3) {
+                    clientService.updatePenaltyStatus(report.getReservation().getClient().getId());
+                }
             }catch (Exception e){
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }

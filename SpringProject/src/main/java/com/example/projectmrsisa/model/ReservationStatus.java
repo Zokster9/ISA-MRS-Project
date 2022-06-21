@@ -1,5 +1,5 @@
 package com.example.projectmrsisa.model;
 
 public enum ReservationStatus {
-    Pending, Finished, Cancelled, Finished_Reported, Finished_Waiting
+    PENDING, FINISHED, CANCELLED, FINISHED_REPORTED, FINISHED_WAITING
 }

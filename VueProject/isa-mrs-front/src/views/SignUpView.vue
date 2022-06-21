@@ -5,7 +5,7 @@
             <div class="vertical-center" style="margin-top: 85px">
                 <div class="inner-block">
                     <div class="signUp">
-                        <form @submit.prevent>
+                        <form @submit.prevent="register">
                             <h3>Sign Up</h3>
                             <div class="form-check form-check-inline">
                               <input :checked="isClient" v-model="form.registrationType" class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="client">
@@ -87,7 +87,7 @@
                             </div>
                             
                             <div class="form-group">
-                                <button @click="register" :disabled="$v.form.$invalid || isExplanationRequired" type="submit" class="btn btn-dark btn-lg btn-block">Sign Up</button>
+                                <button :disabled="$v.form.$invalid || isExplanationRequired" type="submit" class="btn btn-dark btn-lg btn-block">Sign Up</button>
                             </div>
                         </form>
                     </div>

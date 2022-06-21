@@ -14,7 +14,6 @@ import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -40,7 +39,7 @@ public class TerminationReasoningController {
     @PreAuthorize("hasAnyRole('admin', 'mainAdmin')")
     public ResponseEntity<List<TerminationReasoningDTO>> findToBeTerminatedUsers(){
         List<TerminationReasoning> unansweredTerminationReasonings = terminationReasoningService.findUnansweredTerminationReasonings();
-        List<TerminationReasoningDTO>  trDTO = new ArrayList<TerminationReasoningDTO>();
+        List<TerminationReasoningDTO> trDTO = new ArrayList<>();
         for (TerminationReasoning tr : unansweredTerminationReasonings){
             trDTO.add(new TerminationReasoningDTO(tr));
         }

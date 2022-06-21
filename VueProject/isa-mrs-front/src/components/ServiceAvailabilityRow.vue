@@ -3,8 +3,11 @@
     <tr :key="service.id">
         <td class="align-middle text-center">
              <figcaption class="mb-1"> {{service.name}} </figcaption>
-            <router-link exact :to="linkToService">
+            <router-link v-if="service.pictures.length != 0" exact :to="linkToService">
                 <img :src="require('@/assets/' + service.pictures[0])" style="width:200px; height:200px" class="rounded">
+            </router-link>
+            <router-link v-else exact :to="linkToService">
+                <img src="@/assets/no-image.png" style="width:200px; height:200px" class="rounded">
             </router-link>
         </td>
         <td class="align-middle"> 
@@ -54,9 +57,13 @@
                 }
             },
             addRetreatAvailability(id) {
+                let dateFrom = new Date(this.startDate);
+                dateFrom.setHours(0, 0, 0, 0);
+                let dateTo = new Date(this.endDate);
+                dateTo.setHours(0, 0, 0, 0);
                 axios.post('http://localhost:8088/retreats/add-availability/' + id, {
-                    dateFrom: new Date(this.startDate),
-                    dateTo: new Date(this.endDate),
+                    dateFrom: dateFrom,
+                    dateTo: dateTo,
                     timeFrom: this.startTime,
                     timeTo: this.endTime
                 }, {
@@ -71,9 +78,13 @@
                 })
             },
             addShipAvailability(id) {
+                let dateFrom = new Date(this.startDate);
+                dateFrom.setHours(0, 0, 0, 0);
+                let dateTo = new Date(this.endDate);
+                dateTo.setHours(0, 0, 0, 0);
                 axios.post('http://localhost:8088/ships/add-availability/' + id, {
-                    dateFrom: new Date(this.startDate),
-                    dateTo: new Date(this.endDate),
+                    dateFrom: dateFrom,
+                    dateTo: dateTo,
                     timeFrom: this.startTime,
                     timeTo: this.endTime
                 }, {
@@ -88,9 +99,13 @@
                 })
             },
             addAdventureAvailability(id) {
+                let dateFrom = new Date(this.startDate);
+                dateFrom.setHours(0, 0, 0, 0);
+                let dateTo = new Date(this.endDate);
+                dateTo.setHours(0, 0, 0, 0);
                 axios.post('http://localhost:8088/adventures/add-availability/' + id, {
-                    dateFrom: new Date(this.startDate),
-                    dateTo: new Date(this.endDate),
+                    dateFrom: dateFrom,
+                    dateTo: dateTo,
                     timeFrom: this.startTime,
                     timeTo: this.endTime
                 },{

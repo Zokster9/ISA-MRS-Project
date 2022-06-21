@@ -1,5 +1,5 @@
 <template>
-    <form class="w-50 mx-auto mt-5">
+    <form @submit.prevent="sendData" class="w-50 mx-auto mt-5">
         <h2> New adventure </h2>
         <div class="form-group mb-3">
             <label for="adventureName">Adventure name:</label>
@@ -120,7 +120,7 @@
             <input accept="image/*" type="file" class="form-control" @change="addPicture" multiple/>
         </div>
         <div class="form-group- mb-3">
-            <button @click="sendData" type="submit" @ :disabled="$v.form.$invalid" class="btn btn-primary float-end" >Add adventure</button>
+            <button type="submit" @ :disabled="$v.form.$invalid" class="btn btn-primary float-end" >Add adventure</button>
         </div>
     </form>
 </template>
@@ -198,7 +198,7 @@
                 }
                 ).then(response => {
                     alert('Added adventure: ' + response.data.name + '.');
-                    router.push('/profile-page-fishing-instructor');
+                    router.back();
                 }).catch(error => {
                     if (error.response.status === 400) alert("Server error.");
                     else alert("Error occurred while adding adventure!");

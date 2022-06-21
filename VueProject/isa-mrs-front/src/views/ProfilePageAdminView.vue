@@ -41,7 +41,7 @@ import router from '@/router'
         },
         data(){
             return {
-                data: "",
+                data: null,
                 password:{
                     newPassword: "",
                     confirmNewPassword: ""
@@ -61,7 +61,20 @@ import router from '@/router'
                         Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }
                 }).then(()=>{
-                    window.location.reload();
+                    axios.get("http://localhost:8088/users/getLoggedAdmin",
+                    {
+                        headers: {
+                            Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
+                        }
+                    }).then((response)=>{
+                        this.data = response.data;
+                        if (this.data.passwordChanged === false && window.sessionStorage.getItem("role") === "ROLE_admin"){
+                            this.isFirstTimeAdmin = true;
+                        }
+                        else{
+                            this.isFirstTimeAdmin = false;
+                        }
+                    })
                 })
             }
         },

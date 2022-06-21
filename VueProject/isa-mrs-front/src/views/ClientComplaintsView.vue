@@ -6,7 +6,7 @@
                 <div class="vertical-center" style="margin-top: 85px">
                     <div class="inner-block">
                         <div class="complaints">
-                            <form @submit.prevent>
+                            <form @submit.prevent="complain">
                                 <div class="form-group required">
                                     <label class="control-label">Choose a reservation: </label>
                                     <select v-model="selected" class="form-select" aria-label="Reservations">
@@ -21,7 +21,7 @@
                                     <textarea v-model="complaint" placeholder="Please enter your complaint..." class="form-control form-control-lg"></textarea>
                                 </div>
                                 <div class="form-group">
-                                    <button @click="complain" :disabled="$v.$invalid" type="submit" class="btn btn-dark btn-lg btn-block">Send complaint</button>
+                                    <button :disabled="$v.$invalid" type="submit" class="btn btn-dark btn-lg btn-block">Send complaint</button>
                                 </div>
                             </form>
                         </div>

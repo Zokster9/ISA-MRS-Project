@@ -1,6 +1,5 @@
 package com.example.projectmrsisa.repository;
 
-import com.example.projectmrsisa.model.Address;
 import com.example.projectmrsisa.model.ServiceAvailability;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

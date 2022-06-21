@@ -1,10 +1,10 @@
 package com.example.projectmrsisa.repository;
 
 import com.example.projectmrsisa.model.Report;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.*;
 
+import javax.persistence.LockModeType;
+import javax.persistence.QueryHint;
 import java.util.List;
 
 public interface ReportRepository extends JpaRepository<Report, Integer> {
@@ -13,6 +13,8 @@ public interface ReportRepository extends JpaRepository<Report, Integer> {
     public List<Report> findNegativeUnansweredReports();
 
     @Query("select r from Report r where r.id=?1")
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value ="0")})
     public Report findReportById(Integer id);
 
     @Modifying

@@ -26,7 +26,7 @@ public class RevisionDTO {
 
     public RevisionDTO(Revision revision){
         this.id = revision.getId();
-        this.revision = revision.getRevision();
+        this.revision = revision.getUserRevision();
         this.isApproved = revision.isApproved();
         this.isAnswered = revision.isAnswered();
         this.serviceRating = revision.getRating().getServiceRating();
@@ -134,10 +134,6 @@ public class RevisionDTO {
 
     public void setServicePictures(Set<String> servicePictures) {
         this.servicePictures = servicePictures;
-    }
-
-    public void setApproved(boolean approved) {
-        isApproved = approved;
     }
 
     public void setAnswered(boolean answered) {
