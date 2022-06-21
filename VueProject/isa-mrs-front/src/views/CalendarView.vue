@@ -37,7 +37,7 @@ export default {
     methods: {
         eventClickHandler(click){
             let event = click.event;
-            if (event.extendedProps.status === "Finished") {
+            if (event.extendedProps.status === "FINISHED") {
                 router.push('/write-report/' + event.id);
             }
         },

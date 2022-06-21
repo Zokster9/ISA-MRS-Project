@@ -644,7 +644,7 @@ public class ReservationController {
                 for (int i = 0; i < dates.size(); i++){
                     Date startDate = new SimpleDateFormat(dateFormat).parse(dates.get(i).substring(0, 10));
                     Date endDate = new SimpleDateFormat(dateFormat).parse(dates.get(i).substring(12));
-                    if (reservation.getFromDate().after(startDate) && reservation.getFromDate().before(endDate)){
+                    if ((reservation.getFromDate().getTime() > startDate.getTime() && reservation.getFromDate().getTime() < endDate.getTime()) || reservation.getFromDate().getTime() == startDate.getTime()){
                         int currVal = values.get(i);
                         values.set(i, currVal + 1);
                     }
