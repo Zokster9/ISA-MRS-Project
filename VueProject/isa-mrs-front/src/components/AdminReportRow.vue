@@ -33,7 +33,7 @@
         props: ["report"],
         methods: {
             acceptReport(id, clientName, clientSurname, ownerName, ownerSurname, serviceName, servicePictures, report, reservationId){
-                axios.put("http://localhost:8088/reports/updateReport", {
+                axios.put("https://isa-project-tim3.herokuapp.com/reports/updateReport", {
                     id: id,
                     clientName: clientName,
                     clientSurname: clientSurname,
@@ -57,7 +57,7 @@
                 })
             },
             declineReport(id, clientName, clientSurname, ownerName, ownerSurname, serviceName, servicePictures, report, reservationId){
-                axios.put("http://localhost:8088/reports/updateReport", {
+                axios.put("https://isa-project-tim3.herokuapp.com/reports/updateReport", {
                     id: id,
                     clientName: clientName,
                     clientSurname: clientSurname,

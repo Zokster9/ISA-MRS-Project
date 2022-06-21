@@ -155,7 +155,7 @@
                 }
             },
             sendData() {
-                axios.put("http://localhost:8088/retreats/update-retreat/" + this.$route.params.id, {
+                axios.put("https://isa-project-tim3.herokuapp.com/retreats/update-retreat/" + this.$route.params.id, {
                     name: this.form.name,
                     description: this.form.description,
                     country: this.form.country,
@@ -189,7 +189,7 @@
 
         mounted() {
             if (window.sessionStorage.getItem('role') === "ROLE_retreatOwner") {
-                axios.get("http://localhost:8088/retreats/get/" + this.$route.params.id, {
+                axios.get("https://isa-project-tim3.herokuapp.com/retreats/get/" + this.$route.params.id, {
                     headers: {
                         Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }
@@ -207,7 +207,7 @@
                     this.form.additionalServices = response.data.additionalServices;
                     this.form.pictures = response.data.pictures;
                 });
-                axios.get("http://localhost:8088/tags/retreat", {
+                axios.get("https://isa-project-tim3.herokuapp.com/tags/retreat", {
                     headers: {
                         Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }

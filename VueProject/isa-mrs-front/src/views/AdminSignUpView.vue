@@ -118,7 +118,7 @@ import router from '@/router'
         },
         methods: {
             register() {
-                axios.post("http://localhost:8088/users/registerAdmin", {
+                axios.post("https://isa-project-tim3.herokuapp.com/users/registerAdmin", {
                     email: this.form.email,
                     password: this.form.password,
                     confirmPassword: this.form.confirmPassword,

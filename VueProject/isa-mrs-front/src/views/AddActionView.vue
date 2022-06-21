@@ -115,7 +115,7 @@
                 let dateTo = new Date(this.form.endDate);
                 dateFrom.setHours(0, 0, 0, 0);
                 dateTo.setHours(0, 0, 0, 0);
-                axios.post("http://localhost:8088/" + service + "/add-action/" + this.$route.params.id,
+                axios.post("https://isa-project-tim3.herokuapp.com/" + service + "/add-action/" + this.$route.params.id,
                     {
                         dateFrom: dateFrom,
                         timeFrom: this.form.startTime,
@@ -202,7 +202,7 @@
 		mounted() {
             if (window.sessionStorage.getItem('role')) {
                 if (window.sessionStorage.getItem("role") === "ROLE_fishingInstructor"){
-                    axios.get('http://localhost:8088/adventures/get/' + this.$route.params.id, {
+                    axios.get('https://isa-project-tim3.herokuapp.com/adventures/get/' + this.$route.params.id, {
                         headers: {
                             Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                         }
@@ -211,7 +211,7 @@
                     });
                 }
                 else if (window.sessionStorage.getItem("role") === "ROLE_shipOwner"){
-                    axios.get('http://localhost:8088/ships/get/' + this.$route.params.id, {
+                    axios.get('https://isa-project-tim3.herokuapp.com/ships/get/' + this.$route.params.id, {
                         headers: {
                             Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                         }
@@ -220,7 +220,7 @@
                     });
                 }
                 else if (window.sessionStorage.getItem("role") === "ROLE_retreatOwner"){
-                    axios.get('http://localhost:8088/retreats/get/' + this.$route.params.id, {
+                    axios.get('https://isa-project-tim3.herokuapp.com/retreats/get/' + this.$route.params.id, {
                         headers: {
                             Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                         }

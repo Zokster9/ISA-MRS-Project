@@ -32,7 +32,7 @@
             StarRating,
         },
         mounted() {
-            axios.get('http://localhost:8088/revisions/user-service-ratings', {
+            axios.get('https://isa-project-tim3.herokuapp.com/revisions/user-service-ratings', {
                 headers: {
                     Authorization: 'Bearer ' + window.sessionStorage.getItem('accessToken')               
                 }

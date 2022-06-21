@@ -43,7 +43,7 @@
         props: ["reservation"],
         methods: {
             endReservation(){
-                axios.put("http://localhost:8088/reservations/changeStatus",{
+                axios.put("https://isa-project-tim3.herokuapp.com/reservations/changeStatus",{
                     id: this.reservationData.id,
                     fromDate: this.reservationData.fromDate,
                     toDate: this.reservationData.toDate,

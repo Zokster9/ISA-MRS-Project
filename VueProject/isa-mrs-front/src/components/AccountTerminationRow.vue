@@ -57,7 +57,7 @@
                 this.isDeclineButtonHidden = false;
             },
             declineTermination(){
-                axios.post("http://localhost:8088/termination/declineTermination",
+                axios.post("https://isa-project-tim3.herokuapp.com/termination/declineTermination",
                 {
                     userId: this.termination.userId,
                     terminationChoiceReason: this.declineReasoning
@@ -83,7 +83,7 @@
                 });
             },
             acceptTermination(){
-                axios.post("http://localhost:8088/termination/acceptTermination",
+                axios.post("https://isa-project-tim3.herokuapp.com/termination/acceptTermination",
                 {
                     userId: this.termination.userId,
                     terminationChoiceReason: this.acceptReasoning

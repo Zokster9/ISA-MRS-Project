@@ -54,7 +54,7 @@ import router from '@/router'
         },
         methods: {
             review() {
-                axios.post("http://localhost:8088/revisions/makeARevision", {
+                axios.post("https://isa-project-tim3.herokuapp.com/revisions/makeARevision", {
                     reservationId: parseInt(this.$route.params.id),
                     revision: this.form.revision,
                     serviceRating: this.form.serviceRating,

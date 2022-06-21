@@ -61,7 +61,7 @@
                 dateFrom.setHours(0, 0, 0, 0);
                 let dateTo = new Date(this.endDate);
                 dateTo.setHours(0, 0, 0, 0);
-                axios.post('http://localhost:8088/retreats/add-availability/' + id, {
+                axios.post('https://isa-project-tim3.herokuapp.com/retreats/add-availability/' + id, {
                     dateFrom: dateFrom,
                     dateTo: dateTo,
                     timeFrom: this.startTime,
@@ -82,7 +82,7 @@
                 dateFrom.setHours(0, 0, 0, 0);
                 let dateTo = new Date(this.endDate);
                 dateTo.setHours(0, 0, 0, 0);
-                axios.post('http://localhost:8088/ships/add-availability/' + id, {
+                axios.post('https://isa-project-tim3.herokuapp.com/ships/add-availability/' + id, {
                     dateFrom: dateFrom,
                     dateTo: dateTo,
                     timeFrom: this.startTime,
@@ -103,7 +103,7 @@
                 dateFrom.setHours(0, 0, 0, 0);
                 let dateTo = new Date(this.endDate);
                 dateTo.setHours(0, 0, 0, 0);
-                axios.post('http://localhost:8088/adventures/add-availability/' + id, {
+                axios.post('https://isa-project-tim3.herokuapp.com/adventures/add-availability/' + id, {
                     dateFrom: dateFrom,
                     dateTo: dateTo,
                     timeFrom: this.startTime,

@@ -176,7 +176,7 @@
                 }
             },
             sendData(){
-                axios.post("http://localhost:8088/adventures/create-adventure", {
+                axios.post("https://isa-project-tim3.herokuapp.com/adventures/create-adventure", {
                     name: this.form.adventureName,
                     description: this.form.description,
                     rulesOfConduct: this.form.rulesOfConduct,
@@ -244,7 +244,7 @@
         },
         mounted(){
             if (window.sessionStorage.getItem("role") === "ROLE_fishingInstructor") {
-                axios.get("http://localhost:8088/tags/adventure", {
+                axios.get("https://isa-project-tim3.herokuapp.com/tags/adventure", {
                     headers: {
                         Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }

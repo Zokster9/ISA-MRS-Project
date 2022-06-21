@@ -1,24 +1,64 @@
 version: 2.1
-
-jobs:
-  build-and-test:
-    docker:
-      - image: cimg/openjdk:8.0
-    steps:
-      - checkout
-      - run:
-          name: Build
-          command: mvn -B -DskipTests clean package
-      - run:
-          name: Test
-          command: mvn test
-
 orbs:
   heroku: circleci/heroku@1.2.6
+  sonarcloud: sonarsource/sonarcloud@1.0.3
+
+jobs:
+  build_backend:
+
+    docker:
+      - image: cimg/openjdk:11.0
+    steps:
+      - checkout
+      - run: cd SpringProject
+      - run: ls -l
+      - run:
+          name: Build
+          command: cd SpringProject && mvn -B -DskipTests=false clean package
+      - run:
+          name: Analyze
+          command: cd SpringProject && mvn sonar:sonar -Dsonar.projectKey=$PROJECT_KEY -Dsonar.organization=zokster9 -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
+  deploy_backend:
+    docker:
+      - image: cimg/openjdk:11.0
+    steps:
+       - checkout
+       - run:
+            name: Deploy backend
+            command: git subtree push --prefix SpringProject https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
+  build_frontend:
+    working_directory: ~/DeployTestISA
+    docker:
+      - image: circleci/node:10.16.3
+    steps:
+      - checkout
+      - run: cd VueProject/isa-mrs-front
+      - run: ls -l
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - run:
+          name: update-npm
+          command: "sudo npm install -g npm@5"
+      - run:
+          name: install-packages
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+          paths:
+          - ./node_modules
+  deploy_frontend:
+    docker:
+      - image: circleci/node:10.16.3
+    steps:
+       - checkout
+       - run:
+            name: Deploy VueProject
+            command: git subtree push --prefix VueProject/isa-mrs-front https://heroku:$HEROKU_API_KEY@git.heroku.com/isa-front-tim3.git master
+
 workflows:
-  heroku_deploy:
+  sample:
     jobs:
-      - build-and-test
-      - heroku/deploy-via-git:
-          requires:
-            - build-and-test
+      - build_backend
+      - deploy_backend
+      - build_frontend
+      - deploy_frontend

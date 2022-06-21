@@ -62,7 +62,7 @@
         },
         mounted () {
             if (window.sessionStorage.getItem('role') === "ROLE_admin" || window.sessionStorage.getItem("role") === "ROLE_mainAdmin") {
-                axios.get("http://localhost:8088/users/findAllUsers",{
+                axios.get("https://isa-project-tim3.herokuapp.com/users/findAllUsers",{
                     headers:{
                         Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
                     }

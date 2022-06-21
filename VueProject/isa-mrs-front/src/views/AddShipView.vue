@@ -277,7 +277,7 @@
                 }
             },
             sendData() {
-                axios.post("http://localhost:8088/ships/create-ship", {
+                axios.post("https://isa-project-tim3.herokuapp.com/ships/create-ship", {
                     name: this.form.name,
                     description: this.form.description,
                     country: this.form.country,
@@ -317,7 +317,7 @@
         },
         mounted() {
             if (window.sessionStorage.getItem("role") === "ROLE_shipOwner") {
-                axios.get("http://localhost:8088/tags/ship", {
+                axios.get("https://isa-project-tim3.herokuapp.com/tags/ship", {
                     headers: {
                         Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }

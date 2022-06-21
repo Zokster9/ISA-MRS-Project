@@ -56,7 +56,7 @@
                 }
             },
             deleteRetreat(id) {
-                axios.delete('http://localhost:8088/retreats/delete-retreat/' + id, {
+                axios.delete('https://isa-project-tim3.herokuapp.com/retreats/delete-retreat/' + id, {
                     headers: {
                         Authorization: 'Bearer ' + window.sessionStorage.getItem('accessToken')
                     }
@@ -70,7 +70,7 @@
                 })
             },
             deleteShip(id) {
-                axios.delete('http://localhost:8088/ships/delete-ship/' + id, {
+                axios.delete('https://isa-project-tim3.herokuapp.com/ships/delete-ship/' + id, {
                     headers: {
                         Authorization: 'Bearer ' + window.sessionStorage.getItem('accessToken')
                     }
@@ -84,7 +84,7 @@
                 })
             },
             deleteAdventure(id) {
-                axios.delete('http://localhost:8088/adventures/delete-adventure/' + id,
+                axios.delete('https://isa-project-tim3.herokuapp.com/adventures/delete-adventure/' + id,
                 {
                     headers: {
                         Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")

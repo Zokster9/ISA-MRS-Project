@@ -78,7 +78,7 @@
         },
         methods: {
             deleteAccount(){
-                axios.post("http://localhost:8088/users/sendTerminationReason", 
+                axios.post("https://isa-project-tim3.herokuapp.com/users/sendTerminationReason", 
 				{
 					terminationReason: this.terminationReason
 				},
@@ -95,7 +95,7 @@
                 })
             },
             changePassword(){
-                axios.post("http://localhost:8088/users/changePassword", {
+                axios.post("https://isa-project-tim3.herokuapp.com/users/changePassword", {
                     newPassword: this.passwordChange.newPassword,
                     confirmPassword: this.passwordChange.confirmNewPassword
                 }, {

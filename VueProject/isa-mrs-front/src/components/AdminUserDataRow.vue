@@ -20,7 +20,7 @@
         props: ["user"],
         methods: {
             deleteUser(id){
-                axios.delete("http://localhost:8088/users/delete/" + id,{
+                axios.delete("https://isa-project-tim3.herokuapp.com/users/delete/" + id,{
                     headers:{
                         Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
                     }

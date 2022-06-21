@@ -36,7 +36,7 @@
         props: ["revision"],
         methods: {
             acceptRevision(id, clientName, clientSurname, ownerName, ownerSurname, serviceName, servicePictures, revision, ownerRating, serviceRating){
-                axios.post("http://localhost:8088/revisions/updateRevision", {
+                axios.post("https://isa-project-tim3.herokuapp.com/revisions/updateRevision", {
                     id: id,
                     isAnswered: true,
                     clientName: clientName,
@@ -61,7 +61,7 @@
                 });
             },
             declineRevision(id, clientName, clientSurname, ownerName, ownerSurname, serviceName, servicePictures, revision, ownerRating, serviceRating){
-                axios.post("http://localhost:8088/revisions/updateRevision", {
+                axios.post("https://isa-project-tim3.herokuapp.com/revisions/updateRevision", {
                     id: id,
                     isAnswered: true,
                     clientName: clientName,

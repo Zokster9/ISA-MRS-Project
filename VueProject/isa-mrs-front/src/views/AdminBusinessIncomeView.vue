@@ -83,7 +83,7 @@
         },
         methods:{
             updatePercentage(){
-                axios.post("http://localhost:8088/discounts/updatePercentage",{
+                axios.post("https://isa-project-tim3.herokuapp.com/discounts/updatePercentage",{
                     discount: this.newPercentage,
                     fromDate: new Date(),
                     toDate: new Date('2100-01-01 00:00:00')
@@ -93,13 +93,13 @@
                     },
                 }).then(() => {
                     alert("Successfully changed percentage taken of system reservations!")
-                    axios.get("http://localhost:8088/reservations/findAllNotCancelled",{
+                    axios.get("https://isa-project-tim3.herokuapp.com/reservations/findAllNotCancelled",{
                         headers:{
                             Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
                         }
                     }).then((response) =>{
                         this.reservations = response.data;
-                        axios.post("http://localhost:8088/reservations/calculateSystemIncome", {
+                        axios.post("https://isa-project-tim3.herokuapp.com/reservations/calculateSystemIncome", {
                             reservationsDTO: this.reservations,
                         },{
                             headers:{
@@ -112,13 +112,13 @@
                 })
             },
             search(){
-                axios.get("http://localhost:8088/reservations/findInDateSpan?fromDate=" + this.fromDate + "&toDate=" + this.toDate,{
+                axios.get("https://isa-project-tim3.herokuapp.com/reservations/findInDateSpan?fromDate=" + this.fromDate + "&toDate=" + this.toDate,{
                     headers:{
                         Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
                     },
                 }).then((response) => {
                     this.reservations = response.data;
-                    axios.post("http://localhost:8088/reservations/calculateSystemIncome", {
+                    axios.post("https://isa-project-tim3.herokuapp.com/reservations/calculateSystemIncome", {
                         reservationsDTO: this.reservations,
                     },{
                         headers:{
@@ -130,13 +130,13 @@
                 })
             },
             showAll(){
-                axios.get("http://localhost:8088/reservations/findAllNotCancelled",{
+                axios.get("https://isa-project-tim3.herokuapp.com/reservations/findAllNotCancelled",{
                     headers:{
                         Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
                     }
                 }).then((response) =>{
                     this.reservations = response.data;
-                    axios.post("http://localhost:8088/reservations/calculateSystemIncome", {
+                    axios.post("https://isa-project-tim3.herokuapp.com/reservations/calculateSystemIncome", {
                         reservationsDTO: this.reservations,
                     },{
                         headers:{
@@ -162,13 +162,13 @@
         },
         mounted () {
             if (window.sessionStorage.getItem('role') === "ROLE_admin" || window.sessionStorage.getItem("role") === "ROLE_mainAdmin") {
-                axios.get("http://localhost:8088/reservations/findAllNotCancelled",{
+                axios.get("https://isa-project-tim3.herokuapp.com/reservations/findAllNotCancelled",{
                     headers:{
                         Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
                     }
                 }).then((response) =>{
                     this.reservations = response.data;
-                    axios.post("http://localhost:8088/reservations/calculateSystemIncome", {
+                    axios.post("https://isa-project-tim3.herokuapp.com/reservations/calculateSystemIncome", {
                         reservationsDTO: this.reservations,
                     },{
                         headers:{

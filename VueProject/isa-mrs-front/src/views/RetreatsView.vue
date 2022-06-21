@@ -70,7 +70,7 @@
                 this.sortBy = sortBy;
             },
             search(form) {
-                axios.get("http://localhost:8088/services/search", {
+                axios.get("https://isa-project-tim3.herokuapp.com/services/search", {
                     params: {
                         name: form.name,
                         address: form.address,
@@ -100,7 +100,7 @@
             },
         },
         mounted () {
-            axios.get("http://localhost:8088/retreats/getAll")
+            axios.get("https://isa-project-tim3.herokuapp.com/retreats/getAll")
             .then(response => {
                 this.searchResults = response.data;
                 this.updateVisibleUsers();

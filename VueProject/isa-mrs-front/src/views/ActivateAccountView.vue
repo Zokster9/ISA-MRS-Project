@@ -22,7 +22,7 @@
             NavbarGuest,
         },
         mounted() {
-            axios.post("http://localhost:8088/users/activate-client/" + this.$route.params.id)
+            axios.post("https://isa-project-tim3.herokuapp.com/users/activate-client/" + this.$route.params.id)
             .then(() => {
                 console.log("Uspesna aktivacija");
             })

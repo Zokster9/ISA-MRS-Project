@@ -70,7 +70,7 @@
                 this.sortBy = sortBy;
             },
             search(form) {
-                axios.get("http://localhost:8088/users/searchInstructors", {
+                axios.get("https://isa-project-tim3.herokuapp.com/users/searchInstructors", {
                     params: {
                         name: form.name,
                         surname: form.surname,
@@ -100,7 +100,7 @@
             },
         },
         mounted () {
-            axios.get("http://localhost:8088/users/getAllInstructors")
+            axios.get("https://isa-project-tim3.herokuapp.com/users/getAllInstructors")
             .then(response => {
                 this.searchResults = response.data;
                 this.updateVisibleUsers();

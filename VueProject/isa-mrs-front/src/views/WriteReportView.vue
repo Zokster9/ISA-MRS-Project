@@ -80,7 +80,7 @@
         },
         methods: {
             penalizeClient(){
-                axios.post("http://localhost:8088/reports/penalizeClient",{
+                axios.post("https://isa-project-tim3.herokuapp.com/reports/penalizeClient",{
                     reservationId: this.$route.params.id,
                     comment: "Client didn't show up."
                 },
@@ -94,7 +94,7 @@
                 })
             },
             sendReport(){
-                axios.post("http://localhost:8088/reports/sendReport", {
+                axios.post("https://isa-project-tim3.herokuapp.com/reports/sendReport", {
                     reservationId: this.$route.params.id,
                     comment: this.form.comment
                 },
@@ -108,7 +108,7 @@
                 })
             },
             askForPenal(){
-                axios.post("http://localhost:8088/reports/askForPenal", {
+                axios.post("https://isa-project-tim3.herokuapp.com/reports/askForPenal", {
                     reservationId: this.$route.params.id,
                     comment: this.form.comment
                 },

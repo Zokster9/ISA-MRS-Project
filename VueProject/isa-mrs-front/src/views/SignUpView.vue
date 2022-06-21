@@ -149,7 +149,7 @@
         methods: {
             register() {
                 if (this.isClient) this.form.privilegedUserType = "client"
-                axios.post("http://localhost:8088/users/register", {
+                axios.post("https://isa-project-tim3.herokuapp.com/users/register", {
                     email: this.form.email,
                     password: this.form.password,
                     confirmPassword: this.form.confirmPassword,

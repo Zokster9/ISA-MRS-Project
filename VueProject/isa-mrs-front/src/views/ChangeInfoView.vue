@@ -100,7 +100,7 @@
         },
         methods: {
             changeInfo() {
-                axios.post("http://localhost:8088/users/changeInfo", {
+                axios.post("https://isa-project-tim3.herokuapp.com/users/changeInfo", {
                     email: this.form.email,
                     name: this.form.name,
                     surname: this.form.surname,
@@ -177,7 +177,7 @@
         },
 		mounted() {
             if (window.sessionStorage.getItem("role")) {
-                axios.get("http://localhost:8088/users/getLoggedUser", {
+                axios.get("https://isa-project-tim3.herokuapp.com/users/getLoggedUser", {
                     headers: {
                         Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }

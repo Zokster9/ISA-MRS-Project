@@ -57,7 +57,7 @@ export default {
         }
     },
     mounted(){
-        axios.get("http://localhost:8088/reservations/yearlyReport", {
+        axios.get("https://isa-project-tim3.herokuapp.com/reservations/yearlyReport", {
             headers: {
                 Authorization: 'Bearer ' + window.sessionStorage.getItem('accessToken')               
             }
@@ -105,7 +105,7 @@ export default {
             });
             yearlyChart;
         }),
-        axios.get("http://localhost:8088/reservations/monthlyReport",{
+        axios.get("https://isa-project-tim3.herokuapp.com/reservations/monthlyReport",{
             headers:{
                 Authorization: 'Bearer ' + window.sessionStorage.getItem('accessToken')
             }
@@ -153,7 +153,7 @@ export default {
             });
             monthlyChart;
         }),
-        axios.get("http://localhost:8088/reservations/weeklyReport",{
+        axios.get("https://isa-project-tim3.herokuapp.com/reservations/weeklyReport",{
             headers:{
                 Authorization: 'Bearer ' + window.sessionStorage.getItem('accessToken')
             }

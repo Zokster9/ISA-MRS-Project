@@ -42,7 +42,7 @@ import router from '@/router'
         },
         methods: {
             cancelReservation(reservationId) {
-                axios.put("http://localhost:8088/reservations/cancelReservation/" + reservationId, {},
+                axios.put("https://isa-project-tim3.herokuapp.com/reservations/cancelReservation/" + reservationId, {},
                 {
                     headers: {
                         Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
@@ -57,7 +57,7 @@ import router from '@/router'
                 })
             },
             getPendingReservations() {
-                axios.get("http://localhost:8088/reservations/getPendingReservations", {
+                axios.get("https://isa-project-tim3.herokuapp.com/reservations/getPendingReservations", {
                     headers: {
                         Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }

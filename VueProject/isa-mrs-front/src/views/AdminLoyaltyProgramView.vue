@@ -109,7 +109,7 @@
         },
         methods: {
             createNewLoyaltyProgram(){
-                axios.post("http://localhost:8088/loyaltyPrograms/add",
+                axios.post("https://isa-project-tim3.herokuapp.com/loyaltyPrograms/add",
                 {
                     clientPointsPerReservation: this.form.clientPointsPerReservation,
                     privilegedUserPointsPerReservation: this.form.privilegedUserPointsPerReservation,

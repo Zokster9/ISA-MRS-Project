@@ -33,7 +33,7 @@
         },
         methods: {
             declineUser(){
-                axios.post("http://localhost:8088/users/decline",
+                axios.post("https://isa-project-tim3.herokuapp.com/users/decline",
                 {
                     userId: this.user.id,
                     declineReasoning: this.declineReasoning
@@ -51,7 +51,7 @@
                 })
             },
             acceptUser(){
-                axios.post("http://localhost:8088/users/accept",
+                axios.post("https://isa-project-tim3.herokuapp.com/users/accept",
                 {
                     userId: this.user.id
                 },

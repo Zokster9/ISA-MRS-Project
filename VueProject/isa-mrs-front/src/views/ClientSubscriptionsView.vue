@@ -32,7 +32,7 @@ import router from '@/router'
         },
         mounted() {
             if (window.sessionStorage.getItem("role") === "ROLE_client") {
-                axios.get("http://localhost:8088/services/allSubscriptions", {
+                axios.get("https://isa-project-tim3.herokuapp.com/services/allSubscriptions", {
                     headers: {
                         Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }

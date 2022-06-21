@@ -94,7 +94,7 @@
             search(reservationForm, additionalServices) {
                 this.type = reservationForm.serviceType;
                 this.reservationForm = reservationForm;
-                axios.get("http://localhost:8088/reservations/" + this.type + "/getAvailableReservations", {
+                axios.get("https://isa-project-tim3.herokuapp.com/reservations/" + this.type + "/getAvailableReservations", {
                     headers: {
                         Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     },
@@ -133,7 +133,7 @@
                 toDate = new Date(toDate)
                 toDate.setHours(0, 0, 0, 0)
                 date.setHours(0, 0, 0, 0)
-                axios.post("http://localhost:8088/reservations/makeAReservation", {
+                axios.post("https://isa-project-tim3.herokuapp.com/reservations/makeAReservation", {
                     fromDate: date,
                     toDate: toDate,
                     fromTime: this.reservationForm.startTime,
@@ -163,7 +163,7 @@
             if (window.sessionStorage.getItem("role") != "ROLE_client") {
                 router.push("/");
             }
-            axios.get("http://localhost:8088/clients/getLoggedClient", {
+            axios.get("https://isa-project-tim3.herokuapp.com/clients/getLoggedClient", {
                     headers:{
                         Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }
@@ -174,7 +174,7 @@
                         router.push("/penalty-points");
                     }
                 })
-            axios.get("http://localhost:8088/tags/retreat", {
+            axios.get("https://isa-project-tim3.herokuapp.com/tags/retreat", {
                     headers:{
                         Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }
@@ -182,7 +182,7 @@
             .then((response) => {
                 this.retreatTags = response.data
             })
-            axios.get("http://localhost:8088/tags/ship", {
+            axios.get("https://isa-project-tim3.herokuapp.com/tags/ship", {
                     headers:{
                         Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }
@@ -190,7 +190,7 @@
             .then((response) => {
                 this.shipTags = response.data
             })
-            axios.get("http://localhost:8088/tags/adventure", {
+            axios.get("https://isa-project-tim3.herokuapp.com/tags/adventure", {
                     headers:{
                         Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }

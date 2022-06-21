@@ -289,7 +289,7 @@
                 }
             },
             sendData() {
-                axios.put("http://localhost:8088/ships/update-ship/" + this.$route.params.id, {
+                axios.put("https://isa-project-tim3.herokuapp.com/ships/update-ship/" + this.$route.params.id, {
                     name: this.form.name,
                     description: this.form.description,
                     country: this.form.country,
@@ -330,7 +330,7 @@
 
         mounted() {
             if (window.sessionStorage.getItem("role") === "ROLE_shipOwner") {
-                axios.get("http://localhost:8088/ships/get/" + this.$route.params.id, {
+                axios.get("https://isa-project-tim3.herokuapp.com/ships/get/" + this.$route.params.id, {
                     headers: {
                         Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }
@@ -356,7 +356,7 @@
                     this.form.navigationEquipment = response.data.navigationEquipment;
                     this.form.additionalServices = response.data.additionalServices;
                 });
-                axios.get("http://localhost:8088/tags/ship", {
+                axios.get("https://isa-project-tim3.herokuapp.com/tags/ship", {
                     headers: {
                         Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }

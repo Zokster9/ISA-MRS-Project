@@ -146,7 +146,7 @@
                 }
             },
             sendData() {
-                axios.post("http://localhost:8088/retreats/create-retreat", {
+                axios.post("https://isa-project-tim3.herokuapp.com/retreats/create-retreat", {
                     name: this.form.name,
                     description: this.form.description,
                     country: this.form.country,
@@ -181,7 +181,7 @@
 
         mounted() {
             if (window.sessionStorage.getItem("role") === "ROLE_retreatOwner") {
-                axios.get("http://localhost:8088/tags/retreat", {
+                axios.get("https://isa-project-tim3.herokuapp.com/tags/retreat", {
                     headers: {
                         Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }

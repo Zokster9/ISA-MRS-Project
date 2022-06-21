@@ -129,7 +129,7 @@
                 if (this.isFormValid) {
                     let endDate = new Date(this.form.date);
                     endDate.setDate(endDate.getDate() + parseInt(this.form.numberOfDays));
-                    axios.post('http://localhost:8088/reservations/make-for-client/' + this.$route.params.id, {
+                    axios.post('https://isa-project-tim3.herokuapp.com/reservations/make-for-client/' + this.$route.params.id, {
                         fromDate: this.form.date,
                         toDate: endDate,
                         fromTime: this.form.startTime,
@@ -171,7 +171,7 @@
             else {
                 router.push("/");
             }
-            axios.get('http://localhost:8088/' + path + '/get/' + this.$route.params.id, {
+            axios.get('https://isa-project-tim3.herokuapp.com/' + path + '/get/' + this.$route.params.id, {
                 headers: {
                     Authorization: 'Bearer ' + window.sessionStorage.getItem('accessToken')
                 }

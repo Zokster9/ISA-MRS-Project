@@ -64,13 +64,13 @@
         },
         methods:{
             search(){
-                axios.get("http://localhost:8088/reservations/findInDateSpanPrivilegedUser?fromDate=" + this.fromDate + "&toDate=" + this.toDate,{
+                axios.get("https://isa-project-tim3.herokuapp.com/reservations/findInDateSpanPrivilegedUser?fromDate=" + this.fromDate + "&toDate=" + this.toDate,{
                     headers:{
                         Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
                     },
                 }).then((response) => {
                     this.reservations = response.data;
-                    axios.post("http://localhost:8088/reservations/calculateMyIncome", {
+                    axios.post("https://isa-project-tim3.herokuapp.com/reservations/calculateMyIncome", {
                         reservationsDTO: this.reservations,
                     },{
                         headers:{
@@ -82,13 +82,13 @@
                 })
             },
             showAll(){
-                axios.get("http://localhost:8088/reservations/findUsersNonCancelledReservations",{
+                axios.get("https://isa-project-tim3.herokuapp.com/reservations/findUsersNonCancelledReservations",{
                     headers:{
                         Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
                     }
                 }).then((response) =>{
                     this.reservations = response.data;
-                    axios.post("http://localhost:8088/reservations/calculateMyIncome", {
+                    axios.post("https://isa-project-tim3.herokuapp.com/reservations/calculateMyIncome", {
                         reservationsDTO: this.reservations,
                     },{
                         headers:{
@@ -113,13 +113,13 @@
             }
         },
         mounted () {
-            axios.get("http://localhost:8088/reservations/findUsersNonCancelledReservations",{
+            axios.get("https://isa-project-tim3.herokuapp.com/reservations/findUsersNonCancelledReservations",{
                 headers:{
                     Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
                 }
             }).then((response) =>{
                 this.reservations = response.data;
-                axios.post("http://localhost:8088/reservations/calculateMyIncome", {
+                axios.post("https://isa-project-tim3.herokuapp.com/reservations/calculateMyIncome", {
                     reservationsDTO: this.reservations,
                 },{
                     headers:{

@@ -51,7 +51,7 @@ import router from '@/router'
         },
         mounted(){
             if (window.sessionStorage.getItem('role') === "ROLE_admin" || window.sessionStorage.getItem("role") === "ROLE_mainAdmin") {
-                axios.get("http://localhost:8088/users/inactive",{
+                axios.get("https://isa-project-tim3.herokuapp.com/users/inactive",{
                     headers:{
                         Authorization: "Bearer " + window.sessionStorage.getItem("accessToken")
                     }
