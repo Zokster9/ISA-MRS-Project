@@ -4,7 +4,8 @@
         <td class="align-middle text-center"> {{ report.ownerName }} {{report.ownerSurname}}</td>
         <td class="align-middle text-center">
             <figcaption class="mb-1"> {{report.serviceName}} </figcaption> 
-            <img :src="require('@/assets/' + report.servicePictures[0])" style="width:200px; height:200px" class="mb-1"> 
+            <img v-if="report.servicePictures.length != 0" :src="require('@/assets/' + report.servicePictures[0])" style="width:200px; height:200px" class="mb-1">
+            <img v-else src="@/assets/no-image.png" alt="Nema slike" style="width:200px; height:200px" class="mb-1"> 
         </td>
         <td class="align-middle text-center w-25">  {{report.report}} </td>
         <td class="align-middle text-center">

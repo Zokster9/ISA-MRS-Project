@@ -4,7 +4,8 @@
         <td class="align-middle text-center"> {{ complaint.privilegedUserName }} {{complaint.privilegedUserSurname}}</td>
         <td class="align-middle text-center">
             <figcaption class="mb-1"> {{complaint.serviceName}} </figcaption> 
-            <img :src="require('@/assets/' + complaint.servicePictures[0])" style="width:200px; height:200px" class="mb-1"> 
+            <img v-if="complaint.servicePictures.length != 0" :src="require('@/assets/' + complaint.servicePictures[0])" style="width:200px; height:200px" class="mb-1"> 
+            <img v-else src="@/assets/no-image.png" alt="Nema slike" style="width:200px; height:200px" class="mb-1">
         </td>
         <td class="align-middle text-center w-25">  {{complaint.complaint}} </td>
         <td class="align-middle text-center">  

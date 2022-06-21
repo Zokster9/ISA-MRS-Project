@@ -2,7 +2,8 @@
     <tr :key="service.id" :class="{activeDeleteButton: hoverDeleteButton, activeViewButton: hoverViewButton}">
         <td class="align-middle text-center">
             <figcaption class="mb-1"> {{service.name}} </figcaption> 
-            <img :src="require('@/assets/' + service.pictures[0])" style="width:200px; height:200px" class="mb-1">
+            <img v-if="service.pictures.length != 0" :src="require('@/assets/' + service.pictures[0])" style="width:200px; height:200px" class="mb-1">
+            <img v-else src="@/assets/no-image.png" alt="Nema slike" style="width:200px; height:200px" class="mb-1">
             <figcaption class="mb-1"> <button type="button" class="btn btn-primary" style="width:130px" @mouseover="hoverViewButton = true"
             @mouseleave="hoverViewButton = false" @click="redirect(service.id)"> View service </button> </figcaption>
             <figcaption class="mb-1"> <button type="button" class="btn btn-danger" style="width:130px"  @mouseover="hoverDeleteButton = true" 

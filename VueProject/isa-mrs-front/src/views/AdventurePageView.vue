@@ -7,13 +7,16 @@
         <div v-if="adventure" style="margin: 100px">
             <div class="d-flex flex-row" style="margin: 50px">
                 <div class="d-flex flex-column" style="width: 50%">
-                    <div class="slideshow-container">
+                    <div v-if="this.adventure.pictures.length != 0" class="slideshow-container">
                         <div class="mySlides" style="display: block;">
                             <div class="numbertext">{{this.currentPicture + 1}} / {{adventure.pictures.length}}</div>
                             <img :src="require(`../assets/${this.adventure.pictures[this.currentPicture]}`)" style="width:100%; height:400px; border-radius:25px;">
                         </div>
                         <a class="prev" @click="changePicture(-1)">&#10094;</a>
                         <a class="next" @click="changePicture(1)">&#10095;</a>
+                    </div>
+                    <div v-else>
+                        <img src="@/assets/no-image.png" style="width:100%; height:400px; border-radius:25px;">
                     </div>
                     <div class="d-flex flex-column" style="border-radius: 25px; margin: 5px; border: 1px solid #323539">
                         <div>

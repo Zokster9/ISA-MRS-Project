@@ -2,8 +2,11 @@
     <tr :key="service.id" :class="{activeDeleteButton: hoverDeleteButton, activeEditButton: hoverEditButton, activeAcceptButton: hoverNewActionButton}">
         <td class="align-middle text-center">
             <figcaption class="mb-1"> {{service.name}} </figcaption>
-            <router-link exact :to="linkToService">
-                <img :src="require('@/assets/' + service.pictures[0])" style="width:200px; height:200px;" class="rounded">
+            <router-link v-if="service.pictures.length != 0" exact :to="linkToService">
+                <img :src="require('@/assets/' + service.pictures[0])" alt="No image" style="width:200px; height:200px;" class="rounded">
+            </router-link>
+            <router-link v-else exact :to="linkToService">
+                <img src="@/assets/no-image.png" alt="No image" style="width:200px; height:200px;" class="rounded">
             </router-link>
         </td>
         <td class="align-middle text-center"> <button type="button" @mouseover="hoverEditButton = true" @mouseleave="hoverEditButton = false" class="btn btn-warning" @click="editService(service.id)">Edit service info</button></td>

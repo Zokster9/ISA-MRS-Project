@@ -3,8 +3,11 @@
     <tr :key="service.id">
         <td class="align-middle text-center">
              <figcaption class="mb-1"> {{service.name}} </figcaption>
-            <router-link exact :to="linkToService">
+            <router-link v-if="service.pictures.length != 0" exact :to="linkToService">
                 <img :src="require('@/assets/' + service.pictures[0])" style="width:200px; height:200px" class="rounded">
+            </router-link>
+            <router-link v-else exact :to="linkToService">
+                <img src="@/assets/no-image.png" style="width:200px; height:200px" class="rounded">
             </router-link>
         </td>
         <td class="align-middle"> 

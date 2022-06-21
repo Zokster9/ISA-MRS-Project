@@ -3,7 +3,8 @@
         <td class="align-middle text-center">
             <figcaption class="mb-1"> {{reservation.serviceName}} </figcaption>
             <router-link exact :to="linkToService">
-                <img :src="require('@/assets/' + reservation.servicePictures[0])" style="width:200px; height:200px;" class="rounded">
+                <img v-if="reservation.servicePictures.length != 0" :src="require('@/assets/' + reservation.servicePictures[0])" style="width:200px; height:200px;" class="rounded">
+                <img v-else src="@/assets/no-image.png" style="width:200px; height:200px;" class="rounded" alt="Nema slike">
             </router-link>
         </td>
         <td class="align-middle text-center">
