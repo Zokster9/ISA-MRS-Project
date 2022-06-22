@@ -22,22 +22,22 @@
             <input v-model="form.street" type="text" class="form-control" placeholder="This field is required!"/>
         </div>
         <div class="form-group mb-3">
-           <label for="rulesOfConduct">Rules of conduct: </label>
+           <label style="font-weight: bold;" for="rulesOfConduct">Rules of conduct: </label>
            <div class="form-group mb-3">
                 <input type="checkbox" v-model="form.rulesOfConduct" value="Mobile phone must be turned off">
-                <label>Mobile phone must be turned off</label>
+                <label style="margin: 5px">Mobile phone must be turned off</label>
            </div>
            <div class="form-group mb-3">
                 <input type="checkbox" v-model="form.rulesOfConduct" value="Must be properly dressed">
-                <label>Must be properly dressed</label>
+                <label style="margin: 5px">Must be properly dressed</label>
            </div>
            <div class="form-group mb-3">
                 <input type="checkbox" v-model="form.rulesOfConduct" value="Bring your own fishing equipment">
-                <label>Bring your own fishing equipment</label>
+                <label style="margin: 5px">Bring your own fishing equipment</label>
            </div>
            <div class="form-group mb-3">
                 <input type="checkbox" v-model="form.rulesOfConduct" value="Can't be noisy">
-                <label>Can't be noisy</label>
+                <label style="margin: 5px">Can't be noisy</label>
            </div>
         </div>
         <div class="form-group mb-3">
@@ -51,60 +51,60 @@
             <small id="maxHelp" class="form-text text-muted"> Maximum number of people should at least be 1.</small>
         </div>
         <div class="form-group mb-3">
-            <label>Additional services:</label>
+            <label style="font-weight: bold;">Additional services:</label>
             <br>
             <template v-for="tag in tags">
                 <div class="form-group mb-3" :key="tag.id">
                     <input type="checkbox" v-model="form.additionalServices" :value="tag.name" :key="tag.id"/>
-                    <label :for="tag.key">{{tag.name}}</label>
+                    <label style="margin: 5px" :for="tag.key">{{tag.name}}</label>
                 </div>
             </template>
         </div>
         <div class="form-group mb-3">
-            <label for="fishingEquipment">Fishing equipment: </label>
+            <label style="font-weight: bold;" for="fishingEquipment">Fishing equipment: </label>
             <div class="form-group mb-3">
                 <input type="checkbox" v-model="form.fishingEquipment" value="hooks">
-                <label>Hooks</label>
+                <label style="margin: 5px">Hooks</label>
            </div>
            <div class="form-group mb-3">
                 <input type="checkbox" v-model="form.fishingEquipment" value="lines">
-                <label>Lines</label>
+                <label style="margin: 5px">Lines</label>
            </div>
            <div class="form-group mb-3">
                 <input type="checkbox" v-model="form.fishingEquipment" value="floats">
-                <label>Floats</label>
+                <label style="margin: 5px">Floats</label>
            </div>
            <div class="form-group mb-3">
                 <input type="checkbox" v-model="form.fishingEquipment" value="rods">
-                <label>Rods</label>
+                <label style="margin: 5px">Rods</label>
            </div>
            <div class="form-group mb-3">
                 <input type="checkbox" v-model="form.fishingEquipment" value="reels">
-                <label>Reels</label>
+                <label style="margin: 5px">Reels</label>
            </div>
            <div class="form-group mb-3">
                 <input type="checkbox" v-model="form.fishingEquipment" value="baits">
-                <label>Baits</label>
+                <label style="margin: 5px">Baits</label>
            </div>
            <div class="form-group mb-3">
                 <input type="checkbox" v-model="form.fishingEquipment" value="lures">
-                <label>Lures</label>
+                <label style="margin: 5px">Lures</label>
            </div>
            <div class="form-group mb-3">
                 <input type="checkbox" v-model="form.fishingEquipment" value="spears">
-                <label>Spears</label>
+                <label style="margin: 5px">Spears</label>
            </div>
            <div class="form-group mb-3">
                 <input type="checkbox" v-model="form.fishingEquipment" value="nets">
-                <label>Nets</label>
+                <label style="margin: 5px">Nets</label>
            </div>
            <div class="form-group mb-3">
                 <input type="checkbox" v-model="form.fishingEquipment" value="gaffs">
-                <label>Gaffs</label>
+                <label style="margin: 5px">Gaffs</label>
            </div>
            <div class="form-group mb-3">
                 <input type="checkbox" v-model="form.fishingEquipment" value="traps">
-                <label>Traps</label>
+                <label style="margin: 5px">Traps</label>
            </div>
         </div>
         <div class="form-group mb-3">
@@ -160,10 +160,10 @@
         },
         computed: {
             countryIsValid() {
-                return RegExp(/([A-Z]{1})([a-z]+)([^0-9]*)$/).test(this.form.country) && !!this.form.country;
+                return RegExp(/^[a-zA-Z.-]+(?:[\s-][/a-zA-Z.]+)*$/).test(this.form.country) && !!this.form.country;
             },
             cityIsValid() {
-                return RegExp(/([A-Z]{1})([a-z]+)([^0-9]*)$/).test(this.form.city) && !!this.form.city;
+                return RegExp(/^[a-zA-Z.-]+(?:[\s-][/a-zA-Z.]+)*$/).test(this.form.city) && !!this.form.city;
             }
         },
         methods: {

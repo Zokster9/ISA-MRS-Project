@@ -44,7 +44,7 @@
                 searchResults: null,
                 visibleSearchResults: null,
                 currentPage: 0,
-                pageSize: 5,
+                pageSize: 3,
                 sortBy: "name",
             }
         },
@@ -54,9 +54,11 @@
             },
             orderedVisibleResults() {
                 if (this.sortBy == "name") {
-                    return _orderBy(this.visibleSearchResults, this.sortBy)
+                    this.updateOrderedVisibleUsers();
+                    return this.visibleSearchResults;
                 }
-                return _orderBy(this.visibleSearchResults, this.sortBy, 'desc') 
+                this.updateOrderedVisibleUsers();
+                return this.visibleSearchResults;
             },
             orderedResults() {
                 if (this.sortBy == "name") {
@@ -87,6 +89,12 @@
                 .catch(() => {
                     alert("Something went wrong!");
                 })
+            },
+            updateOrderedVisibleUsers(){
+                this.visibleSearchResults = this.orderedResults.slice(this.currentPage * this.pageSize, (this.currentPage * this.pageSize) + this.pageSize);
+                if (this.visibleSearchResults.length == 0 && this.currentPage > 0){
+                    this.updatePage(this.currentPage - 1);
+                }
             },
             updateVisibleUsers(){
                 this.visibleSearchResults = this.searchResults.slice(this.currentPage * this.pageSize, (this.currentPage * this.pageSize) + this.pageSize);

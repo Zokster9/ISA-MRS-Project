@@ -87,7 +87,10 @@
         },
         computed: {
             orderedResults() {
-                return _orderBy(this.availableReservations, this.sortBy)
+                if (this.sortBy === 'price') {
+                    return _orderBy(this.availableReservations, this.sortBy)
+                }
+                return _orderBy(this.availableReservations, this.sortBy, 'desc') 
             },
         },
         methods: {
@@ -131,10 +134,11 @@
                 let date = new Date(this.reservationForm.date)
                 let toDate = date.setDate(date.getDate() + parseInt(this.reservationForm.numberOfDays) - 1)
                 toDate = new Date(toDate)
+                let fromDate = new Date(this.reservationForm.date)
                 toDate.setHours(0, 0, 0, 0)
-                date.setHours(0, 0, 0, 0)
+                fromDate.setHours(0, 0, 0, 0)
                 axios.post("https://isa-project-tim3.herokuapp.com/reservations/makeAReservation", {
-                    fromDate: date,
+                    fromDate: fromDate,
                     toDate: toDate,
                     fromTime: this.reservationForm.startTime,
                     toTime: this.reservationForm.endTime,
@@ -154,8 +158,9 @@
                     this.modal = false
                     this.availableReservations = this.availableReservations.filter(service => service.id != this.selectedService.id);
                 })
-                .catch(() => {
-                    alert("Something went wrong!")
+                .catch((error) => {
+                    if (error.response.status === 409) alert("Service is already reserved in that particular time period.");
+                    else alert("Something went wrong!")
                 })
             }
         },

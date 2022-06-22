@@ -1,7 +1,7 @@
 <template>
-    <div class="shadow-lg rounded" style="flex-shrink:0">
+    <div class="sidebar shadow-lg rounded" style="flex-shrink:0">
         <div style="width:300px;height:100%;">
-            <form @submit.prevent="search" style="padding:10px;padding-top:100px">
+            <form autocomplete="off" @submit.prevent="search" style="padding:10px;padding-top:100px">
                 <div class="form-group required">
                     <label class="control-label">Choose a service type: </label>
                     <select v-model="reservationForm.serviceType" class="form-select" aria-label="Service types">
@@ -227,3 +227,9 @@
         }
     }
 </script>
+
+<style scoped>
+    .sidebar {
+        position: fixed;
+    }
+</style>

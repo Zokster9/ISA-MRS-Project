@@ -60,8 +60,8 @@ public class ComplaintController {
         try{
             complaintService.updateComplaintStatus(complaintDTO.getId());
             complaintService.updateComplaintResponse(complaintDTO.getResponse(), complaintDTO.getId());
-            emailService.sendComplaintEmailClient(complaint.getUserComplaint(), complaint.getReservation().getClient());
-            emailService.sendComplaintEmailPrivilegedUser(complaint.getUserComplaint(), complaint.getReservation().getService().getOwner());
+            emailService.sendComplaintEmailClient(complaintDTO.getResponse(), complaint.getReservation().getClient());
+            emailService.sendComplaintEmailPrivilegedUser(complaintDTO.getResponse(), complaint.getReservation().getService().getOwner());
         } catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

@@ -77,7 +77,6 @@
 					}
                 }).catch(() => {
                     alert("Incorrect login details")
-                    console.log("Ne ide brt")
                 });
             }
         },

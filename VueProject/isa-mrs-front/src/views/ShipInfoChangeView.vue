@@ -244,10 +244,10 @@
                 return !!this.form.description;
             },
             countryIsValid() {
-                return RegExp(/([A-Z]{1})([a-z]+)([^0-9]*)$/).test(this.form.country) && !!this.form.country;
+                return RegExp(/^[a-zA-Z.-]+(?:[\s-][/a-zA-Z.]+)*$/).test(this.form.country) && !!this.form.country;
             },
             cityIsValid() {
-                return RegExp(/([A-Z]{1})([a-z]+)([^0-9]*)$/).test(this.form.city) && !!this.form.city;
+                return RegExp(/^[a-zA-Z.-]+(?:[\s-][/a-zA-Z.]+)*$/).test(this.form.city) && !!this.form.city;
             },
             addressIsValid() {
                 return !!this.form.address;

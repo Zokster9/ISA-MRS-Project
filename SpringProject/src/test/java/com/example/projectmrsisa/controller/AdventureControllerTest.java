@@ -48,8 +48,8 @@ public class AdventureControllerTest {
         mockMvc.perform(get(URL_PREFIX + "/get/" + 3)).andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.id").value(3))
-                .andExpect(jsonPath("$.name").value("Instrukcije pecanja"))
-                .andExpect(jsonPath("$.description").value("Naucite da pecate. Strpljiv i veoma prijatan instruktor"))
+                .andExpect(jsonPath("$.name").value("Fishing with experts"))
+                .andExpect(jsonPath("$.description").value("Learn to fish with one of the most famous instructors."))
                 .andExpect(jsonPath("$.price").value(30));
     }
 
@@ -59,17 +59,18 @@ public class AdventureControllerTest {
         mockMvc.perform(get(URL_PREFIX + "/getAll")).andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))//.andExpect(jsonPath("$", hasSize(1))) Trenutno ima 1 avantura, kasnije ce mozda biti vise
                 .andExpect(jsonPath("$.[*].id").value(hasItem(3)))
-                .andExpect(jsonPath("$.[*].name").value("Instrukcije pecanja"))
-                .andExpect(jsonPath("$.[*].description").value("Naucite da pecate. Strpljiv i veoma prijatan instruktor"))
-                .andExpect(jsonPath("$.[*].price").value(30.0));
+                .andExpect(jsonPath("$.[*].name").value(hasItem("Fishing with experts")))
+                .andExpect(jsonPath("$.[*].description").value(hasItem("Learn to fish with one of the most famous instructors.")))
+                .andExpect(jsonPath("$.[*].price").value(hasItem(30.0)));
     }
 
     @Test
     @Transactional
     @Rollback(true) // vrv je defaultno
     @WithMockUser(roles="fishingInstructor")
+    //Ima rezervacija, pa je zabranjeno brisanje
     public void testDeleteAdventure() throws Exception {
-        mockMvc.perform(delete(URL_PREFIX + "/delete-adventure/" + 3)).andExpect(status().isOk());
+        mockMvc.perform(delete(URL_PREFIX + "/delete-adventure/" + 3)).andExpect(status().isConflict());
     }
 
 }

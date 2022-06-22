@@ -36,9 +36,7 @@
     import axios from 'axios'
     import VueAxios from 'vue-axios'
     import router from '@/router'
-
     Vue.use(VueAxios, axios)
-
     export default {
         props: ["reservation"],
         methods: {
@@ -70,7 +68,8 @@
                         Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }
                 }).then(() => {
-                    this.$emit('endReservation');
+                    alert("Successfully ended the reservation!");
+                    window.location.reload();
                 })
             },
             getDate(date) {

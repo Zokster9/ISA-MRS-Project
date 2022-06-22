@@ -3,7 +3,7 @@ insert into tags (name, description) values ('Garage', 'retreat');
 insert into tags (name, description) values ('Heating', 'retreat');
 insert into tags (name, description) values ('Kitchen', 'retreat');
 insert into tags (name, description) values ('Shower', 'retreat');
-insert into tags (name, description) values ('Barbeque', 'retreat');
+insert into tags (name, description) values ('Barbecue', 'retreat');
 insert into tags (name, description) values ('Drinking water', 'retreat');
 insert into tags (name, description) values ('Bathroom', 'retreat');
 insert into tags (name, description) values ('WiFi', 'ship');
@@ -367,19 +367,19 @@ insert into complaints (complaint, response, is_answered, reservation_id) values
 insert into complaints (complaint, response, is_answered, reservation_id) values ('Stinky bathroom', '', False, 6);
 insert into complaints (complaint, response, is_answered, reservation_id) values ('No fish?', '', False, 3);
 
-insert into revisions (revision, is_approved, is_answered, rating_id, reservation_id) values ('It was fine, liked it a lot.', False, False, 1, 3);
+insert into revisions (revision, is_approved, is_answered, rating_id, reservation_id) values ('It was fine, liked it a lot.', True, True, 1, 3);
 insert into revisions (revision, is_approved, is_answered, rating_id, reservation_id) values ('It stinks, it was really bad.', False, False, 2, 6);
-insert into revisions (revision, is_approved, is_answered, rating_id, reservation_id) values ('We almost fell out of the boat. Fix it!', False, False, 3, 9);
+insert into revisions (revision, is_approved, is_answered, rating_id, reservation_id) values ('We almost fell out of the boat. Fix it!', True, False, 3, 9);
 insert into revisions (revision, is_approved, is_answered, rating_id, reservation_id) values ('Was dope.', False, False, 4, 12);
-insert into revisions (revision, is_approved, is_answered, rating_id, reservation_id) values ('It was fine', False, False, 5, 14);
+insert into revisions (revision, is_approved, is_answered, rating_id, reservation_id) values ('It was fine', True, True, 5, 14);
 insert into revisions (revision, is_approved, is_answered, rating_id, reservation_id) values ('It was ok.', False, False, 6, 16);
-insert into revisions (revision, is_approved, is_answered, rating_id, reservation_id) values ('It was a success.', False, False, 7, 18);
+insert into revisions (revision, is_approved, is_answered, rating_id, reservation_id) values ('It was a success.', True, True, 7, 18);
 insert into revisions (revision, is_approved, is_answered, rating_id, reservation_id) values ('It could be better.', False, False, 8, 20);
-insert into revisions (revision, is_approved, is_answered, rating_id, reservation_id) values ('It was fine i guess.', False, False, 9, 22);
+insert into revisions (revision, is_approved, is_answered, rating_id, reservation_id) values ('It was fine i guess.', True, True, 9, 22);
 insert into revisions (revision, is_approved, is_answered, rating_id, reservation_id) values ('It was smelly.', False, False, 10, 24);
-insert into revisions (revision, is_approved, is_answered, rating_id, reservation_id) values ('It was really nice.', False, False, 11, 26);
+insert into revisions (revision, is_approved, is_answered, rating_id, reservation_id) values ('It was really nice.', True, True, 11, 26);
 insert into revisions (revision, is_approved, is_answered, rating_id, reservation_id) values ('It was good, nothing bad to say about it.', False, False, 12, 28);
-insert into revisions (revision, is_approved, is_answered, rating_id, reservation_id) values ('It was good, nothing bad to say about it.', False, False, 13, 27);
+insert into revisions (revision, is_approved, is_answered, rating_id, reservation_id) values ('It was good, nothing bad to say about it.', True, True, 13, 27);
 
 insert into discounts(discount, from_date, to_date) values (0.15, '2022-05-12 00:00:00', '2100-01-01 00:00:00');
 

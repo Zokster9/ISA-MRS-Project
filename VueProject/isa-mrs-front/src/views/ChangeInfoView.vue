@@ -79,6 +79,7 @@
 
     const isCapitalFirstLetter = (value) => RegExp(/([A-Z]{1})([a-z]+)([^0-9]*)$/).test(value);
     const isPhoneNumberCorrect = (value) => RegExp(/^[+]?(\d{1,2})?[\s.-]?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/).test(value);
+    const isCityOrCountry = (value) => RegExp(/^[a-zA-Z.-]+(?:[\s-][/a-zA-Z.]+)*$/).test(value);
 
     export default {
         components: {
@@ -161,12 +162,12 @@
                 city: {
                     required,
                     minLength : minLength(1),
-                    isCapitalFirstLetter
+                    isCityOrCountry
                 },
                 country: {
                     required,
                     minLength : minLength(1),
-                    isCapitalFirstLetter
+                    isCityOrCountry
                 },
                 phoneNumber: {
                     required,

@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Objects;
 
@@ -45,13 +47,17 @@ public class EmailService {
 
     @Async
     public void sendReservationConfirmation(ReservationDTO reservationDTO) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String fromDate = dateFormat.format(reservationDTO.getFromDate());
+        String toDate = dateFormat.format(reservationDTO.getToDate());
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(Objects.requireNonNull(env.getProperty(emailTo)));
         mail.setFrom(emailFrom);
         mail.setSubject("Reservation approved");
         mail.setText("Dear " + reservationDTO.getClientName() + " " + reservationDTO.getClientSurname() +
-                " your reservation for " + reservationDTO.getServiceName() + ", from " + reservationDTO.getFromDate() +
-                " to " + reservationDTO.getToDate() + ", has been approved.");
+                " your reservation for " + reservationDTO.getServiceName() + ", from " + fromDate +
+                " " + reservationDTO.getFromTime() + " to " + toDate +
+                " " + reservationDTO.getToTime() + ", has been approved.");
         javaMailSender.send(mail);
     }
 
@@ -212,23 +218,23 @@ public class EmailService {
     }
 
     @Async
-    public void sendComplaintEmailClient(String complaint, Client client){
+    public void sendComplaintEmailClient(String response, Client client){
         SimpleMailMessage mailClient = new SimpleMailMessage();
         mailClient.setTo(Objects.requireNonNull(env.getProperty(emailTo)));
         mailClient.setFrom(emailFrom);
         mailClient.setSubject("Complaint answer");
-        mailClient.setText("Dear " + client.getName() + " " + client.getSurname() + ", this is admin's response to your complaint: " + complaint);
+        mailClient.setText("Dear " + client.getName() + " " + client.getSurname() + ", this is admin's response to your complaint: " + response);
         javaMailSender.send(mailClient);
     }
 
     @Async
-    public void sendComplaintEmailPrivilegedUser(String complaint, User privilegedUser){
+    public void sendComplaintEmailPrivilegedUser(String response, User privilegedUser){
         SimpleMailMessage mailPrivilegedUser = new SimpleMailMessage();
         mailPrivilegedUser.setTo(Objects.requireNonNull(env.getProperty(emailTo)));
         mailPrivilegedUser.setFrom(emailFrom);
         mailPrivilegedUser.setSubject("Complaint answer");
         mailPrivilegedUser.setText("Dear " + privilegedUser.getName() + " " + privilegedUser.getSurname() +
-                ", this is admin's response to a complaint that was written about your service: " + complaint);
+                ", this is admin's response to a complaint that was written about your service: " + response);
         javaMailSender.send(mailPrivilegedUser);
     }
 }

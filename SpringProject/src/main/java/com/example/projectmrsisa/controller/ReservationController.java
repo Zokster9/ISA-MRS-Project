@@ -203,6 +203,9 @@ public class ReservationController {
             if (client.isPenalized())
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             service = serviceService.findById(reservationDTO.getServiceId());
+            if (reservationService.isReserved(service.getId(), reservationDTO.getFromDate(), reservationDTO.getToDate(),
+                    reservationDTO.getFromTime(), reservationDTO.getToTime(), client.getId()))
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
             Set<Tag> additionalServices = new HashSet<>();
             if (reservationDTO.getServiceType() != null) {
                 additionalServices = tagService.findTags(new ArrayList<>(reservationDTO.getAdditionalServices()), reservationDTO.getServiceType());
