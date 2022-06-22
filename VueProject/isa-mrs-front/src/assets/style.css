@@ -1,0 +1,280 @@
+.activeAcceptButton{
+    background-color:darkseagreen;
+}
+
+.activeDeclineButton{
+    background-color:indianred;
+}
+
+.activeEditButton{
+    background-color: yellow;
+}
+
+.activeDeleteButton{
+    background-color: indianred;
+}
+
+.activeViewButton{
+    background-color: rgb(94, 178, 218);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+}
+
+#main-screen-div {
+    height: 100%; 
+    width: 100%; 
+    background-image: url('background.jpg'); 
+    background-size: cover;
+}
+
+#home-page-div {
+    height: 100%; 
+    width: 100%;
+}
+
+#ships-screen {
+    width:100%; 
+    height:100%; 
+    background-image: url('ship_background.jpg');
+}
+
+#fishing-instructors-screen {
+    width:100%; 
+    height:100%; 
+    background-image: url('fishing_background.jpg');
+}
+
+#retreats-screen {
+    width:100%; 
+    height:100%; 
+    background-image: url('retreat_background.jpg');
+}
+
+html,
+body,
+.container,
+.main,
+.row,
+.app,
+.signIn,
+.signUp,
+.complaints,
+.revisions,
+.vertical-center,
+#app {
+    width: 100%;
+    height: 100%;
+}
+
+.form-group,
+.form-check,
+.form-select {
+    margin-top: 4%;
+}
+
+.form-group button{
+    width: 100%;
+    height: 100%;
+    margin-top: 2%;
+}
+
+.form-group.required .control-label:after {
+    content: "*";
+    color: red;
+}
+
+.form-control::placeholder{
+    color:lightcoral;
+    opacity: 1;
+}
+
+.vertical-center {
+    display: flex;
+    text-align: left;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.vertical-center h3 {
+    text-align: center;
+    margin: 0;
+    line-height: 1;
+    padding-bottom: 20px;
+}
+
+.card {
+    cursor: pointer;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    transition: all 0.2s ease;
+}
+
+.card:hover {
+    box-shadow: 5px 6px 6px 2px #e9ecef;
+    transform: scale(1.1)
+}
+
+.card-img-top {
+    height: 161px;
+    width: auto;
+    object-fit: cover;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.inner-block {
+    width: 450px;
+    margin: auto;
+    background: #ffffff;
+    box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
+    padding: 40px 55px 45px 55px;
+    border-radius: 15px;
+    transition: all .3s;
+}
+
+.inner-block-2 {
+    width: 500px;
+    margin: auto;
+    background: #ffffff;
+    box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
+    padding: 40px 55px 45px 55px;
+    border-radius: 15px;
+    transition: all .3s;
+}
+
+.navbar-light {
+    background-color: #ffffff;
+    box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
+}
+
+.nav-item {
+    margin-left: 10px;
+    padding-right: 10px;
+}
+
+.logo {
+    width: 70px;
+    height: auto;
+}
+
+* {
+	box-sizing:border-box
+}
+
+/* Slideshow container */
+.slideshow-container {
+	width: 100%;
+	position: relative;
+	margin: auto;
+}
+
+/* Hide the images by default */
+
+/* Next & previous buttons */
+.prev, .next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  margin-top: -22px;
+  padding: 16px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover, .next:hover {
+  background-color: rgba(0,0,0,0.8);
+}
+
+/* Caption text */
+.text {
+  color: #f2f2f2;
+  font-size: 15px;
+  padding: 8px 12px;
+  position: absolute;
+  bottom: 8px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+  color: #f2f2f2;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+}
+
+/* The dots/bullets/indicators */
+.dot {
+  cursor: pointer;
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+.active, .dot:hover {
+  background-color: #717171;
+}
+
+.homepage {
+    text-align: center;
+}
+
+.homepage h1 {
+    margin: auto;
+    line-height: 50px;
+    vertical-align: middle;
+}
+
+@keyframes fade {
+  from {opacity: .4}
+  to {opacity: 1}
+}
+
+.disabledNavbarOption {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.progress-bar {
+    font-size: 16px;
+}
+
+.progress-bar[aria-valuenow="0"] {
+    color: white;
+    min-width: 5%;
+    background: transparent;
+    box-shadow: none;
+}
+
+.penaltyMessage {
+    color: red;
+}
+
+.navbar-nav .dropdown-menu {
+    position: absolute;
+}
