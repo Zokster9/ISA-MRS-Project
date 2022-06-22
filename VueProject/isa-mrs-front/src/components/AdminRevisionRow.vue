@@ -54,6 +54,7 @@
                         Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }
                 }).then(() => {
+                    alert("Successfully accepted revision.");
                     this.$emit('removeRevision', id)
                 }).catch((error) => {
                     if (error.response.status === 409) alert("Error. Some other administrator already replied to this revision request.");
@@ -79,6 +80,7 @@
                         Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }
                 }).then(() => {
+                    alert("Successfully declined revision.");
                     this.$emit('removeRevision', id)
                 }).catch((error) => {
                     if (error.response.status === 409) alert("Error. Some other administrator already replied to this revision request.");

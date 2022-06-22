@@ -212,23 +212,23 @@ public class EmailService {
     }
 
     @Async
-    public void sendComplaintEmailClient(String complaint, Client client){
+    public void sendComplaintEmailClient(String response, Client client){
         SimpleMailMessage mailClient = new SimpleMailMessage();
         mailClient.setTo(Objects.requireNonNull(env.getProperty(emailTo)));
         mailClient.setFrom(emailFrom);
         mailClient.setSubject("Complaint answer");
-        mailClient.setText("Dear " + client.getName() + " " + client.getSurname() + ", this is admin's response to your complaint: " + complaint);
+        mailClient.setText("Dear " + client.getName() + " " + client.getSurname() + ", this is admin's response to your complaint: " + response);
         javaMailSender.send(mailClient);
     }
 
     @Async
-    public void sendComplaintEmailPrivilegedUser(String complaint, User privilegedUser){
+    public void sendComplaintEmailPrivilegedUser(String response, User privilegedUser){
         SimpleMailMessage mailPrivilegedUser = new SimpleMailMessage();
         mailPrivilegedUser.setTo(Objects.requireNonNull(env.getProperty(emailTo)));
         mailPrivilegedUser.setFrom(emailFrom);
         mailPrivilegedUser.setSubject("Complaint answer");
         mailPrivilegedUser.setText("Dear " + privilegedUser.getName() + " " + privilegedUser.getSurname() +
-                ", this is admin's response to a complaint that was written about your service: " + complaint);
+                ", this is admin's response to a complaint that was written about your service: " + response);
         javaMailSender.send(mailPrivilegedUser);
     }
 }

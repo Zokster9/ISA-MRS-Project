@@ -50,11 +50,11 @@
                                             <tr>
                                                 <td>
                                                     <label class="control-label" for="city">City </label>
-                                                    <input v-model="form.city" id="city" type="text" placeholder="City..." pattern="[a-zA-Z\.]+$" class="form-control form-control-lg"/>
+                                                    <input v-model="form.city" id="city" type="text" placeholder="City..." class="form-control form-control-lg"/>
                                                 </td>
                                                 <td>
                                                     <label class="control-label" for="country">Country </label>
-                                                    <input v-model="form.country" id="country" type="text" placeholder="Country..." pattern="[a-zA-Z\.]+$" class="form-control form-control-lg"/>
+                                                    <input v-model="form.country" id="country" type="text" placeholder="Country..." class="form-control form-control-lg"/>
                                                 </td>
                                             </tr>
                                         </table>
@@ -62,7 +62,7 @@
                                     
                                     <div class="form-group required">
                                         <label class="control-label">Phone number </label>
-                                        <input v-model="form.phoneNumber" type="text" placeholder="Please enter phone number..." class="form-control form-control-lg">
+                                        <input v-model="form.phoneNumber" type="text" placeholder="+381XXXXXXXXX" class="form-control form-control-lg">
                                     </div>
                                     
                                     <div class="form-group">
@@ -92,6 +92,7 @@ import router from '@/router'
 
     const isCapitalFirstLetter = (value) => RegExp(/([A-Z]{1})([a-z]+)([^0-9]*)$/).test(value);
     const isPhoneNumberCorrect = (value) => RegExp(/^[+]?(\d{1,2})?[\s.-]?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/).test(value);
+    const isCityOrCountry = (value) => RegExp(/^[a-zA-Z.-]+(?:[\s-][/a-zA-Z.]+)*$/).test(value);
 
     export default({
         name: 'AdminSignUpView',
@@ -139,8 +140,9 @@ import router from '@/router'
                 ).then(() => {
                     alert("Registration form was successful.");
                     this.$router.push("/profile-page-admin")
-                }).catch(() => {
-                    alert("Something went wrong.")
+                }).catch((error) => {
+                    if (error.response.status === 409) alert("Entered email address is already in use.");
+                    else alert("Something went wrong.")
                 });
             }
         },
@@ -182,12 +184,12 @@ import router from '@/router'
                 city: {
                     required,
                     minLength : minLength(1),
-                    isCapitalFirstLetter
+                    isCityOrCountry
                 },
                 country: {
                     required,
                     minLength : minLength(1),
-                    isCapitalFirstLetter
+                    isCityOrCountry
                 },
                 phoneNumber: {
                     required,

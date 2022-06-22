@@ -8,7 +8,7 @@ public class Validator {
 
     private String[] fishingEquipment = {"Hooks", "Lines", "Floats", "Rods", "Reels", "Baits", "Lures", "Spears", "Nets", "Gaffs", "Traps"};
     private String[] navigationEquipment = {"Gyro Compass", "Radar", "Autopilot", "Echo sounder", "Magnetic Compass", "ARPA", "GPS Receiver", "Navigation lamps"};
-    private final String countryRegex = "([A-Z])([a-z]+)([^0-9]*)$";
+    private final String countryRegex = "^[a-zA-Z.-]+(?:[\\s-][/a-zA-Z.]+)*$";
 
     public boolean validAddress(String country, String city, String street) {
         if (country == null || country.equals("") || !country.matches(countryRegex)) {

@@ -3,7 +3,7 @@
         <td class="align-items text-center"> {{ user.name }} {{user.surname}}</td>
         <td class="align-items text-center"> {{ user.email }} </td>
         <td class="align-items text-center"> {{ user.privilegedUser }} </td>
-        <td class="align-items"> <button type="button" class="btn btn-danger" @mouseover="hoverDeleteButton = true" 
+        <td class="align-items text-center"> <button type="button" class="btn btn-danger" @mouseover="hoverDeleteButton = true" 
             @mouseleave="hoverDeleteButton = false" @click="deleteUser(user.id)"> Delete user </button> </td>
     </tr>
 </template>

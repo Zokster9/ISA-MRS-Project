@@ -52,120 +52,120 @@
                     <input v-model.number="form.price" type="number" class="form-control" placeholder="Price is required, and it must be number greater than 0."/>
                 </div>
                 <div class="form-group mb-3">
-                    <label>Rules of conduction:</label>
+                    <label style="font-weight: bold;">Rules of conduction:</label>
                     <br>
                     <div class="form-group mb-3">
                         <input type="checkbox" v-model="form.rulesOfConduction" value="Smoking disallowed"/>
-                        <label>Smoking disallowed</label>
+                        <label style="margin: 5px">Smoking disallowed</label>
                     </div>
                     <div class="form-group mb-3">
                         <input type="checkbox" v-model="form.rulesOfConduction" value="Pet friendly"/>
-                        <label>Pet friendly</label>
+                        <label style="margin: 5px">Pet friendly</label>
                     </div>
                     <div class="form-group mb-3">
                         <input type="checkbox" v-model="form.rulesOfConduction" value="Parties disallowed"/>
-                        <label>Parties disallowed</label>
+                        <label style="margin: 5px">Parties disallowed</label>
                     </div>
                     <div class="form-group mb-3">
                         <input type="checkbox" v-model="form.rulesOfConduction" value="Drinking disallowed"/>
-                        <label>Drinking disallowed</label>
+                        <label style="margin: 5px">Drinking disallowed</label>
                     </div>
                     <div class="form-group mb-3">
                         <input type="checkbox" v-model="form.rulesOfConduction" value="Weapons disallowed"/>
-                        <label>Weapons disallowed</label>
+                        <label style="margin: 5px">Weapons disallowed</label>
                     </div>
                 </div>
                 <div class="form-group mb-3">
-                    <label>Additional services:</label>
+                    <label style="font-weight: bold;">Additional services:</label>
                     <br>
                     <template v-for="tag in tags">
                         <div class="form-group mb-3" :key="tag.id">
                             <input type="checkbox" v-model="form.additionalServices" :value="tag.name" :key="tag.id"/>
-                            <label :for="tag.key">{{tag.name}}</label>
+                            <label style="margin: 5px" :for="tag.key">{{tag.name}}</label>
                         </div>
                     </template>
                 </div>
                 <div class="form-group mb-3">
-                    <label>Navigation equipment:</label>
+                    <label style="font-weight: bold;">Navigation equipment:</label>
                     <br>
                     <div class="form-group mb-3">
                         <input type="checkbox" v-model="form.navigationEquipment" value="Gyro Compass"/>
-                        <label>Gyro Compass</label>
+                        <label style="margin: 5px">Gyro Compass</label>
                     </div>
                     <div class="form-group mb-3">
                         <input type="checkbox" v-model="form.navigationEquipment" value="Radar"/>
-                        <label>Radar</label>
+                        <label style="margin: 5px">Radar</label>
                     </div>
                     <div class="form-group mb-3">
                         <input type="checkbox" v-model="form.navigationEquipment" value="Autopilot"/>
-                        <label>Autopilot</label>
+                        <label style="margin: 5px">Autopilot</label>
                     </div>
                     <div class="form-group mb-3">
                         <input type="checkbox" v-model="form.navigationEquipment" value="Echo sounder"/>
-                        <label>Echo sounder</label>
+                        <label style="margin: 5px">Echo sounder</label>
                     </div>
                     <div class="form-group mb-3">
                         <input type="checkbox" v-model="form.navigationEquipment" value="Magnetic Compass"/>
-                        <label>Magnetic Compass</label>
+                        <label style="margin: 5px">Magnetic Compass</label>
                     </div>
                     <div class="form-group mb-3">
                         <input type="checkbox" v-model="form.navigationEquipment" value="ARPA"/>
-                        <label>ARPA</label>
+                        <label style="margin: 5px">ARPA</label>
                     </div>
                     <div class="form-group mb-3">
                         <input type="checkbox" v-model="form.navigationEquipment" value="GPS Receiver"/>
-                        <label>GPS Receiver</label>
+                        <label style="margin: 5px">GPS Receiver</label>
                     </div>
                     <div class="form-group mb-3">
                         <input type="checkbox" v-model="form.navigationEquipment" value="Navigation lamps"/>
-                        <label>Navigation lamps</label>
+                        <label style="margin: 5px">Navigation lamps</label>
                     </div>
                 </div>
                 <div class="form-group mb-3">
-                    <label>Fishing equipment: </label>
+                    <label style="font-weight: bold;">Fishing equipment: </label>
                     <div class="form-group mb-3">
                         <input type="checkbox" v-model="form.fishingEquipment" value="Hooks">
-                        <label>Hooks</label>
+                        <label style="margin: 5px">Hooks</label>
                     </div>
                     <div class="form-group mb-3">
                         <input type="checkbox" v-model="form.fishingEquipment" value="Lines">
-                        <label>Lines</label>
+                        <label style="margin: 5px">Lines</label>
                     </div>
                     <div class="form-group mb-3">
                         <input type="checkbox" v-model="form.fishingEquipment" value="Floats">
-                        <label>Floats</label>
+                        <label style="margin: 5px">Floats</label>
                     </div>
                     <div class="form-group mb-3">
                         <input type="checkbox" v-model="form.fishingEquipment" value="Rods">
-                        <label>Rods</label>
+                        <label style="margin: 5px">Rods</label>
                     </div>
                     <div class="form-group mb-3">
                         <input type="checkbox" v-model="form.fishingEquipment" value="Reels">
-                        <label>Reels</label>
+                        <label style="margin: 5px">Reels</label>
                     </div>
                     <div class="form-group mb-3">
                         <input type="checkbox" v-model="form.fishingEquipment" value="Baits">
-                        <label>Baits</label>
+                        <label style="margin: 5px">Baits</label>
                     </div>
                     <div class="form-group mb-3">
                         <input type="checkbox" v-model="form.fishingEquipment" value="Lures">
-                        <label>Lures</label>
+                        <label style="margin: 5px">Lures</label>
                     </div>
                     <div class="form-group mb-3">
                         <input type="checkbox" v-model="form.fishingEquipment" value="Spears">
-                        <label>Spears</label>
+                        <label style="margin: 5px">Spears</label>
                     </div>
                     <div class="form-group mb-3">
                         <input type="checkbox" v-model="form.fishingEquipment" value="Nets">
-                        <label>Nets</label>
+                        <label style="margin: 5px">Nets</label>
                     </div>
                     <div class="form-group mb-3">
                         <input type="checkbox" v-model="form.fishingEquipment" value="Gaffs">
-                        <label>Gaffs</label>
+                        <label style="margin: 5px">Gaffs</label>
                     </div>
                     <div class="form-group mb-3">
                         <input type="checkbox" v-model="form.fishingEquipment" value="Traps">
-                        <label>Traps</label>
+                        <label style="margin: 5px">Traps</label>
                     </div>
                 </div>
                 <div class="form-group mb-3">
@@ -232,10 +232,10 @@
                 return !!this.form.description;
             },
             countryIsValid() {
-                return RegExp(/([A-Z]{1})([a-z]+)([^0-9]*)$/).test(this.form.country) && !!this.form.country;
+                return RegExp(/^[a-zA-Z.-]+(?:[\s-][/a-zA-Z.]+)*$/).test(this.form.country) && !!this.form.country;
             },
             cityIsValid() {
-                return RegExp(/([A-Z]{1})([a-z]+)([^0-9]*)$/).test(this.form.city) && !!this.form.city;
+                return RegExp(/^[a-zA-Z.-]+(?:[\s-][/a-zA-Z.]+)*$/).test(this.form.city) && !!this.form.city;
             },
             addressIsValid() {
                 return !!this.form.address;

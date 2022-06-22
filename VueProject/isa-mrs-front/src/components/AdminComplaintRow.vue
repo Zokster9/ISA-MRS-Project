@@ -52,6 +52,7 @@
                         Authorization: 'Bearer ' + window.sessionStorage.getItem("accessToken")
                     }
                 }).then(() => {
+                    alert("Successfully answered complaint.");
                     this.$emit('send', id);
                 })
             }

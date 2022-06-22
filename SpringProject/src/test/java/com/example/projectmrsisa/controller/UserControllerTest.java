@@ -45,10 +45,10 @@ public class UserControllerTest {
         mockMvc.perform(get(URL_PREFIX + "/getAllInstructors")).andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(3)))
-                .andExpect(jsonPath("$.[*].email").value("lordje@gmail.com"))
-                .andExpect(jsonPath("$.[*].name").value("Djordje"))
-                .andExpect(jsonPath("$.[*].surname").value("Vajagic"))
-                .andExpect(jsonPath("$.[*].phoneNumber").value("+381617647812"));
+                .andExpect(jsonPath("$.[*].email").value(hasItem("lordje@gmail.com")))
+                .andExpect(jsonPath("$.[*].name").value(hasItem("Djordje")))
+                .andExpect(jsonPath("$.[*].surname").value(hasItem("Vajagic")))
+                .andExpect(jsonPath("$.[*].phoneNumber").value(hasItem("+381617647812")));
     }
 
     @Test

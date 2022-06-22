@@ -50,9 +50,9 @@ public class TestRetreatController {
         mockMvc.perform(get(URL_PREFIX + "/getAll")).andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(1)))
-                .andExpect(jsonPath("$.[*].name").value("Brvnara na Dunavu"))
-                .andExpect(jsonPath("$.[*].description").value("Lepo mesto pored reke za kvalitetan odmor. Pogodno za zurke, proslave i drizenja sa prijateljima."))
-                .andExpect(jsonPath("$.[*].price").value(50.0));
+                .andExpect(jsonPath("$.[*].name").value(hasItem("Cottage near Danube")))
+                .andExpect(jsonPath("$.[*].description").value(hasItem("Fine place near lake, excellent for rest.")))
+                .andExpect(jsonPath("$.[*].price").value(hasItem(50.0)));
     }
 
     @Test
@@ -61,8 +61,8 @@ public class TestRetreatController {
         mockMvc.perform(get(URL_PREFIX + "/get/" + 1)).andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.name").value("Brvnara na Dunavu"))
-                .andExpect(jsonPath("$.description").value("Lepo mesto pored reke za kvalitetan odmor. Pogodno za zurke, proslave i drizenja sa prijateljima."))
+                .andExpect(jsonPath("$.name").value("Cottage near Danube"))
+                .andExpect(jsonPath("$.description").value("Fine place near lake, excellent for rest."))
                 .andExpect(jsonPath("$.price").value(50.0));
     }
 

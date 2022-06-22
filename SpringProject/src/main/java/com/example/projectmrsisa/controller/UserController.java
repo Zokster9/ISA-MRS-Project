@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value= "/users")
@@ -161,6 +162,7 @@ public class UserController {
         if (!validator.validUser(userDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         if (!validator.validAddress(userDTO.getAddressDTO().getCountry(), userDTO.getAddressDTO().getCity(), userDTO.getAddressDTO().getStreet())) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         if (!validator.validRegistrationData(userDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (userService.findUserByEmail(userDTO.getEmail()) != null) return new ResponseEntity<>(HttpStatus.CONFLICT);
         Address a;
         Role role;
         try {
@@ -196,6 +198,7 @@ public class UserController {
     public ResponseEntity<AdminDTO> registerAdmin(@RequestBody UserDTO userDTO){
         if (!validator.validAdmin(userDTO)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         if (!validator.validAddress(userDTO.getAddressDTO().getCountry(), userDTO.getAddressDTO().getCity(), userDTO.getAddressDTO().getStreet())) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (userService.findUserByEmail(userDTO.getEmail()) != null) return new ResponseEntity<>(HttpStatus.CONFLICT);
         Address a;
         Role role;
         try{
@@ -287,7 +290,8 @@ public class UserController {
     @GetMapping(value="/findOwnerOfService/{id}")
     @PreAuthorize("hasAnyRole('admin', 'mainAdmin')")
     public ResponseEntity<UserDTO> findOwnerOfService(@PathVariable Integer id){
-        User user = userService.findUserById(id);
+        Service service = serviceService.findById(id);
+        User user = service.getOwner();
         List<Role> roles = user.getRoles();
         Role userRole = roles.get(0);
         PrivilegedUser privilegedUser = PrivilegedUser.NOT_PRIVILEGED_USER;
