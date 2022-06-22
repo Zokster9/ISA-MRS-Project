@@ -69,7 +69,15 @@ public class ReservationService {
                         && reservation.getFromDate().compareTo(toDate) < 0 && reservation.getToDate().compareTo(fromDate) > 0)
                         || (reservation.getFromDate().compareTo(fromDate) > 0 && reservation.getToDate().compareTo(toDate) < 0
                         && reservation.getFromDate().compareTo(toDate) < 0 && reservation.getToDate().compareTo(fromDate) > 0)
-                        || (reservation.getFromDate().compareTo(fromDate) == 0 && reservation.getToDate().compareTo(toDate) == 0)) {
+                        || (reservation.getFromDate().compareTo(fromDate) == 0 && reservation.getToDate().compareTo(toDate) == 0)
+                        || (reservation.getFromDate().compareTo(fromDate) == 0 && reservation.getToDate().compareTo(toDate) > 0
+                        && reservation.getFromDate().compareTo(toDate) < 0 && reservation.getToDate().compareTo(fromDate) > 0)
+                        || (reservation.getFromDate().compareTo(fromDate) == 0 && reservation.getToDate().compareTo(toDate) < 0
+                        && reservation.getFromDate().compareTo(toDate) < 0 && reservation.getToDate().compareTo(fromDate) > 0)
+                        || (reservation.getFromDate().compareTo(fromDate) > 0 && reservation.getToDate().compareTo(toDate) == 0
+                        && reservation.getFromDate().compareTo(toDate) < 0 && reservation.getToDate().compareTo(fromDate) > 0)
+                        || (reservation.getFromDate().compareTo(fromDate) < 0 && reservation.getToDate().compareTo(toDate) == 0
+                        && reservation.getFromDate().compareTo(toDate) < 0 && reservation.getToDate().compareTo(fromDate) > 0)) {
                     if (reservation.getFromDate().compareTo(fromDate) == 0 && reservation.getToDate().compareTo(toDate) == 0
                             && reservation.getFromTime().compareTo(fromTime) == 0 && reservation.getToTime().compareTo(toTime) == 0) {
                         return (reservation.getStatus() == ReservationStatus.CANCELLED || reservation.getStatus() == ReservationStatus.PENDING)

@@ -1,7 +1,7 @@
 <template>
     <div class="sidebar shadow-lg rounded" style="flex-shrink:0">
         <div style="width:300px;height:100%;">
-            <form @submit.prevent="search" style="padding:10px;padding-top:100px">
+            <form autocomplete="off" @submit.prevent="search" style="padding:10px;padding-top:100px">
                 <div class="form-group">
                     <label for="name">Name</label>
                     <input v-model="form.name" id="name" type="text" class="form-control form-control-lg"/>
@@ -12,7 +12,7 @@
                 </div>
                 <div class="form-group">
                     <label for="address">Address</label>
-                    <input v-model="form.address" id="address" type="text" class="form-control form-control-lg"/>
+                    <input autocomplete="off" name="hidden" v-model="form.address" id="address" type="text" class="form-control form-control-lg"/>
                 </div>
                 <div class="form-group">
                     <label for="city">City</label>

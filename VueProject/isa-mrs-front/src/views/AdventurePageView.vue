@@ -101,7 +101,7 @@
                             <button class="btn btn-primary" @click="reserveForClient" value="Reserve">Reserve for client</button>
                         </div>
                         <div style="margin: 10px; align-self: center;" v-if="isOwner">
-                            <button class="btn btn-primary" @click="showCalendar" value="Show calendar">Show calendar for ship</button>
+                            <button class="btn btn-primary" @click="showCalendar" value="Show calendar">Show calendar for adventure</button>
                         </div>
                     </div>
                 </div>

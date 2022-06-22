@@ -1,5 +1,5 @@
 <template>
-    <div class="shadow-lg rounded" style="flex-shrink:0">
+    <div class="sidebar shadow-lg rounded" style="flex-shrink:0">
         <div style="width:300px;height:100%;">
             <form @submit.prevent style="padding:10px;padding-top:100px">
                 <div class="form-group">
@@ -33,3 +33,9 @@
         },
     }
 </script>
+
+<style scoped>
+    .sidebar {
+        position: fixed;
+    }
+</style>
